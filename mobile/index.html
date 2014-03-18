@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>MPIN Welcome</title>
+	<meta name="description" content="">
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<meta name="apple-touch-fullscreen" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta http-equiv="cleartype" content="on">
+	<link rel="stylesheet" href="../build/out/mobile/css/main.css">
+</head>
+<body>
+	<div id="mpinContainer">
+
+		<div id="mpinHolder">
+
+			<!-- Master container to inherit the flexibility position -->
+			<div id="mpinMaster" ontouchstart="">
+			
+			<!-- Append here -->
+
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Load JS files -->
+	<script src="js/main.js"></script>
+	<script src="../lib/underscore-min.js"></script>
+	<script scr="../lib/mpin-all.js"></script>
+	<script scr="../templates.js"></script>
+
+	<!-- Initialize MPIN -->
+
+	<script>
+		(function() {
+			new mpin("mpinMaster", {
+				mpinDTAServerURL: "http://192.168.10.126:8001/",
+				signatureURL: "http://192.168.10.126:8005/mpinSignature",
+				registerURL: "http://192.168.10.126:8005/mpinRegister",
+				verifyTokenURL: "http://192.168.10.126:8005/mpinVerifyToken",
+				seedValue: "0659b4006d9d2f74db91f8a5260837bf6517afcdc06ffc132dbd18df8d60a32c019f04fd733f46b0ecdcfe19a01e56ee17976180dfb04cd375dcb6772578333d905a416c9ff39de53de17688b0a659fa086aee51bca437eee91cbf3c3fb483e30628bd73",
+				mpinAuthServerURL: "ws://192.168.10.126:8002/authenticationToken",
+				
+//					mobileAppFullURL: "http://192.168.10.126:8005/m",
+				accessNumberURL: "http://192.168.10.126:8005/mpinAccessNumber",
+				
+				useWebSocket: false,
+				appID: "477ee6bea8799fb9fe87e7a6ea20f2b9",
+				emailCheckRegex: /.*/,
+				onSuccessLogin: function () {
+					alert(" :: on SUCCESS LOGIN ::");
+				}
+			});
+		})();
+	</script>
+
+</body>
+</html>

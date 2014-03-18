@@ -1,0 +1,16 @@
+{
+	"signatureURL"	 : "//192.168.99.20:8005/mpinSignature",
+	"registerURL"	 : "//192.168.99.20:8005/mpinRegister",
+	"verifyTokenURL" : "http://192.168.99.20:9005/mpinVerifyToken",
+	"MPinDTAServer"  : "http://192.168.99.20:8001/",
+	"MPinAuthenticationServer": "ws://192.168.99.20:8002/authenticationToken",
+
+	"appID"			 : "8c63aa9f7639f15bf46f142a84fedc82",
+	"seedValue"		 : "572f73727874386161466244642f6961666e72525272465a364a3678416d45634e675046624c79635a74364d2b6732425a4b6f32537655366f656a78512f47754a54517a3175315175346937596143514f54574e706f4a325667675565504735354d72364b375642484a6d2b61524244392f4d612b4f4a6c4f4a675152564b325744746534413d3d",
+
+	"certivoxURL": "http://54.228.206.139:8000/v0.2/",
+
+	"accessNumberDigits": 7,
+
+	"requestOTP": true
+}
