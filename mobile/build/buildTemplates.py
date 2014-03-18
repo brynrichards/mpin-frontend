@@ -2,6 +2,10 @@
 
 import os, glob, sys
 
+# Print if executed
+
+print "Usage buildTemplates out-file"
+
 if (len(sys.argv)) < 2:
     print "Usage buildTemplates out-file"
     sys.exit(1)
