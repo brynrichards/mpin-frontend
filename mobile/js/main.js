@@ -195,9 +195,9 @@ var mpin = mpin || {};
 	mpin = function(domID, options) {
 		var self = this;
 
-		loader("js/lib/underscore-min.js", function() {
-			loader("js/lib/mpin-all.js", function() {
-				loader("../build/out/mobile/js/templates.js", function() {
+		loader("js/underscore-min.js", function() {
+			loader("js/mpin-all.js", function() {
+				loader("js/templates.js", function() {
 					//remove _ from global SCOPE
 					mpin._ = _.noConflict();
 					self.initialize.call(self, domID, options);
