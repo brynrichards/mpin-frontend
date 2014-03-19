@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 		},
 		shell: {
 			makeViews: {
-				command: 'python build/buildTemplates.py js/templates.js',
+				command: 'python ../build/buildTemplates.py ../build/out/mobile/js/templates.js',
 				options: {
                 			stdout: true,
 				}
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
 				tasks: ['sass']
 			},
 			views: {
-				files: 'views/*.html',
+				files: '../public/views/*.html',
 				tasks: ['shell:makeViews']
 			}
 		}
