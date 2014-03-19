@@ -768,10 +768,10 @@ var mpin = mpin || {};
 		for (var i = 0; i < els.length; i++) {
 			var element = els[i];
 			if (enable) {
-				element.className = "btn mp_pindigit";
+				element.className = "label mp_pindigit";
 				element.disabled = false;
 			} else {
-				element.className = "btn mp_pindigit mp_inactive";
+				element.className = "label mp_pindigit mp_inactive";
 				element.disabled = true;
 			}
 		}
