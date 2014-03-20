@@ -3984,11 +3984,98 @@ function requestRegister(registerURL, mpinid, customHeaders, postDataFormatter, 
   xmlhttpRegister.send(postData);
 };
 
+//same as RequestRPSJSON
+// usage like function just call
+function requestRPS (params, cb) {
+	var _request = new XMLHttpRequest(), _method, _postData;
+	_method = params.method || "GET";
+	
+	params.postDataFormatter || (params.postDataFormatter = function (data) {return data;});
+	//
+	_postData = JSON.stringify(params.postDataFormatter(params.data));
+	
+	_request.onreadystatechange = function () {
+		if (_request.readyState === 4) {
+			if (_request.status === 200) {
+				cb(_request.responseText ? JSON.parse(_request.responseText): {});
+			} else {
+				var _errorData = {};
+				_errorData.error = _request.responseText;
+				_errorData.errorStatus = _request.status;
+				cb(_errorData);
+			}
+		}
+	};
+	
+	_request.open(_method, params.URL, true);
+	_request.setRequestHeader("Content-Type", "application/json");
+	_request.send(_postData);
+};
 
+function RequestRPSJSON(params) {
+  // Params: URL, method, data, customHeaders, postDataFormatter, timeout, onSuccess, onFail, onTimeout
+  var postData;
+  var method = params.method || "GET"
+
+  if (method == "GET") 
+    postData = null
+  else {
+    if (! params.postDataFormatter) {
+      params.postDataFormatter = function(data){ return data}
+    }
+
+    postData = JSON.stringify(params.postDataFormatter(params.data))
+  }
+
+  var xhr = createXMLHttp()
+  if (params.timeout) {
+    xhr.timeout = params.timeout;
+  }
+
+  xhr.onreadystatechange=function(evtXHR) {
+    if (xhr.readyState == 4)
+      {
+        if (xhr.status == 200)
+          {     
+              if (params.onSuccess) {
+                var response = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+                params.onSuccess(response)
+              }
+          }
+        else
+        {
+          if (params.onFail) {
+            params.onFail(xhr.status, xhr.responseText)
+          }
+        } 
+      }
+  };
+
+  if (params.onTimeout) {
+    xhr.ontimeout = function(){ params.onTimeout() }
+  }
+
+  xhr.open(method, params.URL, true);
+  xhr.myURL = params.URL;
+  xhr.setRequestHeader("Content-Type", "application/json");
+  if (params.customHeaders) {
+    for (var headerKey in params.customHeaders) { 
+      xhr.setRequestHeader(headerKey, params.customHeaders[headerKey]);
+    }    
+  }
+  xhr.send(postData);
+
+  this.abortRequest = function(){
+    params.onFail = null;
+    xhr.abort();
+  }
+
+  return this
+};
 
 
 // Request Client Secret from a TA.
-function requestClientSecretShare(restURL, customHeaders, onSuccess, onFail)
+function requestClientSecretShare(restURL, onSuccess, onFail)
 {
   var xmlhttpClientSecret;
   var requestDataType = 'application/json';
@@ -4019,31 +4106,28 @@ function requestClientSecretShare(restURL, customHeaders, onSuccess, onFail)
     }
   xmlhttpClientSecret.open("GET", restURL, true);
   xmlhttpClientSecret.setRequestHeader("Content-Type",requestDataType);
-  for (var headerKey in customHeaders) { 
-    xmlhttpClientSecret.setRequestHeader(headerKey, customHeaders[headerKey]);
-  }    
 
   xmlhttpClientSecret.send();
 };
 
 // Request the Client Secret Share and add them to form ClientSecret
-function requestClientSecret(certivoxURL, MPinDTAServerURL, customHeaders, onSuccess, onFail)
+function requestClientSecret(certivoxURL, clientSecretShare, onSuccess, onFail)
 {
   // Get Client Secret Share from Certivox TA
   // n.b. Not a mobile request
 //  var certivoxURL = certivoxURL+"&mobile=0"; 
-  requestClientSecretShare(certivoxURL, {}, function(certivoxShare){
+  requestClientSecretShare(certivoxURL, function(certivoxShare){
 
     // Get Client Secret Share from Application TA
-    requestClientSecretShare(MPinDTAServerURL, customHeaders, function(appShare){
+    //--// requestClientSecretShare(MPinDTAServerURL, customHeaders, function(appShare){
 
       // Add secret shares to form Client Secret
       
-      var clientSecretHex = addShares(certivoxShare, appShare);
+      var clientSecretHex = addShares(certivoxShare, clientSecretShare);
 
       // Callback
       onSuccess(clientSecretHex);
-    }, onFail);
+    //--// }, onFail);
 
   }, onFail);
 
@@ -4123,7 +4207,7 @@ function requestTimePermit(certivoxURL, MPinDTAServerURL, customHeaders, onSucce
   // n.b. Not a mobile request
   requestTimePermitShare(certivoxURL, {}, function(certivoxShare){
     // Get Time Permit Share from Application TA
-    requestTimePermitShare(MPinDTAServerURL, customHeaders, function(appShare){
+    requestTimePermitShare(MPinDTAServerURL, {}, function(appShare){
       // Add shares to form Time Permit
       var timePermitHex = addShares(certivoxShare, appShare);
 
