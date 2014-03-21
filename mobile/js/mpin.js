@@ -31,6 +31,7 @@ var mpin = mpin || {};
 //		apiVersion: "v0.3",
 //		apiUrl: "https://m-pinapi.certivox.net/",
 //		apiUrl: "http://dtatest.certivox.me/",
+		language: "en",
 		pinpadDefaultMessage: "",
 		pinSize: 4,
 		requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue"
@@ -60,6 +61,18 @@ var mpin = mpin || {};
 		//set Options
 		this.setOptions(options.server).setOptions(options.client);
 
+		//if set & exist
+		if (this.opts.language && lang[this.opts.language]) {
+			this.language = this.opts.language;
+		} else {
+			this.language = this.cfg.language;
+		}
+		this.setLanguageText();
+
+
+		console.log("language:: ", this.language);
+		console.log("language:: ", lang);
+
 		//this.renderSetupHome();
 //		this.renderMobileSetup();
 		// Check for appID
@@ -88,7 +101,8 @@ var mpin = mpin || {};
 		var _i, _opts, _optionName, _options = "stage; allowAddUser; requestOTP; successSetupURL; onSuccessSetup; successLoginURL; onSuccessLogin; onLoaded; onGetPermit; ";
 		_options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; mpinDTAServerURL; signatureURL; verifyTokenURL; certivoxURL; ";
 		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; authenticateHeaders; authTokenFormatter; accessNumberRequestFormatter; ";
-		_options += "registerRequestFormatter; onVerifySuccess; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL";
+		_options += "registerRequestFormatter; onVerifySuccess; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
+		_options += "language; customLanguageTexts";
 		_opts = _options.split("; ");
 		this.opts || (this.opts = {});
 
@@ -123,6 +137,21 @@ var mpin = mpin || {};
 			this.setCustomStyle();
 		}
 	};
+
+	mpin.prototype.setLanguageText = function() {
+		hlp.language = this.language;
+		//		setLanguageText
+		if (this.opts.customLanguageTexts && this.opts.customLanguageTexts[this.language]) {
+			for (var k in this.opts.customLanguageTexts[this.language]) {
+				console.log("this.opts.customLanguageTexts[this.language]", this.opts.customLanguageTexts[this.language][k]);
+				if (lang[this.language][k]) {
+					lang[this.language][k] = this.opts.customLanguageTexts[this.language][k];
+				}
+			}
+		}
+
+	};
+
 	mpin.prototype.renderHome = function() {
 		var callbacks = {}, self = this;
 
@@ -286,6 +315,10 @@ var mpin = mpin || {};
 			if (_request.readyState === 4 && _request.status === 200) {
 				jsonResponse = JSON.parse(_request.responseText);
 				document.getElementById("mp_accessNumber").innerHTML = jsonResponse.accessNumber;
+				console.log("get access NUMBER :::",jsonResponse);
+				if (jsonResponse.webOTP) {
+					self.webOTP = jsonResponse.webOTP;
+				}
 				expiresOn = new Date();
 				expiresOn.setSeconds(expiresOn.getSeconds() + jsonResponse.ttlSeconds);
 				expire(expiresOn);
@@ -298,7 +331,8 @@ var mpin = mpin || {};
 //		_request.setRequestHeader('Content-Type', 'application/json');
 		_request.send();
 	};
-
+	
+	//post REQUEST
 	mpin.prototype.getAccess = function() {
 		var _request = new XMLHttpRequest(), self = this;
 
@@ -323,8 +357,13 @@ var mpin = mpin || {};
 		_request.ontimeout = function() {
 			self.getAccess();
 		};
-
-		_request.send();
+		var _sendParams = {};
+		if (this.webOTP) {
+			sendParams.webOTP = this.webOTP;
+			_request.send(JSON.stringify(_sendParams));
+		}	else {
+			_request.send();
+		}
 		return _request;
 	};
 
@@ -354,7 +393,7 @@ var mpin = mpin || {};
 		callbacks.mp_action_home = function(evt) {
 			self.renderHome.call(self, evt);
 		};
-		callbacks.mp_action_login = function(evt) {
+		callbacks.mp_action_setup = function(evt) {
 //			self.renderSetup
 			self.beforeRenderSetup.call(self);
 //			self.renderSetup.call(self, self.getDisplayName(email));
@@ -1201,7 +1240,9 @@ var mpin = mpin || {};
 	;
 
 	//private variable
-	lang = {
+	//en
+	lang.en = {};
+	lang.en = {
 		"pinpad_initializing": "Initializing...",
 		"pinpad_errorTimePermit": "ERROR GETTING PERMIT:",
 		"home_alt_mobileOptions": "Mobile Options",
@@ -1223,9 +1264,17 @@ var mpin = mpin || {};
 		"mobileAuth_text2": "Note: Use this number in the next",
 		"mobileAuth_text3": "with your M-Pin Mobile App.",
 		"mobileAuth_text4": "Warning: Navigating away from this page will interrupt the authentication process and you will need to start again to authenticate successfully.",
+		"otp_text1": "Your One-Time Password is:",
+		"otp_text2": "Note: The password is only valid for<br/>{0} seconds before it expires.", // {0} will be replaced with the max. seconds
+		"otp_seconds": "Remaining: {0} sec.", // {0} will be replaced with the remaining seconds
+		"otp_expired_header": "Your One-Time Password has expired.",
+		"otp_expired_button_home": "Login again to get a new OTP",
 		"setup_header": "ADD AN IDENTITY TO THIS BROWSER",
 		"setup_text1": "Enter your email address:",
 		"setup_text2": "Your email address will be used as your identity when M-Pin authenticates you to this service.",
+		"setup_error_unathorized": "{0} has not been registered in the system.", // {0} will be replaced with the userID
+		"setup_error_server": "Cannot process the request. Please try again later.",
+		"setup_error_signupexpired": "Your signup request has been expired. Please try again.",
 		"setup_button_setup": "Setup M-Pin&trade;",
 		"setupPin_header": "Create your M-Pin with {0} digits", // {0} will be replaced with the pin length
 		"setupPin_initializing": "Initializing...",
@@ -1233,21 +1282,26 @@ var mpin = mpin || {};
 		"setupPin_button_clear": "Clear",
 		"setupPin_button_done": "Setup Pin",
 		"setupPin_errorSetupPin": "ERROR SETTING PIN: {0}", // {0} is the request status code
-		"setupReady_header": "Congratulations!",
+		"setupDone_header": "Congratulations!",
+		"setupDone_text1": "Your M-Pin identity",
+		"setupDone_text2": "is setup, now you can login.",
+		"setupDone_text3": "",
+		"setupDone_button_go": "Login now",
+		"setupReady_header": "VERIFY YOUR IDENTITY",
 		"setupReady_text1": "Your M-Pin identity",
-		"setupReady_text2": "is setup, now you must activate it.",
-		"setupReady_text3": "We have just sent you an email, simply click the link to activate your identity.",
-		"setupReady_button_go": "Activated your identity? <br/>Login now",
+		"setupReady_text2": "is ready to setup, now you must verify it.",
+		"setupReady_text3": "We have just sent you an email, simply click the link to verify your identity.",
+		"setupReady_button_go": "Verified your identity? <br/>Setup your M-Pin now",
 		"setupReady_button_resend": "Not received the email? <br/>Send it again",
-		"setupNotReady_header": "YOU MUST ACTIVATE <br/>YOUR IDENTITY",
+		"setupNotReady_header": "YOU MUST VERIFY <br/>YOUR IDENTITY",
 		"setupNotReady_text1": "Your identity",
-		"setupNotReady_text2": "has not been activated.",
-		"setupNotReady_text3": "You need to click the link in the email we sent you, and then choose <br/> 'Check again'.",
+		"setupNotReady_text2": "has not been verified.",
+		"setupNotReady_text3": "You need to click the link in the email we sent you, and then choose <br/> 'Setup M-Pin'.",
 		"setupNotReady_check_info1": "Checking",
-		"setupNotReady_check_info2": "Identity not activated!",
+		"setupNotReady_check_info2": "Identity not verified!",
 		"setupNotReady_resend_info1": "Sending email",
 		"setupNotReady_resend_info2": "Email sent!",
-		"setupNotReady_button_check": "Check again",
+		"setupNotReady_button_check": "Setup M-Pin",
 		"setupNotReady_button_resend": "Send the email again",
 		"setupNotReady_button_back": "Go to the identities list",
 		"authPin_header": "Enter your M-Pin",
@@ -1257,6 +1311,8 @@ var mpin = mpin || {};
 		"authPin_success": "Success",
 		"authPin_errorInvalidPin": "INCORRECT M-PIN!",
 		"authPin_errorNotAuthorized": "You are not authorized!",
+		"authPin_errorExpired": "The auth request expired!",
+		"authPin_errorServer": "Server error!",
 		"deactivated_header": "SECURITY ALERT",
 		"deactivated_text1": "has been de-activated and your M-Pin token has been revoked.",
 		"deactivated_text2": "To re-activate your identity, click on the blue button below to register again.",
@@ -1279,7 +1335,9 @@ var mpin = mpin || {};
 	};
 	//	translate
 	hlp.text = function(langKey) {
-		return lang[langKey];
+		//hlp.language set inside render
+		//customLanguageTexts - language
+		return lang[hlp.language][langKey];
 	};
 
 	var setStringOptions = function() {
