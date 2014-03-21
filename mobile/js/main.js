@@ -504,8 +504,6 @@ var mpin = mpin || {};
 	mpin.prototype.renderSetupDone = function() {
 		var callbacks = {}, self = this, userId;
 		
-		alert("render SETUP DONE");
-		
 		userId = this.getDisplayName(this.identity);
 
 		callbacks.mp_action_home = function() {
