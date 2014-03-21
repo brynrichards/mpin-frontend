@@ -186,13 +186,10 @@ var mpin = mpin || {};
 		}
 
 		callbacks.mpin_authenticate = function(evt) {
-
 			// Modify the sequence for the templates
 			self.renderSetupHome.call(self);
 		};
 
-		console.log("-----------",mpin.template.home_mobile);
-		
 		this.render('home_mobile', callbacks);
 
 		//if (this.opts.mobileAppFullURL) {
@@ -211,13 +208,7 @@ var mpin = mpin || {};
 			self.actionSetupHome.call(self, evt);
 		};
 
-		if (errorID) {
-			descHtml = '<div class="mp_infoDescription mp_error">' + hlp.text(errorID).mpin_format(email) + '</div>';
-		} else {
-			descHtml = '<div class="mp_infoDescription">' + hlp.text("setup_text2") + '</div>';
-		}
-
-		this.render("setup", callbacks, {description: descHtml});
+		this.render("setup-home", callbacks);
 	};
 
 
@@ -325,7 +316,7 @@ var mpin = mpin || {};
 			if (_request.readyState === 4 && _request.status === 200) {
 				jsonResponse = JSON.parse(_request.responseText);
 				document.getElementById("mp_accessNumber").innerHTML = jsonResponse.accessNumber;
-				console.log("get access NUMBER :::",jsonResponse);
+				console.log("get access NUMBER :::", jsonResponse);
 				if (jsonResponse.webOTP) {
 					self.webOTP = jsonResponse.webOTP;
 				}
@@ -341,7 +332,7 @@ var mpin = mpin || {};
 //		_request.setRequestHeader('Content-Type', 'application/json');
 		_request.send();
 	};
-	
+
 	//post REQUEST
 	mpin.prototype.getAccess = function() {
 		var _request = new XMLHttpRequest(), self = this;
@@ -371,7 +362,7 @@ var mpin = mpin || {};
 		if (this.webOTP) {
 			sendParams.webOTP = this.webOTP;
 			_request.send(JSON.stringify(_sendParams));
-		}	else {
+		} else {
 			_request.send();
 		}
 		return _request;
@@ -403,13 +394,13 @@ var mpin = mpin || {};
 		callbacks.mp_action_home = function(evt) {
 			self.renderHome.call(self, evt);
 		};
-		callbacks.mp_action_setup = function(evt) {
+		callbacks.mpin_action_setup = function(evt) {
 //			self.renderSetup
 			self.beforeRenderSetup.call(self);
 //			self.renderSetup.call(self, self.getDisplayName(email));
 //			self.renderLogin.call(self, evt);
 		};
-		callbacks.mp_action_resend = function(evt) {
+		callbacks.mpin_action_resend = function(evt) {
 			self.actionResend.call(self, evt);
 		};
 		this.render("activate-identity", callbacks, {email: email});
@@ -512,7 +503,9 @@ var mpin = mpin || {};
 
 	mpin.prototype.renderSetupDone = function() {
 		var callbacks = {}, self = this, userId;
-
+		
+		alert("render SETUP DONE");
+		
 		userId = this.getDisplayName(this.identity);
 
 		callbacks.mp_action_home = function() {
@@ -691,7 +684,7 @@ var mpin = mpin || {};
 	//
 	mpin.prototype.addToPin = function(digit) {
 		var pinElement = document.getElementById('pinpad-input');
-		pinElement.setAttribute('type','password')
+		pinElement.setAttribute('type', 'password')
 
 		if (digit === 'clear') {
 			this.display("");
@@ -737,7 +730,7 @@ var mpin = mpin || {};
 		var elemPass;
 		elemPass = document.getElementById('pinpad-input');
 		// Changed to convert the existing input to password type
-		elemPass.setAttribute('type','password')
+		elemPass.setAttribute('type', 'password')
 		elemPass.value = message;
 		elemPass.value = '';
 
@@ -785,12 +778,14 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.actionSetupHome = function() {
-		var _email = document.getElementById("emailInput").value;
+		var _email = document.getElementById("emailInput").value, self= this;
 		if (_email.length === 0 || !this.opts.emailCheckRegex.test(_email)) {
 			document.getElementById("emailInput").focus();
 			return;
 		}
-
+		
+		console.log("here :::");
+		var _reqData = {};
 		_reqData.URL = this.opts.registerURL;
 		_reqData.method = "PUT";
 		_reqData.data = {
@@ -830,7 +825,7 @@ var mpin = mpin || {};
 			self.enableNumberButtons(true);
 
 			self.clientSecret = clientSecret;
-				document.getElementById("pinpad-input").value = self.cfg.pinpadDefaultMessage;
+			document.getElementById("pinpad-input").value = self.cfg.pinpadDefaultMessage;
 
 			if (self.opts.onGetSecret) {
 				self.opts.onGetSecret();
@@ -919,12 +914,12 @@ var mpin = mpin || {};
 		//getAuth = this.opts.useWebSocket ? getAuthToken : getAuthTokenAjax;
 		//authServer = this.opts.mpinAuthServerURL;
 		if (this.opts.useWebSocket) {
-        		getAuth = getAuthToken;
-        		authServer = this.opts.mpinAuthServerURL + "/authenticationToken";
-        	} else {
-        		getAuth = getAuthTokenAjax;
-				authServer = this.opts.mpinAuthServerURL;
-        	}
+			getAuth = getAuthToken;
+			authServer = this.opts.mpinAuthServerURL + "/authenticationToken";
+		} else {
+			getAuth = getAuthTokenAjax;
+			authServer = this.opts.mpinAuthServerURL;
+		}
 
 		//authServer = this.opts.authenticateURL;
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
