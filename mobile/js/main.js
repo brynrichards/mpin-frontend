@@ -179,7 +179,7 @@ var mpin = mpin || {};
 		}
 	};
 	mpin.prototype.renderHomeMobile = function() {
-		var callbacks = {}, self = this;
+		var callbacks = {}, self = this, identity;
 
 		if (this.opts.prerollid) {
 			this.renderSetup(this.opts.prerollid);
@@ -190,7 +190,13 @@ var mpin = mpin || {};
 			self.renderSetupHome.call(self);
 		};
 
-		this.render('home_mobile', callbacks);
+		identity = this.ds.getDefaultIdentity();
+		if (identity) {
+			this.renderLogin();
+		} else {
+			this.render('home_mobile', callbacks);
+		}
+
 
 		//if (this.opts.mobileAppFullURL) {
 		//	this.renderHomeMobile();
@@ -236,11 +242,10 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.renderLogin = function(listAccounts) {
-		var callbacks = {}, self = this;
+		var callbacks = {}, self = this, accFlag = false;
 
 		var identity = this.ds.getDefaultIdentity();
 		var email = this.getDisplayName(identity);
-
 		if (!identity) {
 			this.renderSetupHome();
 		}
@@ -254,13 +259,30 @@ var mpin = mpin || {};
 		callbacks.mp_toggleButton = function() {
 			self.toggleButton.call(self);
 		};
+
 		callbacks.mpinLogin = function() {
-			self.actionLogin.call(self);
+			var pinpadDisplay = document.getElementById("pinpad-input");
+			if (!accFlag) {
+				self.accessNumber = pinpadDisplay.value;
+				pinpadDisplay.value = "";
+				pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text");
+				pinpadDisplay.type = "password";
+				accFlag = true;
+			} else {
+				self.actionLogin.call(self);
+			}
 		};
 
-		this.render("login", callbacks);
+
+//		this.render("login", callbacks, {email: email});
+		this.render("setup", callbacks, {email: email, menu: true});
 		this.enableNumberButtons(true);
 		this.bindNumberButtons();
+
+		var pinpadDisplay = document.getElementById("pinpad-input");
+		//set placeholder to access Number text
+		pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
+		pinpadDisplay.type = "text";
 
 		//fix - there are two more conditions ...
 		if (listAccounts) {
@@ -503,7 +525,7 @@ var mpin = mpin || {};
 
 	mpin.prototype.renderSetupDone = function() {
 		var callbacks = {}, self = this, userId;
-		
+
 		userId = this.getDisplayName(this.identity);
 
 		callbacks.mp_action_home = function() {
@@ -682,7 +704,7 @@ var mpin = mpin || {};
 	//
 	mpin.prototype.addToPin = function(digit) {
 		var pinElement = document.getElementById('pinpad-input');
-		pinElement.setAttribute('type', 'password')
+		//pinElement.setAttribute('type', 'password')
 
 		if (digit === 'clear') {
 			this.display("");
@@ -728,7 +750,7 @@ var mpin = mpin || {};
 		var elemPass;
 		elemPass = document.getElementById('pinpad-input');
 		// Changed to convert the existing input to password type
-		elemPass.setAttribute('type', 'password')
+//		elemPass.setAttribute('type', 'password')
 		elemPass.value = message;
 		elemPass.value = '';
 
@@ -776,12 +798,12 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.actionSetupHome = function() {
-		var _email = document.getElementById("emailInput").value, self= this;
+		var _email = document.getElementById("emailInput").value, self = this;
 		if (_email.length === 0 || !this.opts.emailCheckRegex.test(_email)) {
 			document.getElementById("emailInput").focus();
 			return;
 		}
-		
+
 		console.log("here :::");
 		var _reqData = {};
 		_reqData.URL = this.opts.registerURL;
@@ -900,7 +922,7 @@ var mpin = mpin || {};
 	 * @returns {undefined}
 	 */
 	mpin.prototype.actionLogin = function() {
-		var authServer, getAuth, self = this, pinValue = document.getElementById('mp_pin').value;
+		var authServer, getAuth, self = this, pinValue = document.getElementById('pinpad-input').value, accessNumber;
 		//AlertMessage.clearDisplayWrap();
 		this.enableNumberButtons(false);
 		this.enableButton(false, "go");
@@ -918,10 +940,10 @@ var mpin = mpin || {};
 			getAuth = getAuthTokenAjax;
 			authServer = this.opts.mpinAuthServerURL;
 		}
-
+		accessNumber = this.accessNumber;
 		//authServer = this.opts.authenticateURL;
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-				this.opts.requestOTP, "0", this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authTokenFormatter, this.opts.authenticateHeaders,
+				this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authTokenFormatter, this.opts.authenticateHeaders,
 				function(success, errorCode, errorMessage, authData) {
 					if (success) {
 						self.successLogin(authData);
@@ -942,8 +964,8 @@ var mpin = mpin || {};
 			displayName = this.getDisplayName(this.identity);
 		}
 
-		accId = document.getElementById('mp_accountID');
-		accId.innerHTML = displayName;
+		accId = document.getElementById('mpinUser');
+		accId.children[0].innerText = displayName;
 		accId.setAttribute("title", displayName);
 
 		if (requestPermit) {
@@ -1330,7 +1352,9 @@ var mpin = mpin || {};
 		"account_reactivate_question": "Are you sure you wish to reactivate this M-Pin Identity?",
 		"account_reactivate_button": "Yes, reactivate this M-Pin Identity",
 		"noaccount_header": "No identities have been added to this browser!",
-		"noaccount_button_add": "Add a new identity"
+		"noaccount_button_add": "Add a new identity",
+		"pinpad_placeholder_text": "Enter you pin",
+		"pinpad_placeholder_text2": "Enter your access Number"
 	};
 	//	image should have config properties
 	hlp.img = function(imgSrc) {

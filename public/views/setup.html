@@ -10,13 +10,15 @@
     <div id="mpinUser">
         <p><%= email %> <% console.log("cfg :::", cfg); %></p>
     </div>
-    <div id="menuBtn"></div>
+	<% if (menu) { %>
+		<div id="menuBtn"></div>
+	<% } %>
 </div>
-
+ 
 <div id="pinsHolder">
 
     <div id="inputContainer">
-        <input id="pinpad-input" type="text" readonly="true" placeholder="Enter your Access Number">
+        <input id="pinpad-input" type="password" readonly="true" placeholder="<%= hlp.text("pinpad_placeholder_text") %>">
     </div>
 
     <div class="pre-row">
