@@ -548,8 +548,15 @@ var mpin = mpin || {};
 		callbacks.mpin_action_logout = function() {
 			
 			console.log("smth..............", authData);
-			self.ajaxPost("http://192.168.10.197:8005/logout",authData);
+		
+			self.ajaxPost("http://192.168.10.197:8005/logout", authData, function(res) {
 			
+				console.dir(res);
+
+				if(res){
+					self.renderLogin();
+				}
+			});
 			
 		};
 
@@ -1070,6 +1077,7 @@ var mpin = mpin || {};
 			if (_request.readyState === 4 && _request.status === 200)
 			{
 				console.log("POST success ....");
+				cb(JSON.parse(_request);
 			}
 		};
 		_request.open("Post", url, true);
