@@ -506,6 +506,10 @@ var mpin = mpin || {};
 			self.renderAccountsPanel();
 		};
 	};
+	
+
+	
+	
 
 	mpin.prototype.renderDeletePanel = function(iD) {
 		var renderElem, name, self = this;
@@ -536,6 +540,22 @@ var mpin = mpin || {};
 		};
 
 		this.render("setup-done", callbacks, {userId: userId});
+	};
+	
+	mpin.prototype.renderLogout = function(authData) {
+		var callbacks = {}, self = this, userId;
+
+		callbacks.mpin_action_logout = function() {
+			
+			console.log("smth..............", authData);
+			self.ajaxPost("http://192.168.10.197:8005/logout",authData);
+			
+			
+		};
+
+//		console.log("tmpl :::", this.template['logout']);
+//		console.log("tmpl :::", this.readyHtml('logout', {}));
+		this.render("logout", callbacks, {userId: userId});
 	};
 
 	mpin.prototype.addUserToList = function(cnt, uId, isDefault, iNumber) {
@@ -946,9 +966,11 @@ var mpin = mpin || {};
 				this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authTokenFormatter, this.opts.authenticateHeaders,
 				function(success, errorCode, errorMessage, authData) {
 					if (success) {
-						self.successLogin(authData);
+						//self.successLogin(authData);
+						self.renderLogout(authData);
+						
 					}
-
+					
 				}, function() {
 			console.log(" Before HandleToken ::::");
 		});
@@ -1039,6 +1061,19 @@ var mpin = mpin || {};
 		};
 		_request.open("GET", url, true);
 		_request.send();
+	};
+	
+	//Post request
+	mpin.prototype.ajaxPost = function(url, data, cb) {
+		var _request = new XMLHttpRequest();
+		_request.onreadystatechange = function() {
+			if (_request.readyState === 4 && _request.status === 200)
+			{
+				console.log("POST success ....");
+			}
+		};
+		_request.open("Post", url, true);
+		_request.send(JSON.stringify(data));
 	};
 
 
@@ -1354,7 +1389,10 @@ var mpin = mpin || {};
 		"noaccount_header": "No identities have been added to this browser!",
 		"noaccount_button_add": "Add a new identity",
 		"pinpad_placeholder_text": "Enter you pin",
-		"pinpad_placeholder_text2": "Enter your access Number"
+		"pinpad_placeholder_text2": "Enter your access Number",
+		"logout_text1": "YOU ARE NOW LOGGED IN",
+		"logout_button": "Logout"
+		
 	};
 	//	image should have config properties
 	hlp.img = function(imgSrc) {
