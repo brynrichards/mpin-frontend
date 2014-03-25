@@ -805,7 +805,9 @@ var mpin = mpin || {};
 		var elemPass;
 		elemPass = document.getElementById('pinpad-input');
 		// elemPass.classList.add('grey-bg');
-		addClass(elemPass, "grey-bg");
+		if (this.isAccNumber) {
+			addClass(elemPass, "grey-bg");
+		}
 		// Changed to convert the existing input to password type
 //		elemPass.setAttribute('type', 'password')
 		elemPass.value = message;
