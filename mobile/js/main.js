@@ -104,7 +104,7 @@ var mpin = mpin || {};
 		_options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; mpinDTAServerURL; signatureURL; verifyTokenURL; certivoxURL; ";
 		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; authenticateHeaders; authTokenFormatter; accessNumberRequestFormatter; ";
 		_options += "registerRequestFormatter; onVerifySuccess; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
-		_options += "language; customLanguageTexts";
+		_options += "language; customLanguageTexts; accessNumberDigits";
 		_opts = _options.split("; ");
 		this.opts || (this.opts = {});
 
@@ -242,7 +242,9 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.renderLogin = function(listAccounts) {
-		var callbacks = {}, self = this, accFlag = false;
+		var callbacks = {}, self = this;
+
+		this.isAccNumber = true;
 
 		var identity = this.ds.getDefaultIdentity();
 		var email = this.getDisplayName(identity);
@@ -262,12 +264,15 @@ var mpin = mpin || {};
 
 		callbacks.mpinLogin = function() {
 			var pinpadDisplay = document.getElementById("pinpad-input");
-			if (!accFlag) {
+
+			console.log('isAccNumber', self.isAccNumber);
+
+			if (self.isAccNumber) {
 				self.accessNumber = pinpadDisplay.value;
-				pinpadDisplay.value = "";
-				pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text");
-				pinpadDisplay.type = "password";
-				accFlag = true;
+
+				self.isAccNumber = false;
+
+				self.addToPin("login");
 			} else {
 				self.actionLogin.call(self);
 			}
@@ -551,8 +556,6 @@ var mpin = mpin || {};
 		
 			self.ajaxPost("http://192.168.10.197:8005/logout", authData, function(res) {
 			
-				console.dir(res);
-
 				if(res){
 					self.renderLogin();
 				}
@@ -707,7 +710,7 @@ var mpin = mpin || {};
 
 	mpin.prototype.bindNumberButtons = function() {
 		var self = this, btEls;
-		btEls = document.getElementsByClassName("mp_pindigit");
+		btEls = document.getElementsByClassName("btn");
 		for (var i = 0; i < btEls.length; i++) {
 			btEls[i].onclick = function(el) {
 				self.addToPin(el.target.getAttribute("data-value"));
@@ -716,20 +719,21 @@ var mpin = mpin || {};
 		}
 	};
 	mpin.prototype.enableNumberButtons = function(enable) {
-		var els = document.getElementsByClassName("mp_pindigit");
+		var els = document.getElementsByClassName("btn");
 		for (var i = 0; i < els.length; i++) {
 			var element = els[i];
 			if (enable) {
-				element.className = "label mp_pindigit";
+				element.className = "btn";
 				element.disabled = false;
 			} else {
-				element.className = "label mp_pindigit mp_inactive";
+				element.className = "btn mp_inactive";
 				element.disabled = true;
 			}
 		}
 	};
 	//
 	mpin.prototype.addToPin = function(digit) {
+
 		var pinElement = document.getElementById('pinpad-input');
 		//pinElement.setAttribute('type', 'password')
 
@@ -741,11 +745,37 @@ var mpin = mpin || {};
 			return;
 		}
 
+		if (digit === 'login') {
+
+			if (!this.isAccNumber) {
+
+				pinElement.value = "";
+				pinElement.placeholder = hlp.text("pinpad_placeholder_text");
+				pinElement.type = "password";
+
+				this.enableNumberButtons(true);
+				
+				return;
+			}
+		}
+
 		pinElement.value += digit;
+
+		console.log("Check pin value length ", pinElement.value.length);
 
 		if (pinElement.value.length === 1) {
 			this.enableButton(true, "clear");
-		} else if (pinElement.value.length === this.cfg.pinSize) {
+		} 
+
+		else if (this.isAccNumber) {
+			if (pinElement.value.length === this.opts.accessNumberDigits) {
+				this.enableNumberButtons(false);
+				this.enableButton(true, "go");
+				this.enableButton(true, "clear");
+			}
+		}
+
+		else if (pinElement.value.length === this.cfg.pinSize) {
 			this.enableNumberButtons(false);
 			this.enableButton(true, "go");
 			this.enableButton(true, "clear");
