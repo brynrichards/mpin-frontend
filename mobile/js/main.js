@@ -1077,7 +1077,11 @@ var mpin = mpin || {};
 			if (_request.readyState === 4 && _request.status === 200)
 			{
 				console.log("POST success ....");
-				cb(JSON.parse(_request);
+
+				// Tempory fix
+				if(_request.responseText == '') {
+					cb(true);					
+				}
 			}
 		};
 		_request.open("Post", url, true);
