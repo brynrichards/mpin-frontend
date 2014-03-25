@@ -245,7 +245,6 @@ var mpin = mpin || {};
 		var callbacks = {}, self = this;
 
 		this.isAccNumber = true;
-
 		var identity = this.ds.getDefaultIdentity();
 		var email = this.getDisplayName(identity);
 		if (!identity) {
@@ -269,9 +268,8 @@ var mpin = mpin || {};
 
 			if (self.isAccNumber) {
 				self.accessNumber = pinpadDisplay.value;
-
 				self.isAccNumber = false;
-
+				removeClass(pinpadDisplay, "grey-bg");
 				self.addToPin("login");
 			} else {
 				self.actionLogin.call(self);
@@ -806,6 +804,8 @@ var mpin = mpin || {};
 
 		var elemPass;
 		elemPass = document.getElementById('pinpad-input');
+		// elemPass.classList.add('grey-bg');
+		addClass(elemPass, "grey-bg");
 		// Changed to convert the existing input to password type
 //		elemPass.setAttribute('type', 'password')
 		elemPass.value = message;
@@ -1430,7 +1430,7 @@ var mpin = mpin || {};
 		"account_reactivate_button": "Yes, reactivate this M-Pin Identity",
 		"noaccount_header": "No identities have been added to this browser!",
 		"noaccount_button_add": "Add a new identity",
-		"pinpad_placeholder_text": "Enter you pin",
+		"pinpad_placeholder_text": "Enter your pin",
 		"pinpad_placeholder_text2": "Enter your access Number",
 		"logout_text1": "YOU ARE NOW LOGGED IN",
 		"logout_button": "Logout"
