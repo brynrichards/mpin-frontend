@@ -134,7 +134,8 @@ $BORDERLESS : true;
 @mixin mpin-logo() {
 	width: 106px;
 	height: 32px;
-	background-image: url('#{$IMAGES}/m-pin-header-logo.svg');
+
+	background-image: url('#{$IMAGES}/mpin_logo.svg');
 
 	background-repeat: no-repeat;
 	background-position: right;
@@ -147,7 +148,7 @@ $BORDERLESS : true;
 @mixin logo() {
 	width: 183px;
 	height: 69px;
-	background-image: url('#{$IMAGES}/m-pin-header-logo.svg');
+	background-image: url('#{$IMAGES}/mpin_logo.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
