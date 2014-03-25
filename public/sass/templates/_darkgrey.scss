@@ -92,7 +92,7 @@ $BORDERLESS : true;
 
 @mixin pin-screen() {
 
-	background: #006b9e;
+	background: black;
 	border: 1px solid #999;
 	border-top-color: #a6a6a6;
 	color: #fff;
@@ -134,7 +134,7 @@ $BORDERLESS : true;
 @mixin mpin-logo() {
 	width: 106px;
 	height: 32px;
-	background-image: url('#{$IMAGES}/mpin_logo.png');
+	background-image: url('#{$IMAGES}/m-pin-header-logo.svg');
 
 	background-repeat: no-repeat;
 	background-position: right;
@@ -147,7 +147,7 @@ $BORDERLESS : true;
 @mixin logo() {
 	width: 183px;
 	height: 69px;
-	background-image: url('#{$IMAGES}/mpin_header_logo.png');
+	background-image: url('#{$IMAGES}/m-pin-header-logo.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;

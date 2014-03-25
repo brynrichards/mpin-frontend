@@ -269,7 +269,7 @@ var mpin = mpin || {};
 			if (self.isAccNumber) {
 				self.accessNumber = pinpadDisplay.value;
 				self.isAccNumber = false;
-				removeClass(pinpadDisplay, "grey-bg");
+				removeClass(pinpadDisplay, "blue-bg");
 				self.addToPin("login");
 			} else {
 				self.actionLogin.call(self);
@@ -804,9 +804,9 @@ var mpin = mpin || {};
 
 		var elemPass;
 		elemPass = document.getElementById('pinpad-input');
-		// elemPass.classList.add('grey-bg');
+		// elemPass.classList.add('blue-bg');
 		if (this.isAccNumber) {
-			addClass(elemPass, "grey-bg");
+			addClass(elemPass, "blue-bg");
 		}
 		// Changed to convert the existing input to password type
 //		elemPass.setAttribute('type', 'password')
