@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>MPIN Welcome</title>
+	<meta name="description" content="">
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<meta name="apple-touch-fullscreen" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta http-equiv="cleartype" content="on">
+	<link rel="stylesheet" href="../build/out/mobile/css/main.css">
+</head>
+<body>
+	<div id="mpinContainer">
+
+		<div id="mpinHolder">
+
+			<!-- Master container to inherit the flexibility position -->
+			<div id="mpinMaster" ontouchstart="">
+			
+			<!-- Append here -->
+
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Load JS files -->
+	<script src="js/main.js"></script>
+
+	<!-- Initialize MPIN -->
+
+	<script>
+	(function() {
+		new mpin("mpinMaster", {
+				clientSettingsURL: "http://192.168.10.197:8011/rps/clientSettings",
+				mobileAppFullURL: "http://192.168.10.197/frontend/mobile/",
+				emailCheckRegex: /.*/,
+				// emailCheckRegex: "[0-9a-zA-Z]+",
+				onSuccessLogin: function() {
+					alert(" :: on SUCCESS LOGIN ::");
+				}
+			});
+		})();
+
+	</script>
+
+
+</body>
+</html>
