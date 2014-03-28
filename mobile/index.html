@@ -35,8 +35,9 @@
 	<script>
 	(function() {
 		new mpin("mpinMaster", {
-				clientSettingsURL: "http://192.168.10.197:8011/rps/clientSettings",
-				mobileAppFullURL: "http://192.168.10.197/frontend/mobile/",
+				clientSettingsURL: "http://192.168.10.238:8011/rps/clientSettings",
+				mobileAppFullURL: "http://192.168.10.238/frontend/mobile/",
+				useWebSocket: true,
 				emailCheckRegex: /.*/,
 				// emailCheckRegex: "[0-9a-zA-Z]+",
 				onSuccessLogin: function() {
