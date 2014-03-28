@@ -104,7 +104,7 @@ var mpin = mpin || {};
 		_options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; mpinDTAServerURL; signatureURL; verifyTokenURL; certivoxURL; ";
 		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; authenticateHeaders; authTokenFormatter; accessNumberRequestFormatter; ";
 		_options += "registerRequestFormatter; onVerifySuccess; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
-		_options += "language; customLanguageTexts; accessNumberDigits";
+		_options += "language; customLanguageTexts; accessNumberDigits; mobileAuthenticateURL";
 		_opts = _options.split("; ");
 		this.opts || (this.opts = {});
 
@@ -341,7 +341,6 @@ var mpin = mpin || {};
 			if (_request.readyState === 4 && _request.status === 200) {
 				jsonResponse = JSON.parse(_request.responseText);
 				document.getElementById("mp_accessNumber").innerHTML = jsonResponse.accessNumber;
-				console.log("get access NUMBER :::", jsonResponse);
 				if (jsonResponse.webOTP) {
 					self.webOTP = jsonResponse.webOTP;
 				}
@@ -366,12 +365,12 @@ var mpin = mpin || {};
 			var _jsonRes;
 			if (_request.readyState === 4) {
 				if (_request.status === 200) {
-					_jsonRes = JSON.parse(_request.responseText)
-					console.log("success !!!");
+					_jsonRes = JSON.parse(_request.responseText);
 					if (self.opts.onVerifySuccess) {
 						self.opts.onVerifySuccess(_jsonRes);
+					} else {
+						self.successLogin(_jsonRes);
 					}
-					self.successLogin(_jsonRes);
 				} else {
 					console.log("NOT success !!!");
 				}
@@ -509,10 +508,10 @@ var mpin = mpin || {};
 			self.renderAccountsPanel();
 		};
 	};
-	
 
-	
-	
+
+
+
 
 	mpin.prototype.renderDeletePanel = function(iD) {
 		var renderElem, name, self = this;
@@ -544,21 +543,21 @@ var mpin = mpin || {};
 
 		this.render("setup-done", callbacks, {userId: userId});
 	};
-	
+
 	mpin.prototype.renderLogout = function(authData) {
 		var callbacks = {}, self = this, userId;
 
 		callbacks.mpin_action_logout = function() {
-			
+
 			console.log("smth..............", authData);
-		
+
 			self.ajaxPost("http://192.168.10.197:8005/logout", authData, function(res) {
-			
-				if(res){
+
+				if (res) {
 					self.renderLogin();
 				}
 			});
-			
+
 		};
 
 //		console.log("tmpl :::", this.template['logout']);
@@ -752,7 +751,7 @@ var mpin = mpin || {};
 				pinElement.type = "password";
 
 				this.enableNumberButtons(true);
-				
+
 				return;
 			}
 		}
@@ -761,7 +760,7 @@ var mpin = mpin || {};
 
 		if (pinElement.value.length === 1) {
 			this.enableButton(true, "clear");
-		} 
+		}
 
 		else if (this.isAccNumber) {
 			if (pinElement.value.length === this.opts.accessNumberDigits) {
@@ -1000,14 +999,14 @@ var mpin = mpin || {};
 		accessNumber = this.accessNumber;
 		//authServer = this.opts.authenticateURL;
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-				this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authTokenFormatter, this.opts.authenticateHeaders,
+				this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.mobileAuthenticateURL, this.opts.authTokenFormatter, this.opts.authenticateHeaders,
 				function(success, errorCode, errorMessage, authData) {
 					if (success) {
 						//self.successLogin(authData);
 						self.renderLogout(authData);
-						
+
 					}
-					
+
 				}, function() {
 			console.log(" Before HandleToken ::::");
 		});
@@ -1099,7 +1098,7 @@ var mpin = mpin || {};
 		_request.open("GET", url, true);
 		_request.send();
 	};
-	
+
 	//Post request
 	mpin.prototype.ajaxPost = function(url, data, cb) {
 		var _request = new XMLHttpRequest();
@@ -1109,8 +1108,8 @@ var mpin = mpin || {};
 				console.log("POST success ....");
 
 				// Tempory fix
-				if(_request.responseText == '') {
-					cb(true);					
+				if (_request.responseText == '') {
+					cb(true);
 				}
 			}
 		};
@@ -1434,7 +1433,7 @@ var mpin = mpin || {};
 		"pinpad_placeholder_text2": "Enter your access Number",
 		"logout_text1": "YOU ARE NOW LOGGED IN",
 		"logout_button": "Logout"
-		
+
 	};
 	//	image should have config properties
 	hlp.img = function(imgSrc) {
