@@ -6,7 +6,7 @@ var mpin = mpin || {};
 	//CONSTRUCTOR 
 	mpin = function(domID, options) {
 		var self = this;
-		loader("public/mpin/libs/underscore-min.js", function() {
+		loader("public/mpin/underscore-min.js", function() {
 			loader("public/mpin/mpin-all.js", function() {
 				loader("public/mpin/templates.js", function() {
 					var _options = {};
