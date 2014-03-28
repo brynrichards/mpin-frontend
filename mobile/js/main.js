@@ -759,8 +759,6 @@ var mpin = mpin || {};
 
 		pinElement.value += digit;
 
-		console.log("Check pin value length ", pinElement.value.length);
-
 		if (pinElement.value.length === 1) {
 			this.enableButton(true, "clear");
 		} 
