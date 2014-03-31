@@ -168,7 +168,9 @@
 			'			<p><%= hlp.text("setupReady_text3") %></p>' +
 			'		</div>' +
 			'		<button type="button" name="" value="" class="mp_blueBtn" id="mp_action_setup"><%= hlp.text("setupReady_button_go") %></button>' +
+			'		<span id="mp_action_info" class="info-checking"><%= hlp.text("setupNotReady_check_info1") %></span>' +
 			'		<button type="button" name="" value="" class="mp_blueBtn" id="mp_action_resend"><%= hlp.text("setupReady_button_resend") %></button>' +
+			'		<span id="mp_action_info" class="info-checking"><%= hlp.text("setupNotReady_check_info1") %></span>' +
 			'		<div style="clear:both;"></div>' +
 			'	</div>' +
 			'</div></div>';
@@ -181,7 +183,7 @@
 			'</div>' +
 			'</div>' +
 			'</div> ' +
-			'<div style="padding:0px 10px"><button id="mp_acclist_adduser" class="mp_blueSkin" tabindex=-1><%= hlp.text("setupReady_button_resend") %>' +
+			'<div style="padding:0px 10px"><button id="mp_acclist_adduser" class="mp_blueSkin" tabindex=-1><%= hlp.text("account_button_addnew") %>' +
 			'</button></div>';
 
 
