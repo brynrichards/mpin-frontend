@@ -202,20 +202,6 @@ $BORDERLESS : true;
 	min-height: 1.8em;
 	margin-top: 10px;
 
-	// Set as display flex
-
-	display: flex;
-	display: -webkit-box;
-	display: -ms-flexbox;
-
-	-webkit-box-direction: reverse;
-	-ms-flex-direction: row-reverse;
-	flex-direction: row-reverse;
-
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
-
 	padding: 13px 10px 10px;
 }
 
