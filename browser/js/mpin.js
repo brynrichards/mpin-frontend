@@ -58,7 +58,8 @@ var mpin = mpin || {};
 		this.ds = this.dataSource();
 		//set Options
 		this.setOptions(options.server).setOptions(options.client);
-
+		
+		this.checkBrowser();
 		//if set & exist
 		if (this.opts.language && lang[this.opts.language]) {
 			this.language = this.opts.language;
@@ -75,8 +76,15 @@ var mpin = mpin || {};
 //		this.setOptions(options).renderHome();
 //		this.setOptions(options).renderSetupHome();
 //		this.setOptions(options);
-	};
 
+	};
+	mpin.prototype.checkBrowser = function () {
+		console.log("opts :::", this.opts);
+		if (typeof window.localStorage === "undefined") {
+			this.unsupportBrowser("The browser does not support localStorage");
+		}
+		
+	};
 
 	// check minimal required Options
 	//  which should be set up
