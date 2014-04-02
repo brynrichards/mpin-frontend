@@ -31,7 +31,7 @@ var mpin = mpin || {};
 //		apiUrl: "https://m-pinapi.certivox.net/",
 //		apiUrl: "http://dtatest.certivox.me/",
 		language: "en",
-		pinpadDefaultMessage: "",
+		pinpadDefaultMessage: "Enter your M-Pin",
 		pinSize: 4,
 		requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue"
 	};
@@ -378,7 +378,9 @@ var mpin = mpin || {};
 		var _sendParams = {};
 		if (this.webOTP) {
 			_sendParams.webOTP = this.webOTP;
-			console.log("web OTP:", JSON.stringify(_sendParams));
+			if (this.opts.accessNumberRequestFormatter) {
+				_sendParams = this.opts.accessNumberRequestFormatter(_sendParams);
+			}
 			_request.send(JSON.stringify(_sendParams));
 		} else {
 			_request.send();
@@ -530,11 +532,7 @@ var mpin = mpin || {};
 		renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
 
 		document.getElementById("mp_acclist_deluser").onclick = function(evt) {
-//			self.renderSetupHome.call(self, evt);
-			alert("not Implement yet mp_acclist_deluser.");
-
-			self.ds.deleteIdentity(iD);
-
+			self.deleteIdentity(iD);
 		};
 
 		document.getElementById("mp_acclist_cancel").onclick = function(evt) {
@@ -600,7 +598,6 @@ var mpin = mpin || {};
 		rowElem.ondblclick = function() {
 			self.toggleButton.call(self);
 		};
-
 
 		document.getElementById("mp_btIdSettings_" + iNumber).onclick = function(ev) {
 			self.renderUserSettingsPanel(uId);
@@ -683,12 +680,10 @@ var mpin = mpin || {};
 //				self.ds.setIdentityData(rpsData.mpinId, {regOTP: rpsData.regOTP});
 				self.ds.setIdentityData(self.identity, {regOTP: rpsData.regOTP});
 
-
 				// Check for existing userid and delete the old one
 				self.ds.deleteOldIdentity(rpsData.mpinId);
 
 //			self.renderActivateIdentity();
-				console.log(" DONE :::: ");
 
 				spanElem.innerHTML = hlp.text("setupNotReady_resend_info2");
 				spanElem.style.background = "none";
@@ -697,17 +692,10 @@ var mpin = mpin || {};
 					spanElem.style.display = "none";
 					that.style.display = "inline-block";
 				}, 1500);
-
-
-
-
-
-
 			});
 		};
 		//identities list
 		callbacks.mp_action_accounts = function() {
-			console.log(" CREATE frame ELEMENT before use this render HINT !!!");
 //			self.renderAccountsPanel(self);
 			self.renderLogin.call(self, true, email);
 		};
@@ -929,11 +917,10 @@ var mpin = mpin || {};
 		if (this.opts.customHeaders) {
 			_reqData.customHeaders = this.opts.customHeaders;
 		}
-		
+
 		//resend email 
 		// add identity into URL + regOTP
 		requestRPS(_reqData, function(rpsData) {
-			console.log("rpsData on RESEND ::: ::::", rpsData);
 			if (rpsData.error || rpsData.errorStatus) {
 				self.error("Resend problem");
 				return;
@@ -978,7 +965,7 @@ var mpin = mpin || {};
 				_reqData.URL = url;
 				_reqData.method = "POST";
 				_reqData.data = {};
-				
+
 				//get signature
 				requestRPS(_reqData, function(rpsData) {
 					if (rpsData.errorStatus) {
@@ -1020,8 +1007,20 @@ var mpin = mpin || {};
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
 				this.opts.requestOTP, "0", this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
 				function(success, errorCode, errorMessage, authData) {
+					console.log("authenticate arguments :", arguments);
 					if (success) {
 						self.successLogin(authData);
+					} else if (errorCode === "INVALID") {
+						self.display(hlp.text("authPin_errorInvalidPin"), false);
+
+						self.enableNumberButtons(true);
+
+						self.enableButton(false, "go");
+						self.enableButton(false, "clear");
+						self.enableButton(true, "toggle");
+					} else if (errorCode === "MAXATTEMPTS") {
+						var iD = self.identity;
+						self.deleteIdentity(iD);
 					}
 
 				}, function() {
@@ -1051,6 +1050,7 @@ var mpin = mpin || {};
 		}
 
 		if (requestPermit) {
+			console.log("this IDENTITY :: ", this.identity);
 			//new flow v0.3
 			if (this.ds.getIdentityToken(this.identity) == "") {
 				this.renderIdentityNotActive(displayName);
@@ -1130,6 +1130,32 @@ var mpin = mpin || {};
 				function(message, statusCode) {
 					onFail(message, statusCode)
 				});
+	};
+
+	mpin.prototype.deleteIdentity = function(iID) {
+		var newDefaultAccount = "", self = this;
+
+		this.ds.deleteIdentity(iID);
+		for (var i in this.ds.getAccounts()) {
+			newDefaultAccount = i;
+			break;
+		}
+		if (newDefaultAccount) {
+			this.setIdentity(newDefaultAccount, true, function() {
+				self.display(self.cfg.pinpadDefaultMessage);
+			}, function() {
+				return false;
+			});
+
+			this.ds.setDefaultIdentity(newDefaultAccount);
+			this.renderAccountsPanel();
+		} else {
+			this.setIdentity(newDefaultAccount, false);
+			this.ds.setDefaultIdentity("");
+			this.identity = "";
+			this.renderSetupHome();
+		}
+		return false;
 	};
 
 	//data Source with static referance
