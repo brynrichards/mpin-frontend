@@ -58,8 +58,12 @@ var mpin = mpin || {};
 		this.ds = this.dataSource();
 		//set Options
 		this.setOptions(options.server).setOptions(options.client);
-		
-		this.checkBrowser();
+
+		//if false browser unsupport 
+		if (!this.checkBrowser()) {
+			return;
+		}
+
 		//if set & exist
 		if (this.opts.language && lang[this.opts.language]) {
 			this.language = this.opts.language;
@@ -78,12 +82,34 @@ var mpin = mpin || {};
 //		this.setOptions(options);
 
 	};
-	mpin.prototype.checkBrowser = function () {
-		console.log("opts :::", this.opts);
-		if (typeof window.localStorage === "undefined") {
-			this.unsupportBrowser("The browser does not support localStorage");
+
+	mpin.prototype.checkBrowser = function() {
+		var navAgent, onUnsupport = true;
+		navAgent = navigator.userAgent.toLowerCase();
+
+		if (navAgent.indexOf('msie') !== -1) {
+			var ieVer = parseInt(navAgent.split('msie')[1]);
+			if (ieVer < 10) {
+				this.unsupportedBrowser("The browser is not supported");
+				onUnsupport = false;
+			}
 		}
-		
+
+		if (typeof window.localStorage === "undefined") {
+			this.unsupportedBrowser("The browser does not support localStorage");
+			onUnsupport = false;
+		}
+
+		return onUnsupport;
+	};
+
+	mpin.prototype.unsupportedBrowser = function(message) {
+		if (this.opts.onUnsupportedBrowser) {
+			this.opts.onUnsupportedBrowser(message);
+		} else {
+			this.el.innerHTML = "<b>" + message + "</b>";
+		}
+		return;
 	};
 
 	// check minimal required Options
@@ -102,8 +128,8 @@ var mpin = mpin || {};
 	mpin.prototype.setOptions = function(options) {
 		var _i, _opts, _optionName, _options = "requestOTP; successSetupURL; onSuccessSetup; successLoginURL; onSuccessLogin; onLoaded; onGetPermit; ";
 		_options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; mpinDTAServerURL; signatureURL; verifyTokenURL; certivoxURL; ";
-		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; authenticateHeaders; authTokenFormatter; accessNumberRequestFormatter; ";
-		_options += "registerRequestFormatter; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
+		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; customHeaders; authenticateRequestFormatter; accessNumberRequestFormatter; ";
+		_options += "registerRequestFormatter; mobileSupport; identityCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
 		_options += "language; customLanguageTexts";
 		_opts = _options.split("; ");
 		this.opts || (this.opts = {});
@@ -636,6 +662,14 @@ var mpin = mpin || {};
 				regOTP: regOTP
 			};
 
+			if (self.opts.registerRequestFormatter) {
+				_reqData.postDataFormatter = self.opts.registerRequestFormatter;
+			}
+			if (self.opts.customHeaders) {
+				_reqData.customHeaders = self.opts.customHeaders;
+			}
+			//registerRequestFormatter
+
 			//resend email 
 			// add identity into URL + regOTP
 			requestRPS(_reqData, function(rpsData) {
@@ -798,7 +832,7 @@ var mpin = mpin || {};
 
 	mpin.prototype.actionSetupHome = function() {
 		var _email = document.getElementById("mp_emailaddress").value, _reqData = {}, self = this;
-		if (_email.length === 0 || !this.opts.emailCheckRegex.test(_email)) {
+		if (_email.length === 0 || !this.opts.identityCheckRegex.test(_email)) {
 			document.getElementById("mp_emailaddress").focus();
 			return;
 		}
@@ -811,6 +845,12 @@ var mpin = mpin || {};
 			mobile: 0
 		};
 
+		if (this.opts.registerRequestFormatter) {
+			_reqData.postDataFormatter = this.opts.registerRequestFormatter;
+		}
+		if (this.opts.customHeaders) {
+			_reqData.customHeaders = this.opts.customHeaders;
+		}
 		//register identity
 		requestRPS(_reqData, function(rpsData) {
 			if (rpsData.error) {
@@ -873,7 +913,7 @@ var mpin = mpin || {};
 		spanElem.style.display = "inline-block";
 		spanElem.innerHTML = hlp.text("setupNotReady_resend_info1") + "...<br/>";
 
-		
+
 
 		_reqData.URL = this.opts.registerURL;
 		_reqData.URL += "/" + this.identity;
@@ -883,7 +923,13 @@ var mpin = mpin || {};
 			mobile: 0,
 			regOTP: regOTP
 		};
-
+		if (this.opts.registerRequestFormatter) {
+			_reqData.postDataFormatter = this.opts.registerRequestFormatter;
+		}
+		if (this.opts.customHeaders) {
+			_reqData.customHeaders = this.opts.customHeaders;
+		}
+		
 		//resend email 
 		// add identity into URL + regOTP
 		requestRPS(_reqData, function(rpsData) {
@@ -932,7 +978,7 @@ var mpin = mpin || {};
 				_reqData.URL = url;
 				_reqData.method = "POST";
 				_reqData.data = {};
-
+				
 				//get signature
 				requestRPS(_reqData, function(rpsData) {
 					if (rpsData.errorStatus) {
@@ -972,7 +1018,7 @@ var mpin = mpin || {};
 
 		//authServer = this.opts.authenticateURL;
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-				this.opts.requestOTP, "0", this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authTokenFormatter, this.opts.authenticateHeaders,
+				this.opts.requestOTP, "0", this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
 				function(success, errorCode, errorMessage, authData) {
 					if (success) {
 						self.successLogin(authData);
@@ -1036,25 +1082,6 @@ var mpin = mpin || {};
 		}
 	};
 
-	/*
-	 * 
-	 * @param {type} authData
-	 * @returns {undefined}
-	 * 	successSetup: function(authData){
-	 if (mpin.opts.successSetupURL) {
-	 window.location = mpin.opts.successSetupURL;
-	 } else if (mpin.opts.onSuccessSetup) {
-	 ,			mpin.opts.onSuccessSetup(authData, function(){
-	 mpin.renderSetupDone();
-	 });
-	 } else {
-	 mpin.renderSetupDone();
-	 }
-	 },
-	 * 
-	 */
-
-
 	mpin.prototype.successSetup = function(authData) {
 		var self = this;
 		if (this.opts.successSetupURL) {
@@ -1093,7 +1120,7 @@ var mpin = mpin || {};
 	//new Function
 	mpin.prototype.requestPermit = function(identity, onSuccess, onFail) {
 		var self = this;
-		requestTimePermit(self.certivoxPermitsURL(), self.dtaPermitsURL(), self.opts.authenticateHeaders,
+		requestTimePermit(self.certivoxPermitsURL(), self.dtaPermitsURL(), self.opts.customHeaders,
 				function(timePermitHex) {
 					self.ds.setIdentityPermit(self.identity, timePermitHex);
 					self.ds.save();
