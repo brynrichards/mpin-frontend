@@ -31,7 +31,7 @@ var mpin = mpin || {};
 //		apiUrl: "https://m-pinapi.certivox.net/",
 //		apiUrl: "http://dtatest.certivox.me/",
 		language: "en",
-		pinpadDefaultMessage: "",
+		pinpadDefaultMessage: "Enter your M-Pin",
 		pinSize: 4,
 		requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue"
 	};
@@ -59,6 +59,11 @@ var mpin = mpin || {};
 		//set Options
 		this.setOptions(options.server).setOptions(options.client);
 
+		//if false browser unsupport 
+		if (!this.checkBrowser()) {
+			return;
+		}
+
 		//if set & exist
 		if (this.opts.language && lang[this.opts.language]) {
 			this.language = this.opts.language;
@@ -75,8 +80,37 @@ var mpin = mpin || {};
 //		this.setOptions(options).renderHome();
 //		this.setOptions(options).renderSetupHome();
 //		this.setOptions(options);
+
 	};
 
+	mpin.prototype.checkBrowser = function() {
+		var navAgent, onUnsupport = true;
+		navAgent = navigator.userAgent.toLowerCase();
+
+		if (navAgent.indexOf('msie') !== -1) {
+			var ieVer = parseInt(navAgent.split('msie')[1]);
+			if (ieVer < 10) {
+				this.unsupportedBrowser("The browser is not supported");
+				onUnsupport = false;
+			}
+		}
+
+		if (typeof window.localStorage === "undefined") {
+			this.unsupportedBrowser("The browser does not support localStorage");
+			onUnsupport = false;
+		}
+
+		return onUnsupport;
+	};
+
+	mpin.prototype.unsupportedBrowser = function(message) {
+		if (this.opts.onUnsupportedBrowser) {
+			this.opts.onUnsupportedBrowser(message);
+		} else {
+			this.el.innerHTML = "<b>" + message + "</b>";
+		}
+		return;
+	};
 
 	// check minimal required Options
 	//  which should be set up
@@ -94,8 +128,8 @@ var mpin = mpin || {};
 	mpin.prototype.setOptions = function(options) {
 		var _i, _opts, _optionName, _options = "requestOTP; successSetupURL; onSuccessSetup; successLoginURL; onSuccessLogin; onLoaded; onGetPermit; ";
 		_options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; mpinDTAServerURL; signatureURL; verifyTokenURL; certivoxURL; ";
-		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; authenticateHeaders; authTokenFormatter; accessNumberRequestFormatter; ";
-		_options += "registerRequestFormatter; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
+		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; customHeaders; authenticateRequestFormatter; accessNumberRequestFormatter; ";
+		_options += "registerRequestFormatter; mobileSupport; identityCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
 		_options += "language; customLanguageTexts";
 		_opts = _options.split("; ");
 		this.opts || (this.opts = {});
@@ -344,7 +378,9 @@ var mpin = mpin || {};
 		var _sendParams = {};
 		if (this.webOTP) {
 			_sendParams.webOTP = this.webOTP;
-			console.log("web OTP:", JSON.stringify(_sendParams));
+			if (this.opts.accessNumberRequestFormatter) {
+				_sendParams = this.opts.accessNumberRequestFormatter(_sendParams);
+			}
 			_request.send(JSON.stringify(_sendParams));
 		} else {
 			_request.send();
@@ -496,11 +532,7 @@ var mpin = mpin || {};
 		renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
 
 		document.getElementById("mp_acclist_deluser").onclick = function(evt) {
-//			self.renderSetupHome.call(self, evt);
-			alert("not Implement yet mp_acclist_deluser.");
-
-			self.ds.deleteIdentity(iD);
-
+			self.deleteIdentity(iD);
 		};
 
 		document.getElementById("mp_acclist_cancel").onclick = function(evt) {
@@ -567,7 +599,6 @@ var mpin = mpin || {};
 			self.toggleButton.call(self);
 		};
 
-
 		document.getElementById("mp_btIdSettings_" + iNumber).onclick = function(ev) {
 			self.renderUserSettingsPanel(uId);
 			ev.stopPropagation();
@@ -628,6 +659,14 @@ var mpin = mpin || {};
 				regOTP: regOTP
 			};
 
+			if (self.opts.registerRequestFormatter) {
+				_reqData.postDataFormatter = self.opts.registerRequestFormatter;
+			}
+			if (self.opts.customHeaders) {
+				_reqData.customHeaders = self.opts.customHeaders;
+			}
+			//registerRequestFormatter
+
 			//resend email 
 			// add identity into URL + regOTP
 			requestRPS(_reqData, function(rpsData) {
@@ -641,12 +680,10 @@ var mpin = mpin || {};
 //				self.ds.setIdentityData(rpsData.mpinId, {regOTP: rpsData.regOTP});
 				self.ds.setIdentityData(self.identity, {regOTP: rpsData.regOTP});
 
-
 				// Check for existing userid and delete the old one
 				self.ds.deleteOldIdentity(rpsData.mpinId);
 
 //			self.renderActivateIdentity();
-				console.log(" DONE :::: ");
 
 				spanElem.innerHTML = hlp.text("setupNotReady_resend_info2");
 				spanElem.style.background = "none";
@@ -655,17 +692,10 @@ var mpin = mpin || {};
 					spanElem.style.display = "none";
 					that.style.display = "inline-block";
 				}, 1500);
-
-
-
-
-
-
 			});
 		};
 		//identities list
 		callbacks.mp_action_accounts = function() {
-			console.log(" CREATE frame ELEMENT before use this render HINT !!!");
 //			self.renderAccountsPanel(self);
 			self.renderLogin.call(self, true, email);
 		};
@@ -790,7 +820,7 @@ var mpin = mpin || {};
 
 	mpin.prototype.actionSetupHome = function() {
 		var _email = document.getElementById("mp_emailaddress").value, _reqData = {}, self = this;
-		if (_email.length === 0 || !this.opts.emailCheckRegex.test(_email)) {
+		if (_email.length === 0 || !this.opts.identityCheckRegex.test(_email)) {
 			document.getElementById("mp_emailaddress").focus();
 			return;
 		}
@@ -803,6 +833,12 @@ var mpin = mpin || {};
 			mobile: 0
 		};
 
+		if (this.opts.registerRequestFormatter) {
+			_reqData.postDataFormatter = this.opts.registerRequestFormatter;
+		}
+		if (this.opts.customHeaders) {
+			_reqData.customHeaders = this.opts.customHeaders;
+		}
 		//register identity
 		requestRPS(_reqData, function(rpsData) {
 			if (rpsData.error) {
@@ -865,7 +901,7 @@ var mpin = mpin || {};
 		spanElem.style.display = "inline-block";
 		spanElem.innerHTML = hlp.text("setupNotReady_resend_info1") + "...<br/>";
 
-		
+
 
 		_reqData.URL = this.opts.registerURL;
 		_reqData.URL += "/" + this.identity;
@@ -875,11 +911,16 @@ var mpin = mpin || {};
 			mobile: 0,
 			regOTP: regOTP
 		};
+		if (this.opts.registerRequestFormatter) {
+			_reqData.postDataFormatter = this.opts.registerRequestFormatter;
+		}
+		if (this.opts.customHeaders) {
+			_reqData.customHeaders = this.opts.customHeaders;
+		}
 
 		//resend email 
 		// add identity into URL + regOTP
 		requestRPS(_reqData, function(rpsData) {
-			console.log("rpsData on RESEND ::: ::::", rpsData);
 			if (rpsData.error || rpsData.errorStatus) {
 				self.error("Resend problem");
 				return;
@@ -964,10 +1005,25 @@ var mpin = mpin || {};
 
 		//authServer = this.opts.authenticateURL;
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-				this.opts.requestOTP, "0", this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authTokenFormatter, this.opts.authenticateHeaders,
+				this.opts.requestOTP, "0", this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
 				function(success, errorCode, errorMessage, authData) {
+					console.log("authenticate arguments :", arguments);
 					if (success) {
 						self.successLogin(authData);
+					} else if (errorCode === "INVALID") {
+						self.display(hlp.text("authPin_errorInvalidPin"), false);
+
+						self.enableNumberButtons(true);
+
+						self.enableButton(false, "go");
+						self.enableButton(false, "clear");
+						self.enableButton(true, "toggle");
+					} else if (errorCode === "MAXATTEMPTS") {
+						var iD = self.identity;
+						self.deleteIdentity(iD);
+						if (self.opts.onAccountDisabled) {
+							self.opts.onAccountDisabled(iD);
+						}
 					}
 
 				}, function() {
@@ -997,6 +1053,7 @@ var mpin = mpin || {};
 		}
 
 		if (requestPermit) {
+			console.log("this IDENTITY :: ", this.identity);
 			//new flow v0.3
 			if (this.ds.getIdentityToken(this.identity) == "") {
 				this.renderIdentityNotActive(displayName);
@@ -1027,25 +1084,6 @@ var mpin = mpin || {};
 			});
 		}
 	};
-
-	/*
-	 * 
-	 * @param {type} authData
-	 * @returns {undefined}
-	 * 	successSetup: function(authData){
-	 if (mpin.opts.successSetupURL) {
-	 window.location = mpin.opts.successSetupURL;
-	 } else if (mpin.opts.onSuccessSetup) {
-	 ,			mpin.opts.onSuccessSetup(authData, function(){
-	 mpin.renderSetupDone();
-	 });
-	 } else {
-	 mpin.renderSetupDone();
-	 }
-	 },
-	 * 
-	 */
-
 
 	mpin.prototype.successSetup = function(authData) {
 		var self = this;
@@ -1085,7 +1123,7 @@ var mpin = mpin || {};
 	//new Function
 	mpin.prototype.requestPermit = function(identity, onSuccess, onFail) {
 		var self = this;
-		requestTimePermit(self.certivoxPermitsURL(), self.dtaPermitsURL(), self.opts.authenticateHeaders,
+		requestTimePermit(self.certivoxPermitsURL(), self.dtaPermitsURL(), self.opts.customHeaders,
 				function(timePermitHex) {
 					self.ds.setIdentityPermit(self.identity, timePermitHex);
 					self.ds.save();
@@ -1095,6 +1133,32 @@ var mpin = mpin || {};
 				function(message, statusCode) {
 					onFail(message, statusCode)
 				});
+	};
+
+	mpin.prototype.deleteIdentity = function(iID) {
+		var newDefaultAccount = "", self = this;
+
+		this.ds.deleteIdentity(iID);
+		for (var i in this.ds.getAccounts()) {
+			newDefaultAccount = i;
+			break;
+		}
+		if (newDefaultAccount) {
+			this.setIdentity(newDefaultAccount, true, function() {
+				self.display(self.cfg.pinpadDefaultMessage);
+			}, function() {
+				return false;
+			});
+
+			this.ds.setDefaultIdentity(newDefaultAccount);
+			this.renderAccountsPanel();
+		} else {
+			this.setIdentity(newDefaultAccount, false);
+			this.ds.setDefaultIdentity("");
+			this.identity = "";
+			this.renderSetupHome();
+		}
+		return false;
 	};
 
 	//data Source with static referance
