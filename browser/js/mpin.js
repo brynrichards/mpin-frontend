@@ -1021,6 +1021,9 @@ var mpin = mpin || {};
 					} else if (errorCode === "MAXATTEMPTS") {
 						var iD = self.identity;
 						self.deleteIdentity(iD);
+						if (self.opts.onAccountDisabled) {
+							self.opts.onAccountDisabled(iD);
+						}
 					}
 
 				}, function() {
