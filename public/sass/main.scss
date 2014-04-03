@@ -432,6 +432,20 @@ body {
 
 	.mpinBtn {
 		@include mpin-button();
+
+		// Set as display flex
+
+		display: flex;
+		display: -webkit-box;
+		display: -ms-flexbox;
+
+		-webkit-box-direction: reverse;
+		-ms-flex-direction: row-reverse;
+		flex-direction: row-reverse;
+
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
 		
 		font-size: 17px;
 		margin-bottom: 3%;
@@ -462,6 +476,21 @@ body {
 			text-align: center;
 			display: block;
 			overflow: hidden;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		}
 	}
 
