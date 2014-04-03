@@ -223,6 +223,7 @@ var mpin = mpin || {};
 		callbacks.mpinLogin = function() {
 			self.actionSetup.call(self);
 		};
+
 		this.render("setup", callbacks, {email: email});
 
 		document.body.className = 'pinpadGlobal'
@@ -235,6 +236,7 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.renderLogin = function(listAccounts) {
+
 		var callbacks = {}, self = this;
 
 		var identity = this.ds.getDefaultIdentity();
@@ -247,12 +249,11 @@ var mpin = mpin || {};
 		callbacks.mp_action_home = function(evt) {
 			self.renderHome.call(self, evt);
 		};
+		
 		callbacks.mpinClear = function() {
 			self.addToPin.call(self, "clear");
 		};
-		callbacks.mp_toggleButton = function() {
-			self.toggleButton.call(self);
-		};
+
 		callbacks.mpinLogin = function() {
 			self.actionLogin.call(self);
 		};
@@ -376,6 +377,7 @@ var mpin = mpin || {};
 		callbacks.mp_action_cancel = function() {
 			self.renderHome.call(self);
 		};
+
 
 		this.render("mobile-setup", callbacks, {mobileAppFullURL: this.opts.mobileAppFullURL});
 		qrElem = document.getElementById("mp_qrcode");
@@ -599,6 +601,8 @@ var mpin = mpin || {};
 		callbacks.mp_action_home = function(evt) {
 			self.renderHome.call(self, evt);
 		};
+
+		
 		//Check again
 		callbacks.mp_action_login = function() {
 			var spanElem = document.getElementById("mp_info_recheck"), that = this;
@@ -711,7 +715,7 @@ var mpin = mpin || {};
 		var buttonValue = {}, _element;
 		buttonValue.go = {id: "mpinLogin", trueClass: "btn", falseClass: "btn mp_inactive"};
 		buttonValue.clear = {id: "mpinClear", trueClass: "btn", falseClass: "btn mp_inactive"};
-		buttonValue.toggle = {id: "mp_toggleButton", trueClass: "mp_DisabledState", falseClass: ""};
+		buttonValue.toggle = {id: "menuBtn", trueClass: "mp_DisabledState", falseClass: ""};
 		_element = document.getElementById(buttonValue[buttonName].id);
 		if (!buttonValue[buttonName] || !_element) {
 			return;
