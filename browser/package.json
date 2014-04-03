@@ -1,0 +1,22 @@
+{
+  "name": "mpinmobile",
+  "type": "mobile",
+  "version": "0.0.1",
+  "description": "M-PIN Mobile app in pure JavaScript without dependency from Sencha",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://jordan.katsarov@stash.certivox.com/scm/skypin/mpinmobile.git"
+  },
+  "author": "Jordan Katsarov",
+  "license": "ISC",
+  "devDependencies": {
+      "grunt": "~0.4.1",
+      "grunt-contrib-sass": "~0.3.0",
+      "grunt-contrib-watch": "~0.4.4",
+      "grunt-shell": "*"
+  }
+}

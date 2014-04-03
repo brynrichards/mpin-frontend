@@ -14,3 +14,12 @@ Deploy notes for Browser version mpin ver 0.3
 IMAGES into img get from: 
  /var/www/frontend/build/out/mobile/resources/templates/grey/img
 
+SETUP M-Pin Browser environment
+==================================
+
+insall node  > ver. 0.10
+install python
+install gem - ruby 1.9.1
+install npm
+npm install (install dependencies desc into package.json) grund
+

@@ -7,13 +7,13 @@ module.exports = function(grunt) {
 				    style: 'compressed'
 				},
 				files: {
-					'../build/out/mobile/css/main.css' : '../public/sass/main.scss'
+					'css/main.css' : 'src/sass/main.scss'
 				}
 			}
 		},
 		shell: {
 			makeViews: {
-				command: 'python ../build/buildTemplates.py ../build/out/mobile/js/templates.js',
+				command: 'python src/buildTemplates.py js/templates.js',
 				options: {
                 			stdout: true,
 				}
@@ -21,11 +21,11 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			css: {
-				files: '../public/sass/*.scss',
+				files: 'src/sass/*.scss',
 				tasks: ['sass']
 			},
 			views: {
-				files: '../public/views/*.html',
+				files: 'src/templates/*.html',
 				tasks: ['shell:makeViews']
 			}
 		}
