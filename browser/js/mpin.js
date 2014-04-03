@@ -127,9 +127,9 @@ var mpin = mpin || {};
 
 	mpin.prototype.setOptions = function(options) {
 		var _i, _opts, _optionName, _options = "requestOTP; successSetupURL; onSuccessSetup; successLoginURL; onSuccessLogin; onLoaded; onGetPermit; ";
-		_options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; mpinDTAServerURL; signatureURL; verifyTokenURL; certivoxURL; ";
+		_options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; signatureURL; verifyTokenURL; certivoxURL; ";
 		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; customHeaders; authenticateRequestFormatter; accessNumberRequestFormatter; ";
-		_options += "registerRequestFormatter; mobileSupport; identityCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
+		_options += "registerRequestFormatter; identityCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
 		_options += "language; customLanguageTexts";
 		_opts = _options.split("; ");
 		this.opts || (this.opts = {});
@@ -199,6 +199,10 @@ var mpin = mpin || {};
 
 		if (this.opts.mobileAppFullURL) {
 			this.renderHomeMobile();
+		}
+		
+		if (this.opts.onLoaded) {
+			this.opts.onLoaded();
 		}
 	};
 	mpin.prototype.renderHomeMobile = function() {
@@ -1259,11 +1263,6 @@ var mpin = mpin || {};
 //		return this.cfg.apiUrl + this.cfg.apiVersion + "/clientSecret?" + params;
 		return this.opts.certivoxURL + "/clientSecret?" + params;
 	};
-
-	mpin.prototype.dtaClientSecretURL = function(params) {
-		return this.opts.mpinDTAServerURL + "clientSecret?" + params;
-	};
-
 
 	mpin.prototype.certivoxPermitsURL = function() {
 		var mpin_idHex = this.identity;
