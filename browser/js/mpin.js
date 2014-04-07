@@ -179,14 +179,14 @@ var mpin = mpin || {};
 			this.renderSetup(this.opts.prerollid);
 		}
 
-		callbacks.mp_action_addIdentity1 = function(evt) {
+		callbacks.mpin_setup = function(evt) {
 			self.renderSetupHome.call(self, evt);
 		};
-		callbacks.mp_action_Login1 = function(evt) {
+		callbacks.mpin_authenticate = function(evt) {
 			self.renderLogin.call(self);
 		};
-		callbacks.mp_action_addIdentity2 = callbacks.mp_action_addIdentity1;
-		callbacks.mp_action_Login2 = callbacks.mp_action_Login1;
+//		callbacks.mp_action_addIdentity2 = callbacks.mp_action_addIdentity1;
+//		callbacks.mp_action_Login2 = callbacks.mp_action_Login1;
 		this.render('home', callbacks);
 
 		if (this.opts.mobileAppFullURL) {
@@ -776,31 +776,33 @@ var mpin = mpin || {};
 
 	mpin.prototype.bindNumberButtons = function() {
 		var self = this, btEls;
-		btEls = document.getElementsByClassName("mp_pindigit");
+		btEls = document.getElementsByClassName("btn");
 		for (var i = 0; i < btEls.length; i++) {
 			btEls[i].onclick = function(el) {
+				console.log("-----",el);
+				console.log("-----",el.target.getAttribute("data-value"));
 				self.addToPin(el.target.getAttribute("data-value"));
 				return false;
 			};
 		}
 	};
 	mpin.prototype.enableNumberButtons = function(enable) {
-		var els = document.getElementsByClassName("mp_pindigit");
+		var els = document.getElementsByClassName("btn");
 		for (var i = 0; i < els.length; i++) {
 			var element = els[i];
 			if (enable) {
-				element.className = "mp_pin mp_pindigit";
+				element.className = "btn";
 				element.disabled = false;
 			} else {
-				element.className = "mp_pin mp_pindigit mp_inactive";
+				element.className = "btn mp_inactive";
 				element.disabled = true;
 			}
 		}
 	};
 	//
 	mpin.prototype.addToPin = function(digit) {
-		var pinElement = document.getElementById('mp_pin');
-		document.getElementById('mp_display').style.display = 'none';
+		var pinElement = document.getElementById('pinpad-input');
+		document.getElementById('pinpad-input').style.display = 'none';
 		pinElement.style.display = 'block';
 		if (digit === 'clear') {
 			this.display("");
@@ -1117,8 +1119,8 @@ var mpin = mpin || {};
 			displayName = this.getDisplayName(this.identity);
 		}
 
-		accId = document.getElementById('mp_accountID');
-		accId.innerHTML = displayName;
+		accId = document.getElementById('mpinUser');
+		accId.innerHTML = "<p>"  + displayName + "</p>";
 		accId.setAttribute("title", displayName);
 
 		// no Identity go to setup HOME
