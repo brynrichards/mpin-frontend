@@ -219,6 +219,7 @@ var mpin = mpin || {};
 
 
 	mpin.prototype.renderSetup = function(email, clientSecretShare, clientSecretParams) {
+
 		var callbacks = {}, self = this;
 		callbacks.mp_action_home = function(evt) {
 			self.renderHome.call(self, evt);
@@ -229,6 +230,12 @@ var mpin = mpin || {};
 		callbacks.mpinLogin = function() {
 			self.actionSetup.call(self);
 		};
+
+		callbacks.menuBtn = function() {
+			self.toggleButton.call(self);
+		};
+
+
 
 		this.render("setup", callbacks, {email: email});
 
@@ -257,7 +264,8 @@ var mpin = mpin || {};
 		callbacks.mpinClear = function() {
 			self.addToPin.call(self, "clear");
 		};
-		callbacks.mp_toggleButton = function() {
+
+		callbacks.menuBtn = function() {
 			self.toggleButton.call(self);
 		};
 
@@ -460,12 +468,13 @@ var mpin = mpin || {};
 			p.className = "mp_contentEmptyItem";
 			cnt.appendChild(p);
 		};
-		renderElem = document.getElementById("mp_back");
+		renderElem = document.getElementById("mpinMaster");
 		renderElem.innerHTML = this.readyHtml("accounts-panel", {});
 
 		document.getElementById("mp_acclist_adduser").onclick = function(evt) {
 			self.renderSetupHome.call(self, evt);
 		};
+
 		//default IDENTITY
 		var cnt = document.getElementById("mp_accountContent");
 		this.addUserToList(cnt, this.ds.getDefaultIdentity(), true, 0);
@@ -831,8 +840,10 @@ var mpin = mpin || {};
 
 	mpin.prototype.toggleButton = function() {
 		var self = this;
-		if (hasClass("mp_panel", "mp_flip")) {
-			document.getElementById('mp_accountID').style.display = 'inline';
+
+		// console.log(self);
+
+		if (document.getElementById("menuBtn")) {
 
 			console.log("set IDENTITY ;::", typeof this.setIdentity);
 
@@ -841,6 +852,8 @@ var mpin = mpin || {};
 			}, function() {
 				return false;
 			});
+
+			this.renderAccountsPanel();
 
 			removeClass("mp_toggleButton", "mp_SelectedState");
 			removeClass("mp_panel", "mp_flip");
