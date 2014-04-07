@@ -26,46 +26,13 @@
 	box-flex:$value;
 }
 
-html, body {
+.mpinContainer {
+
+	position: relative;
+	width: 300px;
 	height: 100%;
-	width: 100%;
 	@include bg-color();
-	margin: 0;
-}
 
-body {
-
-
-	// Set main font
-
-	font-size: 104%;
-
-	@include font-family();
-
-	// Hide the overflow
-
-	overflow: hidden;
-
-	h1 {
-		font-size: 20px;
-		color: darkgrey;
-	}
-
-	-webkit-text-size-adjust: 100%; /* 2 */
-	-ms-text-size-adjust: 100%; /* 2 */
-
-	position: relative;
-
-	overflow: hidden;
-
-}
-
-#mpinContainer {
-
-	position: relative;
-	width: 100%;
-	height: 100%;
-	
 	// Import the pinpad styles
 
 
@@ -75,26 +42,33 @@ body {
 		// -ms-flex-align: stretch;
 		// align-items: stretch;
 
-		height: 100%;
+		//height: 100%;
 		width: 100%;
-		position: absolute;
+		//position: absolute;
 		width: 100;
 		z-index: 0;
 		top: 0;
 		bottom: 0;
 		left: 0;
 		right: 0;
+		
+		background-color: inherit;
 
-		#mpinMaster {
-			position: absolute;
+		.mpinMaster {
+			//position: absolute;
 			top: 0;
 			right: 0;
 			bottom: 0;
 			left: 0;
 			width: 100%;
-			height: 100%;
+			//height: 100%;
+			min-height: 434px;
 
 
+			// background color
+			
+			background-color: inherit;
+			
 			-webkit-box-align: stretch;
 			-ms-flex-align: stretch;
 			align-items: stretch;
@@ -112,7 +86,7 @@ body {
 			// // display: -ms-flexbox;
 
 			// padding: 10px 10px 0 10px;
-			
+
 			// Import the pinpad SASS
 			@import 'pinpad';
 
@@ -182,9 +156,9 @@ body {
 		display: flex;
 		display: -webkit-box;
 		display: -ms-flexbox;
-		
+
 		#mpinUser {
-			
+
 			@include box-flex-value(1.0);
 			@include mpin-user();
 		}
@@ -217,7 +191,7 @@ body {
 		-ms-flex-direction: column;
 		flex-direction: column;
 		min-height: 0px;
-		
+
 		text-align: center;
 		text-transform: uppercase;
 
@@ -231,7 +205,7 @@ body {
 			display: -ms-flexbox;
 
 			-ms-flex-pack: center;
-			
+
 			-webkit-box-flex: 1;
 			-ms-flex: 1 0 auto;
 			flex: 1 0 auto;
@@ -322,7 +296,7 @@ body {
 
 						@include email-input();
 
-						-webkit-user-select: text; 
+						-webkit-user-select: text;
 						-webkit-appearance: none;
 
 						border-width: 0;
@@ -427,7 +401,7 @@ body {
 
 		@include mpin-copyright();
 	}
-	
+
 	// General button styling
 
 	.mpinBtn {
@@ -446,7 +420,7 @@ body {
 		-webkit-box-align: center;
 		-ms-flex-align: center;
 		align-items: center;
-		
+
 		font-size: 17px;
 		margin-bottom: 3%;
 
