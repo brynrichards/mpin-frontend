@@ -46,6 +46,7 @@ var mpin = mpin || {};
 	 */
 	mpin.prototype.initialize = function(domID, options) {
 		this.el = document.getElementById(domID);
+		addClass(this.el, "mpinMaster");
 		//options CHECK
 		if (!options || !this.checkOptions(options.server)) {
 //			this.error(" Some options are required :" + this.cfg.requiredOptions);
@@ -72,15 +73,7 @@ var mpin = mpin || {};
 		}
 		this.setLanguageText();
 
-		//this.renderSetupHome();
-//		this.renderMobileSetup();
-		// Check for appID
 		this.renderHome();
-//		this.renderLogin();
-//		this.setOptions(options).renderHome();
-//		this.setOptions(options).renderSetupHome();
-//		this.setOptions(options);
-
 	};
 
 	mpin.prototype.checkBrowser = function() {
@@ -127,7 +120,7 @@ var mpin = mpin || {};
 
 	mpin.prototype.setOptions = function(options) {
 		var _i, _opts, _optionName, _options = "requestOTP; successSetupURL; onSuccessSetup; successLoginURL; onSuccessLogin; onLoaded; onGetPermit; ";
-		_options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; signatureURL; verifyTokenURL; certivoxURL; ";
+		_options += "onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; signatureURL; verifyTokenURL; certivoxURL; ";
 		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; customHeaders; authenticateRequestFormatter; accessNumberRequestFormatter; ";
 		_options += "registerRequestFormatter; identityCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
 		_options += "language; customLanguageTexts";
@@ -145,7 +138,6 @@ var mpin = mpin || {};
 		return this;
 	};
 
-	//return readyHtml
 	mpin.prototype.readyHtml = function(tmplName, tmplData) {
 		var data = tmplData, html;
 		mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
@@ -200,7 +192,7 @@ var mpin = mpin || {};
 		if (this.opts.mobileAppFullURL) {
 			this.renderHomeMobile();
 		}
-		
+
 		if (this.opts.onLoaded) {
 			this.opts.onLoaded();
 		}
@@ -422,6 +414,7 @@ var mpin = mpin || {};
 		callbacks.mp_action_setup = function(evt) {
 //			self.renderSetup
 			self.beforeRenderSetup.call(self);
+			//self.actionSetupHome.call(self, evt);
 //			self.renderSetup.call(self, self.getDisplayName(email));
 //			self.renderLogin.call(self, evt);
 		};
@@ -487,7 +480,12 @@ var mpin = mpin || {};
 		//default IDENTITY
 		var cnt = document.getElementById("mp_accountContent");
 		defaultIdentity = this.ds.getDefaultIdentity();
-		this.addUserToList(cnt, defaultIdentity, true, 0);
+		if (defaultIdentity) {
+			this.addUserToList(cnt, defaultIdentity, true, 0);
+		}
+		//bug1 default identity
+
+		console.log("defaultIDENTITY :", defaultIdentity);
 
 		for (var i in this.ds.getAccounts()) {
 			c += 1;
@@ -616,14 +614,84 @@ var mpin = mpin || {};
 		callbacks.mp_action_home = function(evt) {
 			self.renderHome.call(self, evt);
 		};
+
 		//Check again
-		callbacks.mp_action_login = function() {
-			var spanElem = document.getElementById("mp_info_recheck"), that = this;
+		callbacks.mp_action_setup = function() {
+			var spanElem = document.getElementById("mp_info_recheck"), that = this,
+					_reqData = {}, regOTP, url;
+			
 			this.style.display = "none";
 			spanElem.className = "info-checking";
 			spanElem.style.display = "inline-block";
 			spanElem.innerHTML = hlp.text("setupNotReady_check_info1") + "...<br/>";
 
+			console.log("IDENTITY --- :::", self.identity);
+			console.log("IDENTITY --- :::", self.identity.length);
+
+			regOTP = self.ds.getIdentityData(self.identity, "regOTP");
+			url = self.opts.signatureURL + "/" + self.identity + "?regOTP=" + regOTP;
+
+			_reqData.URL = url;
+			_reqData.method = "GET";
+
+			requestRPS(_reqData, function(rpsData) {
+				if (rpsData.errorStatus) {
+					spanElem.className = "info-error";
+					spanElem.innerHTML = hlp.text("setupNotReady_check_info2") + "<br/>";
+					self.error("Activate identity");
+					setTimeout(function() {
+						spanElem.style.display = "none";
+						that.style.display = "inline-block";
+					}, 1500);
+
+					return;
+				}
+
+				var userId = self.getDisplayName(self.identity);
+				self.renderSetup(userId, rpsData.clientSecretShare, rpsData.params);
+			});
+
+
+			/*
+			 * 
+			 * 		var _reqData = {}, regOTP, url, self = this;
+			 regOTP = this.ds.getIdentityData(this.identity, "regOTP");
+			 url = this.opts.signatureURL + "/" + this.identity + "?regOTP=" + regOTP;
+			 
+			 //manipulate DOM - mp_action_setup
+			 var btnElem, spanElem;
+			 btnElem = document.getElementById("mp_action_setup");
+			 spanElem = document.getElementById("mp_action_info");
+			 btnElem.style.display = "none";
+			 spanElem.className = "info-checking";
+			 spanElem.style.display = "inline-block";
+			 spanElem.innerHTML = hlp.text("setupNotReady_check_info1") + "...<br/>";
+			 
+			 _reqData.URL = url;
+			 _reqData.method = "GET";
+			 
+			 //get signature
+			 requestRPS(_reqData, function(rpsData) {
+			 if (rpsData.errorStatus) {
+			 spanElem.className = "info-error";
+			 spanElem.innerHTML = hlp.text("setupNotReady_check_info2") + "<br/>";
+			 self.error("Activate identity");
+			 setTimeout(function() {
+			 spanElem.style.display = "none";
+			 btnElem.style.display = "inline-block";
+			 }, 1500);
+			 
+			 return;
+			 }
+			 
+			 var userId = self.getDisplayName(self.identity);
+			 self.renderSetup(userId, rpsData.clientSecretShare, rpsData.params);
+			 });
+			 * 
+			 * 
+			 */
+
+			 return;
 
 			self.requestPermit(self.identity,
 					function() {
@@ -849,10 +917,13 @@ var mpin = mpin || {};
 				self.error("Activate First");
 				return;
 			}
-			self.identity = rpsData.mpinId;
 			self.ds.addIdentity(rpsData.mpinId, "");
 			self.ds.setIdentityData(rpsData.mpinId, {regOTP: rpsData.regOTP});
 
+			//bug fix
+			self.ds.setDefaultIdentity(rpsData.mpinId);
+
+			self.identity = rpsData.mpinId;
 			// Check for existing userid and delete the old one
 			self.ds.deleteOldIdentity(rpsData.mpinId);
 
@@ -1039,7 +1110,7 @@ var mpin = mpin || {};
 	mpin.prototype.setIdentity = function(newIdentity, requestPermit, onSuccess, onFail) {
 		var displayName, accId, self = this;
 		console.info("call setIdentity:", newIdentity);
-		if ((typeof(newIdentity) === "undefined") || (!newIdentity)) {
+		if ((typeof (newIdentity) === "undefined") || (!newIdentity)) {
 			displayName = "";
 		} else {
 			this.identity = newIdentity;
@@ -1147,6 +1218,7 @@ var mpin = mpin || {};
 			newDefaultAccount = i;
 			break;
 		}
+
 		if (newDefaultAccount) {
 			this.setIdentity(newDefaultAccount, true, function() {
 				self.display(self.cfg.pinpadDefaultMessage);
@@ -1169,7 +1241,7 @@ var mpin = mpin || {};
 	mpin.prototype.dataSource = function() {
 		var mpinDs = {}, self = this;
 		this.ds || (this.ds = {});
-		if (typeof(localStorage['mpin']) === "undefined") {
+		if (typeof (localStorage['mpin']) === "undefined") {
 			localStorage.setItem("mpin", JSON.stringify({
 				defaultIdentity: "",
 				version: "0.3",
@@ -1317,7 +1389,7 @@ var mpin = mpin || {};
 
 	function addClass(elId, className) {
 		var el;
-		if (typeof(elId) === "string") {
+		if (typeof (elId) === "string") {
 			el = document.getElementById(elId);
 		} else {
 			el = elId;
@@ -1334,7 +1406,7 @@ var mpin = mpin || {};
 
 	function hasClass(elId, className) {
 		var el;
-		if (typeof(elId) == "string")
+		if (typeof (elId) == "string")
 			el = document.getElementById(elId);
 		else
 			el = elId;
@@ -1346,7 +1418,7 @@ var mpin = mpin || {};
 
 	function removeClass(elId, className) {
 		var el;
-		if (typeof(elId) == "string")
+		if (typeof (elId) == "string")
 			el = document.getElementById(elId);
 		else
 			el = elId;
@@ -1461,7 +1533,7 @@ var mpin = mpin || {};
 	};
 
 	var setStringOptions = function() {
-		if (typeof(String.prototype.trim) === "undefined")
+		if (typeof (String.prototype.trim) === "undefined")
 		{
 			String.prototype.mpin_trim = function() {
 				return String(this).replace(/^\s+|\s+$/g, '');

@@ -1,2 +1,4 @@
 browser/node_modules/
 browser/.sass-cache/
+/browser/nbproject/private/
+browser/nbproject/
