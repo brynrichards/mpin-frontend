@@ -629,8 +629,8 @@ var mpin = mpin || {};
 			// addClass(rowElem, "mp_itemSelected");
 
 			self.ds.setDefaultIdentity(uId);
-			document.getElementById('mp_back').style.display = 'none';
-			
+			document.getElementById('mp_back').remove();
+
 			self.setIdentity(uId, true, function() {
 				self.display(self.cfg.pinpadDefaultMessage);
 			}, function() {
