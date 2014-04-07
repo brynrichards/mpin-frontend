@@ -32,10 +32,10 @@ $MOBILE : false;
 	position: relative;
 	width: 300px;
 	height: 100%;
+	font-size: 14px;
 	@include bg-color();
 
 	// Import the pinpad styles
-
 
 	#mpinHolder {
 

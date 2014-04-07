@@ -1,76 +1,76 @@
-<header id="topNav">
+<header class="pinpad" id="topNav">
     <a id="mp_action_home" href="#">
         <div id="homeBtn"></div>
     </a>
     </div>
     <div id="mpinLogo"></div>
 </header>
+
 <div id="accountTopBar">
     <div id="mpinUser">
-        
     </div>
-    <div id="menuBtn"></div>
+		<div id="menuBtn"></div>
 </div>
-
+ 
 <div id="pinsHolder">
 
     <div id="inputContainer">
-        <input id="pinpad-input" type="text" readonly="true" placeholder="Enter your Access Number" maxlength="mpin.pinSize">
+        <input id="pinpad-input" type="password" readonly="true" placeholder="<%= hlp.text("pinpad_placeholder_text") %>">
     </div>
 
     <div class="pre-row">
         <div class="row">
-            <div class="btn mp_pindigit" data-value="1">
-                <span class="label">1</span>
-            </div>
-            <div class="btn mp_pindigit" data-value="2">
-                <span class="label">2</span>
-            </div>
-            <div class="btn mp_pindigit" data-value="3">
-                <span class="label">3</span>
-            </div>
+            <button class="btn" data-value="1">
+                1
+            </button>
+            <button class="btn" data-value="2">
+                2
+            </button>
+            <button class="btn" data-value="3">
+                3
+            </button>
         </div>
     </div>
     <div class="pre-row">
         <div class="row">
-            <div class="btn mp_pindigit" data-value="4">
-                <span class="label">4</span>
-            </div>
-            <div class="btn mp_pindigit" data-value="5">
-                <span class="label">5</span>
-            </div>
-            <div class="btn mp_pindigit" data-value="6">
-                <span class="label">6</span>
-            </div>
+            <button class="btn" data-value="4">
+                4
+            </button>
+            <button class="btn" data-value="5">
+                5
+            </button>
+            <button class="btn" data-value="6">
+                6
+            </button>
         </div>
     </div>
     <div class="pre-row">
         <div class="row">
-            <div class="btn mp_pindigit" data-value="7">
-                <span class="label">7</span>
-            </div>
-            <div class="btn mp_pindigit" data-value="8">
-                <span class="label">8</span>
-            </div>
-            <div class="btn mp_pindigit" data-value="9">
-                <span class="label">9</span>
-            </div>
+            <button class="btn" data-value="7">
+                7
+            </button>
+            <button class="btn" data-value="8">
+                8
+            </button>
+            <button class="btn" data-value="9">
+                9
+            </button>
         </div>
     </div>
     <div class="pre-row">
         <div class="row bottom">
-            <div class="btn" id="mpinClear" data-value="clear">
-                <span class="label"><%=hlp.text( "authPin_button_clear") %></span>
-            </div>
-            <div class="btn mp_pindigit" data-value="0">
-                <span class="label">0</span>
-            </div>
-            <div class="btn" id="mpinLogin" data-value="go">
-                <span class="label"><%=hlp.text( "authPin_button_login") %></span>
-            </div>
+            <button class="btnClear" data-value="clear" id="mpinClear">
+                <span class="label">clear</span>
+            </button>
+            <button class="btn" data-value="0">
+                <span class="label mp_pindigit">0</span>
+            </button>
+            <button class="btnLogin" data-value="go" id="mpinLogin">
+                <span class="label">login</span>
+            </button>
         </div>
     </div>
 </div>
-<footer id="mpinFooter">
+<footer class="pinpad" id="mpinFooter">
     <div id="homeBtn"></div>
 </footer>
