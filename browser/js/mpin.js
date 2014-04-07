@@ -6,9 +6,9 @@ var mpin = mpin || {};
 	//CONSTRUCTOR 
 	mpin = function(domID, options) {
 		var self = this;
-		loader("public/mpin/underscore-min.js", function() {
-			loader("public/mpin/mpin-all.js", function() {
-				loader("public/mpin/templates.js", function() {
+		loader("js/underscore-min.js", function() {
+			loader("js/mpin-all.js", function() {
+				loader("js/templates.js", function() {
 					var _options = {};
 					if (!options.clientSettingsURL)
 						return console.error("set client Settings");
@@ -44,6 +44,7 @@ var mpin = mpin || {};
 	 * 
 	 * @returns {Boolean}
 	 */
+
 	mpin.prototype.initialize = function(domID, options) {
 		this.el = document.getElementById(domID);
 		//options CHECK
