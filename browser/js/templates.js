@@ -200,7 +200,7 @@
 			'			<span style="padding: 10px 5px 20px 5px;" class="mp_accountField"><%= email %></span><br/><%= hlp.text("setupNotReady_text2") %></p>' +
 			'			<p><%= hlp.text("setupNotReady_text3") %></p>' +
 			'		</div>' +
-			'		<button type="button" name="" value="" class="mp_blueBtn" id="mp_action_login"><%= hlp.text("setupNotReady_button_check") %></button>' +
+			'		<button type="button" name="" value="" class="mp_blueBtn" id="mp_action_setup"><%= hlp.text("setupNotReady_button_check") %></button>' +
 			'		<span id="mp_info_recheck" class="info-checking"><%= hlp.text("setupNotReady_check_info1") %></span>' +
 			'		<button type="button" name="" value="" class="mp_blueBtn" id="mp_action_resend"><%= hlp.text("setupNotReady_button_resend") %></button>' +
 			'		<span id="mp_info_resend" class="info-checking"><%= hlp.text("setupNotReady_resend_info1") %></span>' +

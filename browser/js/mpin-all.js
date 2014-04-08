@@ -4009,6 +4009,11 @@ function requestRPS (params, cb) {
 	
 	_request.open(_method, params.URL, true);
 	_request.setRequestHeader("Content-Type", "application/json");
+	if (params.customHeaders) {
+		for (var headerKey in params.customHeaders) { 
+			_request.setRequestHeader(headerKey, params.customHeaders[headerKey]);
+		}
+	}
 	_request.send(_postData);
 };
 
