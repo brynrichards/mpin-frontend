@@ -2,7 +2,7 @@ var mpin = mpin || {};
 
 (function() {
 	var lang = {}, hlp = {}, loader;
-	var IMAGES_PATH = "public/images/";
+	var IMAGES_PATH = "../build/out/mobile/resources/templates/grey/img/";
 
 	//CONSTRUCTOR
 	mpin = function(domID, options) {
@@ -462,14 +462,32 @@ var mpin = mpin || {};
 
 //custom render 
 	mpin.prototype.renderAccountsPanel = function() {
-		var self = this, renderElem, addEmptyItem, c = 0;
+		var self = this, 
+			renderElem, 
+			addEmptyItem, 
+			c = 0, 
+			mpBack = document.getElementById('mp_back');
+
 		addEmptyItem = function(cnt) {
 			var p = document.createElement("div");
 			p.className = "mp_contentEmptyItem";
 			cnt.appendChild(p);
 		};
-		renderElem = document.getElementById("mpinMaster");
-		renderElem.innerHTML = this.readyHtml("accounts-panel", {});
+
+
+		addMpinBack = function () {
+			renderElem = document.getElementById('mpinMaster').appendChild(document.createElement("div"));
+			renderElem.id = "mp_back";
+			mpBack = document.getElementById("mp_back");
+			mpBack.innerHTML = self.readyHtml("accounts-panel", {});
+		}
+
+		if(document.contains(mpBack) === false) {
+			addMpinBack();
+			mpBack.style.display = 'block';
+		} else {
+			mpBack.style.display = 'none';
+		}
 
 		document.getElementById("mp_acclist_adduser").onclick = function(evt) {
 			self.renderSetupHome.call(self, evt);
@@ -491,6 +509,9 @@ var mpin = mpin || {};
 		var renderElem, name, self = this;
 		name = this.getDisplayName(iD);
 		renderElem = document.getElementById("mp_back");
+		console.log('%c Hey!', renderElem, 'background: #222; color: red');
+		console.log(">>>>", name);
+		console.log(">>>>", this.readyHtml("user-settings", {name: name}));
 		renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
 
 		document.getElementById("mp_deluser").onclick = function(evt) {
@@ -579,7 +600,7 @@ var mpin = mpin || {};
 
 		if (isDefault) {
 			starClass = "mp_starButtonSelectedState";
-			divClass = "mp_contentItem one-edge-shadow mp_itemSelected";
+			divClass = "mp_contentItem one-edge-shadow default";
 		} else {
 			starClass = "mp_starButtonDefaultState";
 			divClass = "mp_contentItem one-edge-shadow";
@@ -605,9 +626,11 @@ var mpin = mpin || {};
 
 		rowElem.onclick = function() {
 			removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
-			addClass(rowElem, "mp_itemSelected");
+			// addClass(rowElem, "mp_itemSelected");
 
 			self.ds.setDefaultIdentity(uId);
+			document.getElementById('mp_back').remove();
+
 			self.setIdentity(uId, true, function() {
 				self.display(self.cfg.pinpadDefaultMessage);
 			}, function() {
@@ -616,16 +639,23 @@ var mpin = mpin || {};
 			return false;
 		};
 
-		rowElem.ondblclick = function() {
-			self.toggleButton.call(self);
-			/*
-			 setTimeout(self.toggleButton, 1);
-			 return false;
-			 */
-		};
+		// rowElem.ondblclick = function() {
+
+		// 	 removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
+		// 	 // addClass(rowElem, "mp_itemSelected");
+
+		// 	 self.ds.setDefaultIdentity(uId);
+		// 	 self.setIdentity(uId, true, function() {
+		// 	 	self.display(self.cfg.pinpadDefaultMessage);
+		// 	 }, function() {
+		// 	 	return false;
+		// 	 });
+		// 	 return false;
+		// };
 
 
 		document.getElementById("mp_btIdSettings_" + iNumber).onclick = function(ev) {
+			console.log(uId);
 			self.renderUserSettingsPanel(uId);
 			ev.stopPropagation();
 			return false;
@@ -1321,8 +1351,9 @@ var mpin = mpin || {};
 			var cNames = el.className.split(/\s+/g);
 			if (cNames.indexOf(className) < 0)
 				el.className += " " + className;
-		} else
+		} else {
 			el.className = className;
+		}
 	}
 	;
 

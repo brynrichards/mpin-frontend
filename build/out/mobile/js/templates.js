@@ -1,6 +1,15 @@
 (function() {
     mpin.template = {};
-    mpin.template['accounts-panel'] = ['<div id="mp_accountListView" class="PinPadListViewSkin">',
+    mpin.template['accounts-panel'] = ['<!-- Home/Top Nav Bar -->',
+        '',
+        '<header id="topNav">',
+        '    <div id="mp_action_home">',
+        '    </div>',
+        '    <div id="mpinLogo">',
+        '    </div>',
+        '</header>',
+        '',
+        '<div id="mp_accountListView" class="PinPadListViewSkin">',
         '    <div class="mp_customScrollBox">',
         '        <div class="mp_container">',
         '            <div id="mp_accountContent" class="mp_content"></div>',
@@ -11,7 +20,9 @@
         '    <button id="mp_acclist_adduser" class="mp_blueSkin" tabindex=-1>',
         '        <%=hlp.text( "setupReady_button_resend") %>',
         '    </button>',
-        '</div>'].join('');
+        '</div>',
+        '',
+        ''].join('');
 
     mpin.template['activate-identity'] = ['<!-- Home/Top Nav Bar -->',
         '',
@@ -536,7 +547,7 @@
         '    <div id="mpinUser">',
         '        <p><%= email %> <% console.log("cfg :::", cfg); %></p>',
         '    </div>',
-        '		<div id="menuBtn"></div>',
+        '		<a href="#" id="menuBtn"></a>',
         '</div>',
         ' ',
         '<div id="pinsHolder">',
@@ -607,7 +618,7 @@
         '    <%=name %>',
         '</div>',
         '<div id="mp_btIdSettings_<%= iNumber %>" class="mp_buttonItem">',
-        '    <img src="<%= hlp.img(" id-settings.png ") %>" tabindex=-1/>',
+        '    <img src="<%= hlp.img("id-settings.svg") %>" tabindex=-1/>',
         '</div>'].join('');
 
     mpin.template['user-settings'] = ['<div id="mp_accountListView" class="PinPadListViewSkin">',
@@ -619,12 +630,11 @@
         '</div>',
         '<dWiv class="mp_alertContainer mp_alertMainContainer">',
         '    <div class="mp_headerFrameCancelOnly">',
-        '        <div class="mp_accountField" style="padding: 10px 5px 50px 5px;">',
-        '            <%=name%>',
+        '        <div class="mp_accountField"',
         '        </div>',
         '        <div style="padding:0px 10px">',
         '            <button id="mp_deluser" class="mp_blueSkin" tabindex=-1>',
-        '                <%=hlp.text( "account_button_delete"%>',
+        '                <%=hlp.text( "account_button_delete")%>',
         '            </button>',
         '            <button id="mp_reactivate" class="mp_blueSkin" tabindex=-1>',
         '                <%=hlp.text( "account_button_reactivate")%>',

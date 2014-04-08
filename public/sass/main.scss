@@ -476,21 +476,6 @@ body {
 			text-align: center;
 			display: block;
 			overflow: hidden;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
 	}
 
@@ -498,6 +483,34 @@ body {
 
 // Activate Identity Screen
 
+#mp_accountListView {
+	color: white;
+
+	.default {
+		background: #3c9dcb;
+	}
+
+	.mp_buttonItem {
+		float: right;
+	}
+}
+
+.mp_contentItem {
+	position: relative;
+	height: 58px;
+	border-bottom: 2px solid #666666;
+}
+
+#mp_back {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	@include bg-color();
+	z-index: 999;
+}
 
 // Import mediaqueries
 @import 'mediaqueries';
