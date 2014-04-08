@@ -201,6 +201,7 @@ $BORDERLESS : true;
 	margin-top: 10px;
 
 	padding: 13px 10px 10px;
+	font-size: 14px;
 }
 
 @mixin central-content() {
@@ -212,6 +213,7 @@ $BORDERLESS : true;
 @mixin central-text() {
 	color: white;
 	font-size: 4vh;
+	font-size: 14px;
 	width: 100%;
 	text-align: center;
 }

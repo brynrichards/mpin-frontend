@@ -1,10 +1,10 @@
 <!-- Home/Top Nav Bar -->
-
-<header id="topNav">
-    <div id="homeBtn">
+<header class="pinpad" id="topNav">
+    <a id="mp_action_home" href="#">
+        <div id="homeBtn"></div>
+    </a>
     </div>
-    <div id="mpinLogo">
-    </div>
+    <div id="mpinLogo"></div>
 </header>
 
 <!-- Input button -->
@@ -13,6 +13,7 @@
 
   <div class="identityMainText">
       <div>
+	  <h1><%= hlp.text("setupNotReady_header") %></h1> 
         Your email address will be used as your identity when M-Pin authenticates you to this service.
       </div>
 
@@ -33,13 +34,17 @@
   </div>
 
   <div id="buttonsContainer">
-      <div class="mpinBtn" id="mpin_authenticate">
+      <div class="mpinBtn" id="mpin_setup">
           <span class="iconArrow"></span>
-          <span class="btnLabel"><%=hlp.text( "setupReady_button_go") %></span>
+          <span class="btnLabel"><%=hlp.text( "setupNotReady_button_check") %></span>
       </div>
       <div class="mpinBtn" id="mpin_resend">
           <span class="iconArrow"></span>
           <span class="btnLabel"><%=hlp.text( "setupNotReady_button_resend")%></span>
+      </div>
+	  <div class="mpinBtn" id="mpin_accounts">
+          <span class="iconArrow"></span>
+          <span class="btnLabel"><%=hlp.text( "setupNotReady_button_back")%></span>
       </div>
   </div>
 

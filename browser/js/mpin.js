@@ -268,13 +268,13 @@ var mpin = mpin || {};
 		callbacks.mp_action_home = function(evt) {
 			self.renderHome.call(self, evt);
 		};
-		callbacks.mp_btclear = function() {
+		callbacks.mpinClear = function() {
 			self.addToPin.call(self, "clear");
 		};
 		callbacks.mp_toggleButton = function() {
 			self.toggleButton.call(self);
 		};
-		callbacks.mp_btgo = function() {
+		callbacks.mpinLogin = function() {
 			self.actionLogin.call(self);
 		};
 
@@ -625,17 +625,17 @@ var mpin = mpin || {};
 		};
 
 		//Check again
-		callbacks.mp_action_setup = function() {
+		callbacks.mpin_setup = function() {
 			var spanElem = document.getElementById("mp_info_recheck"), that = this,
 					_reqData = {}, regOTP, url;
 			
-			this.style.display = "none";
-			spanElem.className = "info-checking";
-			spanElem.style.display = "inline-block";
-			spanElem.innerHTML = hlp.text("setupNotReady_check_info1") + "...<br/>";
+			//--//this.style.display = "none";
+			//--//spanElem.className = "info-checking";
+			//--//spanElem.style.display = "inline-block";
+			//--//spanElem.innerHTML = hlp.text("setupNotReady_check_info1") + "...<br/>";
 
-			console.log("IDENTITY --- :::", self.identity);
-			console.log("IDENTITY --- :::", self.identity.length);
+			//--//console.log("IDENTITY --- :::", self.identity);
+			//--//console.log("IDENTITY --- :::", self.identity.length);
 
 			regOTP = self.ds.getIdentityData(self.identity, "regOTP");
 			url = self.opts.signatureURL + "/" + self.identity + "?regOTP=" + regOTP;
@@ -645,12 +645,12 @@ var mpin = mpin || {};
 
 			requestRPS(_reqData, function(rpsData) {
 				if (rpsData.errorStatus) {
-					spanElem.className = "info-error";
-					spanElem.innerHTML = hlp.text("setupNotReady_check_info2") + "<br/>";
+				//--//	spanElem.className = "info-error";
+				//--//	spanElem.innerHTML = hlp.text("setupNotReady_check_info2") + "<br/>";
 					self.error("Activate identity");
 					setTimeout(function() {
-						spanElem.style.display = "none";
-						that.style.display = "inline-block";
+				//--//		spanElem.style.display = "none";
+				//--//		that.style.display = "inline-block";
 					}, 1500);
 
 					return;
@@ -659,73 +659,15 @@ var mpin = mpin || {};
 				var userId = self.getDisplayName(self.identity);
 				self.renderSetup(userId, rpsData.clientSecretShare, rpsData.params);
 			});
-
-
-			/*
-			 * 
-			 * 		var _reqData = {}, regOTP, url, self = this;
-			 regOTP = this.ds.getIdentityData(this.identity, "regOTP");
-			 url = this.opts.signatureURL + "/" + this.identity + "?regOTP=" + regOTP;
-			 
-			 //manipulate DOM - mp_action_setup
-			 var btnElem, spanElem;
-			 btnElem = document.getElementById("mp_action_setup");
-			 spanElem = document.getElementById("mp_action_info");
-			 btnElem.style.display = "none";
-			 spanElem.className = "info-checking";
-			 spanElem.style.display = "inline-block";
-			 spanElem.innerHTML = hlp.text("setupNotReady_check_info1") + "...<br/>";
-			 
-			 _reqData.URL = url;
-			 _reqData.method = "GET";
-			 
-			 //get signature
-			 requestRPS(_reqData, function(rpsData) {
-			 if (rpsData.errorStatus) {
-			 spanElem.className = "info-error";
-			 spanElem.innerHTML = hlp.text("setupNotReady_check_info2") + "<br/>";
-			 self.error("Activate identity");
-			 setTimeout(function() {
-			 spanElem.style.display = "none";
-			 btnElem.style.display = "inline-block";
-			 }, 1500);
-			 
-			 return;
-			 }
-			 
-			 var userId = self.getDisplayName(self.identity);
-			 self.renderSetup(userId, rpsData.clientSecretShare, rpsData.params);
-			 });
-			 * 
-			 * 
-			 */
-
-			 return;
-
-			self.requestPermit(self.identity,
-					function() {
-						spanElem.style.display = "none";
-						self.renderLogin(true);
-					},
-					function(message, status) {
-						var e = document.getElementById("mp_info_recheck");
-						spanElem.className = "info-error";
-						spanElem.innerHTML = hlp.text("setupNotReady_check_info2") + "<br/>";
-
-						setTimeout(function() {
-							spanElem.style.display = "none";
-							that.style.display = "inline-block";
-						}, 1500);
-					}
-			);
 		};
 		//email
 		callbacks.mpin_resend = function() {
 			var spanElem = document.getElementById("mp_info_resend"), regOTP, _email, _reqData = {}, that = this;
-			this.style.display = "none";
-			spanElem.className = "info-checking";
-			spanElem.style.display = "inline-block";
-			spanElem.innerHTML = hlp.text("setupNotReady_resend_info1");
+			
+			//--//this.style.display = "none";
+			//--//spanElem.className = "info-checking";
+			//--//spanElem.style.display = "inline-block";
+			//--//spanElem.innerHTML = hlp.text("setupNotReady_resend_info1");
 
 
 			regOTP = self.ds.getIdentityData(self.identity, "regOTP");
@@ -766,17 +708,17 @@ var mpin = mpin || {};
 
 //			self.renderActivateIdentity();
 
-				spanElem.innerHTML = hlp.text("setupNotReady_resend_info2");
-				spanElem.style.background = "none";
+				//--//spanElem.innerHTML = hlp.text("setupNotReady_resend_info2");
+				//--//spanElem.style.background = "none";
 
 				setTimeout(function() {
-					spanElem.style.display = "none";
-					that.style.display = "inline-block";
+					//--//spanElem.style.display = "none";
+					//--//that.style.display = "inline-block";
 				}, 1500);
 			});
 		};
 		//identities list
-		callbacks.mp_action_accounts = function() {
+		callbacks.mpin_accounts = function() {
 //			self.renderAccountsPanel(self);
 			self.renderLogin.call(self, true, email);
 		};
@@ -1079,7 +1021,7 @@ var mpin = mpin || {};
 	 * @returns {undefined}
 	 */
 	mpin.prototype.actionLogin = function() {
-		var authServer, getAuth, self = this, pinValue = document.getElementById('mp_pin').value;
+		var authServer, getAuth, self = this, pinValue = document.getElementById('pinpad-input').value;
 		//AlertMessage.clearDisplayWrap();
 		this.enableNumberButtons(false);
 		this.enableButton(false, "go");
