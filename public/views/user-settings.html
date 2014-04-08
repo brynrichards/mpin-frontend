@@ -1,28 +1,50 @@
-<div id="mp_accountListView" class="PinPadListViewSkin">
-    <div class="customScrollBox">
+    <!-- Home/Top Nav Bar -->
+
+    <header id="topNav">
+        <div id="homeBtn">
+        </div>
+        <div id="mpinLogo">
+        </div>
+    </header>
+
+    <!-- User section -->
+
+    <header id="header">
+      <div id="mpinLogo"></div>
+    </header>
+
+    <!-- Input button -->
+
+    <div id="identityContainer">
+
+      <div class="identityMainText">
         <div class="mp_container">
             <div id="mp_accountContent" class="mp_content"></div>
         </div>
+      </div>
+
+      <div id="buttonsContainer">
+
+          <div class="mpinBtn" id="mp_deluser">
+                <span class="iconArrow"></span>
+                <span class="btnLabel"><%=hlp.text( "account_button_delete") %></span>
+          </div>
+
+          <div class="mpinBtn" id="mp_reactivate">
+                <span class="iconArrow"></span>
+                <span class="btnLabel"><%=hlp.text( "account_button_reactivate") %></span>
+          </div>
+
+          <div class="mpinBtn" id="mp_acclist_cancel">
+                <span class="iconArrow"></span>
+                <span class="btnLabel"><%=hlp.text( "account_button_backToList") %></span>
+          </div>
+
+      </div>
+
     </div>
-</div>
-<dWiv class="mp_alertContainer mp_alertMainContainer">
-    <div class="mp_headerFrameCancelOnly">
-        <div class="mp_accountField" style="padding: 10px 5px 50px 5px;">
+
+    <footer id="mpinFooter">
+        <div id="homeBtn">
         </div>
-        <div style="padding:0px 10px">
-            <button id="mp_deluser" class="mp_blueSkin" tabindex=-1>
-                <%=hlp.text( "account_button_delete"%>
-            </button>
-            <button id="mp_reactivate" class="mp_blueSkin" tabindex=-1>
-                <%=hlp.text( "account_button_reactivate")%>
-            </button>
-        </div>
-    </div>
-    <div class="mp_bottomFrame">
-        <div style="padding:0px 10px">
-            <button id="mp_acclist_cancel" class="mp_graySkin" tabindex=-1>
-                <%=hlp.text( "account_button_backToList") %>
-            </button>
-        </div>
-    </div>
-    </div>
+    </footer>

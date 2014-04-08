@@ -89,6 +89,11 @@
 
 			@include display-box-flex();
 
+			#mpinClear, #mpinLogin {
+				font-size: 16px !important;
+				padding-left: 0% !important;
+			}
+
 
 			.btn {
 
@@ -149,6 +154,9 @@
 				}
 
 				-webkit-tap-highlight-color: #ccc;
+
+				padding-left: 15%;
+
 			}
 
 
