@@ -13,8 +13,7 @@
 
   <div class="identityMainText">
       <div>
-	  <h1><%= hlp.text("setupNotReady_header") %></h1> 
-        Your email address will be used as your identity when M-Pin authenticates you to this service.
+	  <h1><%= hlp.text("setupNotReady_header") %></h1>
       </div>
 
       <div class="mp_note" style="margin:0pxpadding:0px">
@@ -22,13 +21,13 @@
               <%=hlp.text( "setupNotReady_text1") %>
                   <br/>
                   <span style="padding: 10px 5px 20px 5px" class="mp_accountField">
-                      jordan@dasdsa.com
+                      <%= email %>
                   </span>
                   <br/>
-                  <%=hlp.text( "setupReady_text2") %>
+                  <%=hlp.text( "setupNotReady_text2") %>
           </p>
           <p>
-              <%=hlp.text( "setupReady_text3") %>
+              <%=hlp.text( "setupNotReady_text3") %>
           </p>
       </div>
   </div>

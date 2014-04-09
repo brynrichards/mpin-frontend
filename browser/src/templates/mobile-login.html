@@ -1,34 +1,44 @@
-<div id="mp_pinpadHolder">
-    <div id="mp_headersml">
-        <section class="mp_floatLeft"><a href="#" id="mp_action_home"><img src="<%= hlp.img("icon-home-sml.png" ) %>" alt="Home" /></a>
-        </section>
-        <section class="mp_floatRight">
-            <img src="<%= hlp.img(" m-pin-logo-white-sml.png ") %>" alt="M-Pin Logo" />
-        </section>
-        <div class="mp_clear"></div>
+<!-- Home/Top Nav Bar -->
+<header class="pinpad" id="topNav">
+    <a id="mp_action_home" href="#">
+        <div id="homeBtn"></div>
+    </a>
     </div>
-    <div id="mp_contentPadWithHeaderthin">
-        <div id="mp_wrapperthin">
-            <h1>
-                <%=hlp.text( "mobileAuth_header") %>
-            </h1>
-            <div class="mp_accessNumberHolder">
-                <p>
-                    <%=hlp.text( "mobileAuth_text1") %>
-                </p>
-                <label class="mp_accessNumber" id="mp_accessNumber"></label>
-                <div class="clear"></div>
-            </div>
-            <p class="mp_note">
-                <%=hlp.text( "mobileAuth_text2") %>
-                    <br/>
-                    <label id="mp_seconds" class="mp_red"></label>
-                    <br/>
-                    <%=hlp.text( "mobileAuth_text3") %>
-            </p>
-            <p class="mp_note_small">
-                <%=hlp.text( "mobileAuth_text4") %>
-            </p>
-        </div>
-    </div>
+    <div id="mpinLogo"></div>
+</header>
+
+<div id="mpinMobileTitle">
+	<%=hlp.text( "mobileAuth_header") %>
 </div>
+
+<div id="pinsHolder">
+
+	<div class="mpinMobileHolder" id="mpinLoginHolder">
+		<p>
+			<%=hlp.text( "mobileAuth_text1") %>
+		</p>
+		<span id="mpin_accessNumber">
+			
+		</span>
+	</div>
+	
+	<div id="mpinMobileDesc">
+		<p class="mp_note">
+			<%=hlp.text( "mobileAuth_text2") %>
+				<br/>
+				<label id="mpin_seconds"></label>
+				<br/>
+				<%=hlp.text( "mobileAuth_text3") %>
+		</p>
+		
+		<p class="mpinNoteWarning">
+			<%=hlp.text( "mobileAuth_text4") %>
+		</p>
+	</div>
+
+</div>
+
+<footer id="mpinFooter">
+    <div id="homeBtn">
+    </div>
+</footer>
