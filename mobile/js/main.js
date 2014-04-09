@@ -175,6 +175,7 @@ var mpin = mpin || {};
 		this.render('home', callbacks);
 
 		if (this.opts.mobileAppFullURL) {
+			// RenderMobile Home
 			this.renderHomeMobile();
 		}
 	};
@@ -482,16 +483,20 @@ var mpin = mpin || {};
 			mpBack.innerHTML = self.readyHtml("accounts-panel", {});
 		}
 
+		console.log("Trying to call here");
+
 		if(document.contains(mpBack) === false) {
 			addMpinBack();
 			mpBack.style.display = 'block';
-		} else {
-			mpBack.style.display = 'none';
-		}
 
-		document.getElementById("mp_acclist_adduser").onclick = function(evt) {
-			self.renderSetupHome.call(self, evt);
-		};
+			console.log("Trying to call here again");
+
+
+			document.getElementById("mp_acclist_adduser").onclick = function(evt) {
+				self.renderSetupHome.call(self, evt);
+			};
+
+		}
 
 		//default IDENTITY
 		var cnt = document.getElementById("mp_accountContent");
@@ -624,22 +629,35 @@ var mpin = mpin || {};
 
 		cnt.appendChild(rowElem);
 
-		rowElem.onclick = function() {
-			removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
-			// addClass(rowElem, "mp_itemSelected");
+		// rowElem.onclick = function() {
+		// 	removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
+		// 	// addClass(rowElem, "mp_itemSelected");
+		// 	document.getElementById('mp_back').remove();
+		// 	self.ds.setDefaultIdentity(uId);
+		// 	self.setIdentity(uId, true);
+		// };
 
-			self.ds.setDefaultIdentity(uId);
-			document.getElementById('mp_back').remove();
+		rowElem.addEventListener('touchstart', mEventsHandler, false);
+		rowElem.addEventListener('click', mEventsHandler, false);
 
-			self.setIdentity(uId, true, function() {
-				self.display(self.cfg.pinpadDefaultMessage);
-			}, function() {
-				return false;
-			});
-			return false;
-		};
+		// document.getElementById('mp_back').remove();
 
-		// rowElem.ondblclick = function() {
+		function mEventsHandler(e) {
+		  if (e.type == "touchstart" || e.type == "click") {
+		  	// alert("Touch start....");
+
+		  	var elem = document.getElementById("mp_back");
+		  	elem.parentNode.removeChild(elem);
+
+		  	removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
+		  	// addClass(rowElem, "mp_itemSelected");
+		  	self.ds.setDefaultIdentity(uId);
+		  	self.setIdentity(uId, true);
+		  }
+		}
+
+
+		// rowElem.ondoubleclick = function() {
 
 		// 	 removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
 		// 	 // addClass(rowElem, "mp_itemSelected");
