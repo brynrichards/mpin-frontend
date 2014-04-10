@@ -770,6 +770,20 @@ var mpin = mpin || {};
 				self.addToPin(el.target.getAttribute("data-value"));
 				return false;
 			};
+
+			// btEls[i].addEventListener('click', mEventsHandler, false);
+
+			// // document.getElementById('mp_back').remove();
+
+			// function mEventsHandler(e) {
+			//   if (e.type == "click") {
+			//   	// alert("Touch start....");
+
+			//   self.addToPin(e.target.getAttribute("data-value"));
+			//   return false;
+
+			//   }
+			// }
 		}
 	};
 	mpin.prototype.enableNumberButtons = function(enable) {
@@ -1494,7 +1508,8 @@ var mpin = mpin || {};
 		"pinpad_placeholder_text": "Enter your pin",
 		"pinpad_placeholder_text2": "Enter your access Number",
 		"logout_text1": "YOU ARE NOW LOGGED IN",
-		"logout_button": "Logout"
+		"logout_button": "Logout",
+		"home_button_setupMobile": "Add an identity to this browser"
 
 	};
 	//	image should have config properties
