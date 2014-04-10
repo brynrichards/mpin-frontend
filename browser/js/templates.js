@@ -49,7 +49,7 @@
         '</div>',
         '<div style="padding:0px 10px">',
         '    <button id="mp_acclist_adduser" class="mp_blueSkin" tabindex=-1>',
-        '        <%=hlp.text( "setupReady_button_resend") %>',
+        '        <%=hlp.text("account_button_addnew") %>',
         '    </button>',
         '</div>'].join('');
 
@@ -82,7 +82,7 @@
         '        </div>',
         '        <div style="padding:0px 10px">',
         '            <button id="mp_deluser" class="mp_blueSkin" tabindex=-1>',
-        '                <%=hlp.text( "account_button_delete"%>',
+        '                <%=hlp.text( "account_button_delete")%>',
         '            </button>',
         '            <button id="mp_reactivate" class="mp_blueSkin" tabindex=-1>',
         '                <%=hlp.text( "account_button_reactivate")%>',
@@ -506,7 +506,7 @@
         '    <%=name %>',
         '</div>',
         '<div id="mp_btIdSettings_<%= iNumber %>" class="mp_buttonItem">',
-        '    <img src="<%= hlp.img(" id-settings.png ") %>" tabindex=-1/>',
+        '    <img src="<%= hlp.img("id-settings.svg") %>" tabindex=-1/>',
         '</div>'].join('');
 
     mpin.template['activate-identity'] = ['<!-- User section -->',

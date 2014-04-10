@@ -519,7 +519,7 @@ var mpin = mpin || {};
 	mpin.prototype.renderUserSettingsPanel = function(iD) {
 		var renderElem, name, self = this;
 		name = this.getDisplayName(iD);
-		renderElem = document.getElementById("mp_back");
+		renderElem = document.getElementById("mpinIdentities");
 		renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
 
 		document.getElementById("mp_deluser").onclick = function(evt) {
@@ -536,7 +536,7 @@ var mpin = mpin || {};
 	mpin.prototype.renderReactivatePanel = function(iD) {
 		var renderElem, name, self = this;
 		name = this.getDisplayName(iD);
-		renderElem = document.getElementById("mp_back");
+		renderElem = document.getElementById("mpinIdentities");
 		renderElem.innerHTML = this.readyHtml("reactivate-panel", {name: name});
 
 		document.getElementById("mp_acclist_reactivateuser").onclick = function() {
@@ -551,7 +551,7 @@ var mpin = mpin || {};
 		var renderElem, name, self = this;
 		name = this.getDisplayName(iD);
 
-		renderElem = document.getElementById("mp_back");
+		renderElem = document.getElementById("mpinIdentities");
 		renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
 
 		document.getElementById("mp_acclist_deluser").onclick = function(evt) {
