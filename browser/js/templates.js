@@ -440,6 +440,10 @@
         '        </div>',
         '    </div>',
         '</div>',
+        '<div id="mpinIdentities">',
+        '</div>',
+        '',
+        '',
         '<footer class="pinpad" id="mpinFooter">',
         '    <div id="homeBtn"></div>',
         '</footer>'].join('');

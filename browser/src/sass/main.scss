@@ -173,9 +173,14 @@ $MOBILE : false;
 			-moz-border-radius: 0;
 			-o-border-radius: 0;
 			-ms-border-radius: 0;
-			min-height: 1.8em;
+			min-height: 2em;
 			padding: .3em .6em;
 			@include mpin-menu();
+		
+			&.activeBtn {
+				margin-left: 250px;
+				@include mpin-menu-active();
+			}
 		}
 
 	}
@@ -378,7 +383,7 @@ $MOBILE : false;
 		}
 	}
 
-	
+
 	@import 'mobile';
 
 	#mpinFooter {

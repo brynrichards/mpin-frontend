@@ -79,7 +79,7 @@ var mpin = mpin || {};
 			this.language = this.cfg.language;
 		}
 		this.setLanguageText();
-		
+
 		this.displayType = "text";
 
 		this.renderHome();
@@ -283,13 +283,13 @@ var mpin = mpin || {};
 		callbacks.mpinClear = function() {
 			self.addToPin.call(self, "clear");
 		};
-		callbacks.mp_toggleButton = function() {
+		callbacks.menuBtn = function() {
 			self.toggleButton.call(self);
 		};
 		callbacks.mpinLogin = function() {
 			self.actionLogin.call(self);
 		};
-		
+
 		this.render("login", callbacks);
 		this.enableNumberButtons(true);
 		this.bindNumberButtons();
@@ -492,7 +492,7 @@ var mpin = mpin || {};
 			p.className = "mp_contentEmptyItem";
 			cnt.appendChild(p);
 		};
-		renderElem = document.getElementById("mp_back");
+		renderElem = document.getElementById("mpinIdentities");
 		renderElem.innerHTML = this.readyHtml("accounts-panel", {});
 
 		document.getElementById("mp_acclist_adduser").onclick = function(evt) {
@@ -748,8 +748,8 @@ var mpin = mpin || {};
 			};
 		}
 	};
-	
-	
+
+
 	mpin.prototype.enableNumberButtons = function(enable) {
 		var els = document.getElementsByClassName("btn");
 		for (var i = 0; i < els.length; i++) {
@@ -766,19 +766,14 @@ var mpin = mpin || {};
 	//
 	mpin.prototype.addToPin = function(digit) {
 		var elemDisplay = document.getElementById('pinpad-input');
-//		elemDisplay.style.display = 'none';
-//		elemDisplay.style.display = 'block';
-
-		console.log(">>>>", this.displayType);
-		console.log(">>>>", (this.displayType === "text"));
-
-		if (this.displayType === "text") {
-			console.log("------------------------ elem DISPLAY PASSWORD");
+		
+		console.log("elemDisplay", elemDisplay);
+		//convert input text to password
+		if (this.displayType === "text" && elemDisplay) {
 			elemDisplay.value = "";
 			elemDisplay.type = "password";
 			this.displayType = "password";
 		}
-
 
 		if (digit === 'clear') {
 			this.display("");
@@ -853,25 +848,32 @@ var mpin = mpin || {};
 		}
 	};
 
-	
-	mpin.prototype.toggleButton = function() {
-		var self = this;
-		if (hasClass("mp_panel", "mp_flip")) {
-			document.getElementById('mp_accountID').style.display = 'inline';
 
+	mpin.prototype.toggleButton = function() {
+		var self = this, pinpadElem, idenElem;
+		
+		pinpadElem = document.getElementById("pinsHolder");
+		idenElem = document.getElementById("mpinIdentities");
+		
+		console.log("pinpadDisplay::", pinpadElem.style.display);
+		
+		if (pinpadElem.style.display === "none") {
+			document.getElementById('mpinUser').style.display = '';
 			this.setIdentity(this.identity, true, function() {
 				self.display(self.cfg.pinpadDefaultMessage);
 			}, function() {
 				return false;
 			});
 
-			removeClass("mp_toggleButton", "mp_SelectedState");
-			removeClass("mp_panel", "mp_flip");
+			removeClass("menuBtn", "activeBtn");
+			pinpadElem.style.display = "";
+			idenElem.style.display = "none";
 		} else {
-			document.getElementById('mp_accountID').style.display = 'none';
+			document.getElementById('mpinUser').style.display = 'none';
+			pinpadElem.style.display = "none";
+			idenElem.style.display = "";
+			addClass("menuBtn", "activeBtn");
 			this.renderAccountsPanel();
-			addClass("mp_toggleButton", "mp_SelectedState");
-			addClass("mp_panel", "mp_flip");
 		}
 		return false;
 	};
@@ -1127,9 +1129,9 @@ var mpin = mpin || {};
 
 			this.addToPin("clear");
 			this.display(hlp.text("pinpad_initializing"), false);
-			
+
 			this.displayType = "text";
-			
+
 			this.enableNumberButtons(false);
 			this.enableButton(false, "go");
 			this.enableButton(false, "clear");

@@ -114,7 +114,12 @@ $BORDERLESS : true;
 
 
 @mixin mpin-menu() {
-	background: url('#{$IMAGES}/PinPad_button_active.png') top left no-repeat;
+	background: url('#{$IMAGES}/PinPad_button_inactive.svg') top left no-repeat;
+	width: 30px;
+}
+
+@mixin mpin-menu-active() {
+	background: url('#{$IMAGES}/PinPad_button_active.svg') top left no-repeat;
 	width: 30px;
 }
 
