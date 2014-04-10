@@ -84,8 +84,10 @@
 	/*padding: 10% 0px 20px;*/
 
 	#mobileIcon {
-		
 		@include mobile-icon();
+	}
+	#desktopIcon {
+		@include desktop-icon();
 	}
 
 }

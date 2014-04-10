@@ -66,7 +66,6 @@ $BORDERLESS : true;
 
 	border: 1px solid #999;
 	border-top-color: #a6a6a6;
-
 	// Active color on press
 
 	&:active {
@@ -175,6 +174,19 @@ $BORDERLESS : true;
 	width: 50px !important;
 	height: 42px !important;
 	background-image: url('#{$IMAGES}/phone.svg');
+
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: auto 100%;
+	margin: 5px 10px 5px 0px;
+
+	@include box-flex-value(1.0);
+}
+
+@mixin desktop-icon() {
+	width: 50px !important;
+	height: 42px !important;
+	background-image: url('#{$IMAGES}/mac-icon.png');
 
 	background-repeat: no-repeat;
 	background-position: center;

@@ -149,6 +149,7 @@
 				}
 
 				-webkit-tap-highlight-color: #ccc;
+				display: block;
 			}
 
 
@@ -210,6 +211,10 @@
 					overflow: hidden;
 					width: 100%;
 					height: 100%;
+				}
+				
+				&:disabled {
+					color: #4b4b4b;
 				}
 			}
 		}

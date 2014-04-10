@@ -14,7 +14,7 @@
 <div id="pinsHolder">
 
     <div id="inputContainer">
-        <input id="pinpad-input" type="password" readonly="true" placeholder="<%= hlp.text("pinpad_placeholder_text") %>">
+        <input id="pinpad-input" type="text" readonly="true" placeholder="<%= hlp.text("pinpad_placeholder_text") %>">
     </div>
 
     <div class="pre-row">
@@ -58,13 +58,13 @@
     </div>
     <div class="pre-row">
         <div class="row bottom">
-            <button class="btnClear" data-value="clear" id="mpinClear">
+            <button class="btnClear" data-value="clear" id="mpinClear" disabled>
                 <span class="label">clear</span>
             </button>
             <button class="btn" data-value="0">
                 <span class="label mp_pindigit">0</span>
             </button>
-            <button class="btnLogin" data-value="go" id="mpinLogin">
+            <button class="btnLogin" data-value="go" id="mpinLogin" disabled>
                 <span class="label">login</span>
             </button>
         </div>

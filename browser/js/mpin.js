@@ -79,11 +79,11 @@ var mpin = mpin || {};
 			this.language = this.cfg.language;
 		}
 		this.setLanguageText();
+		
+		this.displayType = "text";
 
-		this.displayType = "password";
-
-		//this.renderHome();
-		this.renderSetup("123da");
+		this.renderHome();
+//		this.renderSetup("123da");
 
 	};
 
@@ -262,12 +262,6 @@ var mpin = mpin || {};
 		this.enableNumberButtons(true);
 		this.bindNumberButtons();
 
-		if (this.displayType === "password") {
-			var elemDisplay = document.getElementById("pinpad-input");
-			elemDisplay.type = "text";
-			this.displayType = "text";
-		}
-
 		//requestSignature
 		this.requestSignature(email, clientSecretShare, clientSecretParams);
 	};
@@ -280,6 +274,7 @@ var mpin = mpin || {};
 
 		if (!identity) {
 			this.renderSetupHome();
+			return;
 		}
 
 		callbacks.mp_action_home = function(evt) {
@@ -294,7 +289,7 @@ var mpin = mpin || {};
 		callbacks.mpinLogin = function() {
 			self.actionLogin.call(self);
 		};
-
+		
 		this.render("login", callbacks);
 		this.enableNumberButtons(true);
 		this.bindNumberButtons();
@@ -753,6 +748,8 @@ var mpin = mpin || {};
 			};
 		}
 	};
+	
+	
 	mpin.prototype.enableNumberButtons = function(enable) {
 		var els = document.getElementsByClassName("btn");
 		for (var i = 0; i < els.length; i++) {
@@ -769,14 +766,15 @@ var mpin = mpin || {};
 	//
 	mpin.prototype.addToPin = function(digit) {
 		var elemDisplay = document.getElementById('pinpad-input');
-		elemDisplay.style.display = 'none';
-		elemDisplay.style.display = 'block';
+//		elemDisplay.style.display = 'none';
+//		elemDisplay.style.display = 'block';
 
 		console.log(">>>>", this.displayType);
 		console.log(">>>>", (this.displayType === "text"));
 
 		if (this.displayType === "text") {
-			alert("set to pass");
+			console.log("------------------------ elem DISPLAY PASSWORD");
+			elemDisplay.value = "";
 			elemDisplay.type = "password";
 			this.displayType = "password";
 		}
@@ -808,8 +806,8 @@ var mpin = mpin || {};
 	 */
 	mpin.prototype.enableButton = function(enable, buttonName) {
 		var buttonValue = {}, _element;
-		buttonValue.go = {id: "mp_btgo", trueClass: "mp_pin mp_actionbutton", falseClass: "mp_pin mp_actionbutton mp_inactive"};
-		buttonValue.clear = {id: "btnClear", trueClass: "mp_pin mp_actionbutton", falseClass: "mp_pin mp_actionbutton mp_inactive"};
+		buttonValue.go = {id: "mpinLogin", trueClass: "mp_pin mp_actionbutton", falseClass: "mp_pin mp_actionbutton mp_inactive"};
+		buttonValue.clear = {id: "mpinClear", trueClass: "mp_pin mp_actionbutton", falseClass: "mp_pin mp_actionbutton mp_inactive"};
 		buttonValue.toggle = {id: "mp_toggleButton", trueClass: "mp_DisabledState", falseClass: ""};
 		_element = document.getElementById(buttonValue[buttonName].id);
 		if (!buttonValue[buttonName] || !_element) {
@@ -817,7 +815,7 @@ var mpin = mpin || {};
 		}
 
 		_element.disabled = !enable;
-		_element.className = buttonValue[buttonName][enable + "Class"];
+//		_element.className = buttonValue[buttonName][enable + "Class"];
 	};
 	//showInPinPadDisplay
 	mpin.prototype.display = function(message, isError) {
@@ -855,6 +853,7 @@ var mpin = mpin || {};
 		}
 	};
 
+	
 	mpin.prototype.toggleButton = function() {
 		var self = this;
 		if (hasClass("mp_panel", "mp_flip")) {
@@ -1119,7 +1118,7 @@ var mpin = mpin || {};
 		}
 
 		if (requestPermit) {
-			console.log("set Identity :: ", this.identity);
+
 			//new flow v0.3
 			if (this.ds.getIdentityToken(this.identity) == "") {
 				this.renderIdentityNotActive(displayName);
@@ -1128,7 +1127,9 @@ var mpin = mpin || {};
 
 			this.addToPin("clear");
 			this.display(hlp.text("pinpad_initializing"), false);
-
+			
+			this.displayType = "text";
+			
 			this.enableNumberButtons(false);
 			this.enableButton(false, "go");
 			this.enableButton(false, "clear");
