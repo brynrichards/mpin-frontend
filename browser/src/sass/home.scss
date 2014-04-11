@@ -16,7 +16,7 @@
 	display: flex;
 	display: -webkit-box;
 	display: -ms-flexbox;
-	
+
 	#mpinLogo {
 		@include logo();
 
@@ -113,9 +113,19 @@
 	align-items: center;
 
 	width: 100%;
-	
+
 	.mpinBtn {
 		width: 90%;
+
+		&.mpinBtnBusy {
+			background: url('#{$IMAGES}checking.gif') no-repeat 95% center;
+			padding: 10px;
+		}
+
+		&.mpinBtnError {
+			background: grey;
+			color: red;
+		}
 	}
 
 }

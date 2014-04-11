@@ -427,36 +427,49 @@ var mpin = mpin || {};
 		};
 		callbacks.mpin_action_setup = function(evt) {
 //			self.renderSetup
-			self.beforeRenderSetup.call(self);
+			self.beforeRenderSetup.call(self, this);
 			//self.actionSetupHome.call(self, evt);
 //			self.renderSetup.call(self, self.getDisplayName(email));
 //			self.renderLogin.call(self, evt);
 		};
 
-		callbacks.mpin_action_resend = function(evt) {
-			self.actionResend.call(self, evt);
+		callbacks.mpin_action_resend = function(ev) {
+			self.actionResend.call(self, this);
 		};
 
 		this.render("activate-identity", callbacks, {email: email});
 	};
 
+	mpin.prototype.mpinButton = function(btnElem, busyText) {
+		var oldHtml = btnElem.innerHTML;
+		console.log("mpinButton :", btnElem);
+		addClass(btnElem, "mpinBtnBusy");
+		btnElem.innerHTML = hlp.text(busyText);
+		return {
+			error: function(errorText) {
 
-	mpin.prototype.beforeRenderSetup = function() {
+				removeClass(btnElem, "mpinBtnBusy");
+				addClass(btnElem, "mpinBtnError");
+				btnElem.innerHTML = hlp.text(errorText);
+				setTimeout(function() {
+					removeClass(btnElem, "mpinBtnError");
+					btnElem.innerHTML = oldHtml;
+				}, 1500);
+
+			}, on: function() {
+				removeClass(btnElem, "mpinBtnBusy");
+				setTimeout(function() {
+					btnElem.innerHTML = oldHtml;
+				}, 1500);
+			}};
+	};
+
+	mpin.prototype.beforeRenderSetup = function(btnElem) {
 		var _reqData = {}, regOTP, url, self = this;
 		regOTP = this.ds.getIdentityData(this.identity, "regOTP");
 		url = this.opts.signatureURL + "/" + this.identity + "?regOTP=" + regOTP;
 
-		var oldHtml, btnElem = document.getElementById("mpin_action_setup");
-		oldHtml = btnElem.innerHTML;
-		btnElem.innerHTML = hlp.text("setupNotReady_check_info1") + "...<br/>";
-		//manipulate DOM - mp_action_setup
-		//--// var btnElem, spanElem;
-		//--//btnElem = document.getElementById("mpin_action_setup");
-		//--//spanElem = document.getElementById("mp_action_info");
-		//--//btnElem.style.display = "none";
-		//--//spanElem.className = "info-checking";
-		//--//spanElem.style.display = "inline-block";
-		//--//spanElem.innerHTML = hlp.text("setupNotReady_check_info1") + "...<br/>";
+		var btn = this.mpinButton(btnElem, "setupNotReady_check_info1");
 
 		_reqData.URL = url;
 		_reqData.method = "GET";
@@ -466,15 +479,11 @@ var mpin = mpin || {};
 			if (rpsData.errorStatus) {
 				//--//spanElem.className = "info-error";
 				//--//spanElem.innerHTML = hlp.text("setupNotReady_check_info2") + "<br/>";
-				btnElem.innerHTML = hlp.text("setupNotReady_check_info2") + "...<br/>";
+//				btnElem.innerHTML = hlp.text("setupNotReady_check_info2") + "...<br/>";
+
+				btn.error("setupNotReady_check_info2");
 
 				self.error("Activate identity");
-				setTimeout(function() {
-					//--//	spanElem.style.display = "none";
-					//--//	btnElem.style.display = "inline-block";
-					btnElem.innerHTML = oldHtml;
-				}, 1500);
-
 				return;
 			}
 
@@ -540,7 +549,9 @@ var mpin = mpin || {};
 		renderElem.innerHTML = this.readyHtml("reactivate-panel", {name: name});
 
 		document.getElementById("mp_acclist_reactivateuser").onclick = function() {
-			self.renderSetup(self.getDisplayName(iD));
+//			self.renderSetup(self.getDisplayName(iD));
+			console.log("resend :", self.getDisplayName(iD));
+			self.actionSetupHome.call(self, self.getDisplayName(iD));
 		};
 		document.getElementById("mp_acclist_cancel").onclick = function() {
 			self.renderAccountsPanel();
@@ -766,7 +777,7 @@ var mpin = mpin || {};
 	//
 	mpin.prototype.addToPin = function(digit) {
 		var elemDisplay = document.getElementById('pinpad-input');
-		
+
 		console.log("elemDisplay", elemDisplay);
 		//convert input text to password
 		if (this.displayType === "text" && elemDisplay) {
@@ -851,12 +862,12 @@ var mpin = mpin || {};
 
 	mpin.prototype.toggleButton = function() {
 		var self = this, pinpadElem, idenElem;
-		
+
 		pinpadElem = document.getElementById("pinsHolder");
 		idenElem = document.getElementById("mpinIdentities");
-		
+
 		console.log("pinpadDisplay::", pinpadElem.style.display);
-		
+
 		if (pinpadElem.style.display === "none") {
 			document.getElementById('mpinUser').style.display = '';
 			this.setIdentity(this.identity, true, function() {
@@ -884,7 +895,6 @@ var mpin = mpin || {};
 			document.getElementById("mp_emailaddress").focus();
 			return;
 		}
-
 
 		_reqData.URL = this.opts.registerURL;
 		_reqData.method = "PUT";
@@ -949,22 +959,15 @@ var mpin = mpin || {};
 		}
 	};
 
-	mpin.prototype.actionResend = function() {
+	mpin.prototype.actionResend = function(btnElem) {
 		var self = this, _reqData = {}, regOTP, _email;
 
 		regOTP = this.ds.getIdentityData(this.identity, "regOTP");
 		_email = this.getDisplayName(this.identity);
 
-
-		//--//var btnElem, spanElem;
-		//--//btnElem = document.getElementById("mp_action_resend");
-		//--//spanElem = document.getElementById("mp_action_info");
-		//--//btnElem.style.display = "none";
-		//--//spanElem.className = "info-checking";
-		//--//spanElem.style.display = "inline-block";
-		//--//spanElem.innerHTML = hlp.text("setupNotReady_resend_info1") + "...<br/>";
-
-
+		var btnOld = btnElem.innerHTML;
+		addClass(btnElem, "mpinBtnBusy");
+		btnElem.innerHTML = hlp.text("setupNotReady_resend_info1") + "...<br/>";
 
 		_reqData.URL = this.opts.registerURL;
 		_reqData.URL += "/" + this.identity;
@@ -990,6 +993,7 @@ var mpin = mpin || {};
 			}
 			self.identity = rpsData.mpinId;
 
+
 			//should be already exist only update regOTP
 			self.ds.setIdentityData(rpsData.mpinId, {regOTP: rpsData.regOTP});
 
@@ -999,9 +1003,10 @@ var mpin = mpin || {};
 //			self.renderActivateIdentity();
 			//--//spanElem.innerHTML = hlp.text("setupNotReady_resend_info2");
 			//--//spanElem.style.background = "none";
+			removeClass(btnElem, "mpinBtnBusy");
+			btnElem.innerHTML = hlp.text("setupNotReady_resend_info2") + "...<br/>";
 			setTimeout(function() {
-				//--//spanElem.style.display = "none";
-				//--//btnElem.style.display = "inline-block";
+				btnElem.innerHTML = btnOld;
 			}, 1500);
 		});
 	};

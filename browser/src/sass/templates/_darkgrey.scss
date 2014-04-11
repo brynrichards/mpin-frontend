@@ -191,7 +191,7 @@ $BORDERLESS : true;
 @mixin desktop-icon() {
 	width: 50px !important;
 	height: 42px !important;
-	background-image: url('#{$IMAGES}/mac-icon.png');
+	background-image: url('#{$IMAGES}/mac-icon.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
