@@ -130,9 +130,14 @@ var mpin = mpin || {};
 	mpin.prototype.render = function(tmplName, callbacks, tmplData) {
 		var data = tmplData || {}, k;
 		this.el.innerHTML = this.readyHtml(tmplName, data);
+
 		for (k in callbacks) {
 			if (document.getElementById(k)) {
-				document.getElementById(k).onclick = callbacks[k];
+				// document.getElementById(k).onclick = callbacks[k];
+
+				document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+				document.getElementById(k).addEventListener('click', callbacks[k], false);
+
 			}
 		}
 		if (typeof mpin.custom !== 'undefined') {
@@ -192,12 +197,41 @@ var mpin = mpin || {};
 		};
 
 		identity = this.ds.getDefaultIdentity();
-		if (identity) {
-			this.renderLogin();
-		} else {
-			this.render('home_mobile', callbacks);
+
+		// Check browsers
+
+		function isMobileSafari() {
+		    return navigator.userAgent.match(/(iPad|iPhone|iPod touch)/) && navigator.userAgent.match(/AppleWebKit/)
 		}
 
+		function isIos7() {
+			return navigator.userAgent.match(/(iPad|iPhone);.*CPU.*OS 7_\d/i)
+		}
+
+		if(isMobileSafari() && !window.navigator.standalone) {
+
+			if(isIos7()) {
+
+				this.render('ios7-startup', callbacks);
+
+			} else {
+
+				this.render('ios6-startup', callbacks);
+
+			}
+
+		} else {
+
+			if (identity) {
+				this.renderLogin();
+			} else {
+				this.render('home_mobile', callbacks);
+			}
+		}
+
+		// if ( ("standalone" in window.navigator) && window.navigator.standalone ) {
+		//    alert('full screen');
+		//  }
 
 		//if (this.opts.mobileAppFullURL) {
 		//	this.renderHomeMobile();
@@ -526,6 +560,9 @@ var mpin = mpin || {};
 			self.renderReactivatePanel.call(self, iD);
 		};
 		document.getElementById("mp_acclist_cancel").onclick = function(evt) {
+			// Call the setup screen first
+			self.renderSetup.call(self, evt);
+			// Render after that the accounts panel
 			self.renderAccountsPanel.call(self, evt);
 		};
 	};
@@ -556,8 +593,7 @@ var mpin = mpin || {};
 		renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
 
 		document.getElementById("mp_acclist_deluser").onclick = function(evt) {
-//			self.renderSetupHome.call(self, evt);
-			alert("not Implement yet mp_acclist_deluser.");
+			self.deleteIdentity(iD);
 		};
 		document.getElementById("mp_acclist_cancel").onclick = function(evt) {
 			self.renderAccountsPanel.call(self, evt);
@@ -766,24 +802,27 @@ var mpin = mpin || {};
 		var self = this, btEls;
 		btEls = document.getElementsByClassName("btn");
 		for (var i = 0; i < btEls.length; i++) {
-			btEls[i].onclick = function(el) {
-				self.addToPin(el.target.getAttribute("data-value"));
-				return false;
-			};
+			// btEls[i].onclick = function(el) {
+			// 	self.addToPin(el.target.getAttribute("data-value"));
+			// 	return false;
+			// };
 
-			// btEls[i].addEventListener('click', mEventsHandler, false);
+			btEls[i].addEventListener('touchstart', mEventsHandler, false);
 
-			// // document.getElementById('mp_back').remove();
+			// Tempory for development
 
-			// function mEventsHandler(e) {
-			//   if (e.type == "click") {
-			//   	// alert("Touch start....");
+			btEls[i].addEventListener('click', mEventsHandler, false);
 
-			//   self.addToPin(e.target.getAttribute("data-value"));
-			//   return false;
+			// document.getElementById('mp_back').remove();
 
-			//   }
-			// }
+			function mEventsHandler(e) {
+			  // if (e.type == "touchstart") {
+
+			  self.addToPin(e.target.getAttribute("data-value"));
+			  // return false;
+
+			  // }
+			}
 		}
 	};
 	mpin.prototype.enableNumberButtons = function(enable) {
@@ -1074,12 +1113,25 @@ var mpin = mpin || {};
 		accessNumber = this.accessNumber;
 		//authServer = this.opts.authenticateURL;
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-				this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.mobileAuthenticateURL, this.opts.authTokenFormatter, this.opts.authenticateHeaders,
+				this.opts.requestOTP, "0", this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
 				function(success, errorCode, errorMessage, authData) {
+					console.log("authenticate arguments :", arguments);
 					if (success) {
-						//self.successLogin(authData);
-						self.renderLogout(authData);
+						self.successLogin(authData);
+					} else if (errorCode === "INVALID") {
+						self.display(hlp.text("authPin_errorInvalidPin"), false);
 
+						self.enableNumberButtons(true);
+
+						self.enableButton(false, "go");
+						self.enableButton(false, "clear");
+						self.enableButton(true, "toggle");
+					} else if (errorCode === "MAXATTEMPTS") {
+						var iD = self.identity;
+						self.deleteIdentity(iD);
+						if (self.opts.onAccountDisabled) {
+							self.opts.onAccountDisabled(iD);
+						}
 					}
 
 				}, function() {
@@ -1215,6 +1267,34 @@ var mpin = mpin || {};
 					onFail(message, statusCode)
 				});
 
+	};
+
+	mpin.prototype.deleteIdentity = function(iID) {
+		var newDefaultAccount = "", self = this;
+
+		this.ds.deleteIdentity(iID);
+		for (var i in this.ds.getAccounts()) {
+			newDefaultAccount = i;
+			break;
+		}
+
+		if (newDefaultAccount) {
+			this.setIdentity(newDefaultAccount, true, function() {
+				self.display(self.cfg.pinpadDefaultMessage);
+			}, function() {
+				return false;
+			});
+
+			this.ds.setDefaultIdentity(newDefaultAccount);
+			// Render the identity list panel
+			this.renderAccountsPanel();
+		} else {
+			this.setIdentity(newDefaultAccount, false);
+			this.ds.setDefaultIdentity("");
+			this.identity = "";
+			this.renderSetupHome();
+		}
+		return false;
 	};
 
 	//data Source with static referance
