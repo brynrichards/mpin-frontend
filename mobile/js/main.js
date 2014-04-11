@@ -1588,7 +1588,8 @@ var mpin = mpin || {};
 		"logout_button": "Logout",
 		"home_button_setupMobile": "Add an identity to this browser",
 		"mobile_splash_text": "INSTALL THE M-PIN MOBILE APP",
-		"mobile_add_home": "Tap the icon to 'Add to homescreen'"
+		"mobile_add_home_ios6": "Tap the <img src='/build/out/mobile/resources/templates/grey/img/ios6-share.png'/> icon to 'Add to homescreen'",
+		"mobile_add_home_ios7": "Tap the <img src='/build/out/mobile/resources/templates/grey/img/ios7-share.png'/> icon to 'Add to homescreen'"
 
 	};
 	//	image should have config properties
