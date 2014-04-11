@@ -168,8 +168,12 @@ var mpin = mpin || {};
 
 		callbacks.mpin_authenticate = function(evt) {
 
-			// Modify the sequence for the templates
-			self.renderSetupHome.call(self, evt);
+			// Check for identity
+			if(self.ds.getDefaultIdentity()) {
+				self.renderLogin();
+			} else {
+				self.renderSetupHome.call(self, evt);				
+			}
 		};
 		callbacks.mp_action_Login1 = function(evt) {
 			self.renderLogin.call(self);
@@ -229,13 +233,6 @@ var mpin = mpin || {};
 			}
 		}
 
-		// if ( ("standalone" in window.navigator) && window.navigator.standalone ) {
-		//    alert('full screen');
-		//  }
-
-		//if (this.opts.mobileAppFullURL) {
-		//	this.renderHomeMobile();
-		//}
 	};
 
 	mpin.prototype.renderSetupHome = function(email, errorID) {
@@ -1589,7 +1586,9 @@ var mpin = mpin || {};
 		"pinpad_placeholder_text2": "Enter your access Number",
 		"logout_text1": "YOU ARE NOW LOGGED IN",
 		"logout_button": "Logout",
-		"home_button_setupMobile": "Add an identity to this browser"
+		"home_button_setupMobile": "Add an identity to this browser",
+		"mobile_splash_text": "INSTALL THE M-PIN MOBILE APP",
+		"mobile_add_home": "Tap the icon to 'Add to homescreen'"
 
 	};
 	//	image should have config properties
