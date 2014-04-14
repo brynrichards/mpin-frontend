@@ -187,10 +187,10 @@ var mpin = mpin || {};
 			this.renderSetup(this.opts.prerollid);
 		}
 
-		callbacks.mpin_setup = function(evt) {
-			self.renderSetupHome.call(self, evt);
+		callbacks.mpin_setup = function() {
+			self.renderSetupHome.call(self);
 		};
-		callbacks.mpin_authenticate = function(evt) {
+		callbacks.mpin_authenticate = function() {
 			self.renderLogin.call(self);
 		};
 //		callbacks.mp_action_addIdentity2 = callbacks.mp_action_addIdentity1;
@@ -217,9 +217,6 @@ var mpin = mpin || {};
 		document.getElementById("mpin_mobile_setup").onclick = function() {
 			self.renderMobileSetup.call(self);
 		};
-
-//		document.getElementById("mp_action_mobileLogin2").onclick = document.getElementById("mp_action_mobileLogin1").onclick;
-//		document.getElementById("mp_action_mobileSetup2").onclick = document.getElementById("mp_action_mobileSetup1").onclick;
 	};
 
 	mpin.prototype.renderSetupHome = function(email, errorID) {
@@ -304,7 +301,7 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.renderMobileLogin = function() {
-		var callbacks = {}, self = this, reqIntervalID, _request;
+		var callbacks = {}, self = this;
 
 		callbacks.mp_action_home = function(evt) {
 //			_request.abort();
@@ -392,8 +389,6 @@ var mpin = mpin || {};
 		} else {
 			_request.send();
 		}
-//		this.getAccessRequest = _request;
-//		return _request;
 	};
 
 	mpin.prototype.renderMobileSetup = function() {
@@ -419,8 +414,9 @@ var mpin = mpin || {};
 	mpin.prototype.renderActivateIdentity = function() {
 		var callbacks = {}, self = this, email;
 		email = this.getDisplayName(this.identity);
-		callbacks.mp_action_home = function(evt) {
-			self.renderHome.call(self, evt);
+
+		callbacks.mp_action_home = function() {
+			self.renderHome.call(self);
 		};
 		callbacks.mpin_action_setup = function() {
 			self.beforeRenderSetup.call(self, this);
@@ -435,7 +431,6 @@ var mpin = mpin || {};
 
 	mpin.prototype.mpinButton = function(btnElem, busyText) {
 		var oldHtml = btnElem.innerHTML;
-		console.log(": mpinButton :");
 		addClass(btnElem, "mpinBtnBusy");
 		btnElem.innerHTML = hlp.text(busyText);
 		return {
@@ -556,7 +551,7 @@ var mpin = mpin || {};
 		renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
 
 		document.getElementById("mp_acclist_deluser").onclick = function(evt) {
-			self.pntity(iD);
+			self.deleteIdentity(iD);
 		};
 
 		document.getElementById("mp_acclist_cancel").onclick = function(evt) {
@@ -763,7 +758,7 @@ var mpin = mpin || {};
 		}
 
 		if (digit === 'clear') {
-			this.display("");
+			this.display(this.cfg.pinpadDefaultMessage);
 			this.enableNumberButtons(true);
 			this.enableButton(false, "go");
 			this.enableButton(false, "clear");
@@ -807,6 +802,7 @@ var mpin = mpin || {};
 		elem = document.getElementById('pinpad-input');
 		elem.type = "text";
 		elem.value = message;
+		this.displayType = "text";
 		return;
 		//old template
 		elemPass = document.getElementById('mp_pin');

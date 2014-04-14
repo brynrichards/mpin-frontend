@@ -12,21 +12,22 @@
 <div id="identityContainer">
 
   <div class="identityMainText">
-      <div class="congrats">
-        <%=hlp.text( "setupReady_header") %>
-      </div>
-
-      <div class="identityBodyText">
-          <p>
+		
+	<div>
+		<h1><%= hlp.text("setupReady_header") %></h1>
+    </div>
+	  
+	    <div class="mp_note" style="margin:0pxpadding:0px">
+          <p class="mp_center">
               <%=hlp.text( "setupReady_text1") %>
-                  <span class="email">
+                  <br/>
+                  <span style="padding: 10px 5px 20px 5px" class="mp_accountField">
                       <%= email %>
                   </span>
+                  <br/>
+                  <%=hlp.text( "setupReady_text2") %>
           </p>
-          <p>
-            <%=hlp.text( "setupReady_text2") %>
-          </p>
-          <p>
+          <p class="mp_after_center">
               <%=hlp.text( "setupReady_text3") %>
           </p>
       </div>
