@@ -370,7 +370,7 @@ var mpin = mpin || {};
 			var _jsonRes;
 			if (_request.readyState === 4) {
 				if (_request.status === 200) {
-					_jsonRes = JSON.parse(_request.responseText)
+					_jsonRes = JSON.parse(_request.responseText);
 					self.successLogin(_jsonRes);
 				} else if (!this.intervalID2) {
 					self.intervalID2 = setTimeout(function() {
@@ -425,15 +425,11 @@ var mpin = mpin || {};
 		callbacks.mp_action_home = function(evt) {
 			self.renderHome.call(self, evt);
 		};
-		callbacks.mpin_action_setup = function(evt) {
-//			self.renderSetup
+		callbacks.mpin_action_setup = function() {
 			self.beforeRenderSetup.call(self, this);
-			//self.actionSetupHome.call(self, evt);
-//			self.renderSetup.call(self, self.getDisplayName(email));
-//			self.renderLogin.call(self, evt);
 		};
 
-		callbacks.mpin_action_resend = function(ev) {
+		callbacks.mpin_action_resend = function() {
 			self.actionResend.call(self, this);
 		};
 
@@ -442,12 +438,11 @@ var mpin = mpin || {};
 
 	mpin.prototype.mpinButton = function(btnElem, busyText) {
 		var oldHtml = btnElem.innerHTML;
-		console.log("mpinButton :", btnElem);
+		console.log(": mpinButton :");
 		addClass(btnElem, "mpinBtnBusy");
 		btnElem.innerHTML = hlp.text(busyText);
 		return {
 			error: function(errorText) {
-
 				removeClass(btnElem, "mpinBtnBusy");
 				addClass(btnElem, "mpinBtnError");
 				btnElem.innerHTML = hlp.text(errorText);
@@ -456,8 +451,9 @@ var mpin = mpin || {};
 					btnElem.innerHTML = oldHtml;
 				}, 1500);
 
-			}, on: function() {
+			}, ok: function(okText) {
 				removeClass(btnElem, "mpinBtnBusy");
+				btnElem.innerHTML = hlp.text(okText);
 				setTimeout(function() {
 					btnElem.innerHTML = oldHtml;
 				}, 1500);
@@ -477,9 +473,6 @@ var mpin = mpin || {};
 		//get signature
 		requestRPS(_reqData, function(rpsData) {
 			if (rpsData.errorStatus) {
-				//--//spanElem.className = "info-error";
-				//--//spanElem.innerHTML = hlp.text("setupNotReady_check_info2") + "<br/>";
-//				btnElem.innerHTML = hlp.text("setupNotReady_check_info2") + "...<br/>";
 
 				btn.error("setupNotReady_check_info2");
 
@@ -649,16 +642,9 @@ var mpin = mpin || {};
 
 		//Check again
 		callbacks.mpin_setup = function() {
-			var spanElem = document.getElementById("mp_info_recheck"), that = this,
-					_reqData = {}, regOTP, url;
+			var _reqData = {}, regOTP, url, btn;
 
-			//--//this.style.display = "none";
-			//--//spanElem.className = "info-checking";
-			//--//spanElem.style.display = "inline-block";
-			//--//spanElem.innerHTML = hlp.text("setupNotReady_check_info1") + "...<br/>";
-
-			//--//console.log("IDENTITY --- :::", self.identity);
-			//--//console.log("IDENTITY --- :::", self.identity.length);
+			btn = self.mpinButton(this, "setupNotReady_check_info1");
 
 			regOTP = self.ds.getIdentityData(self.identity, "regOTP");
 			url = self.opts.signatureURL + "/" + self.identity + "?regOTP=" + regOTP;
@@ -668,14 +654,8 @@ var mpin = mpin || {};
 
 			requestRPS(_reqData, function(rpsData) {
 				if (rpsData.errorStatus) {
-					//--//	spanElem.className = "info-error";
-					//--//	spanElem.innerHTML = hlp.text("setupNotReady_check_info2") + "<br/>";
+					btn.error("setupNotReady_check_info2");
 					self.error("Activate identity");
-					setTimeout(function() {
-						//--//		spanElem.style.display = "none";
-						//--//		that.style.display = "inline-block";
-					}, 1500);
-
 					return;
 				}
 
@@ -685,13 +665,9 @@ var mpin = mpin || {};
 		};
 		//email
 		callbacks.mpin_resend = function() {
-			var spanElem = document.getElementById("mp_info_resend"), regOTP, _email, _reqData = {}, that = this;
+			var btn, regOTP, _email, _reqData = {};
 
-			//--//this.style.display = "none";
-			//--//spanElem.className = "info-checking";
-			//--//spanElem.style.display = "inline-block";
-			//--//spanElem.innerHTML = hlp.text("setupNotReady_resend_info1");
-
+			btn = self.mpinButton(this, "setupNotReady_resend_info1");
 
 			regOTP = self.ds.getIdentityData(self.identity, "regOTP");
 			_email = self.getDisplayName(self.identity);
@@ -718,6 +694,8 @@ var mpin = mpin || {};
 			requestRPS(_reqData, function(rpsData) {
 				if (rpsData.error || rpsData.errorStatus) {
 					self.error("Resend problem");
+
+					btn.error("setupNotReady_resend_error");
 					return;
 				}
 //				self.identity = rpsData.mpinId;
@@ -729,6 +707,7 @@ var mpin = mpin || {};
 				// Check for existing userid and delete the old one
 				self.ds.deleteOldIdentity(rpsData.mpinId);
 
+				btn.ok("setupNotReady_resend_info2");
 //			self.renderActivateIdentity();
 
 				//--//spanElem.innerHTML = hlp.text("setupNotReady_resend_info2");
@@ -960,14 +939,12 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.actionResend = function(btnElem) {
-		var self = this, _reqData = {}, regOTP, _email;
+		var self = this, _reqData = {}, regOTP, _email, btn;
 
 		regOTP = this.ds.getIdentityData(this.identity, "regOTP");
 		_email = this.getDisplayName(this.identity);
 
-		var btnOld = btnElem.innerHTML;
-		addClass(btnElem, "mpinBtnBusy");
-		btnElem.innerHTML = hlp.text("setupNotReady_resend_info1") + "...<br/>";
+		btn = this.mpinButton(btnElem, "setupNotReady_resend_info1");
 
 		_reqData.URL = this.opts.registerURL;
 		_reqData.URL += "/" + this.identity;
@@ -993,21 +970,13 @@ var mpin = mpin || {};
 			}
 			self.identity = rpsData.mpinId;
 
-
 			//should be already exist only update regOTP
 			self.ds.setIdentityData(rpsData.mpinId, {regOTP: rpsData.regOTP});
 
 			// Check for existing userid and delete the old one
 			self.ds.deleteOldIdentity(rpsData.mpinId);
 
-//			self.renderActivateIdentity();
-			//--//spanElem.innerHTML = hlp.text("setupNotReady_resend_info2");
-			//--//spanElem.style.background = "none";
-			removeClass(btnElem, "mpinBtnBusy");
-			btnElem.innerHTML = hlp.text("setupNotReady_resend_info2") + "...<br/>";
-			setTimeout(function() {
-				btnElem.innerHTML = btnOld;
-			}, 1500);
+			btn.ok("setupNotReady_resend_info2");
 		});
 	};
 
@@ -1492,6 +1461,7 @@ var mpin = mpin || {};
 		"setupNotReady_check_info2": "Identity not verified!",
 		"setupNotReady_resend_info1": "Sending email",
 		"setupNotReady_resend_info2": "Email sent!",
+		"setupNotReady_resend_error": "Sending email failed!",
 		"setupNotReady_button_check": "Setup M-Pin",
 		"setupNotReady_button_resend": "Send the email again",
 		"setupNotReady_button_back": "Go to the identities list",
