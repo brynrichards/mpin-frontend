@@ -25,11 +25,6 @@ var mpin = mpin || {};
 		});
 	};
 
-	//dom ID names
-	mpin.prototype.idName = {
-		display: "pinpad-input"
-	};
-
 	//CONFIGS
 	mpin.prototype.cfg = {
 //		apiVersion: "v0.3",
@@ -49,7 +44,6 @@ var mpin = mpin || {};
 	 * 
 	 * @returns {Boolean}
 	 */
-
 	mpin.prototype.initialize = function(domID, options) {
 		this.el = document.getElementById(domID);
 		addClass(this.el, "mpinMaster");
@@ -84,7 +78,6 @@ var mpin = mpin || {};
 
 		this.renderHome();
 //		this.renderSetup("123da");
-
 	};
 
 	mpin.prototype.checkBrowser = function() {
@@ -131,7 +124,7 @@ var mpin = mpin || {};
 
 	mpin.prototype.setOptions = function(options) {
 		var _i, _opts, _optionName, _options = "requestOTP; successSetupURL; onSuccessSetup; successLoginURL; onSuccessLogin; onLoaded; onGetPermit; ";
-		_options += "onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; signatureURL; verifyTokenURL; certivoxURL; ";
+		_options += "onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; signatureURL; certivoxURL; ";
 		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; customHeaders; authenticateRequestFormatter; accessNumberRequestFormatter; ";
 		_options += "registerRequestFormatter; identityCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
 		_options += "language; customLanguageTexts";
@@ -169,6 +162,11 @@ var mpin = mpin || {};
 		}
 	};
 
+	/**
+	 * funciton	setLanguageText
+	 * 
+	 * replace lang with customLanguageTexts
+	 */
 	mpin.prototype.setLanguageText = function() {
 		hlp.language = this.language;
 		//		setLanguageText
@@ -180,7 +178,6 @@ var mpin = mpin || {};
 				}
 			}
 		}
-
 	};
 
 	mpin.prototype.renderHome = function() {
