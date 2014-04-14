@@ -488,6 +488,7 @@ var mpin = mpin || {};
 		};
 		renderElem = document.getElementById("mpinIdentities");
 		renderElem.innerHTML = this.readyHtml("accounts-panel", {});
+		renderElem.style.display = "block";
 
 		document.getElementById("mp_acclist_adduser").onclick = function(evt) {
 			self.renderSetupHome.call(self, evt);
@@ -514,6 +515,7 @@ var mpin = mpin || {};
 		var renderElem, name, self = this;
 		name = this.getDisplayName(iD);
 		renderElem = document.getElementById("mpinIdentities");
+//		renderElem = document.getElementById("mp_accountListView");
 		renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
 
 		document.getElementById("mp_deluser").onclick = function(evt) {
@@ -579,7 +581,7 @@ var mpin = mpin || {};
 
 		if (isDefault) {
 			starClass = "mp_starButtonSelectedState";
-			divClass = "mp_contentItem one-edge-shadow mp_itemSelected";
+			divClass = "mp_contentItem one-edge-shadow default";
 		} else {
 			starClass = "mp_starButtonDefaultState";
 			divClass = "mp_contentItem one-edge-shadow";

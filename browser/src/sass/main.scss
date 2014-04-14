@@ -31,7 +31,7 @@ $MOBILE : false;
 body {
 	font-size: 104%;
 	@include font-family();
-	
+
 	// Hide the overflow
 	overflow: hidden;
 	// Set default text size of the H1 tag
@@ -247,16 +247,103 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		}
 	}
 
+	#mpinIdentities {
+		margin-top: 20px;
+		margin-bottom: 5px;
+	}
+
+	#mp_accountListView {
+
+		height: 250px;
+		overflow: auto;
+		overflow-x: hidden;
+		
+		@include central-content();
+
+		/*To be put in _darkgrey*/
+
+		&.active {
+			border: 1px solid #666;
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+
+		.mp_customScrollBox {
+			width: 100%;
+		}
+
+		.mp_starIcon{
+			background: url('#{$IMAGES}/star_inactive.svg') right top no-repeat;
+			position: relative;
+			top: 0;
+			width: 16px;
+			height: 16px;
+			display: inline-block;
+			margin: 21px 10px;
+			border-style: none;
+			border-width: 0;
+			border: 0;
+		}
+		
+		.mp_titleItem {
+			display: inline-block;
+			position: absolute;
+			top: 21px;
+		}
+
+		-webkit-box-flex: 10;
+		background-position: initial initial;
+		background-repeat: initial initial;
+
+
+		display: -webkit-box;
+		display: -ms-flexbox;
+
+		.default {
+			background: #3c9dcb;
+			.mp_starIcon { 
+				background: url('#{$IMAGES}/star_active.svg') right top no-repeat;
+			}
+		}
+
+		.mp_buttonItem {
+			float: right;
+		}
+
+		.mp_buttonItem {
+			display: block;
+			position: absolute;
+			top: 15px;
+			right: 10px;
+			z-index: 9999;
+			cursor: pointer;
+
+			img {
+				background-color: white;
+				border-radius: 4px;
+			}
+		}
+
+
+		.mp_contentItem {
+			position: relative;
+			height: 58px;
+			border-bottom: 2px solid #666666;
+		}
+
+
+	}
+
 	#identityContainer {
 
 		@include central-content();
 
 		/*To be put in _darkgrey*/
-		
+
 		&.active {
 			border: 1px solid #666;
-			margin-left: 13px;
-			margin-right: 13px;
+			margin-left: 10px;
+			margin-right: 10px;
 		}
 
 		-webkit-box-flex: 10;
@@ -347,24 +434,24 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 		.identityMainText {
 			color: white;
-			
+
 			.mp_accountField {
 				color: #3c9dcb;
 			}
-			
+
 			h1 {
 				font-size: 1em;
 				font-weight: bold;
 				padding-top: 20px;
 				color: white;
 			}
-			
+
 			.mp_center {
 				padding-top: 30px;
 				font: inherit;
 				font-family: Arial,Helvetica,sans-serif;
 			}
-			
+
 			.mp_after_center {
 				padding-top: 30px;
 				padding-bottom: 10px;
@@ -399,15 +486,15 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 				display: block;
 			}
 		}
-		
+
 	}
-	
-	
+
+
 
 	#bottomBtnHolder {
-		
-		margin-left: 13px;
-		margin-right: 13px;
+
+		margin-left: 10px;
+		margin-right: 10px;
 
 		-webkit-box-pack: center;
 		-ms-flex-pack: center;
@@ -471,7 +558,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	}
 
 	// General button styling
-	
+
 	#mp_action_setup {
 		@include mpin-button();
 		padding: 13px 10px 10px;
