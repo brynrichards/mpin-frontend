@@ -559,7 +559,7 @@ var mpin = mpin || {};
 		renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
 
 		document.getElementById("mp_acclist_deluser").onclick = function(evt) {
-			self.deleteIdentity(iD);
+			self.pntity(iD);
 		};
 
 		document.getElementById("mp_acclist_cancel").onclick = function(evt) {
