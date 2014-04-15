@@ -182,7 +182,9 @@ $BORDERLESS : true;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
-	margin: 5px 10px 5px 0px;
+	// margin: 5px 10px 5px 0px;
+
+	margin: 0 auto;
 
 	@include box-flex-value(1.0);
 }

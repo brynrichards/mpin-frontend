@@ -8,9 +8,9 @@ var mpin = mpin || {};
 	mpin = function(domID, options) {
 		var self = this;
 
-		loader("../libs/underscore-min.js", function() {
-			loader("../libs/mpin-all.js", function() {
-				loader("../build/out/mobile/js/templates.js", function() {
+		loader("../build/out/mobile/js/underscore-min.js", function() {
+			loader("../build/out/mobile/js/mpin-all.min.js", function() {
+				loader("../build/out/mobile/js/templates.min.js", function() {
 					var _options = {};
 					if (!options.clientSettingsURL)
 						return console.error("set client Settings");
@@ -37,6 +37,7 @@ var mpin = mpin || {};
 		pinSize: 4,
 		requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue"
 	};
+
 
 	/**
 	 * Mpin Constructor
@@ -74,6 +75,11 @@ var mpin = mpin || {};
 
 		console.log("language:: ", this.language);
 		console.log("language:: ", lang);
+
+		
+		// Disable scroll areas
+
+		document.ontouchmove = function(e){ e.preventDefault(); }
 
 		//this.renderSetupHome();
 //		this.renderMobileSetup();
@@ -212,23 +218,27 @@ var mpin = mpin || {};
 			return navigator.userAgent.match(/(iPad|iPhone);.*CPU.*OS 7_\d/i)
 		}
 
+		// Check if Safari and if it's open as standalone app
 		if(isMobileSafari() && !window.navigator.standalone) {
 
+			// Render IOS7 view
 			if(isIos7()) {
 
 				this.render('ios7-startup', callbacks);
 
 			} else {
-
+				// Render the IOS6 view - the difference is in the icons
 				this.render('ios6-startup', callbacks);
 
 			}
 
 		} else {
 
+			// Check if there's identity, redirect to login where 'Add to identity will appear'
 			if (identity) {
 				this.renderLogin();
 			} else {
+				// Render the home mobile button, if no identity exists
 				this.render('home_mobile', callbacks);
 			}
 		}
@@ -591,6 +601,10 @@ var mpin = mpin || {};
 
 		document.getElementById("mp_acclist_deluser").onclick = function(evt) {
 			self.deleteIdentity(iD);
+
+			// Render the identity list too
+
+
 		};
 		document.getElementById("mp_acclist_cancel").onclick = function(evt) {
 			self.renderAccountsPanel.call(self, evt);
