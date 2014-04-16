@@ -1,16 +1,10 @@
 <!-- Home/Top Nav Bar -->
-
-<header id="topNav">
-    <div id="homeBtn">
+<header class="pinpad" id="topNav">
+    <a id="mp_action_home" href="#">
+        <div id="homeBtn"></div>
+    </a>
     </div>
-    <div id="mpinLogo">
-    </div>
-</header>
-
-<!-- User section -->
-
-<header id="header">
-  <div id="mpinLogo"></div>
+    <div id="mpinLogo"></div>
 </header>
 
 <!-- Input button -->
@@ -19,33 +13,37 @@
 
   <div class="identityMainText">
       <div>
-        Your email address will be used as your identity when M-Pin authenticates you to this service.
+	  <h1><%= hlp.text("setupNotReady_header") %></h1>
       </div>
 
       <div class="mp_note" style="margin:0pxpadding:0px">
-          <p class="mp_center" style="width:240px">
+          <p class="mp_center">
               <%=hlp.text( "setupNotReady_text1") %>
                   <br/>
                   <span style="padding: 10px 5px 20px 5px" class="mp_accountField">
-                      jordan@dasdsa.com
+                      <%= email %>
                   </span>
                   <br/>
-                  <%=hlp.text( "setupReady_text2") %>
+                  <%=hlp.text( "setupNotReady_text2") %>
           </p>
-          <p>
-              <%=hlp.text( "setupReady_text3") %>
+          <p class="mp_after_center">
+              <%=hlp.text( "setupNotReady_text3") %>
           </p>
       </div>
   </div>
 
   <div id="buttonsContainer">
-      <div class="mpinBtn" id="mpin_authenticate">
+      <div class="mpinBtn" id="mpin_setup">
           <span class="iconArrow"></span>
-          <span class="btnLabel"><%=hlp.text( "setupReady_button_go") %></span>
+          <span class="btnLabel"><%=hlp.text( "setupNotReady_button_check") %></span>
       </div>
-      <div class="mpinBtn" id="deviceIdentity">
+      <div class="mpinBtn" id="mpin_resend">
           <span class="iconArrow"></span>
           <span class="btnLabel"><%=hlp.text( "setupNotReady_button_resend")%></span>
+      </div>
+	  <div class="mpinBtn" id="mpin_accounts">
+          <span class="iconArrow"></span>
+          <span class="btnLabel"><%=hlp.text( "setupNotReady_button_back")%></span>
       </div>
   </div>
 

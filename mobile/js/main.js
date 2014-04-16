@@ -2,7 +2,7 @@ var mpin = mpin || {};
 
 (function() {
 	var lang = {}, hlp = {}, loader;
-	var IMAGES_PATH = "public/images/";
+	var IMAGES_PATH = "../build/out/mobile/resources/templates/grey/img/";
 
 	//CONSTRUCTOR
 	mpin = function(domID, options) {
@@ -130,9 +130,14 @@ var mpin = mpin || {};
 	mpin.prototype.render = function(tmplName, callbacks, tmplData) {
 		var data = tmplData || {}, k;
 		this.el.innerHTML = this.readyHtml(tmplName, data);
+
 		for (k in callbacks) {
 			if (document.getElementById(k)) {
-				document.getElementById(k).onclick = callbacks[k];
+				// document.getElementById(k).onclick = callbacks[k];
+
+				document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+				document.getElementById(k).addEventListener('click', callbacks[k], false);
+
 			}
 		}
 		if (typeof mpin.custom !== 'undefined') {
@@ -163,8 +168,12 @@ var mpin = mpin || {};
 
 		callbacks.mpin_authenticate = function(evt) {
 
-			// Modify the sequence for the templates
-			self.renderSetupHome.call(self, evt);
+			// Check for identity
+			if(self.ds.getDefaultIdentity()) {
+				self.renderLogin();
+			} else {
+				self.renderSetupHome.call(self, evt);				
+			}
 		};
 		callbacks.mp_action_Login1 = function(evt) {
 			self.renderLogin.call(self);
@@ -175,6 +184,7 @@ var mpin = mpin || {};
 		this.render('home', callbacks);
 
 		if (this.opts.mobileAppFullURL) {
+			// RenderMobile Home
 			this.renderHomeMobile();
 		}
 	};
@@ -191,16 +201,38 @@ var mpin = mpin || {};
 		};
 
 		identity = this.ds.getDefaultIdentity();
-		if (identity) {
-			this.renderLogin();
-		} else {
-			this.render('home_mobile', callbacks);
+
+		// Check browsers
+
+		function isMobileSafari() {
+		    return navigator.userAgent.match(/(iPad|iPhone|iPod touch)/) && navigator.userAgent.match(/AppleWebKit/)
 		}
 
+		function isIos7() {
+			return navigator.userAgent.match(/(iPad|iPhone);.*CPU.*OS 7_\d/i)
+		}
 
-		//if (this.opts.mobileAppFullURL) {
-		//	this.renderHomeMobile();
-		//}
+		if(isMobileSafari() && !window.navigator.standalone) {
+
+			if(isIos7()) {
+
+				this.render('ios7-startup', callbacks);
+
+			} else {
+
+				this.render('ios6-startup', callbacks);
+
+			}
+
+		} else {
+
+			if (identity) {
+				this.renderLogin();
+			} else {
+				this.render('home_mobile', callbacks);
+			}
+		}
+
 	};
 
 	mpin.prototype.renderSetupHome = function(email, errorID) {
@@ -219,6 +251,7 @@ var mpin = mpin || {};
 
 
 	mpin.prototype.renderSetup = function(email, clientSecretShare, clientSecretParams) {
+
 		var callbacks = {}, self = this;
 		callbacks.mp_action_home = function(evt) {
 			self.renderHome.call(self, evt);
@@ -229,6 +262,12 @@ var mpin = mpin || {};
 		callbacks.mpinLogin = function() {
 			self.actionSetup.call(self);
 		};
+
+		callbacks.menuBtn = function() {
+			self.toggleButton.call(self);
+		};
+
+
 
 		this.render("setup", callbacks, {email: email});
 
@@ -257,7 +296,8 @@ var mpin = mpin || {};
 		callbacks.mpinClear = function() {
 			self.addToPin.call(self, "clear");
 		};
-		callbacks.mp_toggleButton = function() {
+
+		callbacks.menuBtn = function() {
 			self.toggleButton.call(self);
 		};
 
@@ -454,18 +494,41 @@ var mpin = mpin || {};
 
 //custom render 
 	mpin.prototype.renderAccountsPanel = function() {
-		var self = this, renderElem, addEmptyItem, c = 0;
+		var self = this, 
+			renderElem, 
+			addEmptyItem, 
+			c = 0, 
+			mpBack = document.getElementById('mp_back');
+
 		addEmptyItem = function(cnt) {
 			var p = document.createElement("div");
 			p.className = "mp_contentEmptyItem";
 			cnt.appendChild(p);
 		};
-		renderElem = document.getElementById("mp_back");
-		renderElem.innerHTML = this.readyHtml("accounts-panel", {});
 
-		document.getElementById("mp_acclist_adduser").onclick = function(evt) {
-			self.renderSetupHome.call(self, evt);
-		};
+
+		addMpinBack = function () {
+			renderElem = document.getElementById('mpinMaster').appendChild(document.createElement("div"));
+			renderElem.id = "mp_back";
+			mpBack = document.getElementById("mp_back");
+			mpBack.innerHTML = self.readyHtml("accounts-panel", {});
+		}
+
+		console.log("Trying to call here");
+
+		if(document.contains(mpBack) === false) {
+			addMpinBack();
+			mpBack.style.display = 'block';
+
+			console.log("Trying to call here again");
+
+
+			document.getElementById("mp_acclist_adduser").onclick = function(evt) {
+				self.renderSetupHome.call(self, evt);
+			};
+
+		}
+
 		//default IDENTITY
 		var cnt = document.getElementById("mp_accountContent");
 		this.addUserToList(cnt, this.ds.getDefaultIdentity(), true, 0);
@@ -482,6 +545,9 @@ var mpin = mpin || {};
 		var renderElem, name, self = this;
 		name = this.getDisplayName(iD);
 		renderElem = document.getElementById("mp_back");
+		console.log('%c Hey!', renderElem, 'background: #222; color: red');
+		console.log(">>>>", name);
+		console.log(">>>>", this.readyHtml("user-settings", {name: name}));
 		renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
 
 		document.getElementById("mp_deluser").onclick = function(evt) {
@@ -491,6 +557,9 @@ var mpin = mpin || {};
 			self.renderReactivatePanel.call(self, iD);
 		};
 		document.getElementById("mp_acclist_cancel").onclick = function(evt) {
+			// Call the setup screen first
+			self.renderSetup.call(self, evt);
+			// Render after that the accounts panel
 			self.renderAccountsPanel.call(self, evt);
 		};
 	};
@@ -521,8 +590,7 @@ var mpin = mpin || {};
 		renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
 
 		document.getElementById("mp_acclist_deluser").onclick = function(evt) {
-//			self.renderSetupHome.call(self, evt);
-			alert("not Implement yet mp_acclist_deluser.");
+			self.deleteIdentity(iD);
 		};
 		document.getElementById("mp_acclist_cancel").onclick = function(evt) {
 			self.renderAccountsPanel.call(self, evt);
@@ -570,7 +638,7 @@ var mpin = mpin || {};
 
 		if (isDefault) {
 			starClass = "mp_starButtonSelectedState";
-			divClass = "mp_contentItem one-edge-shadow mp_itemSelected";
+			divClass = "mp_contentItem one-edge-shadow default";
 		} else {
 			starClass = "mp_starButtonDefaultState";
 			divClass = "mp_contentItem one-edge-shadow";
@@ -594,29 +662,51 @@ var mpin = mpin || {};
 
 		cnt.appendChild(rowElem);
 
-		rowElem.onclick = function() {
-			removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
-			addClass(rowElem, "mp_itemSelected");
+		// rowElem.onclick = function() {
+		// 	removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
+		// 	// addClass(rowElem, "mp_itemSelected");
+		// 	document.getElementById('mp_back').remove();
+		// 	self.ds.setDefaultIdentity(uId);
+		// 	self.setIdentity(uId, true);
+		// };
 
-			self.ds.setDefaultIdentity(uId);
-			self.setIdentity(uId, true, function() {
-				self.display(self.cfg.pinpadDefaultMessage);
-			}, function() {
-				return false;
-			});
-			return false;
-		};
+		rowElem.addEventListener('touchstart', mEventsHandler, false);
+		rowElem.addEventListener('click', mEventsHandler, false);
 
-		rowElem.ondblclick = function() {
-			self.toggleButton.call(self);
-			/*
-			 setTimeout(self.toggleButton, 1);
-			 return false;
-			 */
-		};
+		// document.getElementById('mp_back').remove();
+
+		function mEventsHandler(e) {
+		  if (e.type == "touchstart" || e.type == "click") {
+		  	// alert("Touch start....");
+
+		  	var elem = document.getElementById("mp_back");
+		  	elem.parentNode.removeChild(elem);
+
+		  	removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
+		  	// addClass(rowElem, "mp_itemSelected");
+		  	self.ds.setDefaultIdentity(uId);
+		  	self.setIdentity(uId, true);
+		  }
+		}
+
+
+		// rowElem.ondoubleclick = function() {
+
+		// 	 removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
+		// 	 // addClass(rowElem, "mp_itemSelected");
+
+		// 	 self.ds.setDefaultIdentity(uId);
+		// 	 self.setIdentity(uId, true, function() {
+		// 	 	self.display(self.cfg.pinpadDefaultMessage);
+		// 	 }, function() {
+		// 	 	return false;
+		// 	 });
+		// 	 return false;
+		// };
 
 
 		document.getElementById("mp_btIdSettings_" + iNumber).onclick = function(ev) {
+			console.log(uId);
 			self.renderUserSettingsPanel(uId);
 			ev.stopPropagation();
 			return false;
@@ -709,10 +799,27 @@ var mpin = mpin || {};
 		var self = this, btEls;
 		btEls = document.getElementsByClassName("btn");
 		for (var i = 0; i < btEls.length; i++) {
-			btEls[i].onclick = function(el) {
-				self.addToPin(el.target.getAttribute("data-value"));
-				return false;
-			};
+			// btEls[i].onclick = function(el) {
+			// 	self.addToPin(el.target.getAttribute("data-value"));
+			// 	return false;
+			// };
+
+			btEls[i].addEventListener('touchstart', mEventsHandler, false);
+
+			// Tempory for development
+
+			btEls[i].addEventListener('click', mEventsHandler, false);
+
+			// document.getElementById('mp_back').remove();
+
+			function mEventsHandler(e) {
+			  // if (e.type == "touchstart") {
+
+			  self.addToPin(e.target.getAttribute("data-value"));
+			  // return false;
+
+			  // }
+			}
 		}
 	};
 	mpin.prototype.enableNumberButtons = function(enable) {
@@ -831,8 +938,10 @@ var mpin = mpin || {};
 
 	mpin.prototype.toggleButton = function() {
 		var self = this;
-		if (hasClass("mp_panel", "mp_flip")) {
-			document.getElementById('mp_accountID').style.display = 'inline';
+
+		// console.log(self);
+
+		if (document.getElementById("menuBtn")) {
 
 			console.log("set IDENTITY ;::", typeof this.setIdentity);
 
@@ -841,6 +950,8 @@ var mpin = mpin || {};
 			}, function() {
 				return false;
 			});
+
+			this.renderAccountsPanel();
 
 			removeClass("mp_toggleButton", "mp_SelectedState");
 			removeClass("mp_panel", "mp_flip");
@@ -999,12 +1110,25 @@ var mpin = mpin || {};
 		accessNumber = this.accessNumber;
 		//authServer = this.opts.authenticateURL;
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-				this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.mobileAuthenticateURL, this.opts.authTokenFormatter, this.opts.authenticateHeaders,
+				this.opts.requestOTP, "0", this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
 				function(success, errorCode, errorMessage, authData) {
+					console.log("authenticate arguments :", arguments);
 					if (success) {
-						//self.successLogin(authData);
-						self.renderLogout(authData);
+						self.successLogin(authData);
+					} else if (errorCode === "INVALID") {
+						self.display(hlp.text("authPin_errorInvalidPin"), false);
 
+						self.enableNumberButtons(true);
+
+						self.enableButton(false, "go");
+						self.enableButton(false, "clear");
+						self.enableButton(true, "toggle");
+					} else if (errorCode === "MAXATTEMPTS") {
+						var iD = self.identity;
+						self.deleteIdentity(iD);
+						if (self.opts.onAccountDisabled) {
+							self.opts.onAccountDisabled(iD);
+						}
 					}
 
 				}, function() {
@@ -1140,6 +1264,34 @@ var mpin = mpin || {};
 					onFail(message, statusCode)
 				});
 
+	};
+
+	mpin.prototype.deleteIdentity = function(iID) {
+		var newDefaultAccount = "", self = this;
+
+		this.ds.deleteIdentity(iID);
+		for (var i in this.ds.getAccounts()) {
+			newDefaultAccount = i;
+			break;
+		}
+
+		if (newDefaultAccount) {
+			this.setIdentity(newDefaultAccount, true, function() {
+				self.display(self.cfg.pinpadDefaultMessage);
+			}, function() {
+				return false;
+			});
+
+			this.ds.setDefaultIdentity(newDefaultAccount);
+			// Render the identity list panel
+			this.renderAccountsPanel();
+		} else {
+			this.setIdentity(newDefaultAccount, false);
+			this.ds.setDefaultIdentity("");
+			this.identity = "";
+			this.renderSetupHome();
+		}
+		return false;
 	};
 
 	//data Source with static referance
@@ -1308,8 +1460,9 @@ var mpin = mpin || {};
 			var cNames = el.className.split(/\s+/g);
 			if (cNames.indexOf(className) < 0)
 				el.className += " " + className;
-		} else
+		} else {
 			el.className = className;
+		}
 	}
 	;
 
@@ -1432,7 +1585,11 @@ var mpin = mpin || {};
 		"pinpad_placeholder_text": "Enter your pin",
 		"pinpad_placeholder_text2": "Enter your access Number",
 		"logout_text1": "YOU ARE NOW LOGGED IN",
-		"logout_button": "Logout"
+		"logout_button": "Logout",
+		"home_button_setupMobile": "Add an identity to this browser",
+		"mobile_splash_text": "INSTALL THE M-PIN MOBILE APP",
+		"mobile_add_home_ios6": "Tap the <img src='/build/out/mobile/resources/templates/grey/img/ios6-share.png'/> icon to 'Add to homescreen'",
+		"mobile_add_home_ios7": "Tap the <img src='/build/out/mobile/resources/templates/grey/img/ios7-share.png'/> icon to 'Add to homescreen'"
 
 	};
 	//	image should have config properties

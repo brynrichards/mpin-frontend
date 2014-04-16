@@ -1,5 +1,6 @@
 // Import CSS3 reset
 
+$MOBILE : false;
 @import 'reset';
 
 // Import template
@@ -26,15 +27,37 @@
 	box-flex:$value;
 }
 
+
+body {
+	font-size: 104%;
+	@include font-family();
+
+	// Hide the overflow
+	overflow: hidden;
+	// Set default text size of the H1 tag
+	h1 {
+		font-size: 20px;
+		color: darkgrey;
+	}
+	-webkit-text-size-adjust: 100%; /* 2 */
+	-ms-text-size-adjust: 100%; /* 2 */
+
+	position: relative;
+
+}
+
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
+
+
 .mpinContainer {
 
 	position: relative;
 	width: 300px;
 	height: 100%;
+	font-size: 16px;
 	@include bg-color();
 
 	// Import the pinpad styles
-
 
 	#mpinHolder {
 
@@ -51,7 +74,7 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
-		
+
 		background-color: inherit;
 
 		.mpinMaster {
@@ -66,9 +89,9 @@
 
 
 			// background color
-			
+
 			background-color: inherit;
-			
+
 			-webkit-box-align: stretch;
 			-ms-flex-align: stretch;
 			align-items: stretch;
@@ -172,9 +195,14 @@
 			-moz-border-radius: 0;
 			-o-border-radius: 0;
 			-ms-border-radius: 0;
-			min-height: 1.8em;
+			min-height: 2em;
 			padding: .3em .6em;
 			@include mpin-menu();
+
+			&.activeBtn {
+				margin-left: 250px;
+				@include mpin-menu-active();
+			}
 		}
 
 	}
@@ -219,10 +247,168 @@
 		}
 	}
 
+	#mpinIdentities {
+		margin-top: 20px;
+		margin-bottom: 5px;
+
+		.mp_accountField {
+
+		}
+	}
+
+	#mp_accountListView, #mp_operationView {
+
+		height: 250px;
+		overflow: auto;
+		overflow-x: hidden;
+
+		@include central-content();
+
+		/*To be put in _darkgrey*/
+
+		&.active {
+			border: 1px solid #666;
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+
+		.mp_customScrollBox {
+			width: 100%;
+		}
+
+		.mp_starIcon{
+			background: url('#{$IMAGES}/star_inactive.svg') right top no-repeat;
+			position: relative;
+			top: 0;
+			width: 16px;
+			height: 16px;
+			display: inline-block;
+			margin: 21px 10px;
+			border-style: none;
+			border-width: 0;
+			border: 0;
+		}
+
+		.mp_titleItem {
+			display: inline-block;
+			position: absolute;
+			top: 21px;
+		}
+
+		-webkit-box-flex: 10;
+		background-position: initial initial;
+		background-repeat: initial initial;
+
+
+		display: -webkit-box;
+		display: -ms-flexbox;
+
+		.default {
+			background: #3c9dcb;
+			.mp_starIcon { 
+				background: url('#{$IMAGES}/star_active.svg') right top no-repeat;
+			}
+		}
+
+		.mp_buttonItem {
+			float: right;
+		}
+
+		.mp_buttonItem {
+			display: block;
+			position: absolute;
+			top: 15px;
+			right: 10px;
+			z-index: 9999;
+			cursor: pointer;
+
+			img {
+				background-color: white;
+				border-radius: 4px;
+			}
+		}
+
+
+		.mp_contentItem {
+			position: relative;
+			height: 58px;
+			border-bottom: 2px solid #666666;
+		}
+		.mp_accountField {
+			text-align: center;
+			color: #3C9DCB;
+		}
+
+
+		.mp_bottomFrame {
+			border-top-color: #666666;
+			border-top-style: solid;
+			border-top-width: 2px;
+			height: 108px;
+			text-align: center;
+		}
+
+		.mpinBtn {
+			padding: 10px;
+		}
+
+
+			button.mpinGreyButton {
+				border-color: #aaa #888 #888 #aaa;
+				border-image: none;
+				border-right: 1px solid #888;
+				border-style: solid;
+				border-width: 1px;
+				border: 1px solid transparent!important;
+				border-radius: .3em .3em .3em .3em;
+				box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset,0 25px 30px -12px rgba(255,255,255,0.4) inset,0 1px 2px rgba(0,0,0,0.6);
+				outline: medium none;
+				background-color: #fff;
+				cursor: pointer;
+				color: #3c3c3c;
+				font-family: 'Helvetica',serif;
+				font-size: 12px;
+				font-weight: bold;
+				padding: 13px 10px 10px;
+				margin-top: 10px;
+			}
+			button.mpinGreyButton:hover {
+				background-color: #e2e2e2;
+				color: #3c3c3c;
+				cursor: pointer;
+			}
+
+
+		.mp_headerFrame {
+			height: 175px;
+			text-align: center;
+			color: white;
+		}
+		.mp_alertTitle {
+			font-weight: bold;
+			padding-bottom: 20px;
+			padding-left: 10px;
+			padding-right: 10px;
+			padding-top: 20px;
+		}
+	}
+	
+	#mp_operationView {
+		height: 291px;
+	}
+
+
 	#identityContainer {
 
 		@include central-content();
 
+		/*To be put in _darkgrey*/
+
+		&.active {
+			border: 1px solid #666;
+			margin-left: 10px;
+			margin-right: 10px;
+		}
 
 		-webkit-box-flex: 10;
 		background-position: initial initial;
@@ -311,13 +497,37 @@
 		}
 
 		.identityMainText {
+			color: white;
+
+			.mp_accountField {
+				color: #3c9dcb;
+			}
+
+			h1 {
+				font-size: 1em;
+				font-weight: bold;
+				padding-top: 20px;
+				color: white;
+			}
+
+			.mp_center {
+				padding-top: 30px;
+				font: inherit;
+				font-family: Arial,Helvetica,sans-serif;
+			}
+
+			.mp_after_center {
+				padding-top: 30px;
+				padding-bottom: 10px;
+			}
 
 			@include central-text();
 
 			display: block;
 
 			.congrats {
-				font-size: 5vh;
+				/*font-size: 1vh;*/
+				font-size:  140%;
 				color: rgb(255, 255, 255);
 				padding: 0px 1vh;
 				display: flex;
@@ -340,9 +550,15 @@
 				display: block;
 			}
 		}
+
 	}
 
+
+
 	#bottomBtnHolder {
+
+		margin-left: 10px;
+		margin-right: 10px;
 
 		-webkit-box-pack: center;
 		-ms-flex-pack: center;
@@ -377,6 +593,9 @@
 		}
 	}
 
+
+	@import 'mobile';
+
 	#mpinFooter {
 
 		-webkit-box-orient: horizontal;
@@ -404,6 +623,11 @@
 
 	// General button styling
 
+	#mp_action_setup {
+		@include mpin-button();
+		padding: 13px 10px 10px;
+	}
+
 	.mpinBtn {
 		@include mpin-button();
 
@@ -421,8 +645,8 @@
 		-ms-flex-align: center;
 		align-items: center;
 
-		font-size: 17px;
-		margin-bottom: 3%;
+
+		margin-bottom: 1%;
 
 		width: 100%;
 		height: auto;
@@ -450,21 +674,6 @@
 			text-align: center;
 			display: block;
 			overflow: hidden;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
 	}
 
@@ -474,4 +683,107 @@
 
 
 // Import mediaqueries
-@import 'mediaqueries';
+@if $MOBILE == true {
+	/*@import 'mediaqueries';*/
+	@media only screen and (max-width: 480px) and (min-width: 320px)
+		{
+		body {
+			min-height: 400px;
+		}
+	}
+
+	@media screen and (orientation: landscape) {
+
+
+		.pinpadGlobal {
+			padding: 10px;
+		}
+
+
+
+		header.pinpad {
+
+			#topNav #mpinLogo {
+				position: absolute;
+				right: 50%;
+				bottom: 10px;
+			}
+
+			#mp_action_home {
+				left: 0;
+				right: 50%;
+				bottom: 12px;
+				z-index: 10;
+				position: absolute;
+			}
+
+			border-bottom: 0 !important;
+		}
+
+		#mpinMaster #accountTopBar {
+			margin: 0 ;
+		}
+
+		#homeIcon {
+			display: none !important;
+		}
+
+		.mpinBtn {
+			padding: 0px 10px 0px !important;
+		}
+
+		#pinsHolder {
+			left: auto !important;
+			width: 47% !important;
+			width: calc(50% - 15px) !important;
+			font-size: 14px !important;
+			position: absolute !important;
+			right: 0 !important;
+			top: 0 !important;
+			margin-bottom: 0 !important;
+			@if $BORDERLESS == true {
+				border: 2px solid white !important;
+			}
+			z-index: 5 !important;
+		}
+
+		#inputContainer {
+			position: absolute!important;
+			top: 47%!important;
+			border: 2px solid white!important;
+			border-right: none!important;
+			height: auto!important;
+			margin-top: -10px!important;
+			margin-right: -10px!important;
+			z-index: 10!important;
+			left: -100%;
+			width: 100%;
+		}
+
+		#accountTopBar {
+			width: 100%!important;
+			position: absolute!important;
+			margin: 0 !important!important;
+			top: 27%!important;
+			right: 0!important;
+		}
+
+		#mpinFooter.pinpad {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			margin: 0;
+		}
+
+
+
+		#mpinContainer #accountTopBar #menuBtn {
+			position: absolute;
+			right: 50%;
+			margin-right: 10px;
+			margin-top: -15px;
+			z-index: 100;
+		}
+
+	}
+}

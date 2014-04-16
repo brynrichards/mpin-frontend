@@ -1,27 +1,24 @@
-<div id="mp_accountListView" class="PinPadListViewSkin">
-    <div class="customScrollBox">
-        <div class="mp_container">
-            <div id="mp_accountContent" class="mp_content"></div>
-        </div>
-    </div>
-</div>
-<div class="mp_alertContainer mp_alertMainContainer">
-    <div class="mp_headerFrame">
-        <div class="mp_alertTitle">
-            <%=hlp.text( "account_delete_question") %>
-        </div>
-        <div class="mp_accountField">
-            <%=name %>
-        </div>
-    </div>
-    <div class="mp_bottomFrame">
-        <div style="padding:0px 10px">
-            <button id="mp_acclist_deluser" class="mp_blueSkin" tabindex=-1>
-                <%=hlp.text( "account_delete_button") %>
-            </button>
-        </div>
-        <button id="mp_acclist_cancel" class="mp_graySkin" tabindex=-1>
-            <%=hlp.text( "account_button_cancel") %>
-        </button>
-    </div>
+<div id="mp_operationView" class="active">
+	<div class="mp_container">
+            
+		<div class="mp_headerFrame">
+			<div class="mp_alertTitle">
+				<%=hlp.text( "account_delete_question") %>
+			</div>
+			<div class="mp_accountField">
+				<%=name %>
+			</div>
+		</div>
+		<div class="mp_bottomFrame">
+			<div style="padding:0px 10px">
+				<button id="mp_acclist_deluser" class="mpinBtn" tabindex=-1>
+					<%=hlp.text( "account_delete_button") %>
+				</button>
+			</div>
+			<button id="mp_acclist_cancel" class="mpinGreyButton" tabindex=-1>
+				<%=hlp.text( "account_button_cancel") %>
+			</button>
+		</div>
+	
+	</div>
 </div>

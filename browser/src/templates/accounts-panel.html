@@ -1,12 +1,13 @@
-<div id="mp_accountListView" class="PinPadListViewSkin">
+<div id="mp_accountListView" class="active">
     <div class="mp_customScrollBox">
         <div class="mp_container">
             <div id="mp_accountContent" class="mp_content"></div>
         </div>
     </div>
 </div>
-<div style="padding:0px 10px">
-    <button id="mp_acclist_adduser" class="mp_blueSkin" tabindex=-1>
-        <%=hlp.text( "setupReady_button_resend") %>
-    </button>
+
+<div id="bottomBtnHolder">
+	<button class="mpinBtn" id="mp_acclist_adduser">
+		<span class="btnLabel"><%=hlp.text("account_button_addnew") %></span>
+	</button>
 </div>

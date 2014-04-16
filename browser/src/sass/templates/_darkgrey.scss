@@ -23,7 +23,7 @@ $BORDERLESS : true;
 // Font family
 
 @mixin font-family() {
-	font-family: Helvetica, sans-serif;
+	font-family: Arial,Helvetica,sans-serif;
 }
 
 //  Pin Button style
@@ -57,7 +57,7 @@ $BORDERLESS : true;
 	border-radius: 0.1em;
 
 	// Font size
-	font-size: 2em;
+	font-size: 1.25em;
 
 	padding: 0;
 	line-height: 100%;
@@ -66,7 +66,6 @@ $BORDERLESS : true;
 
 	border: 1px solid #999;
 	border-top-color: #a6a6a6;
-
 	// Active color on press
 
 	&:active {
@@ -115,7 +114,12 @@ $BORDERLESS : true;
 
 
 @mixin mpin-menu() {
-	background: url('#{$IMAGES}/PinPad_button_active.png') top left no-repeat;
+	background: url('#{$IMAGES}/PinPad_button_inactive.svg') top left no-repeat;
+	width: 30px;
+}
+
+@mixin mpin-menu-active() {
+	background: url('#{$IMAGES}/PinPad_button_active.svg') top left no-repeat;
 	width: 30px;
 }
 
@@ -184,6 +188,19 @@ $BORDERLESS : true;
 	@include box-flex-value(1.0);
 }
 
+@mixin desktop-icon() {
+	width: 50px !important;
+	height: 42px !important;
+	background-image: url('#{$IMAGES}/mac-icon.svg');
+
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: auto 100%;
+	margin: 5px 10px 5px 0px;
+
+	@include box-flex-value(1.0);
+}
+
 @mixin mpin-button() {
 	-moz-transition: all 0.5s ease 0s;
 	border: 1px solid transparent !important;
@@ -199,8 +216,9 @@ $BORDERLESS : true;
 	height: auto;
 	min-height: 1.8em;
 	margin-top: 10px;
-
-	padding: 13px 10px 10px;
+	
+	margin: 3px 0 .5em;
+	font-size: 14px;
 }
 
 @mixin central-content() {
@@ -211,7 +229,7 @@ $BORDERLESS : true;
 
 @mixin central-text() {
 	color: white;
-	font-size: 4vh;
+	font-size: 14px;
 	width: 100%;
 	text-align: center;
 }
@@ -221,19 +239,17 @@ $BORDERLESS : true;
 	padding: 0px 0px 5px 0px;
 	font-size: 4vh;
 	width: 100% !important;
-	text-shadow: rgba(255,255,255,0.25) 0 0.08em 0;
 	text-align: center;
 
 		span {
 			text-align: center;
 			color: white;
 			background: transparent;
-			padding: 0px 0px 5px 0px;
-			text-shadow: rgba(255,255,255,0.25) 0 0.08em 0;
-			text-shadow: #fff 0 1px 1px;
-			font-size: .8em;
+			font-size: 14px;
+			/*padding: 0px 0px 5px 0px;*/
 			font-weight: bold;
-			-webkit-tap-highlight-color: rgba(0,0,0,0);
+			padding: 20px 10px;
+			display: inherit;
 		}
 	
 }
@@ -253,7 +269,10 @@ $BORDERLESS : true;
 @mixin top-heading() {
 	color: white;
 	padding: 3vh;
-	font-size: 5vh;
+	/*font-size: 5vh;*/
+	font-size:  0.81em;
+	font-weight: bold;
+	text-transform: uppercase;
 }
 
 @mixin central-heading() {
@@ -267,7 +286,6 @@ $BORDERLESS : true;
 	padding: 2vh !important;
 	color: white;
 	text-align: center;
-	font-size: 3vh;
 }
 
 @mixin mpin-copyright() {
