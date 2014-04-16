@@ -123,8 +123,14 @@
 		}
 
 		&.mpinBtnError {
-			background: grey;
 			color: red;
+			padding: 10px;
+			box-shadow: none;
+			background: none;
+			text-align: center;
+		}
+		&.mpinBtnOk	{
+			padding: 10px;
 		}
 	}
 

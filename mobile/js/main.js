@@ -977,7 +977,7 @@ var mpin = mpin || {};
 		_reqData.method = "PUT";
 		_reqData.data = {
 			userId: _email,
-			mobile: 0
+			mobile: 1
 		};
 
 		//register identity
@@ -1110,7 +1110,7 @@ var mpin = mpin || {};
 		accessNumber = this.accessNumber;
 		//authServer = this.opts.authenticateURL;
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-				this.opts.requestOTP, "0", this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
+				this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
 				function(success, errorCode, errorMessage, authData) {
 					console.log("authenticate arguments :", arguments);
 					if (success) {

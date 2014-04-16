@@ -250,14 +250,18 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	#mpinIdentities {
 		margin-top: 20px;
 		margin-bottom: 5px;
+
+		.mp_accountField {
+
+		}
 	}
 
-	#mp_accountListView {
+	#mp_accountListView, #mp_operationView {
 
 		height: 250px;
 		overflow: auto;
 		overflow-x: hidden;
-		
+
 		@include central-content();
 
 		/*To be put in _darkgrey*/
@@ -284,7 +288,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			border-width: 0;
 			border: 0;
 		}
-		
+
 		.mp_titleItem {
 			display: inline-block;
 			position: absolute;
@@ -330,9 +334,69 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			height: 58px;
 			border-bottom: 2px solid #666666;
 		}
+		.mp_accountField {
+			text-align: center;
+			color: #3C9DCB;
+		}
 
 
+		.mp_bottomFrame {
+			border-top-color: #666666;
+			border-top-style: solid;
+			border-top-width: 2px;
+			height: 108px;
+			text-align: center;
+		}
+
+		.mpinBtn {
+			padding: 10px;
+		}
+
+
+			button.mpinGreyButton {
+				border-color: #aaa #888 #888 #aaa;
+				border-image: none;
+				border-right: 1px solid #888;
+				border-style: solid;
+				border-width: 1px;
+				border: 1px solid transparent!important;
+				border-radius: .3em .3em .3em .3em;
+				box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset,0 25px 30px -12px rgba(255,255,255,0.4) inset,0 1px 2px rgba(0,0,0,0.6);
+				outline: medium none;
+				background-color: #fff;
+				cursor: pointer;
+				color: #3c3c3c;
+				font-family: 'Helvetica',serif;
+				font-size: 12px;
+				font-weight: bold;
+				padding: 13px 10px 10px;
+				margin-top: 10px;
+			}
+			button.mpinGreyButton:hover {
+				background-color: #e2e2e2;
+				color: #3c3c3c;
+				cursor: pointer;
+			}
+
+
+		.mp_headerFrame {
+			height: 175px;
+			text-align: center;
+			color: white;
+		}
+		.mp_alertTitle {
+			font-weight: bold;
+			padding-bottom: 20px;
+			padding-left: 10px;
+			padding-right: 10px;
+			padding-top: 20px;
+		}
 	}
+	
+	#mp_operationView {
+		height: 291px;
+	}
+
 
 	#identityContainer {
 
@@ -463,7 +527,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 			.congrats {
 				/*font-size: 1vh;*/
-				font-size:  0.81em;
+				font-size:  140%;
 				color: rgb(255, 255, 255);
 				padding: 0px 1vh;
 				display: flex;

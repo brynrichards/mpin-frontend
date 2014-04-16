@@ -432,12 +432,12 @@ var mpin = mpin || {};
 	mpin.prototype.mpinButton = function(btnElem, busyText) {
 		var oldHtml = btnElem.innerHTML;
 		addClass(btnElem, "mpinBtnBusy");
-		btnElem.innerHTML = hlp.text(busyText);
+		btnElem.innerHTML = "<span class='btnLabel'>" + hlp.text(busyText) + "</span>";
 		return {
 			error: function(errorText) {
 				removeClass(btnElem, "mpinBtnBusy");
 				addClass(btnElem, "mpinBtnError");
-				btnElem.innerHTML = hlp.text(errorText);
+				btnElem.innerHTML = "<span class='btnLabel'>" + hlp.text(errorText) + "</span>";
 				setTimeout(function() {
 					removeClass(btnElem, "mpinBtnError");
 					btnElem.innerHTML = oldHtml;
@@ -445,8 +445,10 @@ var mpin = mpin || {};
 
 			}, ok: function(okText) {
 				removeClass(btnElem, "mpinBtnBusy");
-				btnElem.innerHTML = hlp.text(okText);
+				addClass(btnElem, "mpinBtnOk");
+				btnElem.innerHTML = "<span class='btnLabel'>" + hlp.text(okText) + "</span>";
 				setTimeout(function() {
+					removeClass(btnElem, "mpinBtnOk");
 					btnElem.innerHTML = oldHtml;
 				}, 1500);
 			}};
@@ -866,7 +868,7 @@ var mpin = mpin || {};
 	mpin.prototype.actionSetupHome = function() {
 		var _email = document.getElementById("emailInput").value, _reqData = {}, self = this;
 		if (_email.length === 0 || !this.opts.identityCheckRegex.test(_email)) {
-			document.getElementById("mp_emailaddress").focus();
+			document.getElementById("emailInput").focus();
 			return;
 		}
 
@@ -918,11 +920,6 @@ var mpin = mpin || {};
 		}, function(message, code) {
 			self.error(message, code);
 		});
-		/*	
-		 }, function(err) {
-		 console.log("ERRORRR  :::");
-		 });
-		 */
 	};
 
 	mpin.prototype.error = function(msg) {
