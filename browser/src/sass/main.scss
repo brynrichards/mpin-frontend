@@ -50,10 +50,12 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 
 .mpinContainer {
-
+	 
+	clear: both;
+	
 	position: relative;
 	width: 300px;
-	height: 100%;
+	height: auto;
 	font-size: 16px;
 	@include bg-color();
 

@@ -9,16 +9,18 @@ var mpin = mpin || {};
 		loader("public/mpin/underscore-min.js", function() {
 			loader("public/mpin/mpin-all.js", function() {
 				loader("public/mpin/templates.js", function() {
-					var _options = {};
-					if (!options.clientSettingsURL)
-						return console.error("set client Settings");
+					loader("public/mpinCss/main.css", function() {
+						var _options = {};
+						if (!options.clientSettingsURL)
+							return console.error("set client Settings");
 
-					//remove _ from global SCOPE
-					mpin._ = _.noConflict();
-					_options.client = options;
-					self.ajax(options.clientSettingsURL, function(serverOptions) {
-						_options.server = serverOptions;
-						self.initialize.call(self, domID, _options);
+						//remove _ from global SCOPE
+						mpin._ = _.noConflict();
+						_options.client = options;
+						self.ajax(options.clientSettingsURL, function(serverOptions) {
+							_options.server = serverOptions;
+							self.initialize.call(self, domID, _options);
+						});
 					});
 				});
 			});
@@ -61,6 +63,10 @@ var mpin = mpin || {};
 		//set Options
 		this.setOptions(options.server).setOptions(options.client);
 
+		if (!this.opts.certivoxURL.mpin_endsWith("/")) {
+			this.opts.certivoxURL += "/";
+		}
+
 		//if false browser unsupport 
 		if (!this.checkBrowser()) {
 			return;
@@ -78,6 +84,7 @@ var mpin = mpin || {};
 
 		this.renderHome();
 //		this.renderSetup("123da");
+//		this.renderDeleteWarning("dada");
 	};
 
 	mpin.prototype.checkBrowser = function() {
@@ -139,6 +146,7 @@ var mpin = mpin || {};
 			if (typeof options[_optionName] !== "undefined")
 				this.opts[_optionName] = options[_optionName];
 		}
+
 		return this;
 	};
 
@@ -220,7 +228,7 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.renderSetupHome = function(email, errorID) {
-		var callbacks = {}, self = this, descHtml;
+		var callbacks = {}, self = this, descHtml, userId;
 
 		callbacks.mp_action_home = function(evt) {
 			self.renderHome.call(self, evt);
@@ -230,12 +238,15 @@ var mpin = mpin || {};
 		};
 
 		if (errorID) {
-			descHtml = '<div class="mp_infoDescription mp_error">' + hlp.text(errorID).mpin_format(email) + '</div>';
+			var descText = hlp.text(errorID);
+			descText = descText.mpin_format(email);
+			descHtml = '<div class="mp_infoDescription mp_error">' + descText + '</div>';
 		} else {
 			descHtml = '<div class="mp_infoDescription">' + hlp.text("setup_text2") + '</div>';
 		}
-
-		this.render("setup-home", callbacks, {description: descHtml});
+		userId = (email) ? email : "" ;
+		
+		this.render("setup-home", callbacks, {description: descHtml, userId: userId});
 	};
 
 
@@ -337,12 +348,12 @@ var mpin = mpin || {};
 			if (_request.readyState === 4 && _request.status === 200) {
 				jsonResponse = JSON.parse(_request.responseText);
 				document.getElementById("mpin_accessNumber").innerHTML = jsonResponse.accessNumber;
-				if (jsonResponse.webOTP) {
-					self.webOTP = jsonResponse.webOTP;
+				if (jsonResponse.webOTT) {
+					self.webOTT = jsonResponse.webOTT;
 					if (self.intervalID2) {
 						clearTimeout(self.intervalID2);
 					}
-					self.getAccess(jsonResponse.webOTP);
+					self.getAccess();
 				}
 				expiresOn = new Date();
 				expiresOn.setSeconds(expiresOn.getSeconds() + jsonResponse.ttlSeconds);
@@ -380,8 +391,8 @@ var mpin = mpin || {};
 			self.getAccess();
 		};
 		var _sendParams = {};
-		if (this.webOTP) {
-			_sendParams.webOTP = this.webOTP;
+		if (this.webOTT) {
+			_sendParams.webOTT = this.webOTT;
 			if (this.opts.accessNumberRequestFormatter) {
 				_sendParams = this.opts.accessNumberRequestFormatter(_sendParams);
 			}
@@ -455,9 +466,9 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.beforeRenderSetup = function(btnElem) {
-		var _reqData = {}, regOTP, url, self = this;
-		regOTP = this.ds.getIdentityData(this.identity, "regOTP");
-		url = this.opts.signatureURL + "/" + this.identity + "?regOTP=" + regOTP;
+		var _reqData = {}, regOTT, url, self = this;
+		regOTT = this.ds.getIdentityData(this.identity, "regOTT");
+		url = this.opts.signatureURL + "/" + this.identity + "?regOTT=" + regOTT;
 
 		var btn = this.mpinButton(btnElem, "setupNotReady_check_info1");
 
@@ -492,8 +503,8 @@ var mpin = mpin || {};
 		renderElem.innerHTML = this.readyHtml("accounts-panel", {});
 		renderElem.style.display = "block";
 
-		document.getElementById("mp_acclist_adduser").onclick = function(evt) {
-			self.renderSetupHome.call(self, evt);
+		document.getElementById("mp_acclist_adduser").onclick = function() {
+			self.renderSetupHome.call(self);
 		};
 		//default IDENTITY
 		var cnt = document.getElementById("mp_accountContent");
@@ -547,6 +558,8 @@ var mpin = mpin || {};
 		};
 	};
 
+
+
 	mpin.prototype.renderDeletePanel = function(iD) {
 		var renderElem, name, self = this;
 		name = this.getDisplayName(iD);
@@ -576,6 +589,21 @@ var mpin = mpin || {};
 		};
 
 		this.render("setup-done", callbacks, {userId: userId});
+	};
+
+	//after warning
+	mpin.prototype.renderDeleteWarning = function(userId) {
+		var callbacks = {}, self = this, userId;
+
+		callbacks.mp_action_home = function() {
+			self.renderHome.call(self);
+		};
+		callbacks.mp_action_go = function() {
+//			self.renderLogin.call(self);
+			self.renderSetupHome.call(self, userId);
+		};
+
+		this.render("delete-warning", callbacks, {userId: userId});
 	};
 
 	mpin.prototype.addUserToList = function(cnt, uId, isDefault, iNumber) {
@@ -638,12 +666,12 @@ var mpin = mpin || {};
 
 		//Check again
 		callbacks.mpin_setup = function() {
-			var _reqData = {}, regOTP, url, btn;
+			var _reqData = {}, regOTT, url, btn;
 
 			btn = self.mpinButton(this, "setupNotReady_check_info1");
 
-			regOTP = self.ds.getIdentityData(self.identity, "regOTP");
-			url = self.opts.signatureURL + "/" + self.identity + "?regOTP=" + regOTP;
+			regOTT = self.ds.getIdentityData(self.identity, "regOTT");
+			url = self.opts.signatureURL + "/" + self.identity + "?regOTT=" + regOTT;
 
 			_reqData.URL = url;
 			_reqData.method = "GET";
@@ -661,11 +689,11 @@ var mpin = mpin || {};
 		};
 		//email
 		callbacks.mpin_resend = function() {
-			var btn, regOTP, _email, _reqData = {};
+			var btn, regOTT, _email, _reqData = {};
 
 			btn = self.mpinButton(this, "setupNotReady_resend_info1");
 
-			regOTP = self.ds.getIdentityData(self.identity, "regOTP");
+			regOTT = self.ds.getIdentityData(self.identity, "regOTT");
 			_email = self.getDisplayName(self.identity);
 
 			_reqData.URL = self.opts.registerURL;
@@ -674,7 +702,7 @@ var mpin = mpin || {};
 			_reqData.data = {
 				userId: _email,
 				mobile: 0,
-				regOTP: regOTP
+				regOTT: regOTT
 			};
 
 			if (self.opts.registerRequestFormatter) {
@@ -686,7 +714,7 @@ var mpin = mpin || {};
 			//registerRequestFormatter
 
 			//resend email 
-			// add identity into URL + regOTP
+			// add identity into URL + regOTT
 			requestRPS(_reqData, function(rpsData) {
 				if (rpsData.error || rpsData.errorStatus) {
 					self.error("Resend problem");
@@ -696,9 +724,9 @@ var mpin = mpin || {};
 				}
 //				self.identity = rpsData.mpinId;
 
-				//should be already exist only update regOTP
-//				self.ds.setIdentityData(rpsData.mpinId, {regOTP: rpsData.regOTP});
-				self.ds.setIdentityData(self.identity, {regOTP: rpsData.regOTP});
+				//should be already exist only update regOTT
+//				self.ds.setIdentityData(rpsData.mpinId, {regOTT: rpsData.regOTT});
+				self.ds.setIdentityData(self.identity, {regOTT: rpsData.regOTT});
 
 				// Check for existing userid and delete the old one
 				self.ds.deleteOldIdentity(rpsData.mpinId);
@@ -892,7 +920,7 @@ var mpin = mpin || {};
 				return;
 			}
 			self.ds.addIdentity(rpsData.mpinId, "");
-			self.ds.setIdentityData(rpsData.mpinId, {regOTP: rpsData.regOTP});
+			self.ds.setIdentityData(rpsData.mpinId, {regOTT: rpsData.regOTT});
 
 			//bug fix
 			self.ds.setDefaultIdentity(rpsData.mpinId);
@@ -931,9 +959,9 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.actionResend = function(btnElem) {
-		var self = this, _reqData = {}, regOTP, _email, btn;
+		var self = this, _reqData = {}, regOTT, _email, btn;
 
-		regOTP = this.ds.getIdentityData(this.identity, "regOTP");
+		regOTT = this.ds.getIdentityData(this.identity, "regOTT");
 		_email = this.getDisplayName(this.identity);
 
 		btn = this.mpinButton(btnElem, "setupNotReady_resend_info1");
@@ -944,7 +972,7 @@ var mpin = mpin || {};
 		_reqData.data = {
 			userId: _email,
 			mobile: 0,
-			regOTP: regOTP
+			regOTT: regOTT
 		};
 		if (this.opts.registerRequestFormatter) {
 			_reqData.postDataFormatter = this.opts.registerRequestFormatter;
@@ -954,7 +982,7 @@ var mpin = mpin || {};
 		}
 
 		//resend email 
-		// add identity into URL + regOTP
+		// add identity into URL + regOTT
 		requestRPS(_reqData, function(rpsData) {
 			if (rpsData.error || rpsData.errorStatus) {
 				self.error("Resend problem");
@@ -962,8 +990,8 @@ var mpin = mpin || {};
 			}
 			self.identity = rpsData.mpinId;
 
-			//should be already exist only update regOTP
-			self.ds.setIdentityData(rpsData.mpinId, {regOTP: rpsData.regOTP});
+			//should be already exist only update regOTT
+			self.ds.setIdentityData(rpsData.mpinId, {regOTT: rpsData.regOTT});
 
 			// Check for existing userid and delete the old one
 			self.ds.deleteOldIdentity(rpsData.mpinId);
@@ -1170,7 +1198,7 @@ var mpin = mpin || {};
 				});
 	};
 
-	mpin.prototype.deleteIdentity = function(iID) {
+	mpin.prototype.deleteIdentity = function(iID, onMaxAttempts) {
 		var newDefaultAccount = "", self = this;
 
 		this.ds.deleteIdentity(iID);
@@ -1180,17 +1208,16 @@ var mpin = mpin || {};
 		}
 
 		if (newDefaultAccount) {
+			this.ds.setDefaultIdentity(newDefaultAccount);
 			this.setIdentity(newDefaultAccount, true, function() {
 				self.display(self.cfg.pinpadDefaultMessage);
 			}, function() {
 				return false;
 			});
-
-			this.ds.setDefaultIdentity(newDefaultAccount);
 			this.renderAccountsPanel();
 		} else {
-			this.setIdentity(newDefaultAccount, false);
 			this.ds.setDefaultIdentity("");
+			this.setIdentity(newDefaultAccount, false);
 			this.identity = "";
 			this.renderSetupHome();
 		}
@@ -1293,12 +1320,12 @@ var mpin = mpin || {};
 
 	mpin.prototype.certivoxClientSecretURL = function(params) {
 //		return this.cfg.apiUrl + this.cfg.apiVersion + "/clientSecret?" + params;
-		return this.opts.certivoxURL + "/clientSecret?" + params;
+		return this.opts.certivoxURL + "clientSecret?" + params;
 	};
 
 	mpin.prototype.certivoxPermitsURL = function() {
 		var mpin_idHex = this.identity;
-		return this.opts.certivoxURL + "/timePermit?app_id=" + this.opts.appID + "&mobile=0&mpin_id=" + mpin_idHex;
+		return this.opts.certivoxURL + "timePermit?app_id=" + this.opts.appID + "&mobile=0&mpin_id=" + mpin_idHex;
 	};
 
 	mpin.prototype.dtaPermitsURL = function() {
@@ -1335,9 +1362,18 @@ var mpin = mpin || {};
 
 	//loader 
 	loader = function(url, callback) {
-		var script = document.createElement('script');
-		script.type = 'text/javascript';
-		script.src = url;
+		var type = url.split(".");
+		type = type[type.length - 1];
+		if (type === "css") {
+			var script = document.createElement('link');
+			script.setAttribute('rel', 'stylesheet');
+			script.setAttribute('type', 'text/css');
+			script.setAttribute('href', url);
+		} else if (type === "js") {
+			var script = document.createElement('script');
+			script.type = 'text/javascript';
+			script.src = url;
+		}
 		//IE feature detect
 		if (script.readyState) {
 			script.onreadystatechange = callback;
