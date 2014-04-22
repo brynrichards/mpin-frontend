@@ -1,7 +1,8 @@
 var mpin = mpin || {};
 
 (function() {
-	var lang = {}, hlp = {}, loader;
+	var lang = {}, hlp = {};
+	var loader;
 	var IMAGES_PATH = "../build/out/mobile/resources/templates/grey/img/";
 
 	//CONSTRUCTOR
@@ -12,19 +13,28 @@ var mpin = mpin || {};
 			loader("../build/out/mobile/js/mpin-all.min.js", function() {
 				loader("../build/out/mobile/js/templates.min.js", function() {
 					var _options = {};
-					if (!options.clientSettingsURL)
-						return console.error("set client Settings");
+					if (!options.clientSettingsURL) {
+						return console.error("set client Settings");					
+					}
 
 					//remove _ from global SCOPE
 					mpin._ = _.noConflict();
 					_options.client = options;
+
 					self.ajax(options.clientSettingsURL, function(serverOptions) {
+						if(serverOptions.error === 500) {
+
+							_options.server = '';
+							document.getElementById(domID).innerHTML = mpin._.template(mpin.template['offline'], {});
+							return;
+						}
 						_options.server = serverOptions;
 						self.initialize.call(self, domID, _options);
 					});
 				});
 			});
 		});
+
 	};
 
 	//CONFIGS
@@ -89,6 +99,15 @@ var mpin = mpin || {};
 		// this.setOptions(options).renderHome();
 		// this.setOptions(options).renderSetupHome();
 		// this.setOptions(options);
+
+		// Caching - monitor if new version of the cache exists
+
+		setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
+
+		window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
+				window.applicationCache.swapCache(); //swap to the newest version of the cache
+				alert("I updated the cache");
+		}, false);
 	};
 
 
@@ -208,6 +227,7 @@ var mpin = mpin || {};
 
 		identity = this.ds.getDefaultIdentity();
 
+
 		// Check browsers
 
 		function isMobileSafari() {
@@ -234,8 +254,14 @@ var mpin = mpin || {};
 
 		} else {
 
+			// Check if online
+
+			if(!navigator.onLine) {
+				this.render('offline', callbacks);
+			}
+
 			// Check if there's identity, redirect to login where 'Add to identity will appear'
-			if (identity) {
+			else if (identity) {
 				this.renderLogin();
 			} else {
 				// Render the home mobile button, if no identity exists
@@ -1231,6 +1257,8 @@ var mpin = mpin || {};
 			if (_request.readyState === 4 && _request.status === 200)
 			{
 				cb(JSON.parse(_request.responseText));
+			} else {
+				cb({error: 500});
 			}
 		};
 		_request.open("GET", url, true);
