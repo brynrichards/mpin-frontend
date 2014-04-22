@@ -1,7 +1,7 @@
 var mpin = mpin || {};
 (function() {
 	var lang = {}, hlp = {}, loader;
-	var IMAGES_PATH = "public/images/";
+	var IMAGES_PATH = "public/mpinImages/";
 
 	//CONSTRUCTOR 
 	mpin = function(domID, options) {
@@ -82,9 +82,9 @@ var mpin = mpin || {};
 
 		this.displayType = "text";
 
-		this.renderHome();
+//		this.renderHome();
 //		this.renderSetup("123da");
-//		this.renderDeleteWarning("dada");
+		this.renderDeleteWarning("dada");
 	};
 
 	mpin.prototype.checkBrowser = function() {
@@ -244,8 +244,8 @@ var mpin = mpin || {};
 		} else {
 			descHtml = '<div class="mp_infoDescription">' + hlp.text("setup_text2") + '</div>';
 		}
-		userId = (email) ? email : "" ;
-		
+		userId = (email) ? email : "";
+
 		this.render("setup-home", callbacks, {description: descHtml, userId: userId});
 	};
 
@@ -376,7 +376,24 @@ var mpin = mpin || {};
 			if (_request.readyState === 4) {
 				if (_request.status === 200) {
 					_jsonRes = JSON.parse(_request.responseText);
-					self.successLogin(_jsonRes);
+//					self.successLogin(_jsonRes);
+					alert("now POST authenticate.");
+					
+					var mpinResponse = _jsonRes;
+					var handleToken = function(success, errorCode, errorMessage, authData){
+						if (success) {
+	            			self.successLogin.call(self, authData);
+	            		} else {
+	            			self.renderHome.call(self);
+	            		}
+					};
+
+					// Do RPA Authentication
+					sendAuthToken(self.opts.authenticateURL, mpinResponse, handleToken, self.opts.authenticateRequestFormatter, self.opts.customHeaders, function () {
+						self.successLogin.call(self);
+					});
+					
+					
 				} else if (!this.intervalID2) {
 					self.intervalID2 = setTimeout(function() {
 						self.getAccess.call(self);
@@ -787,6 +804,7 @@ var mpin = mpin || {};
 			elemDisplay.value = "";
 			elemDisplay.type = "password";
 			this.displayType = "password";
+			removeClass(elemDisplay, "errorPin");
 		}
 
 		if (digit === 'clear') {
@@ -827,7 +845,7 @@ var mpin = mpin || {};
 //		_element.className = buttonValue[buttonName][enable + "Class"];
 	};
 	//showInPinPadDisplay
-	mpin.prototype.display = function(message, isError) {
+	mpin.prototype.display = function(message, isErrorFlag) {
 		var elem, elemText, elemPass;
 
 		//pinpad-input
@@ -835,6 +853,10 @@ var mpin = mpin || {};
 		elem.type = "text";
 		elem.value = message;
 		this.displayType = "text";
+		
+		if (isErrorFlag) {
+			addClass(elem, "errorPin");
+		}
 		return;
 		//old template
 		elemPass = document.getElementById('mp_pin');
@@ -1072,7 +1094,8 @@ var mpin = mpin || {};
 					if (success) {
 						self.successLogin(authData);
 					} else if (errorCode === "INVALID") {
-						self.display(hlp.text("authPin_errorInvalidPin"), false);
+						
+						self.display(hlp.text("authPin_errorInvalidPin"), true);
 
 						self.enableNumberButtons(true);
 
@@ -1081,7 +1104,7 @@ var mpin = mpin || {};
 						self.enableButton(true, "toggle");
 					} else if (errorCode === "MAXATTEMPTS") {
 						var iD = self.identity;
-						self.deleteIdentity(iD);
+						self.deleteIdentity(iD, true);
 						if (self.opts.onAccountDisabled) {
 							self.opts.onAccountDisabled(iD);
 						}
@@ -1198,8 +1221,8 @@ var mpin = mpin || {};
 				});
 	};
 
-	mpin.prototype.deleteIdentity = function(iID, onMaxAttempts) {
-		var newDefaultAccount = "", self = this;
+	mpin.prototype.deleteIdentity = function(iID, renderWarningFlag) {
+		var newDefaultAccount = "", self = this, identity;
 
 		this.ds.deleteIdentity(iID);
 		for (var i in this.ds.getAccounts()) {
@@ -1209,18 +1232,30 @@ var mpin = mpin || {};
 
 		if (newDefaultAccount) {
 			this.ds.setDefaultIdentity(newDefaultAccount);
+
 			this.setIdentity(newDefaultAccount, true, function() {
 				self.display(self.cfg.pinpadDefaultMessage);
 			}, function() {
 				return false;
 			});
-			this.renderAccountsPanel();
+			if (!renderWarningFlag) {
+				this.renderAccountsPanel();
+			}
 		} else {
 			this.ds.setDefaultIdentity("");
 			this.setIdentity(newDefaultAccount, false);
 			this.identity = "";
-			this.renderSetupHome();
+			if (!renderWarningFlag) {
+				this.renderSetupHome();
+			}
 		}
+		
+		//check
+		if (renderWarningFlag) {
+			identity = this.getDisplayName(iID);
+			this.renderDeleteWarning(identity);
+		}
+		
 		return false;
 	};
 
@@ -1468,7 +1503,7 @@ var mpin = mpin || {};
 		"setupPin_initializing": "Initializing...",
 		"setupPin_pleasewait": "Please wait...",
 		"setupPin_button_clear": "Clear",
-		"setupPin_button_done": "Setup Pin",
+		"setupPin_button_done": "Setup<br />Pin",
 		"setupPin_errorSetupPin": "ERROR SETTING PIN: {0}", // {0} is the request status code
 		"setupDone_header": "Congratulations!",
 		"setupDone_text1": "Your M-Pin identity",
