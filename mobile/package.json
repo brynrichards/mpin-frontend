@@ -1,6 +1,9 @@
 {
   "name": "mpinmobile",
   "type": "mobile",
+  "clientSettingsURL": "http://192.168.10.107:8011/rps/clientSettings",
+  "templateName": "grey",
+  "emailRegex": "/.*/",
   "version": "0.0.1",
   "description": "M-PIN Mobile app in pure JavaScript without dependency from Sencha",
   "main": "Gruntfile.js",
@@ -14,11 +17,12 @@
   "author": "Jordan Katsarov",
   "license": "ISC",
   "devDependencies": {
-      "grunt": "~0.4.1",
-      "grunt-contrib-sass": "~0.3.0",
-      "grunt-contrib-watch": "~0.4.4",
-      "grunt-shell": "*",
-      "grunt-contrib-uglify": "*",
-      "grunt-contrib-concat": "*"
+    "grunt": "~0.4.1",
+    "grunt-contrib-sass": "~0.3.0",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-shell": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-replace": "~0.7.7"
   }
 }

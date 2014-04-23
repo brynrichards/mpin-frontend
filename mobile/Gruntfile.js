@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 				options: {
                 			stdout: true,
 				}
-			}	
+			}
 		},
 		watch: {
 			css: {
@@ -38,14 +38,38 @@ module.exports = function(grunt) {
 			    {src: '../build/out/mobile/js/templates.js', dest: '../build/out/mobile/js/templates.min.js'}
 			  ],
 			}
-		}
+		},
+		replace: {
+		      dist: {
+		        options: {
+		          patterns: [
+		            {
+		              match: 'clientsetting',
+		              replacement: '<%= pkg.clientSettingsURL %>'
+		            },
+		            {
+		              match: 'templatename',
+		              replacement: '<%= pkg.templateName %>'
+		            },
+		            {
+		              match: 'emailregex',
+		              replacement: '<%= pkg.emailRegex %>'
+		            }
+		          ]
+		        },
+		        files: [
+		          {expand: true, flatten: true, src: ['index.html'], dest: '../build/out/mobile/'}
+		        ]
+		      }
+		    }
 	});
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-replace');
 	grunt.registerTask('default',['watch', 'uglify']);
-	grunt.registerTask('build',  ['uglify']);
+	grunt.registerTask('build',  ['uglify', 'shell', 'replace']);
 
 }
