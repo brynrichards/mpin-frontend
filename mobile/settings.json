@@ -1,0 +1,5 @@
+{
+  "clientSettingsURL": "http://192.168.10.107:8011/rps/clientSettings",
+  "templateName": "grey",
+  "emailRegex": "/.*/"
+}

@@ -1,6 +1,7 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
+		settings: grunt.file.readJSON('settings.json'),
 		sass: {
 			dist: {
 				options: {
@@ -45,20 +46,21 @@ module.exports = function(grunt) {
 		          patterns: [
 		            {
 		              match: 'clientsetting',
-		              replacement: '<%= pkg.clientSettingsURL %>'
+		              replacement: '<%= settings.clientSettingsURL %>'
 		            },
 		            {
 		              match: 'templatename',
-		              replacement: '<%= pkg.templateName %>'
+		              replacement: '<%= settings.templateName %>'
 		            },
 		            {
 		              match: 'emailregex',
-		              replacement: '<%= pkg.emailRegex %>'
+		              replacement: '<%= settings.emailRegex %>'
 		            }
 		          ]
 		        },
 		        files: [
-		          {expand: true, flatten: true, src: ['index.html'], dest: '../build/out/mobile/'}
+		          {expand: true, flatten: true, src: ['index.html'], dest: '../build/out/mobile/'},
+		          {expand: true, flatten: true, src: ['mpin.appcache'], dest: '../build/out/mobile/'}
 		        ]
 		      }
 		    }

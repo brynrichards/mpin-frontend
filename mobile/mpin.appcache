@@ -1,0 +1,23 @@
+CACHE MANIFEST
+# v0.1 Jordan - Apr 11 2014
+
+# Explicitly cached 'master entries'.
+
+CACHE:
+css/main.css
+
+js/underscore-min.js
+js/underscore-min.map
+js/templates.min.js
+js/mpin-all.min.js
+js/main.js
+
+#Cache images
+
+resources/templates/@@templatename/img/mpin_logo.svg
+resources/templates/@@templatename/img/arrow.svg
+resources/templates/@@templatename/img/byCertivox.svg
+resources/templates/@@templatename/img/home.svg
+resources/templates/@@templatename/img/phone.svg
+NETWORK:
+*
