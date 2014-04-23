@@ -2,7 +2,7 @@
 
 $IMAGES : "../mpinImages/";
 $BORDERLESS : true;
-
+ 
 // Background color
 @mixin bg-color() {
 	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
@@ -183,8 +183,8 @@ $BORDERLESS : true;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
-	margin: 5px 10px 5px 0px;
-
+	margin: 5px auto;
+	
 	@include box-flex-value(1.0);
 }
 
@@ -196,7 +196,7 @@ $BORDERLESS : true;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
-	margin: 5px 10px 5px 0px;
+	margin: 5px auto;
 
 	@include box-flex-value(1.0);
 }

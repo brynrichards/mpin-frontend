@@ -1,6 +1,6 @@
 // GLOBAL CONFIGS
 
-$IMAGES : "../resources/templates/flatwhite/img";
+$IMAGES : "../mpinImages/";
 $BORDERLESS : false;
 
 // Background color
@@ -118,6 +118,11 @@ $BORDERLESS : false;
 	width: 30px;
 }
 
+@mixin mpin-menu-active() {
+	background: url('#{$IMAGES}/PinPad_button_active.svg') top left no-repeat;
+	width: 30px;
+}
+
 // Mixin home icon
 
 @mixin home-icon() {
@@ -182,6 +187,20 @@ $BORDERLESS : false;
 	@include box-flex-value(1.0);
 }
 
+
+@mixin desktop-icon() {
+	width: 50px !important;
+	height: 42px !important;
+	background-image: url('#{$IMAGES}/mac-icon.svg');
+
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: auto 100%;
+	margin: 5px 10px 5px 0px;
+
+	@include box-flex-value(1.0);
+}
+
 @mixin mpin-button() {
 	-moz-transition: all 0.5s ease 0s;
 	border: 1px solid transparent !important;
@@ -198,20 +217,19 @@ $BORDERLESS : false;
 	margin-top: 10px;
 
 	// Set as display flex
-
 	display: flex;
 	display: -webkit-box;
 	display: -ms-flexbox;
-
+	
 	-webkit-box-direction: reverse;
 	-ms-flex-direction: row-reverse;
 	flex-direction: row-reverse;
-
 	-webkit-box-align: center;
 	-ms-flex-align: center;
 	align-items: center;
-
 	padding: 13px 10px 10px;
+	
+	background-image: -moz-linear-gradient(center top , #349FCD 0%, #2D89B0);
 }
 
 @mixin top-heading() {

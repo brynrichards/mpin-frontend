@@ -82,9 +82,9 @@ var mpin = mpin || {};
 
 		this.displayType = "text";
 
-//		this.renderHome();
+		this.renderHome();
 //		this.renderSetup("123da");
-		this.renderDeleteWarning("dada");
+		//this.renderDeleteWarning("dada");
 	};
 
 	mpin.prototype.checkBrowser = function() {
