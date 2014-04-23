@@ -19,5 +19,6 @@ resources/templates/@@templatename/img/arrow.svg
 resources/templates/@@templatename/img/byCertivox.svg
 resources/templates/@@templatename/img/home.svg
 resources/templates/@@templatename/img/phone.svg
+
 NETWORK:
 *

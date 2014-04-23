@@ -72,6 +72,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-replace');
 	grunt.registerTask('default',['watch', 'uglify']);
-	grunt.registerTask('build',  ['uglify', 'shell', 'replace']);
+	grunt.registerTask('build',  ['uglify', 'shell', 'replace', 'sass']);
 
 }
