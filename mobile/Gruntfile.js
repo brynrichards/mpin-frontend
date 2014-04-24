@@ -25,6 +25,24 @@ module.exports = function(grunt) {
                 			stdout: true,
 				}
 			},
+			copyMainJS: {
+				cmd: 'cp -R js/main.js ../build/out/mobile/js/',
+				options: {
+	            			stdout: true,
+				}
+			},
+			copyUnderscoreJS: {
+				cmd: 'cp -R js/underscore-min.js ../build/out/mobile/js/',
+				options: {
+	            			stdout: true,
+				}
+			},
+			copyUnderscoreJSMap: {
+				cmd: 'cp -R js/underscore-min.map ../build/out/mobile/js/',
+				options: {
+	            			stdout: true,
+				}
+			},
 			copySASS: {
 				cmd: 'cp -R public/sass/ ../build/out/mobile/sass/',
 				options: {
@@ -49,7 +67,6 @@ module.exports = function(grunt) {
 			static_mappings: {
 				// Static mappings of files to be minified
 			  files: [
-			    {src: 'js/main.js', dest: '../build/out/mobile/js/<%= pkg.name %>.min.js'},			    
 			    {src: 'js/mpin-all.js', dest: '../build/out/mobile/js/mpin-all.min.js'},
 			    {src: '../build/out/mobile/js/templates.js', dest: '../build/out/mobile/js/templates.min.js'}
 			  ],
