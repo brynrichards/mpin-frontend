@@ -17,7 +17,10 @@ module.exports = function(grunt) {
 				cmd: 'python ../build/buildTemplates.py ../build/out/mobile/js/templates.js',
 				options: {
                 			stdout: true,
-				}
+				},
+				done: function () {
+				   grunt.task.run('uglify');
+				 }
 			},
 			copyResources: {
 				cmd: 'cp -R resources/ ../build/out/mobile/resources/',
@@ -106,6 +109,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-replace');
 	grunt.registerTask('default',['watch', 'uglify']);
-	grunt.registerTask('build',  ['uglify', 'bgShell', 'sass']);
+	grunt.registerTask('build',  ['bgShell', 'sass']);
 
 }
