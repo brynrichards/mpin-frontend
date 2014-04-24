@@ -8,7 +8,7 @@ if (len(sys.argv)) < 2:
 
 outFile = sys.argv[1]
 
-templateFolder = "../public/views"
+templateFolder = "public/views"
 
 outJS = '''(function() {
     mpin.template = {};

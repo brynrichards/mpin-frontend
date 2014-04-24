@@ -14,10 +14,11 @@ js/main.js
 
 #Cache images
 
-resources/templates/grey/img/mpin_logo.svg
-resources/templates/grey/img/arrow.svg
-resources/templates/grey/img/byCertivox.svg
-resources/templates/grey/img/home.svg
-resources/templates/grey/img/phone.svg
+resources/templates/darkgrey/img/mpin_logo.svg
+resources/templates/darkgrey/img/arrow.svg
+resources/templates/darkgrey/img/byCertivox.svg
+resources/templates/darkgrey/img/home.svg
+resources/templates/darkgrey/img/phone.svg
+
 NETWORK:
 *

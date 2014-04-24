@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"  manifest="../build/out/mobile/mpin.appcache">
+<html lang="en"  manifest="mpin.appcache">
 <head>
 	<meta charset="UTF-8">
 	<title>MPIN</title>
@@ -9,9 +9,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 	<meta name="apple-touch-fullscreen" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
-	<link rel="apple-touch-icon" href="../build/out/mobile/resources/templates/grey/icons/Icon@2x.png" />
+	<link rel="apple-touch-icon" href="resources/templates/@@templatename/icons/Icon@2x.png" />
 	<meta http-equiv="cleartype" content="on">
-	<link rel="stylesheet" href="../build/out/mobile/css/main.css">
+	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 	<div>
@@ -36,16 +36,20 @@
 
 	<!-- Load JS files -->
 
-	<script src="../build/out/mobile/js/main.js"></script>
+	<script src="js/main.js"></script>
 
 	<!-- Initialize MPIN -->
 
 	<script>
 	(function() {
 		new mpin("mpinMaster", {
+<<<<<<< HEAD
 				clientSettingsURL: "http://192.168.10.114:8011/rps/clientSettings",
+=======
+				clientSettingsURL: "@@clientsetting",
+>>>>>>> e882c501cac02b793226d34537909e3c17f538bd
 				// useWebSocket: true,
-				emailCheckRegex: /.*/,
+				emailCheckRegex: @@emailregex,
 				onSuccessLogin: function() {
 					alert(" :: on SUCCESS LOGIN ::");
 				}

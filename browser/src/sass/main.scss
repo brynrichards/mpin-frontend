@@ -54,12 +54,14 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	position: relative;
 	width: 260px;
 	height: auto;
-	font-size: 16px;
-	@include bg-color();
+	font-size: 15px;
+	/*font-family: 'Alegreya Sans',Arial,Helvetica,sans-serif;*/
 
 	// Import the pinpad styles
 	#mpinHolder {
+
 		width: 100%;
+		position: absolute;
 		width: 100;
 		z-index: 0;
 		top: 0;
@@ -70,6 +72,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		background-color: inherit;
 
 		.mpinMaster {
+			position: absolute;
 			top: 0;
 			right: 0;
 			bottom: 0;
@@ -77,8 +80,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			width: 100%;
 			min-height: 430px;
 			// background color
+			@include bg-color();
 
-			background-color: inherit;
 
 			-webkit-box-align: stretch;
 			-ms-flex-align: stretch;
@@ -87,11 +90,11 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			-webkit-box-orient: vertical !important;
 			-ms-flex-direction: column !important;
 			flex-direction: column !important;
-			
+
 			display:-moz-box; /* Firefox */
 			display:-webkit-box; /* Safari and Chrome */
 			display:-ms-flexbox; /* Internet Explorer 10 */
-			 
+
 			// display: flex;
 			// // display: -webkit-box;
 			// // display: -ms-flexbox;
@@ -135,6 +138,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			@include home-icon();
 			background-repeat: no-repeat;
 			background-size: auto 100%;
+			cursor: pointer;
 		}
 
 		#mpinLogo {
@@ -262,6 +266,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 		.mp_customScrollBox {
 			width: 100%;
+			color: #FFFFFF;
 		}
 
 		.mp_starIcon{
@@ -293,9 +298,14 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 		.default {
 			background: #3c9dcb;
-			.mp_starIcon { 
+			.mp_starIcon {
 				background: url('#{$IMAGES}/star_active.svg') right top no-repeat;
 			}
+		}
+		
+		.one-edge-shadow {
+			box-shadow: 0 8px 6px -6px #000000;
+			font-size: 12px;
 		}
 
 		.mp_buttonItem {
@@ -380,7 +390,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			padding-top: 20px;
 		}
 	}
-	
+
 	#mp_operationView {
 		height: 291px;
 	}
@@ -406,7 +416,9 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		-ms-flex-pack: center;
 		justify-content: center;
 		-webkit-box-align: center;
-
+		
+		box-shadow: 0 8px 6px -6px #000000;
+		
 		display: -webkit-box;
 		display: -ms-flexbox;
 		-webkit-box-orient: vertical;
@@ -664,8 +676,11 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			display: block;
 			overflow: hidden;
 		}
+		
+		.btnLabelArrow {
+			margin-left: 40px;
+		}
 	}
-
 }
 
 // Activate Identity Screen
@@ -704,6 +719,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 				bottom: 12px;
 				z-index: 10;
 				position: absolute;
+				cursor: pointer;
 			}
 
 			border-bottom: 0 !important;

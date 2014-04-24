@@ -3,15 +3,15 @@ var mpin = mpin || {};
 (function() {
 	var lang = {}, hlp = {};
 	var loader;
-	var IMAGES_PATH = "../build/out/mobile/resources/templates/grey/img/";
+	var IMAGES_PATH = "resources/templates/grey/img/";
 
 	//CONSTRUCTOR
 	mpin = function(domID, options) {
 		var self = this;
 
-		loader("../build/out/mobile/js/underscore-min.js", function() {
-			loader("../build/out/mobile/js/mpin-all.min.js", function() {
-				loader("../build/out/mobile/js/templates.min.js", function() {
+		loader("js/underscore-min.js", function() {
+			loader("js/mpin-all.min.js", function() {
+				loader("js/templates.min.js", function() {
 					var _options = {};
 					if (!options.clientSettingsURL) {
 						return console.error("set client Settings");					
@@ -848,7 +848,7 @@ var mpin = mpin || {};
 
 			// Tempory for development
 
-			btEls[i].addEventListener('click', mEventsHandler, false);
+			// btEls[i].addEventListener('click', mEventsHandler, false);
 
 			// document.getElementById('mp_back').remove();
 
@@ -1253,23 +1253,25 @@ var mpin = mpin || {};
 	//Get request
 	mpin.prototype.ajax = function(url, cb) {
 		var _request = new XMLHttpRequest();
+		_request.open("GET", url, true);
+		_request.send();
+
 		_request.onreadystatechange = function() {
 			if (_request.readyState === 4 && _request.status === 200)
 			{
 				cb(JSON.parse(_request.responseText));
-			} else {
+			} else if (_request.readyState === 4 && !navigator.onLine) {
 				cb({error: 500});
 			}
 		};
-		_request.open("GET", url, true);
-		_request.send();
+
 	};
 
 	//Post request
 	mpin.prototype.ajaxPost = function(url, data, cb) {
 		var _request = new XMLHttpRequest();
 		_request.onreadystatechange = function() {
-			if (_request.readyState === 4 && _request.status === 200)
+			if (_request.status === 106)
 			{
 				console.log("POST success ....");
 

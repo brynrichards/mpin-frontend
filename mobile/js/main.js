@@ -488,6 +488,10 @@ var mpin = mpin || {};
 	mpin.prototype.beforeRenderSetup = function() {
 		var _reqData = {}, regOTT, url, self = this;
 		regOTT = this.ds.getIdentityData(this.identity, "regOTT");
+		
+		console.log("before RENDER STUP:", this.identity);
+		console.log("before RENDER STUP REGOTT:", regOTT);
+		
 		url = this.opts.signatureURL + "/" + this.identity + "?regOTT=" + regOTT;
 
 		_reqData.URL = url;

@@ -233,8 +233,8 @@ var mpin = mpin || {};
 		callbacks.mp_action_home = function(evt) {
 			self.renderHome.call(self, evt);
 		};
-		callbacks.mp_action_setup = function(evt) {
-			self.actionSetupHome.call(self, evt);
+		callbacks.mp_action_setup = function() {
+			self.actionSetupHome.call(self);
 		};
 
 		if (errorID) {
@@ -568,6 +568,8 @@ var mpin = mpin || {};
 		document.getElementById("mp_acclist_reactivateuser").onclick = function() {
 //			self.renderSetup(self.getDisplayName(iD));
 			console.log("resend :", self.getDisplayName(iD));
+			console.log("resend :", name);
+//			return ;
 			self.actionSetupHome.call(self, self.getDisplayName(iD));
 		};
 		document.getElementById("mp_acclist_cancel").onclick = function() {
@@ -915,8 +917,11 @@ var mpin = mpin || {};
 		return false;
 	};
 
-	mpin.prototype.actionSetupHome = function() {
-		var _email = document.getElementById("emailInput").value, _reqData = {}, self = this;
+	mpin.prototype.actionSetupHome = function(uId) {
+		var _email, _reqData = {}, self = this;
+		
+		_email = (uId) ? uId : document.getElementById("emailInput").value;
+		
 		if (_email.length === 0 || !this.opts.identityCheckRegex.test(_email)) {
 			document.getElementById("emailInput").focus();
 			return;
