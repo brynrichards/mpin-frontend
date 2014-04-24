@@ -28,12 +28,6 @@ module.exports = function(grunt) {
                 			stdout: true,
 				}
 			},
-			copyMainJS: {
-				cmd: 'cp -R js/main.js ../build/out/mobile/js/',
-				options: {
-	            			stdout: true,
-				}
-			},
 			copyUnderscoreJS: {
 				cmd: 'cp -R js/underscore-min.js ../build/out/mobile/js/',
 				options: {
@@ -90,6 +84,10 @@ module.exports = function(grunt) {
 		            {
 		              match: 'emailregex',
 		              replacement: '<%= settings.emailRegex %>'
+		            },
+		            {
+		              match: 'timestamp',
+		              replacement: '<%= grunt.template.today() %>'
 		            }
 		          ]
 		        },
@@ -97,7 +95,8 @@ module.exports = function(grunt) {
 		          {expand: true, flatten: true, src: ['index.html'], dest: '../build/out/mobile/'},
 		          {expand: true, flatten: true, src: ['mpin.appcache'], dest: '../build/out/mobile/'},
 		          {expand: true, flatten: true, src: ['public/sass/main.scss'], dest: '../build/out/mobile/sass/'},
-		          {expand: true, flatten: true, src: ['public/sass/templates/*.scss'], dest: '../build/out/mobile/sass/templates/'}
+		          {expand: true, flatten: true, src: ['public/sass/templates/*.scss'], dest: '../build/out/mobile/sass/templates/'},
+		          {expand: true, flatten: true, src: ['js/main.js'], dest: '../build/out/mobile/js/'},
 		        ]
 		      }
 		    }

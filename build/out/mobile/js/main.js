@@ -4,7 +4,7 @@ var mpin = mpin || {};
 (function() {
     var lang = {}, hlp = {};
     var loader;
-    var IMAGES_PATH = "resources/templates/grey/img/";
+    var IMAGES_PATH = "resources/templates/darkgrey/img/";
  
     //CONSTRUCTOR
     mpin = function(domID, options) {
@@ -74,6 +74,10 @@ var mpin = mpin || {};
  
         //set Options
         this.setOptions(options.server).setOptions(options.client);
+		
+		if (!this.opts.certivoxURL.mpin_endsWith("/")) {
+			this.opts.certivoxURL += "/";
+		}
  
         //if set & exist
         if (this.opts.language && lang[this.opts.language]) {
@@ -103,12 +107,15 @@ var mpin = mpin || {};
  
         // Caching - monitor if new version of the cache exists
  
-        setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
+        // setInterval(function () { window.applicationCache.update(); }, 20000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
+        window.applicationCache.update();
  
         window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
+                // alert("The application has been updated. Tap OK to reload.");
                 window.applicationCache.swapCache(); //swap to the newest version of the cache
-                alert("I updated the cache");
+                window.location.reload();
         }, false);
+        
     };
  
  
@@ -509,9 +516,9 @@ var mpin = mpin || {};
  
  
     mpin.prototype.beforeRenderSetup = function() {
-        var _reqData = {}, regOTP, url, self = this;
-        regOTP = this.ds.getIdentityData(this.identity, "regOTP");
-        url = this.opts.signatureURL + "/" + this.identity + "?regOTP=" + regOTP;
+        var _reqData = {}, regOTT, url, self = this;
+        regOTT = this.ds.getIdentityData(this.identity, "regOTT");
+        url = this.opts.signatureURL + "/" + this.identity + "?regOTT=" + regOTT;
  
         _reqData.URL = url;
         _reqData.method = "GET";
@@ -849,7 +856,7 @@ var mpin = mpin || {};
  
             // Tempory for development
  
-            // btEls[i].addEventListener('click', mEventsHandler, false);
+			btEls[i].addEventListener('click', mEventsHandler, false);
  
             // document.getElementById('mp_back').remove();
  
@@ -1030,7 +1037,7 @@ var mpin = mpin || {};
             }
             self.identity = rpsData.mpinId;
             self.ds.addIdentity(rpsData.mpinId, "");
-            self.ds.setIdentityData(rpsData.mpinId, {regOTP: rpsData.regOTP});
+            self.ds.setIdentityData(rpsData.mpinId, {regOTT: rpsData.regOTT});
  
             // Check for existing userid and delete the old one
             self.ds.deleteOldIdentity(rpsData.mpinId);
@@ -1151,7 +1158,7 @@ var mpin = mpin || {};
         accessNumber = this.accessNumber;
         //authServer = this.opts.authenticateURL;
         getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-                this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
+                this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
                 function(success, errorCode, errorMessage, authData) {
                     console.log("authenticate arguments :", arguments);
                     if (success) {
@@ -1434,7 +1441,7 @@ var mpin = mpin || {};
  
     mpin.prototype.certivoxClientSecretURL = function(params) {
 //      return this.cfg.apiUrl + this.cfg.apiVersion + "/clientSecret?" + params;
-        return this.opts.certivoxURL + "/clientSecret?" + params;
+        return this.opts.certivoxURL + "clientSecret?" + params;
     };
  
     mpin.prototype.dtaClientSecretURL = function(params) {
@@ -1444,7 +1451,7 @@ var mpin = mpin || {};
  
     mpin.prototype.certivoxPermitsURL = function() {
         var mpin_idHex = this.identity;
-        return this.opts.certivoxURL + "/timePermit?app_id=" + this.opts.appID + "&mobile=0&mpin_id=" + mpin_idHex;
+        return this.opts.certivoxURL + "timePermit?app_id=" + this.opts.appID + "&mobile=0&mpin_id=" + mpin_idHex;
     };
  
     mpin.prototype.dtaPermitsURL = function() {
