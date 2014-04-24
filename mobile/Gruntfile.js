@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 				    style: 'compressed'
 				},
 				files: {
-					'../build/out/mobile/css/main.css' : '../public/sass/main.scss'
+					'../build/out/mobile/css/main.css' : 'public/sass/main.scss'
 				}
 			}
 		},
@@ -18,15 +18,21 @@ module.exports = function(grunt) {
 				options: {
                 			stdout: true,
 				}
+			},
+			copyResources: {
+				command: 'cp -R resources/ ../build/out/mobile/',
+				options: {
+                			stdout: true,
+				}
 			}
 		},
 		watch: {
 			css: {
-				files: '../public/sass/*.scss',
+				files: 'public/sass/*.scss',
 				tasks: ['sass']
 			},
 			views: {
-				files: '../public/views/*.html',
+				files: 'public/views/*.html',
 				tasks: ['shell:makeViews']
 			}
 		},
