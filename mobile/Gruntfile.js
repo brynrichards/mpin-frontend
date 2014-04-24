@@ -63,7 +63,7 @@ module.exports = function(grunt) {
 			},
 			views: {
 				files: 'public/views/*.html',
-				tasks: ['bgShell:makeViews']
+				tasks: ['bgShell']
 			}
 		},
 		uglify: {
