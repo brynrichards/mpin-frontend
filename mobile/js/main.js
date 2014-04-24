@@ -107,15 +107,12 @@ var mpin = mpin || {};
  
         // Caching - monitor if new version of the cache exists
  
-        // setInterval(function () { window.applicationCache.update(); }, 20000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
-        window.applicationCache.update();
+        setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
  
         window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
-                // alert("The application has been updated. Tap OK to reload.");
                 window.applicationCache.swapCache(); //swap to the newest version of the cache
-                window.location.reload();
+                alert("I updated the cache");
         }, false);
-        
     };
  
  
@@ -1640,8 +1637,8 @@ var mpin = mpin || {};
         "logout_button": "Logout",
         "home_button_setupMobile": "Add an identity to this browser",
         "mobile_splash_text": "INSTALL THE M-PIN MOBILE APP",
-        "mobile_add_home_ios6": "Tap the <img src='/build/out/mobile/resources/templates/grey/img/ios6-share.png'/> icon to 'Add to homescreen'",
-        "mobile_add_home_ios7": "Tap the <img src='/build/out/mobile/resources/templates/grey/img/ios7-share.png'/> icon to 'Add to homescreen'"
+        "mobile_add_home_ios6": "Tap the <img src='/build/out/mobile/resources/templates/@@templatename/img/ios6-share.png'/> icon to 'Add to homescreen'",
+        "mobile_add_home_ios7": "Tap the <img src='/build/out/mobile/resources/templates/@@templatename/img/ios7-share.png'/> icon to 'Add to homescreen'"
  
     };
     //  image should have config properties
