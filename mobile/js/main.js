@@ -1,5 +1,6 @@
-var mpin = mpin || {};
 
+var mpin = mpin || {};
+ 
 (function() {
 	var lang = {}, hlp = {}, loader;
 	var IMAGES_PATH = "../build/out/mobile/resources/templates/grey/img/";
@@ -8,9 +9,9 @@ var mpin = mpin || {};
 	mpin = function(domID, options) {
 		var self = this;
 
-		loader("../libs/underscore-min.js", function() {
-			loader("../libs/mpin-all.js", function() {
-				loader("../build/out/mobile/js/templates.js", function() {
+		loader("../build/out/mobile/js/underscore-min.js", function() {
+			loader("../build/out/mobile/js/mpin-all.min.js", function() {
+				loader("../build/out/mobile/js/templates.min.js", function() {
 					var _options = {};
 					if (!options.clientSettingsURL)
 						return console.error("set client Settings");
@@ -38,6 +39,7 @@ var mpin = mpin || {};
 		requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue"
 	};
 
+
 	/**
 	 * Mpin Constructor
 	 * 
@@ -62,6 +64,10 @@ var mpin = mpin || {};
 
 		//set Options
 		this.setOptions(options.server).setOptions(options.client);
+		
+		if (!this.opts.certivoxURL.mpin_endsWith("/")) {
+			this.opts.certivoxURL += "/";
+		}
 
 		//if set & exist
 		if (this.opts.language && lang[this.opts.language]) {
@@ -74,6 +80,11 @@ var mpin = mpin || {};
 
 		console.log("language:: ", this.language);
 		console.log("language:: ", lang);
+
+		
+		// Disable scroll areas
+
+		document.ontouchmove = function(e){ e.preventDefault(); }
 
 		//this.renderSetupHome();
 //		this.renderMobileSetup();
@@ -212,23 +223,27 @@ var mpin = mpin || {};
 			return navigator.userAgent.match(/(iPad|iPhone);.*CPU.*OS 7_\d/i)
 		}
 
+		// Check if Safari and if it's open as standalone app
 		if(isMobileSafari() && !window.navigator.standalone) {
 
+			// Render IOS7 view
 			if(isIos7()) {
 
 				this.render('ios7-startup', callbacks);
 
 			} else {
-
+				// Render the IOS6 view - the difference is in the icons
 				this.render('ios6-startup', callbacks);
 
 			}
 
 		} else {
 
+			// Check if there's identity, redirect to login where 'Add to identity will appear'
 			if (identity) {
 				this.renderLogin();
 			} else {
+				// Render the home mobile button, if no identity exists
 				this.render('home_mobile', callbacks);
 			}
 		}
@@ -472,9 +487,13 @@ var mpin = mpin || {};
 
 
 	mpin.prototype.beforeRenderSetup = function() {
-		var _reqData = {}, regOTP, url, self = this;
-		regOTP = this.ds.getIdentityData(this.identity, "regOTP");
-		url = this.opts.signatureURL + "/" + this.identity + "?regOTP=" + regOTP;
+		var _reqData = {}, regOTT, url, self = this;
+		regOTT = this.ds.getIdentityData(this.identity, "regOTT");
+		
+		console.log("before RENDER STUP:", this.identity);
+		console.log("before RENDER STUP REGOTT:", regOTT);
+		
+		url = this.opts.signatureURL + "/" + this.identity + "?regOTT=" + regOTT;
 
 		_reqData.URL = url;
 		_reqData.method = "GET";
@@ -591,6 +610,10 @@ var mpin = mpin || {};
 
 		document.getElementById("mp_acclist_deluser").onclick = function(evt) {
 			self.deleteIdentity(iD);
+
+			// Render the identity list too
+
+
 		};
 		document.getElementById("mp_acclist_cancel").onclick = function(evt) {
 			self.renderAccountsPanel.call(self, evt);
@@ -989,7 +1012,7 @@ var mpin = mpin || {};
 			}
 			self.identity = rpsData.mpinId;
 			self.ds.addIdentity(rpsData.mpinId, "");
-			self.ds.setIdentityData(rpsData.mpinId, {regOTP: rpsData.regOTP});
+			self.ds.setIdentityData(rpsData.mpinId, {regOTT: rpsData.regOTT});
 
 			// Check for existing userid and delete the old one
 			self.ds.deleteOldIdentity(rpsData.mpinId);
@@ -1110,7 +1133,7 @@ var mpin = mpin || {};
 		accessNumber = this.accessNumber;
 		//authServer = this.opts.authenticateURL;
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-				this.opts.requestOTP, "0", this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
+				this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
 				function(success, errorCode, errorMessage, authData) {
 					console.log("authenticate arguments :", arguments);
 					if (success) {
@@ -1389,7 +1412,7 @@ var mpin = mpin || {};
 
 	mpin.prototype.certivoxClientSecretURL = function(params) {
 //		return this.cfg.apiUrl + this.cfg.apiVersion + "/clientSecret?" + params;
-		return this.opts.certivoxURL + "/clientSecret?" + params;
+		return this.opts.certivoxURL + "clientSecret?" + params;
 	};
 
 	mpin.prototype.dtaClientSecretURL = function(params) {
@@ -1399,7 +1422,7 @@ var mpin = mpin || {};
 
 	mpin.prototype.certivoxPermitsURL = function() {
 		var mpin_idHex = this.identity;
-		return this.opts.certivoxURL + "/timePermit?app_id=" + this.opts.appID + "&mobile=0&mpin_id=" + mpin_idHex;
+		return this.opts.certivoxURL + "timePermit?app_id=" + this.opts.appID + "&mobile=0&mpin_id=" + mpin_idHex;
 	};
 
 	mpin.prototype.dtaPermitsURL = function() {
@@ -1630,5 +1653,4 @@ var mpin = mpin || {};
 			};
 		}
 	};
-
 })();

@@ -8,7 +8,7 @@ if (len(sys.argv)) < 2:
 
 outFile = sys.argv[1]
 
-templateFolder = "../public/views"
+templateFolder = "../mobile/public/views"
 
 outJS = '''(function() {
     mpin.template = {};
@@ -35,5 +35,9 @@ out = '''(function() {
 out += "\n\n".join([buildTemplate(x) for x in templates])
 
 out += '\n})();'
+
+dirname = os.path.dirname(outFile)
+if not os.path.exists(dirname):
+	os.makedirs(dirname, mode=0777)
 
 open(outFile, "w").write(out)

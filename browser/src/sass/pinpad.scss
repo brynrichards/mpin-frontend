@@ -21,6 +21,12 @@
 		width: 100%;
 		text-align: center;
 		background-clip: padding-box;
+		
+		&.errorPin {
+			color: #FF0000;
+			-webkit-text-fill-color:  #FF0000;
+			border-color: #FF0000;
+		}
 	}
 
 	.blue-bg {

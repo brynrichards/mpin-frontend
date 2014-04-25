@@ -1,6 +1,6 @@
 // GLOBAL CONFIGS
 
-$IMAGES : "../resources/templates/flatwhite/img";
+$IMAGES : "../mpinImages/";
 $BORDERLESS : false;
 
 // Background color
@@ -32,9 +32,9 @@ $BORDERLESS : false;
 		width: 100%;
 		height:0;
 		padding-bottom: 100%;
-		background: #DCDDDF; 
-		-moz-border-radius: 50%; 
-		-webkit-border-radius: 50%; 
+		background: #DCDDDF;
+		-moz-border-radius: 50%;
+		-webkit-border-radius: 50%;
 		border-radius: 50%;
 	}
 
@@ -97,7 +97,7 @@ $BORDERLESS : false;
 	min-height: 2.5em;
 }
 
-// 
+//
 
 .pre-row {
 	margin-bottom: 16%;
@@ -118,13 +118,18 @@ $BORDERLESS : false;
 	width: 30px;
 }
 
+@mixin mpin-menu-active() {
+	background: url('#{$IMAGES}/PinPad_button_active.svg') top left no-repeat;
+	width: 30px;
+}
+
 // Mixin home icon
 
 @mixin home-icon() {
 	background-image: url('#{$IMAGES}/home.svg');
 	color: white;
 	height: 24px;
-	@include box-flex-value(1.0);		
+	@include box-flex-value(1.0);
 }
 
 @mixin mpin-logo() {
@@ -136,7 +141,7 @@ $BORDERLESS : false;
 	background-position: center;
 	background-size: auto 100%;
 	margin: 5px 10px 5px 0px;
-	
+
 	// Place icon on center
 	@include box-flex-value(7.0);
 
@@ -151,7 +156,7 @@ $BORDERLESS : false;
 	background-position: center;
 	background-size: auto 100%;
 	margin: 5px 10px 5px 0px;
-	
+
 	display: block;
 	@include box-flex-value(1.0);
 	width: 100%;
@@ -165,7 +170,7 @@ $BORDERLESS : false;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
-	
+
 	@include box-flex-value(1.0);
 }
 
@@ -177,7 +182,21 @@ $BORDERLESS : false;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
-	margin: 5px 10px 5px 0px;
+	margin: 5px auto;
+
+	@include box-flex-value(1.0);
+}
+
+
+@mixin desktop-icon() {
+	width: 50px !important;
+	height: 42px !important;
+	background-image: url('#{$IMAGES}/mac-icon.svg');
+
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: auto 100%;
+	margin: 5px auto;
 
 	@include box-flex-value(1.0);
 }
@@ -198,7 +217,6 @@ $BORDERLESS : false;
 	margin-top: 10px;
 
 	// Set as display flex
-
 	display: flex;
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -206,18 +224,17 @@ $BORDERLESS : false;
 	-webkit-box-direction: reverse;
 	-ms-flex-direction: row-reverse;
 	flex-direction: row-reverse;
-
 	-webkit-box-align: center;
 	-ms-flex-align: center;
 	align-items: center;
 
-	padding: 13px 10px 10px;
+	background-image: -moz-linear-gradient(center top , #349FCD 0%, #2D89B0);
 }
 
 @mixin top-heading() {
 	color: black;
 	padding: 3vh;
-	font-size: 5vh;
+	font-size: 14px;
 }
 
 @mixin central-content() {
@@ -228,7 +245,7 @@ $BORDERLESS : false;
 
 @mixin central-text() {
 	color: black;
-	font-size: 4vh;
+	font-size: 14px;
 	width: 100%;
 	text-align: center;
 }
@@ -245,19 +262,19 @@ $BORDERLESS : false;
 			text-align: center;
 			color: black;
 			background: transparent;
+			font-size: 14px;
 			padding: 0px 0px 5px 0px;
 			text-shadow: rgba(255,255,255,0.25) 0 0.08em 0;
 			text-shadow: #fff 0 1px 1px;
-			font-size: .8em;
 			font-weight: bold;
 			-webkit-tap-highlight-color: rgba(0,0,0,0);
 		}
-	
+
 }
 
 @mixin email-input() {
 	color: white;
-	font-size: 18px;
+	font-size: 114%;
 	font-weight: normal;
 	background: #565656;
 	width: 100%;
@@ -295,7 +312,5 @@ $BORDERLESS : false;
 }
 
 @mixin btn-text-label() {
-	margin-right: .6em;
-	font-weight: bold;
 	line-height: 1.2em;
 }

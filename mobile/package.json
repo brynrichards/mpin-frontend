@@ -14,9 +14,13 @@
   "author": "Jordan Katsarov",
   "license": "ISC",
   "devDependencies": {
-      "grunt": "~0.4.1",
-      "grunt-contrib-sass": "~0.3.0",
-      "grunt-contrib-watch": "~0.4.4",
-      "grunt-shell": "*"
+    "grunt": "~0.4.1",
+    "grunt-contrib-sass": "~0.3.0",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-shell": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-replace": "~0.7.7",
+    "grunt-bg-shell": "~2.3.1"
   }
 }
