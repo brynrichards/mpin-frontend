@@ -377,7 +377,6 @@ var mpin = mpin || {};
 				if (_request.status === 200) {
 					_jsonRes = JSON.parse(_request.responseText);
 //					self.successLogin(_jsonRes);
-					alert("now POST authenticate.");
 					
 					var mpinResponse = _jsonRes;
 					var handleToken = function(success, errorCode, errorMessage, authData){

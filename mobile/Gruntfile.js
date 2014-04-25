@@ -17,12 +17,33 @@ module.exports = function(grunt) {
 				cmd: 'python ../build/buildTemplates.py ../build/out/mobile/js/templates.js',
 				options: {
                 			stdout: true,
-				}
+				},
+				done: function () {
+				   grunt.task.run('uglify');
+				 }
 			},
 			copyResources: {
 				cmd: 'cp -R resources/ ../build/out/mobile/resources/',
 				options: {
                 			stdout: true,
+				}
+			},
+			copyMainJS: {
+				cmd: 'cp -R js/main.js ../build/out/mobile/js/',
+				options: {
+	            			stdout: true,
+				}
+			},
+			copyUnderscoreJS: {
+				cmd: 'cp -R js/underscore-min.js ../build/out/mobile/js/',
+				options: {
+	            			stdout: true,
+				}
+			},
+			copyUnderscoreJSMap: {
+				cmd: 'cp -R js/underscore-min.map ../build/out/mobile/js/',
+				options: {
+	            			stdout: true,
 				}
 			},
 			copySASS: {
@@ -49,7 +70,6 @@ module.exports = function(grunt) {
 			static_mappings: {
 				// Static mappings of files to be minified
 			  files: [
-			    {src: 'js/main.js', dest: '../build/out/mobile/js/<%= pkg.name %>.min.js'},			    
 			    {src: 'js/mpin-all.js', dest: '../build/out/mobile/js/mpin-all.min.js'},
 			    {src: '../build/out/mobile/js/templates.js', dest: '../build/out/mobile/js/templates.min.js'}
 			  ],
@@ -89,6 +109,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-replace');
 	grunt.registerTask('default',['watch', 'uglify']);
-	grunt.registerTask('build',  ['uglify', 'bgShell', 'sass']);
+	grunt.registerTask('build',  ['bgShell', 'sass']);
 
 }
