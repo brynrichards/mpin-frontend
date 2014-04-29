@@ -112,6 +112,7 @@ var mpin = mpin || {};
         window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
                 window.applicationCache.swapCache(); //swap to the newest version of the cache
                 alert("I updated the cache");
+                window.location.reload();
         }, false);
     };
  

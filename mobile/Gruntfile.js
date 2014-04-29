@@ -51,13 +51,9 @@ module.exports = function(grunt) {
 			}
 		},
 		watch: {
-			css: {
-				files: 'public/sass/*.scss',
-				tasks: ['sass']
-			},
-			views: {
-				files: 'public/views/*.html',
-				tasks: ['bgShell']
+			resourceFiles: {
+				files: ['public/sass/*.scss','public/views/*.html'],
+				tasks: ['bgShell', 'sass']
 			}
 		},
 		uglify: {
@@ -107,7 +103,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-replace');
-	grunt.registerTask('default',['watch', 'uglify']);
+	grunt.registerTask('default',['watch']);
 	grunt.registerTask('build',  ['bgShell', 'sass']);
-
 }
