@@ -1,0 +1,37 @@
+help {
+	color: black;
+	display: block;
+	position: absolute;
+	background-color: rgba(255,255,255,0.8);
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	z-index: 999;
+
+	#helpContainer {
+		background-color: white;
+		width: 70%;
+		height: 70%;
+		position: relative;
+		text-align: center;
+		border: 3px solid darkgrey;
+		margin: 0 auto;
+		top: 60px;
+		@include  border-radius(5px);
+		padding-top: 10px;
+		padding: 20px;
+
+		&:before {
+			content: '';
+			background-image: url('../resources/templates/gradient/img/info.svg');
+			width: 50px;
+			height: 50px;
+			display: block;
+			position: absolute;
+			top: -19px;
+			left: -28px;
+			background-color: white;
+		}
+	}
+}

@@ -129,7 +129,7 @@ $BORDERLESS : true;
 	width: 106px;
 	height: 32px;
 
-	background-image: url('#{$IMAGES}/mpin_logo.svg');
+	background-image: url('#{$IMAGES}/m-pin-header-logo.svg');
 
 	background-repeat: no-repeat;
 	background-position: right;
@@ -142,7 +142,7 @@ $BORDERLESS : true;
 @mixin logo() {
 	width: 183px;
 	height: 69px;
-	background-image: url('#{$IMAGES}/mpin_logo.svg');
+	background-image: url('#{$IMAGES}/m-pin-header-logo.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
@@ -186,10 +186,7 @@ $BORDERLESS : true;
 	-moz-transition: all 0.5s ease 0s;
 	border: 1px solid transparent !important;
 	border-radius: 0.3em 0.3em 0.3em 0.3em;
-	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 25px 30px -12px rgba(255, 255, 255, 0.4) inset, 0 1px 2px rgba(0, 0, 0, 0.6);
-	outline: medium none;
-	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-	background: #0073AA;
+	background: #3979C7;
 	cursor: pointer;
 	color: #FFFFFF;
 	font-family: 'Helvetica', serif;
@@ -199,11 +196,29 @@ $BORDERLESS : true;
 	margin-top: 10px;
 
 	padding: 13px 10px 10px;
+
+	&.green {
+		background: #44A800;
+	}
+
+	&.grey {
+		background: #7E7E7E;
+	}
 }
 
 @mixin central-content() {
 	border: 1px solid rgb(86, 86, 86);
-	background-color: rgb(46, 46, 46);
+	color: black;
+}
+
+@mixin bottom-holder() {
+
+	background-position: initial initial;
+	background-repeat: initial initial;
+
+	padding-top: 5px;
+	padding-bottom: 5px;
+
 }
 
 
@@ -249,7 +264,7 @@ $BORDERLESS : true;
 }
 
 @mixin top-heading() {
-	color: white;
+	color: black;
 	padding: 3vh;
 	font-size: 5vh;
 }
