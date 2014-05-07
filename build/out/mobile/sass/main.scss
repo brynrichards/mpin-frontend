@@ -4,7 +4,7 @@
 
 // Import template
 
-@import 'templates/_darkgrey';
+@import 'templates/_gradient';
 
 // General mixins
 
@@ -26,6 +26,14 @@
   display: flex;
 }
 
+@mixin border-radius($value) {
+	border-radius: $value;
+	-webkit-border-radius: $value;
+	-moz-border-radius: $value;
+	-o-border-radius: $value;
+	-ms-border-radius: $value;
+}
+
 @mixin box-flex-value($value) {
 	-moz-box-flex:$value; /* Firefox */
 	-webkit-box-flex:$value; /* Safari and Chrome */
@@ -37,6 +45,8 @@ html, body {
 	height: 100%;
 	width: 100%;
 	@include bg-color();
+	// background-color:
+	 whitesmoke: !important;
 	margin: 0;
 }
 
@@ -407,12 +417,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		-webkit-box-align: center;
 		-ms-flex-align: center;
 
-		background-color: rgb(86, 86, 86);
-		background-position: initial initial;
-		background-repeat: initial initial;
-
-		padding-top: 5px;
-		padding-bottom: 5px;
+		@include bottom-holder(); 
 
 		display: flex;
 		display: -webkit-box;
@@ -556,3 +561,4 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 // Import mediaqueries
 @import 'mediaqueries';
+@import 'help';

@@ -139,6 +139,17 @@
         '    </div>',
         '</footer>'].join('');
 
+    mpin.template['help-setup-home'] = ['<p><%=hlp.text( "help_text_1") %></p>',
+        '',
+        '<div id="buttonsContainer">',
+        '    <div class="mpinBtn green" id="mpin_authenticate">',
+        '        <span class="btnLabel"><%=hlp.text( "help_ok_btn") %></span>',
+        '    </div>',
+        '    <div class="mpinBtn grey" id="mpin_authenticate">',
+        '        <span class="btnLabel"><%=hlp.text( "help_more_btn") %></span>',
+        '    </div>',
+        '</div>'].join('');
+
     mpin.template['home'] = ['<header id="header">',
         '    <div id="mpinLogo"></div>',
         '</header>',
@@ -171,11 +182,16 @@
         '    <div id="mobileIcon"></div>',
         '</div>',
         '<div id="buttonsContainer">',
+        '	<h1><%=hlp.text( "home_button_authenticateMobile_intro") %></h1>',
+        '    <div class="mpinBtn green" id="mpin_authenticate">',
+        '        <span class="btnLabel"><%=hlp.text( "home_button_authenticateMobile_noTrust") %></span>',
+        '    </div>',
+        '    <h2>or</h2>',
         '    <div class="mpinBtn" id="mpin_authenticate">',
-        '        <span class="iconArrow"></span>',
-        '        <span class="btnLabel"><%=hlp.text( "home_button_authenticateMobile") %></span>',
-        '    </div>    ',
+        '        <span class="btnLabel"><%=hlp.text( "home_button_authenticateMobile_trust") %></span>',
+        '    </div>',
         '</div>',
+        '',
         '<footer id="mpinFooter">',
         '    <div id="homeBtn"></div>',
         '</footer>'].join('');

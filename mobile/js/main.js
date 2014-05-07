@@ -60,6 +60,8 @@ var mpin = mpin || {};
      */
     mpin.prototype.initialize = function(domID, options) {
         this.el = document.getElementById(domID);
+        this.elHelp = document.getElementById('helpContainer');
+
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
 //          this.error(" Some options are required :" + this.cfg.requiredOptions);
@@ -186,10 +188,10 @@ var mpin = mpin || {};
     mpin.prototype.renderHelp = function(tmplName, callbacks, tmplData) {
         var data = tmplData || {}, k;
 
-        var el = document.getElementById('helpContainer');
 
-        el.innerHTML = this.readyHelp(tmplName, data);
-    
+        this.elHelp.innerHTML = this.readyHelp(tmplName, data);
+        this.elHelp.style.display = 'block';
+
         for (k in callbacks) {
             if (document.getElementById(k)) {
                 // document.getElementById(k).onclick = callbacks[k];
@@ -300,6 +302,7 @@ var mpin = mpin || {};
             } else {
                 // Render the home mobile button, if no identity exists
                 this.render('setup-home', callbacks);
+                this.renderHelp("help-setup-home", callbacks);
             }
         }
  
@@ -317,7 +320,6 @@ var mpin = mpin || {};
         };
  
         this.render("setup-home", callbacks);
-
     };
  
  

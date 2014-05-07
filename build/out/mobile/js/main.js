@@ -4,7 +4,7 @@ var mpin = mpin || {};
 (function() {
     var lang = {}, hlp = {};
     var loader;
-    var IMAGES_PATH = "resources/templates/darkgrey/img/";
+    var IMAGES_PATH = "resources/templates/gradient/img/";
  
     //CONSTRUCTOR
     mpin = function(domID, options) {
@@ -60,6 +60,8 @@ var mpin = mpin || {};
      */
     mpin.prototype.initialize = function(domID, options) {
         this.el = document.getElementById(domID);
+        this.elHelp = document.getElementById('helpContainer');
+
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
 //          this.error(" Some options are required :" + this.cfg.requiredOptions);
@@ -107,15 +109,13 @@ var mpin = mpin || {};
  
         // Caching - monitor if new version of the cache exists
  
-        // setInterval(function () { window.applicationCache.update(); }, 20000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
-        window.applicationCache.update();
+        setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
  
         window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
-                // alert("The application has been updated. Tap OK to reload.");
                 window.applicationCache.swapCache(); //swap to the newest version of the cache
+                alert("I updated the cache");
                 window.location.reload();
         }, false);
-        
     };
  
  
@@ -159,6 +159,13 @@ var mpin = mpin || {};
         html = mpin._.template(mpin.template[tmplName], data);
         return html;
     };
+
+    mpin.prototype.readyHelp= function(tmplName, tmplData) {
+        var data = tmplData, html;
+        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
+        html = mpin._.template(mpin.template[tmplName], data);
+        return html;
+    };
  
     mpin.prototype.render = function(tmplName, callbacks, tmplData) {
         var data = tmplData || {}, k;
@@ -171,6 +178,27 @@ var mpin = mpin || {};
                 document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
                 document.getElementById(k).addEventListener('click', callbacks[k], false);
  
+            }
+        }
+        if (typeof mpin.custom !== 'undefined') {
+            this.setCustomStyle();
+        }
+    };
+
+    mpin.prototype.renderHelp = function(tmplName, callbacks, tmplData) {
+        var data = tmplData || {}, k;
+
+
+        this.elHelp.innerHTML = this.readyHelp(tmplName, data);
+        this.elHelp.style.display = 'block';
+
+        for (k in callbacks) {
+            if (document.getElementById(k)) {
+                // document.getElementById(k).onclick = callbacks[k];
+    
+                document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                document.getElementById(k).addEventListener('click', callbacks[k], false);
+    
             }
         }
         if (typeof mpin.custom !== 'undefined') {
@@ -273,16 +301,17 @@ var mpin = mpin || {};
                 this.renderLogin();
             } else {
                 // Render the home mobile button, if no identity exists
-                this.render('home_mobile', callbacks);
+                this.render('setup-home', callbacks);
+                this.renderHelp("help-setup-home", callbacks);
             }
         }
  
     };
  
     mpin.prototype.renderSetupHome = function(email, errorID) {
- 
+
         var callbacks = {}, self = this, descHtml;
- 
+        
         callbacks.mp_action_home = function(evt) {
             self.renderHome.call(self, evt);
         };
@@ -1552,7 +1581,9 @@ var mpin = mpin || {};
         "pinpad_initializing": "Initializing...",
         "pinpad_errorTimePermit": "ERROR GETTING PERMIT:",
         "home_alt_mobileOptions": "Mobile Options",
-        "home_button_authenticateMobile": "Authenticate <br/>with your Smartphone",
+        "home_button_authenticateMobile_noTrust": "Sign in with Smartphone <br> (This is a PUBLIC device which I DO NOT trust)",
+        "home_button_authenticateMobile_trust": "Sign in with Browser <br> (This is a PERSONAL device which I DO trust)",
+        "home_button_authenticateMobile_intro": "First let's establish trust to choose the best way for you to access this service:",
         "home_button_authenticateMobile_description": "Get your Mobile Access Number to use with your M-Pin Mobile App to securely authenticate yourself to this service.",
         "home_button_getMobile": "Get <br/>M-Pin Mobile App",
         "home_button_getMobile_description": "Install the free M-Pin Mobile App on your Smartphone now!  This will enable you to securely authenticate yourself to this service.",
@@ -1575,7 +1606,7 @@ var mpin = mpin || {};
         "otp_seconds": "Remaining: {0} sec.", // {0} will be replaced with the remaining seconds
         "otp_expired_header": "Your One-Time Password has expired.",
         "otp_expired_button_home": "Login again to get a new OTP",
-        "setup_header": "ADD AN IDENTITY TO THIS BROWSER",
+        "setup_header": "ADD AN IDENTITY TO THIS DEVICE",
         "setup_text1": "Enter your email address:",
         "setup_text2": "Your email address will be used as your identity when M-Pin authenticates you to this service.",
         "setup_error_unathorized": "{0} has not been registered in the system.", // {0} will be replaced with the userID
@@ -1640,9 +1671,11 @@ var mpin = mpin || {};
         "logout_button": "Logout",
         "home_button_setupMobile": "Add an identity to this browser",
         "mobile_splash_text": "INSTALL THE M-PIN MOBILE APP",
-        "mobile_add_home_ios6": "Tap the <img src='/build/out/mobile/resources/templates/grey/img/ios6-share.png'/> icon to 'Add to homescreen'",
-        "mobile_add_home_ios7": "Tap the <img src='/build/out/mobile/resources/templates/grey/img/ios7-share.png'/> icon to 'Add to homescreen'"
- 
+        "mobile_add_home_ios6": "Tap the <img src='resources/templates/gradient/img/ios6-share.png'/> icon to 'Add to homescreen'",
+        "mobile_add_home_ios7": "Tap the <img src='resources/templates/gradient/img/ios7-share.png'/> icon to 'Add to homescreen'",
+        "help_text_1": "Simply choose a memorable <b>[4 digit]</b> PIN to assign to this identity by pressing the numbers in sequence followed by the 'Setup' button to setup your PIN for this identity",
+        "help_ok_btn": "Ok, Got it",
+        "help_more_btn": "I'm not sure, tell me more"
     };
     //  image should have config properties
     hlp.img = function(imgSrc) {
