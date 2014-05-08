@@ -1560,7 +1560,7 @@ var mpin = mpin || {};
 		"mobile_header_txt1": "I",
 		"mobile_header_donot": "DON'T",
 		"mobile_header_do": "DO",
-		"mobile_header_txt3": "truest this computer"
+		"mobile_header_txt3": "trust this computer"
 		
 
 	};

@@ -150,7 +150,7 @@ $BORDERLESS : true;
 @mixin mobile-icon() {
 	width: 50px !important;
 	height: 42px !important;
-	background-image: url('#{$IMAGES}/phone.svg');
+	background-image: url('#{$IMAGES}gr_phone.png');
 
 	background-repeat: no-repeat;
 	background-position: center;
