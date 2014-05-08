@@ -54,6 +54,27 @@
 	}
 }
 
+.mpinIntroText {
+	width: 90%;
+	margin: 10px auto;
+}
+.mpinCenterTxt {
+	text-align: center;
+	font-weight: bold;
+	width: 90%;
+	padding: 10px;
+}
+
+.mpinColorGreen {
+	color: #06B405;
+	font-style: italic;
+}
+
+.mpinColorRed {
+	color: #FC0409;
+	font-style: italic;
+}
+
 #homeIcon {
 
 	margin-top: 5px;
@@ -133,5 +154,21 @@
 			padding: 10px;
 		}
 	}
+
+	.mpinBlueBtn {
+		background: #0686CF;
+		padding: 10px;
+	}
+
+	.mpinGreenBtn {
+		background: #06B405;
+		padding: 10px;
+	}
+	.mpinBold {
+		font-weight: bold;
+		display: block;
+	}
+	
+	
 
 }

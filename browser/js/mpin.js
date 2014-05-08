@@ -82,7 +82,8 @@ var mpin = mpin || {};
 
 		this.displayType = "text";
 
-		this.renderHome();
+//		this.renderHome();
+		this.renderMobileLogin();
 //		this.renderSetup("123da");
 		//this.renderDeleteWarning("dada");
 	};
@@ -195,14 +196,10 @@ var mpin = mpin || {};
 			this.renderSetup(this.opts.prerollid);
 		}
 
-		callbacks.mpin_setup = function() {
+		callbacks.mpin_desktop = function() {
 			self.renderSetupHome.call(self);
 		};
-		callbacks.mpin_authenticate = function() {
-			self.renderLogin.call(self);
-		};
-//		callbacks.mp_action_addIdentity2 = callbacks.mp_action_addIdentity1;
-//		callbacks.mp_action_Login2 = callbacks.mp_action_Login1;
+
 		this.render('home', callbacks);
 
 		if (this.opts.mobileAppFullURL) {
@@ -219,11 +216,8 @@ var mpin = mpin || {};
 		renderElem = document.getElementById(renderElem);
 		renderElem.innerHTML = this.readyHtml("home_mobile", {});
 
-		document.getElementById("mpin_mobile_login").onclick = function(evt) {
+		document.getElementById("mpin_mobile").onclick = function(evt) {
 			self.renderMobileLogin.call(self, evt);
-		};
-		document.getElementById("mpin_mobile_setup").onclick = function() {
-			self.renderMobileSetup.call(self);
 		};
 	};
 
@@ -377,22 +371,22 @@ var mpin = mpin || {};
 				if (_request.status === 200) {
 					_jsonRes = JSON.parse(_request.responseText);
 //					self.successLogin(_jsonRes);
-					
+
 					var mpinResponse = _jsonRes;
-					var handleToken = function(success, errorCode, errorMessage, authData){
+					var handleToken = function(success, errorCode, errorMessage, authData) {
 						if (success) {
-	            			self.successLogin.call(self, authData);
-	            		} else {
-	            			self.renderHome.call(self);
-	            		}
+							self.successLogin.call(self, authData);
+						} else {
+							self.renderHome.call(self);
+						}
 					};
 
 					// Do RPA Authentication
-					sendAuthToken(self.opts.authenticateURL, mpinResponse, handleToken, self.opts.authenticateRequestFormatter, self.opts.customHeaders, function () {
+					sendAuthToken(self.opts.authenticateURL, mpinResponse, handleToken, self.opts.authenticateRequestFormatter, self.opts.customHeaders, function() {
 						self.successLogin.call(self);
 					});
-					
-					
+
+
 				} else if (!this.intervalID2) {
 					self.intervalID2 = setTimeout(function() {
 						self.getAccess.call(self);
@@ -854,7 +848,7 @@ var mpin = mpin || {};
 		elem.type = "text";
 		elem.value = message;
 		this.displayType = "text";
-		
+
 		if (isErrorFlag) {
 			addClass(elem, "errorPin");
 		}
@@ -918,9 +912,9 @@ var mpin = mpin || {};
 
 	mpin.prototype.actionSetupHome = function(uId) {
 		var _email, _reqData = {}, self = this;
-		
+
 		_email = (uId) ? uId : document.getElementById("emailInput").value;
-		
+
 		if (_email.length === 0 || !this.opts.identityCheckRegex.test(_email)) {
 			document.getElementById("emailInput").focus();
 			return;
@@ -1098,7 +1092,7 @@ var mpin = mpin || {};
 					if (success) {
 						self.successLogin(authData);
 					} else if (errorCode === "INVALID") {
-						
+
 						self.display(hlp.text("authPin_errorInvalidPin"), true);
 
 						self.enableNumberButtons(true);
@@ -1253,13 +1247,13 @@ var mpin = mpin || {};
 				this.renderSetupHome();
 			}
 		}
-		
+
 		//check
 		if (renderWarningFlag) {
 			identity = this.getDisplayName(iID);
 			this.renderDeleteWarning(identity);
 		}
-		
+
 		return false;
 	};
 
@@ -1555,7 +1549,20 @@ var mpin = mpin || {};
 		"account_reactivate_question": "Are you sure you wish to reactivate this M-Pin Identity?",
 		"account_reactivate_button": "Yes, reactivate this M-Pin Identity",
 		"noaccount_header": "No identities have been added to this browser!",
-		"noaccount_button_add": "Add a new identity"
+		"noaccount_button_add": "Add a new identity",
+		"home_intro_text": "First let's establish truth to choose the best way for you to access this service:",
+		"signin_btn_desktop1": "Sign in with Browser",
+		"signin_btn_desktop2": "(This is a PERSONAL device which I DO trust)",
+		"signin_btn_mobile1": "Sign in with Smartphone",
+		"signin_btn_mobile2": "(This is a PUBLIC device which I DO NOT trust)",
+		"home_txt_between_btns": "or",
+		"home_hlp_link": "Not sure which option to choose?",
+		"mobile_header_txt1": "I",
+		"mobile_header_donot": "DON'T",
+		"mobile_header_do": "DO",
+		"mobile_header_txt3": "truest this computer"
+		
+
 	};
 	//	image should have config properties
 	hlp.img = function(imgSrc) {

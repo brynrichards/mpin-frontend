@@ -5,8 +5,9 @@ $MOBILE : false;
 
 // Import template
 
-@import 'templates/_darkgrey';
+//@import 'templates/_darkgrey';
 //@import 'templates/_flatwhite';
+@import 'templates/_light';
 
 // General mixins
 
@@ -68,9 +69,11 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		bottom: 0;
 		left: 0;
 		right: 0;
-
+		
 		background-color: inherit;
-
+		
+		padding: 5px;
+		
 		.mpinMaster {
 			position: absolute;
 			top: 0;
@@ -81,7 +84,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			min-height: 430px;
 			// background color
 			@include bg-color();
-
+			border: 1px solid grey;
 
 			-webkit-box-align: stretch;
 			-ms-flex-align: stretch;
@@ -107,7 +110,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			// Import the home view
 
 			@import 'home';
-
+			
+			
 		}
 	}
 
@@ -670,7 +674,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			-webkit-box-align: center;
 			-ms-flex-align: center;
 			align-items: center;
-			white-space: nowrap;
+			// white-space: nowrap;
 			text-overflow: ellipsis;
 			text-align: center;
 			display: block;

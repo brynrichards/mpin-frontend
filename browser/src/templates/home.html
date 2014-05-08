@@ -1,22 +1,28 @@
 <div id="header">
     <div id="mpinLogo"></div>
 </div>
+ 
+<div class="mpinIntroText">
+	<%=hlp.text("home_intro_text") %>
+</div>
 
 <div id="renderMobileHome"></div>
 
-<div id="homeIcon">
-    <div id="desktopIcon"></div>
-</div>
 <div id="buttonsContainer">
-    <div class="mpinBtn" id="mpin_authenticate">
-        <span class="iconArrow"></span>
-        <span class="btnLabel btnLabelArrow"><%=hlp.text("home_button_authenticateBrowser") %></span>
+    <div class="mpinBtn mpinBlueBtn" id="mpin_desktop">
+        <span class="btnLabel">
+			<span class="mpinBold">
+				<%=hlp.text( "signin_btn_desktop1") %>
+			</span>
+			<%=hlp.text( "signin_btn_desktop2") %>
+		</span>
     </div>
-    <div class="mpinBtn" id="mpin_setup">
-        <span class="iconArrow"></span>
-        <span class="btnLabel btnLabelArrow"><%=hlp.text("home_button_setupBrowser") %></span>
-    </div>       
+
+	<div class="mpinIntroText">
+		<%= hlp.text( "home_hlp_link") %>
+	</div>
 </div>
+
 <div id="mpinFooter">
     <div id="homeBtn"></div>
 </div>
