@@ -175,8 +175,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			background-size: auto 100%;
 		}
 
-		#mpinLogo {
-			@include mpin-logo();
+		#logo {
+			@include custom-logo();
 			display: block;
 		}
 
@@ -270,7 +270,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 	#identityContainer {
 
-		@include central-content();
+		@include identity-container();
 
 
 		-webkit-box-flex: 10;
@@ -301,6 +301,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		min-height: 0px;
 
 		width: 100%;
+
+		position: relative;
 
 		.inputContainer {
 
@@ -363,9 +365,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 						-webkit-user-select: text; 
 						-webkit-appearance: none;
-
-						border-width: 0;
 						-webkit-appearance: none;
+						text-align: center;
 
 					}
 				}
@@ -438,9 +439,13 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 	#mpinFooter {
 
-		-webkit-box-orient: horizontal;
-		-ms-flex-direction: row;
-		flex-direction: row;
+		padding: 0px 10px 0px 10px !important;
+
+		@include header-bar();
+
+		-webkit-box-orient: horizontal !important;
+		-ms-flex-direction: row !important;
+		flex-direction: row !important;
 
 		-webkit-box-pack: start;
 		-ms-flex-pack: start;
@@ -450,15 +455,21 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		-ms-flex-align: center;
 		align-items: center;
 
-		-webkit-box-orient: horizontal;
-		-ms-flex-direction: row;
-		flex-direction: row;
-
 		display: flex;
 		display: -webkit-box;
 		display: -ms-flexbox;
 
-		@include mpin-copyright();
+		#poweredBy {
+			display: block;
+			@include powered-by();
+			background-repeat: no-repeat;
+			background-size: auto 100%;
+		}
+
+		#mpinLogo {
+			@include mpin-logo();
+			display: block;
+		}
 	}
 	
 	// General button styling

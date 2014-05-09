@@ -3,7 +3,7 @@
 <header id="topNav">
     <div id="mp_action_home">
     </div>
-    <div id="mpinLogo">
+    <div id="logo">
     </div>
 </header>
 
@@ -25,31 +25,27 @@
 
       <div class="identityInput">
         <div>
-          <input type="email" id="emailInput" placeholder="Enter pin here" value="">
+          <input type="email" id="emailInput" placeholder="<%=hlp.text( "setup_text1") %>" value="">
         </div>
       </div>
     </div>
 
   </div>
 
-  <div class="identityMainText">
-      <div>
-        <%=hlp.text( "setup_text2") %>
-      </div>
+  <div id="bottomBtnHolder">
+      <button class="mpinBtn" id="mp_action_setup">
+          <span class="btnLabel"><%=hlp.text( "setup_button_setup") %></span>
+      </button>
   </div>
 
   <info id="info"><i></i>Not sure which option to choose?</info>
 
 </div>
 
-<div id="bottomBtnHolder">
-    <button class="mpinBtn" id="mp_action_setup">
-        <span class="btnLabel"><%=hlp.text( "setup_button_setup") %></span>
-    </button>
-</div>
-
-
 <footer id="mpinFooter">
-    <div id="homeBtn">
+    <div id="mpinLogo">
+    </div>
+
+    <div id="poweredBy">
     </div>
 </footer>

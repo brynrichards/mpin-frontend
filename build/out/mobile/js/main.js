@@ -1,4 +1,3 @@
-
 var mpin = mpin || {};
  
 (function() {
@@ -61,6 +60,7 @@ var mpin = mpin || {};
     mpin.prototype.initialize = function(domID, options) {
         this.el = document.getElementById(domID);
         this.elHelp = document.getElementById('helpContainer');
+        this.elHelpOverlay = document.getElementsByTagName("help")[0];
 
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
@@ -174,7 +174,6 @@ var mpin = mpin || {};
         for (k in callbacks) {
             if (document.getElementById(k)) {
                 // document.getElementById(k).onclick = callbacks[k];
- 
                 document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
                 document.getElementById(k).addEventListener('click', callbacks[k], false);
  
@@ -190,12 +189,12 @@ var mpin = mpin || {};
 
 
         this.elHelp.innerHTML = this.readyHelp(tmplName, data);
+        this.elHelpOverlay.style.display = 'block';
         this.elHelp.style.display = 'block';
 
         for (k in callbacks) {
             if (document.getElementById(k)) {
-                // document.getElementById(k).onclick = callbacks[k];
-    
+                console.log('I render the callback', callbacks[k]);
                 document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
                 document.getElementById(k).addEventListener('click', callbacks[k], false);
     
@@ -204,7 +203,13 @@ var mpin = mpin || {};
         if (typeof mpin.custom !== 'undefined') {
             this.setCustomStyle();
         }
+
     };
+
+    mpin.prototype.dismissHelp = function() {
+            this.elHelpOverlay.style.display = 'none';
+            this.elHelp.style.display = 'none';
+    }
  
     mpin.prototype.setLanguageText = function() {
         hlp.language = this.language;
@@ -260,6 +265,21 @@ var mpin = mpin || {};
             // Modify the sequence for the templates
             self.renderSetupHome.call(self);
         };
+
+        callbacks.ok_dismiss = function(evt) {
+            // Modify the sequence for the templates
+            self.dismissHelp.call(self);
+        };
+
+        callbacks.show_more = function(evt) {
+            // Modify the sequence for the templates
+            self.renderHelp("help-helphub", callbacks);
+        };
+
+        callbacks.info = function(evt) {
+            // Show the help item
+            self.renderHelp("help-setup-home", callbacks);
+        };
  
         identity = this.ds.getDefaultIdentity();
  
@@ -302,7 +322,6 @@ var mpin = mpin || {};
             } else {
                 // Render the home mobile button, if no identity exists
                 this.render('setup-home', callbacks);
-                this.renderHelp("help-setup-home", callbacks);
             }
         }
  
@@ -324,7 +343,7 @@ var mpin = mpin || {};
  
  
     mpin.prototype.renderSetup = function(email, clientSecretShare, clientSecretParams) {
- 
+        
         var callbacks = {}, self = this;
         callbacks.mp_action_home = function(evt) {
             self.renderHome.call(self, evt);

@@ -271,6 +271,11 @@ var mpin = mpin || {};
             self.dismissHelp.call(self);
         };
 
+        callbacks.show_more = function(evt) {
+            // Modify the sequence for the templates
+            self.renderHelp("help-helphub", callbacks);
+        };
+
         callbacks.info = function(evt) {
             // Show the help item
             self.renderHelp("help-setup-home", callbacks);

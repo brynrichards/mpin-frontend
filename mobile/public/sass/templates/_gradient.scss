@@ -125,11 +125,33 @@ $BORDERLESS : true;
 	@include box-flex-value(1.0);		
 }
 
+@mixin powered-by() {
+	background-image: url('#{$IMAGES}/powered-by-certivox-colour.svg');
+	color: white;
+	height: 24px;
+	background-position: right;
+	@include box-flex-value(1.0);		
+}
+
 @mixin mpin-logo() {
 	width: 106px;
 	height: 32px;
 
 	background-image: url('#{$IMAGES}/m-pin-header-logo.svg');
+
+	background-repeat: no-repeat;
+	background-position: left;
+	background-size: auto 100%;
+	margin: 5px 10px 5px 0px;
+
+	@include box-flex-value(1.0);
+}
+
+@mixin custom-logo() {
+	width: 106px;
+	height: 32px;
+
+	background-image: url('#{$IMAGES}/logo-here-grey.svg');
 
 	background-repeat: no-repeat;
 	background-position: right;
@@ -186,7 +208,7 @@ $BORDERLESS : true;
 	-moz-transition: all 0.5s ease 0s;
 	border: 1px solid transparent !important;
 	border-radius: 0.3em 0.3em 0.3em 0.3em;
-	background: #3979C7;
+	background: #3A7CC2;
 	cursor: pointer;
 	color: #FFFFFF;
 	font-family: 'Helvetica', serif;
@@ -206,8 +228,8 @@ $BORDERLESS : true;
 	}
 }
 
-@mixin central-content() {
-	border: 1px solid rgb(86, 86, 86);
+@mixin identity-container() {
+	border-bottom: 1px solid rgb(86, 86, 86);
 	color: black;
 }
 
@@ -223,7 +245,7 @@ $BORDERLESS : true;
 
 
 @mixin central-text() {
-	color: white;
+	color: black;
 	font-size: 4vh;
 	width: 100%;
 	text-align: center;
@@ -239,13 +261,13 @@ $BORDERLESS : true;
 
 		span {
 			text-align: center;
-			color: white;
+			color: black;
 			background: transparent;
 			padding: 0px 0px 5px 0px;
 			text-shadow: rgba(255,255,255,0.25) 0 0.08em 0;
 			text-shadow: #fff 0 1px 1px;
 			font-size: .8em;
-			font-weight: bold;
+			font-weight: normal;
 			-webkit-tap-highlight-color: rgba(0,0,0,0);
 		}
 	
@@ -261,6 +283,7 @@ $BORDERLESS : true;
 	width: 100%;
 	padding: .4em;
 	min-height: 2.5em;
+	border: 1px solid #A3A3A3;
 }
 
 @mixin top-heading() {
@@ -286,7 +309,6 @@ $BORDERLESS : true;
 @mixin mpin-copyright() {
 	width: 97px;
 	height: 13px;
-	background-image: url('#{$IMAGES}/byCertivox.svg');
 	margin: 10px 0px 10px 10px;
 }
 
