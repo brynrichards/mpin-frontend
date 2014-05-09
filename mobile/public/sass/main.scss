@@ -183,8 +183,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	}
 
 	#accountTopBar {
-
-		margin: 10px 10px 0 10px;
+		
+		@include account-top-bar();
 
 		-webkit-box-orient: horizontal !important;
 		-ms-flex-direction: row !important;
@@ -327,7 +327,6 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			align-items: center;
 
 			background-color: transparent;
-			margin-bottom: 2vh;
 			width: 100%;
 			background-position: initial initial;
 			background-repeat: initial initial;
@@ -432,6 +431,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		/* flex-direction: column; */
 		/* min-height: 0px; */
 
+		width: 100%;
+
 		.mpinBtn {
 			width: 90%;
 		}
@@ -516,7 +517,6 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			-ms-flex-align: center;
 			align-items: center;
 			white-space: nowrap;
-			text-overflow: ellipsis;
 			text-align: center;
 			display: block;
 			overflow: hidden;

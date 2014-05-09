@@ -101,8 +101,8 @@ var mpin = mpin || {};
         //this.renderSetupHome();
 //      this.renderMobileSetup();
         // Check for appID
-        this.renderHomeMobile();
-        // this.renderLogin();
+        // this.renderHomeMobile();
+        this.renderLogin();
         // this.setOptions(options).renderHome();
         // this.setOptions(options).renderSetupHome();
         // this.setOptions(options);
@@ -187,9 +187,9 @@ var mpin = mpin || {};
     mpin.prototype.renderHelp = function(tmplName, callbacks, tmplData) {
         var data = tmplData || {}, k;
 
-
-        this.elHelp.innerHTML = this.readyHelp(tmplName, data);
         this.elHelpOverlay.style.display = 'block';
+        this.elHelpOverlay.style.opacity = "1";
+        this.elHelp.innerHTML = this.readyHelp(tmplName, data);
         this.elHelp.style.display = 'block';
 
         for (k in callbacks) {
@@ -208,6 +208,7 @@ var mpin = mpin || {};
 
     mpin.prototype.dismissHelp = function() {
             this.elHelpOverlay.style.display = 'none';
+            this.elHelpOverlay.style.opacity = '0';
             this.elHelp.style.display = 'none';
     }
  
@@ -401,7 +402,8 @@ var mpin = mpin || {};
             if (self.isAccNumber) {
                 self.accessNumber = pinpadDisplay.value;
                 self.isAccNumber = false;
-                removeClass(pinpadDisplay, "blue-bg");
+                // Add class for the v3 version before the redesign
+                // removeClass(pinpadDisplay, "blue-bg");
                 self.addToPin("login");
             } else {
                 self.actionLogin.call(self);
@@ -1006,7 +1008,8 @@ var mpin = mpin || {};
         elemPass = document.getElementById('pinpad-input');
         // elemPass.classList.add('blue-bg');
         if (this.isAccNumber) {
-            addClass(elemPass, "blue-bg");
+            // Add class for the old version
+            // addClass(elemPass, "blue-bg");
         }
         // Changed to convert the existing input to password type
 //      elemPass.setAttribute('type', 'password')
@@ -1628,10 +1631,11 @@ var mpin = mpin || {};
         "setup_header": "ADD AN IDENTITY TO THIS DEVICE",
         "setup_text1": "Enter your email address:",
         "setup_text2": "Your email address will be used as your identity when M-Pin authenticates you to this service.",
+        "setup_text3": "your email address",
         "setup_error_unathorized": "{0} has not been registered in the system.", // {0} will be replaced with the userID
         "setup_error_server": "Cannot process the request. Please try again later.",
         "setup_error_signupexpired": "Your signup request has been expired. Please try again.",
-        "setup_button_setup": "Setup M-Pin&trade;",
+        "setup_button_setup": "Setup M-Pin",
         "setupPin_header": "Create your M-Pin with {0} digits", // {0} will be replaced with the pin length
         "setupPin_initializing": "Initializing...",
         "setupPin_pleasewait": "Please wait...",

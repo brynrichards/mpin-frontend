@@ -3,8 +3,6 @@
 
 #inputContainer {
 
-	margin-top: 10px;
-	
 	display: flex;
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -30,7 +28,6 @@
 
 #pinsHolder {
 	
-	margin: 10px;
 	width: auto;
 	height: auto;
 	position: relative;
@@ -55,6 +52,8 @@
 	flex: 1 0 auto;
 	min-height: 0;
 	min-width: 0;
+
+	@include pins-holder();
 
 	// Pinbat buttons
 
@@ -155,7 +154,7 @@
 
 				}
 
-				-webkit-tap-highlight-color: #ccc;
+				-webkit-tap-highlight-color: #3777ba;
 
 
 			}

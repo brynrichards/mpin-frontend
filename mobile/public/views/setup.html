@@ -1,23 +1,23 @@
 
-<header class="pinpad" id="topNav">
-    <a id="mp_action_home" href="#">
-        <div id="homeBtn"></div>
-    </a>
+<header id="topNav">
+    <div id="mp_action_home">
     </div>
-    <div id="mpinLogo"></div>
+    <div id="logo">
+    </div>
 </header>
+
 <div id="accountTopBar">
     <div id="mpinUser">
         <p><%= email %> <% console.log("cfg :::", cfg); %></p>
     </div>
 		<a href="#" id="menuBtn"></a>
 </div>
+
+<div id="inputContainer">
+    <input id="pinpad-input" type="password" readonly="true" placeholder="<%= hlp.text("pinpad_placeholder_text") %>">
+</div>
  
 <div id="pinsHolder">
-
-    <div id="inputContainer">
-        <input id="pinpad-input" type="password" readonly="true" placeholder="<%= hlp.text("pinpad_placeholder_text") %>">
-    </div>
 
     <div class="pre-row">
         <div class="row">
@@ -74,6 +74,11 @@
         </div>
     </div>
 </div>
-<footer class="pinpad" id="mpinFooter">
-    <div id="homeBtn"></div>
+
+<footer id="mpinFooter">
+    <div id="mpinLogo">
+    </div>
+
+    <div id="poweredBy">
+    </div>
 </footer>
