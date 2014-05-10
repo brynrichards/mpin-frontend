@@ -148,9 +148,9 @@ $BORDERLESS : true;
 
 
 @mixin mobile-icon() {
-	width: 50px !important;
+	width: 30px !important;
 	height: 42px !important;
-	background-image: url('#{$IMAGES}gr_phone.png');
+	background-image: url('#{$IMAGES}phone-green.png');
 
 	background-repeat: no-repeat;
 	background-position: center;
@@ -163,7 +163,7 @@ $BORDERLESS : true;
 @mixin desktop-icon() {
 	width: 50px !important;
 	height: 42px !important;
-	background-image: url('#{$IMAGES}/mac-icon.svg');
+	background-image: url('#{$IMAGES}computer-blue.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;

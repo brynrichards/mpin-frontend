@@ -83,7 +83,8 @@ var mpin = mpin || {};
 		this.displayType = "text";
 
 //		this.renderHome();
-		this.renderMobileLogin();
+//		this.renderMobileLogin();
+		this.renderDesktop();
 //		this.renderSetup("123da");
 		//this.renderDeleteWarning("dada");
 	};
@@ -319,6 +320,24 @@ var mpin = mpin || {};
 		//get access
 		this.getAccessNumber();
 	};
+	
+	//new View
+	mpin.prototype.renderDesktop = function () {
+		var callbacks = {}, self = this;
+		
+		callbacks.mp_action_home = function(evt) {
+			self.renderHome.call(self, evt);
+		};
+		callbacks.mpinClear = function() {
+			self.addToPin.call(self, "clear");
+		};
+		callbacks.mpinLogin = function() {
+			self.actionSetup.call(self);
+		};
+
+
+		this.render("desktop", callbacks);
+	};
 
 	mpin.prototype.getAccessNumber = function() {
 		var _request = new XMLHttpRequest(), self = this, expire;
@@ -341,7 +360,7 @@ var mpin = mpin || {};
 			var jsonResponse, expiresOn;
 			if (_request.readyState === 4 && _request.status === 200) {
 				jsonResponse = JSON.parse(_request.responseText);
-				document.getElementById("mpin_accessNumber").innerHTML = jsonResponse.accessNumber;
+				document.getElementById("mpinAccessNumber").innerHTML = jsonResponse.accessNumber;
 				if (jsonResponse.webOTT) {
 					self.webOTT = jsonResponse.webOTT;
 					if (self.intervalID2) {

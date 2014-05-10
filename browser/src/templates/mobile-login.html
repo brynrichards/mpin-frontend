@@ -3,46 +3,45 @@
     <div id="mpinLogo"></div>
 </div> 
 
-<div class="mpinCenterTxt mpinColorGreen">
-	<%=hlp.text("mobile_header_txt1") %>
-	<span class="mpinColorRed"><%=hlp.text("mobile_header_donot") %></span>
-	<%=hlp.text("mobile_header_txt3") %>
-	
-	<div id="homeIcon">
-		<div id="mobileIcon"></div>
+<div class="mpinTabMiddle clrGreen mpinBtm10">
+	<div>
+		<%=hlp.text("mobile_header_txt1") %>
+		<span class="mpinColorRed"><%= hlp.text("mobile_header_donot") %></span>
+		<%=hlp.text("mobile_header_txt3") %>
+	</div>
+	<div>
+		<div id="homeIcon">
+			<div id="mobileIcon"></div>
+		</div>
 	</div>
 </div>
 
-<div id="mpinMobileTitle">
-	<%=hlp.text( "mobileAuth_header") %>
-</div>
-
-<div id="pinsHolder">
-
-	<div class="mpinMobileHolder" id="mpinLoginHolder">
-		<p>
-			<%=hlp.text( "mobileAuth_text1") %>
-		</p>
-		<span id="mpin_accessNumber">
-			
-		</span>
+<div class="mpinMobileGrBtn mpinBtm10">
+	<div class="mpinGrTxt" id="mpinDownWhite">
+		Sign in with Smartphone
 	</div>
-	
-	<div id="mpinMobileDesc">
-		<p class="mp_note">
-			<%=hlp.text( "mobileAuth_text2") %>
-				<br/>
-				<label id="mpin_seconds"></label>
-				<br/>
-				<%=hlp.text( "mobileAuth_text3") %>
-		</p>
+	<div class="mpinGrTxt">
+		Your Access Number is:
 		
-		<p class="mpinNoteWarning">
-			<%=hlp.text( "mobileAuth_text4") %>
-		</p>
-	</div>
+		<span id="mpinAccessNumber">
+		</span>
 
+	</div>
+	
+	<div class="mpinMobileWhBtn" id="mpin_seconds">
+		99 seconds
+	</div>
 </div>
+
+<div class="mpinBtn mpinBtm10" id="mpin_action_setup">
+    <span class="iconArrow"></span>
+    <span class="btnLabel btnLabelArrow"><%=hlp.text( "setupReady_button_go") %></span>
+</div>
+
+<div class="mpinMobileGrBtn mpinBtm10" id="mpin_login_desktop">
+    I <span class="mpinColorRed">DO</span> trust this computer
+</div>
+
 
 <div id="mpinFooter">
     <div id="homeBtn">

@@ -56,7 +56,6 @@
 
 #mpin_seconds {
 	color: #f00;
-	margin: 15px 0;
 }
 
 .mpinNoteWarning {
@@ -96,4 +95,85 @@
 		color: #3c3c3c;
 		cursor: pointer;
 	}
+}
+
+// new Mobile
+
+.mpinTabMiddle {
+	display: table; 
+	height: 60px; 
+	overflow: hidden;
+	width: 90%;
+	margin: auto;
+
+	font-style: italic;
+	font-weight: bold;
+	
+	div {
+		display: table-cell;
+		vertical-align: middle;
+	}
+}
+
+.clrBlue {
+	color: #248ACB;
+	border-bottom: 1px solid #248ACB;
+}
+
+.clrGreen {
+	color: #06B405;
+	border-bottom: 1px solid #06B405;
+}
+
+.mpinMobileGrBtn {
+	@include mpin-button();
+	background: #01A800;
+	width: 90%;
+	margin: auto;
+	cursor: default;
+	font-size: 16px;
+	
+	.mpinGrTxt {
+		text-align: center;
+		padding: 5px;
+		margin: 5px;
+	}
+	
+	#mpinDownWhite {
+		border-bottom: 1px solid white;
+	}
+	
+	#mpinAccessNumber {
+		font-size: 24px;
+		letter-spacing: .2em;
+		padding: 10px;
+		display: block;
+	}
+	
+	.mpinMobileWhBtn {
+		@include mpin-button();
+		width: 100px;
+		background: white;
+		box-shadow: none;
+		margin: auto;
+		text-align: center;
+		padding: 4px;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+}
+
+#mpin_action_setup {
+	font-size: 14px;
+	width: 90%;
+	margin: auto;
+	background: #01A800;
+}
+
+#mpin_login_desktop {
+	background: none;
+	border: 1px solid #248ACB !important;
+	color: #248ACB;
+	text-align: center;
+	padding: 5px;
 }

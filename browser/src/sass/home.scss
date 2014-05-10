@@ -75,6 +75,11 @@
 	font-style: italic;
 }
 
+.mpinBtm10 {
+	margin-bottom: 10px;
+}
+
+
 #homeIcon {
 
 	margin-top: 5px;
@@ -103,6 +108,7 @@
 	border-bottom-style: solid;
 	border-bottom-color: white;
 	/*padding: 10% 0px 20px;*/
+	float:right;
 
 	#mobileIcon {
 		@include mobile-icon();
@@ -168,7 +174,17 @@
 		font-weight: bold;
 		display: block;
 	}
-	
-	
+}
 
+.mpinWhiteGrBtn {
+	@include mpin-button();
+	background: none;
+	border: 1px solid $green !important;
+	padding: 5px;
+	color: $green;
+	width: 90%;
+	margin-top: 30px;
+	text-align: center;
+	text-shadow: none;
+	font-weight: bold;
 }
