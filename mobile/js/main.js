@@ -102,7 +102,7 @@ var mpin = mpin || {};
 //      this.renderMobileSetup();
         // Check for appID
         // this.renderHomeMobile();
-        this.renderLogin();
+        this.renderSetup();
         // this.setOptions(options).renderHome();
         // this.setOptions(options).renderSetupHome();
         // this.setOptions(options);
@@ -896,31 +896,30 @@ var mpin = mpin || {};
     mpin.prototype.bindNumberButtons = function() {
         var self = this, btEls;
         btEls = document.getElementsByClassName("btn");
+
         for (var i = 0; i < btEls.length; i++) {
             // btEls[i].onclick = function(el) {
             //  self.addToPin(el.target.getAttribute("data-value"));
             //  return false;
             // };
  
-            btEls[i].addEventListener('touchstart', mEventsHandler, false);
+            // btEls[i].addEventListener('touchstart', mEventsHandler, false);
  
             // Tempory for development
- 
 			btEls[i].addEventListener('click', mEventsHandler, false);
- 
             // document.getElementById('mp_back').remove();
  
             function mEventsHandler(e) {
-              // if (e.type == "touchstart") {
- 
-              self.addToPin(e.target.getAttribute("data-value"));
-              // return false;
+                // if (e.type == "touchstart") {
+                self.addToPin(e.target.getAttribute("data-value"));
+                // return false;
  
               // }
             }
         }
     };
     mpin.prototype.enableNumberButtons = function(enable) {
+        console.log("%c Here", "background: black; color: white;", enable);
         var els = document.getElementsByClassName("btn");
         for (var i = 0; i < els.length; i++) {
             var element = els[i];
@@ -965,6 +964,14 @@ var mpin = mpin || {};
  
         if (pinElement.value.length === 1) {
             this.enableButton(true, "clear");
+
+            var circles = document.getElementsByClassName("circle");
+            var element = document.createElement("div");
+            element.className = 'inner-circle';
+
+            for (var i = 0; i < circles.length; i++) {
+                circles[i].appendChild(element);
+            }
         }
  
         else if (this.isAccNumber) {

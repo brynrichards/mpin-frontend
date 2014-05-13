@@ -570,6 +570,48 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	z-index: 999;
 }
 
+.circle {
+	width: 50px;
+	height: 50px;
+	
+	.outer-circle {
+		background: #E4E4E4;
+		width: 32px;
+		height: 32px;
+		-webkit-border-radius: 61px;
+		-moz-border-radius: 61px;
+		border-radius: 61px;
+		border: 1px solid #aaaaaa;
+		position: absolute;
+		z-index: 800;
+		-webkit-transition: all .2s ease-in-out;
+		-moz-transition: all .2s ease-in-out;
+		-o-transition: all .2s ease-in-out;
+		transition: all .2s ease-in-out;
+	}
+
+	.inner-circle {
+		margin: 4px;
+		background: #3A7FB9;
+		width: 24px;
+		height: 24px;
+		font-size: 11px;
+		color: #FFF;
+		line-height: 24px;
+		text-align: center;
+		font-family: Arial;
+		-webkit-border-radius: 48px;
+		-moz-border-radius: 48px;
+		border-radius: 48px;
+		-webkit-box-shadow: inset 0px 1px 1px 0px #575757;
+		-moz-box-shadow: inset 0px 1px 1px 0px #575757;
+		box-shadow: inset 0px 1px 1px 0px #575757;
+		border-bottom: 1px solid #D8F8F8;
+		position: absolute;
+		z-index: 1000;
+	}
+}
+
 // Import mediaqueries
 @import 'mediaqueries';
 @import 'help';
