@@ -102,14 +102,14 @@ var mpin = mpin || {};
 //      this.renderMobileSetup();
         // Check for appID
         // this.renderHomeMobile();
-        this.renderSetup();
+        this.renderSetup()
         // this.setOptions(options).renderHome();
         // this.setOptions(options).renderSetupHome();
         // this.setOptions(options);
  
         // Caching - monitor if new version of the cache exists
  
-        setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
+        setInterval(function () { window.applicationCache.update(); }, 1000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
  
         window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
                 window.applicationCache.swapCache(); //swap to the newest version of the cache
@@ -934,8 +934,34 @@ var mpin = mpin || {};
     };
     //
     mpin.prototype.addToPin = function(digit) {
+
+        console.log("%c Getting here", "background: blue; color: white;");
  
         var pinElement = document.getElementById('pinpad-input');
+        var circles = document.getElementsByClassName("circle");
+
+        // Add circles
+
+        var element = document.createElement("div");
+        element.className = 'inner-circle';
+        element.style.opacity = 0;
+        element.style.width = "36px";
+        element.style.height = "36px";
+        element.style.margin = "0px";
+
+        // window.getComputedStyle(element).opacity;
+
+        // // Fade it in.
+        // element.style.opacity = 1;
+
+        setTimeout(function () {
+          // Fade it in.
+          element.style.opacity = 1;
+          element.style.width = "18px";
+          element.style.height = "18px";
+          element.style.margin = "7px";
+        }, 0);
+
         //pinElement.setAttribute('type', 'password')
  
         if (digit === 'clear') {
@@ -943,6 +969,13 @@ var mpin = mpin || {};
             this.enableNumberButtons(true);
             this.enableButton(false, "go");
             this.enableButton(false, "clear");
+            for (var i = 0; i < circles.length; i++) {
+
+                if (circles[i].querySelector('.inner-circle')) {
+                    circles[i].removeChild(element);
+                }
+            }
+            
             return;
         }
  
@@ -961,17 +994,20 @@ var mpin = mpin || {};
         }
  
         pinElement.value += digit;
+        console.log("LENGTH::", pinElement.value.length);
+
+        var addToDivNum =  pinElement.value.length -1;
+        circles[addToDivNum].appendChild(element);
+
+        // for (var i = 0; i < circles.length; i++) {
+        //     console.log("What I dump here", circles[i], "+", i, (!circles[i].querySelector('.inner-circle')));
+
+        //     if (!circles[i].querySelector('.inner-circle')) {
+        //     }
+        // }
  
         if (pinElement.value.length === 1) {
             this.enableButton(true, "clear");
-
-            var circles = document.getElementsByClassName("circle");
-            var element = document.createElement("div");
-            element.className = 'inner-circle';
-
-            for (var i = 0; i < circles.length; i++) {
-                circles[i].appendChild(element);
-            }
         }
  
         else if (this.isAccNumber) {

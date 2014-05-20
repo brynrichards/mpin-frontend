@@ -6,9 +6,19 @@
 	display: flex;
 	display: -webkit-box;
 	display: -ms-flexbox;
-	-webkit-box-orient: vertical;
-	-ms-flex-direction: column;
-	flex-direction: column;
+
+	margin: 0 auto;
+	padding-top: 10px;
+
+	-webkit-box-orient: horizontal;
+	-ms-flex-direction: row;
+	flex-direction: row;
+
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+
+	text-align: center;
 
 	@include display-box-flex();
 
