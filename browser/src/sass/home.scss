@@ -58,6 +58,7 @@
 	width: 90%;
 	margin: 10px auto;
 }
+
 .mpinCenterTxt {
 	text-align: center;
 	font-weight: bold;
@@ -158,6 +159,12 @@
 		}
 		&.mpinBtnOk	{
 			padding: 10px;
+		}
+		&.green {
+			background: #44A800;
+		}
+		&.grey {
+			background: #7E7E7E;
 		}
 	}
 

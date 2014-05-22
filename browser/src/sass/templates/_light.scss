@@ -3,6 +3,26 @@
 $IMAGES : "../mpinImages/";
 $BORDERLESS : true;
 
+//HEADER
+@mixin header-logo() {
+	margin: 5px 0;
+	width: 85px;
+	height: 20px;
+	float: right; 
+	background: url('#{$IMAGES}logo-here-grey.svg') no-repeat;
+	background-size: auto 100%;
+	background-position: right bottom;
+}
+
+@mixin header-home () {
+	width: 30px;
+	height: 23px;
+	margin: 3px 0;
+	background: url('#{$IMAGES}home.svg') no-repeat;
+	background-size: auto 100%;
+	background-position: left;
+}
+
 // Background color
 @mixin bg-color() {
 	background: #fff;
@@ -58,6 +78,14 @@ $BORDERLESS : true;
 
 	&:active {
 		background: #ccc;
+	}
+
+	&.green {
+		background: #44A800;
+	}
+
+	&.grey {
+		background: #7E7E7E;
 	}
 }
 
@@ -123,7 +151,6 @@ $BORDERLESS : true;
 	width: 183px;
 	height: 69px;
 	background-image: url('#{$IMAGES}/mpin_header_logo.png');
-
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
@@ -150,7 +177,7 @@ $BORDERLESS : true;
 @mixin mobile-icon() {
 	width: 30px !important;
 	height: 42px !important;
-	background-image: url('#{$IMAGES}phone-green.png');
+	background-image: url('#{$IMAGES}phone-green.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
@@ -210,16 +237,16 @@ $BORDERLESS : true;
 	width: 100% !important;
 	text-align: center;
 
-		span {
-			text-align: center;
-			color: white;
-			background: transparent;
-			font-size: 14px;
-			/*padding: 0px 0px 5px 0px;*/
-			font-weight: bold;
-			padding: 20px 10px;
-			display: inherit;
-		}
+	span {
+		text-align: center;
+		color: white;
+		background: transparent;
+		font-size: 14px;
+		/*padding: 0px 0px 5px 0px;*/
+		font-weight: bold;
+		padding: 20px 10px;
+		display: inherit;
+	}
 
 }
 
@@ -257,12 +284,7 @@ $BORDERLESS : true;
 	text-align: center;
 }
 
-@mixin mpin-copyright() {
-	width: 97px;
-	height: 13px;
-	background-image: url('#{$IMAGES}/byCertivox.svg');
-	margin: 10px 0px 10px 10px;
-}
+
 
 @mixin arrow-icon() {
 	background-image: url('#{$IMAGES}/arrow.svg');
@@ -274,3 +296,27 @@ $BORDERLESS : true;
 @mixin btn-text-label() {
 	line-height: 1.2em;
 }
+
+@mixin mpin-copyright {
+	
+}
+
+/// FOOTER
+@mixin footer-helphub() {
+	width: 80px;
+	height: 30px;
+	background: url('#{$IMAGES}m-pin-header-logo.svg') no-repeat;
+	background-size: auto 100%;
+	background-position: left;
+}
+
+@mixin footer-copyright() {
+	width: 80px;
+	height: 30px;
+	float: right; 
+	background: url('#{$IMAGES}/powered-by-certivox-colour.svg') no-repeat;
+	background-size: auto 100%;
+	background-position: right bottom;
+}
+
+

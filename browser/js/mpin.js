@@ -49,6 +49,9 @@ var mpin = mpin || {};
 	mpin.prototype.initialize = function(domID, options) {
 		this.el = document.getElementById(domID);
 		addClass(this.el, "mpinMaster");
+
+		this.addHelp();
+
 		//options CHECK
 		if (!options || !this.checkOptions(options.server)) {
 //			this.error(" Some options are required :" + this.cfg.requiredOptions);
@@ -82,11 +85,14 @@ var mpin = mpin || {};
 
 		this.displayType = "text";
 
-//		this.renderHome();
+		this.renderHome();
+//		this.renderHelpHub();
+//		new VIEWs
 //		this.renderMobileLogin();
-		this.renderDesktop();
+//		this.renderDesktop();
 //		this.renderSetup("123da");
 		//this.renderDeleteWarning("dada");
+//		this.renderBlank();
 	};
 
 	mpin.prototype.checkBrowser = function() {
@@ -152,10 +158,22 @@ var mpin = mpin || {};
 		return this;
 	};
 
+	mpin.prototype.addHelp = function() {
+		var hlpHtml;
+		hlpHtml = mpin._.template(mpin.template["help-tooltip"], {});
+		this.el.insertAdjacentHTML("afterend", hlpHtml);
+
+		this.elHelpOverlay = document.getElementById("mpinHelpTag");
+		this.elHelp = document.getElementById("mpinHelpContainer");
+	};
+
 	mpin.prototype.readyHtml = function(tmplName, tmplData) {
 		var data = tmplData, html;
 		mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
 		html = mpin._.template(mpin.template[tmplName], data);
+		if (html[0] !== "<") {
+			html = html.substr(1);
+		}
 		return html;
 	};
 
@@ -182,7 +200,6 @@ var mpin = mpin || {};
 		//		setLanguageText
 		if (this.opts.customLanguageTexts && this.opts.customLanguageTexts[this.language]) {
 			for (var k in this.opts.customLanguageTexts[this.language]) {
-				console.log("this.opts.customLanguageTexts[this.language]", this.opts.customLanguageTexts[this.language][k]);
 				if (lang[this.language][k]) {
 					lang[this.language][k] = this.opts.customLanguageTexts[this.language][k];
 				}
@@ -190,6 +207,40 @@ var mpin = mpin || {};
 		}
 	};
 
+	mpin.prototype.toggleHelp = function() {
+		if (this.elHelpOverlay.style.display === "block") {
+			this.elHelpOverlay.style.display = "none";
+			this.elHelpOverlay.style.opacity = "0";
+			this.elHelp.style.display = "none";
+		} else {
+			this.elHelpOverlay.style.display = "block";
+			this.elHelpOverlay.style.opacity = "1";
+			this.elHelp.style.display = "block";
+		}
+	};
+
+	mpin.prototype.renderHelp = function(tmplName, callbacks, tmplData) {
+		var k;
+		tmplData = tmplData || {};
+		this.elHelp.innerHTML = this.readyHtml(tmplName, tmplData);
+
+		for (k in callbacks) {
+			if (document.getElementById(k)) {
+				document.getElementById(k).addEventListener('click', callbacks[k], false);
+			}
+		}
+	};
+
+	mpin.prototype.renderBlank = function () {
+		var callbacks = {};
+		
+		callbacks.show_identity = function () {
+			alert(" : show IDENTITY : ");
+		};
+		
+		this.render('blank', callbacks);
+	};
+	
 	mpin.prototype.renderHome = function() {
 		var callbacks = {}, self = this;
 
@@ -198,7 +249,19 @@ var mpin = mpin || {};
 		}
 
 		callbacks.mpin_desktop = function() {
-			self.renderSetupHome.call(self);
+//			self.renderSetupHome.call(self);
+			self.renderDesktop.call(self);
+		};
+
+		callbacks.mpin_help = function() {
+			self.lastView = "renderHome";
+			self.toggleHelp.call(self);
+			self.renderHelpTooltip.call(self);
+		};
+		callbacks.mpin_desktop_hub = function(ev) {
+			self.lastView = "renderHome";
+			self.renderHelpHub.call(self);
+			ev.preventDefault();
 		};
 
 		this.render('home', callbacks);
@@ -211,6 +274,61 @@ var mpin = mpin || {};
 			this.opts.onLoaded();
 		}
 	};
+
+	mpin.prototype.renderHelpTooltip = function() {
+		var callbacks = {}, self = this;
+
+		callbacks.mpin_help_ok = function() {
+			self.toggleHelp.call(self);
+		};
+
+		callbacks.mpin_help_more = function() {
+			self.toggleHelp.call(self);
+			self.renderHelpHub.call(self);
+		};
+
+		this.renderHelp("help-tooltip-home", callbacks);
+	};
+
+	mpin.prototype.renderHelpHub = function() {
+		var callbacks = {}, self = this;
+
+		callbacks.mpin_hub_li1 = function() {
+			self.renderHelpHubPage.call(self, 1);
+		};
+		callbacks.mpin_hub_li2 = function() {
+			self.renderHelpHubPage.call(self, 2);
+		};
+		callbacks.mpin_hub_li3 = function() {
+			self.renderHelpHubPage.call(self, 3);
+		};
+		callbacks.mpin_hub_li4 = function() {
+			self.renderHelpHubPage.call(self, 4);
+		};
+
+		callbacks.mpin_close_hub = function() {
+			self.renderLastView.call(self);
+		};
+		this.render("help-hub", callbacks);
+	};
+
+	mpin.prototype.renderHelpHubPage = function(helpNumber) {
+		var callbacks = {}, self = this, tmplName;
+
+		callbacks.mpin_help_hub = function() {
+			self.renderHelpHub.call(self);
+		};
+		tmplName = "help-hub-1";
+		console.log("tmplName : ", tmplName);
+		this.render(tmplName, callbacks);
+	};
+
+	//
+	mpin.prototype.renderLastView = function() {
+		//call renderHome
+		this[this.lastView]();
+	};
+
 	mpin.prototype.renderHomeMobile = function() {
 		var renderElem = "renderMobileHome", self = this;
 
@@ -315,17 +433,33 @@ var mpin = mpin || {};
 			clearTimeout(self.intervalID2);
 			self.renderHome.call(self, evt);
 		};
+		
+		callbacks.mpinLogo = function(evt) {
+			self.renderHome.call(self, evt);
+		};
+		
+		callbacks.mpin_login_desktop = function () {
+			self.renderDesktop.call(self);
+		};
+		
+		callbacks.mpin_desktop_hub = function (ev) {
+			self.lastView = "renderMobileLogin";	
+			self.renderHelpHub.call(self);
+			ev.preventDefault();
+			return;
+		};
 
 		this.render("mobile-login", callbacks);
 		//get access
 		this.getAccessNumber();
 	};
-	
+
 	//new View
-	mpin.prototype.renderDesktop = function () {
+	mpin.prototype.renderDesktop = function() {
 		var callbacks = {}, self = this;
-		
-		callbacks.mp_action_home = function(evt) {
+
+//		callbacks.mp_action_home = function(evt) {
+		callbacks.mpinLogo = function(evt) {
 			self.renderHome.call(self, evt);
 		};
 		callbacks.mpinClear = function() {
@@ -333,6 +467,17 @@ var mpin = mpin || {};
 		};
 		callbacks.mpinLogin = function() {
 			self.actionSetup.call(self);
+		};
+		
+		callbacks.mpin_mobile = function () {
+			self.renderMobileLogin.call(self);
+		};
+		
+		callbacks.mpin_desktop_hub = function (ev) {
+			self.lastView = "renderDesktop";
+			self.renderHelpHub.call(self);
+			ev.preventDefault();
+			return;
 		};
 
 
@@ -543,8 +688,6 @@ var mpin = mpin || {};
 		}
 		//bug1 default identity
 
-		console.log("defaultIDENTITY :", defaultIdentity);
-
 		for (var i in this.ds.getAccounts()) {
 			c += 1;
 			if (i != defaultIdentity)
@@ -683,8 +826,8 @@ var mpin = mpin || {};
 
 		document.getElementById("mp_btIdSettings_" + iNumber).onclick = function(ev) {
 			self.renderUserSettingsPanel(uId);
-			ev.stopPropagation();
-			return false;
+			ev.preventDefault();
+//			return false;
 		};
 	};
 
@@ -1579,8 +1722,19 @@ var mpin = mpin || {};
 		"mobile_header_txt1": "I",
 		"mobile_header_donot": "DON'T",
 		"mobile_header_do": "DO",
-		"mobile_header_txt3": "trust this computer"
-		
+		"mobile_header_txt3": "trust this computer",
+		"help_text_1": "Simply choose a memorable <b>[4 digit]</b> PIN to assign to this identity by pressing the numbers in sequence followed by the 'Setup' button to setup your PIN for this identity",
+		"help_ok_btn": "Ok, Got it",
+		"help_more_btn": "I'm not sure, tell me more",
+		"help_hub_title": "M-Pin Help Hub",
+		"help_hub_li1": "What is the difference between signing in with the browser or with Smartphone?",
+		"help_hub_li2": "Which is the most secure method to sign in?",
+		"help_hub_li3": "What details will i need to provide?",
+		"help_hub_li4": "Who can see my identity?",
+		"help_hub_button": "Exit Help Hub and return to previous page",
+		"help_hub_3_p1": "You will simply need to provide an <span class=mpinPurple>[email address]</span> in order to set up your identity. You will receive an activation email to complete the set up process.",
+		"help_hub_3_p2": "You will also need to create a PIN number, this will be a secret <span class=mpinPurple>[4 digit]</span> code known only to you which you will use to login to the service.",
+		"help_hub_return_button": "Return to Help Hub"
 
 	};
 	//	image should have config properties
