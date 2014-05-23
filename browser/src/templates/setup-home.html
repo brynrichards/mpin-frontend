@@ -1,52 +1,37 @@
-<!-- Home/Top Nav Bar -->
-
-<div id="topNav">
-    <div id="mp_action_home">
-    </div>
-    <div id="mpinLogo">
-    </div>
+<div class="mpinHeader">
+    <div class="mpinLogo mpPointer"></div>
+	<div class="mpinHome mpPointer" id="mpin_home"></div>
 </div>
 
-<!-- User section -->
 
-<div id="addIdentity">
-  <div class="identityHeader"><%=hlp.text( "setup_header") %></div>
+<div class="mpinHeaderRow">
+	<%=hlp.text( "setup_header") %>
 </div>
 
-<!-- Input button -->
 
-<div id="identityContainer" class="active">
-  <div class="inputContainer">
-    
-    <div class="identityElHolder">
-      <div class="identityText">
-          <span><%=hlp.text( "setup_text1") %></span>
-      </div>
-
-      <div class="identityInput">
-        <div>
-          <input type="email" id="emailInput" placeholder="" value="<%= userId %>">
-        </div>
-      </div>
+<div class="mpinMain mpPaddTop10">
+	
+	<div class="mpinCenter">
+		<%=hlp.text( "setup_text1") %>
+		<input type="email" id="emailInput" class="mpinInput" placeholder="<%=hlp.text( "setup_placeholder") %>" value="<%= userId %>">
     </div>
+	
+	<div class="mpinBtnBox">
+		<div class="mpinButton" id="mpin_setup">
+			<%=hlp.text( "setup_button_setup") %>
+		</div>
+	</div>
 
-  </div>
-
-  <div class="identityMainText">
-      <div>
-        <%=hlp.text( "setup_text2") %>
-      </div>
-  </div>
-
+	
+	<info class="mpinHelpInfo" id="mpin_help">
+		<i></i>
+		<%= hlp.text( "home_hlp_link") %>
+	</info>
+	
 </div>
 
-<div id="bottomBtnHolder">
-    <button class="mpinBtn" id="mp_action_setup">
-        <span class="btnLabel"><%=hlp.text( "setup_button_setup") %></span>
-    </button>
-</div>
 
-<div id="mpinFooter">
-    <div id="homeBtn">
-    </div>
+<div class="mpinFooter">
+	<div class="mpinPowered"></div>
+	<div class="mpinHelpHub mpPointer" id="mpin_helphub"></div>
 </div>
