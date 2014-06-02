@@ -28,6 +28,12 @@
 	}
 }
 
+.mpinHeaderBig {
+	#mpinLogo {
+		@include logo();
+	}
+}
+
 .mpinHeaderRow {
 	padding: 2vh;
 	font-size: 13px;
@@ -81,7 +87,13 @@
 	.mpinCenter5 {
 		padding-top: 5% !important;
 	}
-	
+
+	&.mpNoHeight {
+		height: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+
 	.mpinCenter {
 		width: 90%;
 		margin:0 auto;
@@ -100,17 +112,63 @@
 		.mpinIdentityText {
 			color: red;
 		}
+		&.mpHomeTxt {
+			font-size: 120%;
+			padding-bottom: 2vh;
+		}
 	}
+
+	.mpinInfo {
+		background-image: url('#{$IMAGES}info.svg');
+		background-repeat: no-repeat;
+		background-position: bottom;
+		width: 25px;
+		height: 25px;
+		display: inline-block;
+		margin-right: 3px;
+		margin-bottom: -3px;
+	}
+
+	&.mpinAnimateIn {
+		transition: all 0.5s ease-in;
+	}
+	&.mpinAnimateOut {
+		transition: all 0.5s ease-out;
+	}
+}
+
+.mpinInfoCenter {
+	background-image: url('#{$IMAGES}info.svg');
+	background-repeat: no-repeat;
+	background-position: bottom;
+	width: 23px;
+	height: 23px;
+	display: inline-block;
+	margin-right: 3px;
+	margin-bottom: -3px;
+	position: absolute;
+	left: 18%;
+	cursor: pointer;
+	
 }
 
 .mpLeft20 {
 	margin-left: 20px;
 }
 
+.mpWrapped {
+	width: 90%;
+	word-wrap: break-word;
+}
 
 
 .mpHide {
 	display: none;
+}
+
+.mpZero {
+	height: 0px;
+	padding: 0px;
 }
 
 .mpPointer {
@@ -120,7 +178,9 @@
 .mpPaddTop10 {
 	padding-top: 10px;
 }
-
+.mpTop25per {
+	padding-top: 25%;
+}
 .mp10Down {
 	margin-down: 10px;
 }
@@ -128,7 +188,7 @@
 .mpinFooterRow {
 	position: absolute;
 	bottom: 10%;
-	height: 6%;
+	min-height: 6%;
 	width: 100%;
 }
 
@@ -147,5 +207,10 @@
 	}
 	.mpinPowered {
 		@include footer-copyright();
+	}
+
+	&.mpinFooterHome {
+		border: none;
+		bottom: 2vh;
 	}
 }

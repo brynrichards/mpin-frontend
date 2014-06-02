@@ -109,9 +109,14 @@
 	font-style: italic;
 	font-weight: bold;
 	
-	div {
+	.mpLabel {
 		display: table-cell;
+	}
+	
+	div {
+		/*display: table-cell;*/
 		vertical-align: middle;
+		text-align: center;
 	}
 }
 
@@ -135,7 +140,7 @@
 	
 	.mpinGrTxt {
 		text-align: center;
-		padding: 5px;
+		padding: 2px;
 		margin: 5px;
 	}
 	
@@ -176,4 +181,6 @@
 	color: #248ACB;
 	text-align: center;
 	padding: 5px;
+	
+	font-size: 14px;
 }

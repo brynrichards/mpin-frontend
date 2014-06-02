@@ -1,30 +1,39 @@
-<div id="header">
-    <div id="mpinLogo"></div>
+<div class="mpinHeaderBig">
+	<div id="mpinLogo"></div>
 </div>
-  
+
 <div class="mpinIntroText">
-	<%=hlp.text("home_intro_text") %>
+	<%=hlp.text( "home_intro_text") %>
 </div>
 
-<div id="renderMobileHome"></div>
+<div class="mpinMain mpPaddTop10"> 
+	<div class="mpinBtnBox">
+	
+		<div class="mpinButton mpGreen mpBtnHome" id="mpin_mobile">
+			<%=hlp.text( "signin_mobile_btn_text") %>
+			<p>
+				<%=hlp.text( "signin_btn_mobile2")%>
+			</p>
+			
+		</div>
+		
+		<div class="mpinCenter mpinCenter5 mpHomeTxt">
+			<%=hlp.text( "home_txt_between_btns") %>
+		</div>
+		
 
-<div id="buttonsContainer">
-    <div class="mpinBtn mpinBlueBtn" id="mpin_desktop">
-        <span class="btnLabel">
-			<span class="mpinBold">
-				<%=hlp.text( "signin_btn_desktop1") %>
-			</span>
-			<%=hlp.text( "signin_btn_desktop2") %>
-		</span>
-    </div>
+		<div class="mpinButton mpBtnHome" id="mpin_desktop">
+			<%=hlp.text( "signin_btn_desktop1") %>
+			<p>
+			<%=hlp.text( "signin_btn_desktop2")%>
+			</p>
+		</div>
+	</div>
+</div>
 
+<div class="mpinFooter mpinFooterHome">
 	<info class="mpinHelpInfo" id="mpin_help">
 		<i></i>
 		<%= hlp.text( "home_hlp_link") %>
 	</info>
-</div>
-
-<div id="mpinFooter">
-	<a href="#" class="mpinHelpHub" id="mpin_desktop_hub"></a>
-    <div id="homeBtn"></div>
 </div>

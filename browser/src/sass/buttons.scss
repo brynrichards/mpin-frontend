@@ -3,7 +3,8 @@
 	padding: 5%;
 	
 	.mpinButton {
-		border: 1px solid transparent !important;
+		/*border: 1px solid transparent !important;*/
+		border: 1px solid transparent;
 		border-radius: 0.3em;
 		background: #007cc2;
 		cursor: pointer;
@@ -17,9 +18,33 @@
 		margin-bottom: 3%;
 		line-height: 120%;
 		/*margin: 0 auto;*/
+		
+		&.mpBtnHome {
+			padding-left: 0px;
+			padding-right: 0px;
+			font-size: 90%;
+		}
+		p {
+			font-size: 85%;
+		}
+		
+	}
+	&.mpNoPadding {
+		padding-top:0;
+		padding-bottom:0;
 	}
 	
 	.mpGreen {
 		background: #00a800;
+	}
+	.mpBtnOnlyGreen {
+		background: none;
+		color: #00a800;
+		border-color: #00a800;
+	}
+	.mpBtnOnlyBlue {
+		background: none;
+		color: #007cc2;
+		border-color: #007cc2;
 	}
 }

@@ -10,12 +10,11 @@
 
 
 <div class="mpinMain mpinPinpad">
-	<div class="mpinInput">
+	<div class="mpinInput" id="mpin_input_parent">
 	
 		<div class="mpinInputIn mpHide" id="mpin_input_circle">
 			<div class="mpinCircle" id="mpin_circle_1">
 				<div class="mpinCircleOut"></div>
-				<!-- <div class="mpinCircleIn"></div> -->
 			</div>
 			
 			<div class="mpinCircle" id="mpin_circle_2">
@@ -29,10 +28,10 @@
 			</div>
 		</div>
 		
-		<div class="mpinInputIn mpin75width" id="mpin_input_text">
+		<div class="mpinInputIn mpin80width" id="mpin_input_text">
 			<i id="mpin_help_pinpad"></i>
-				<span class="mpinInputText">
-					CREATE YOUR M-PIN:<br>
+				<span class="mpinInputText" id="mpin_inner_text">		
+					CREATE YOUR M-PIN:
 					CHOOSE 4 DIGITS
 				</span>
 		</div>
@@ -81,21 +80,19 @@
     </div>
     <div class="mpin-pre-row">
         <div class="mpin-row mpin-bottom">
-            <button class="mpinPadBtn mpinPadBtnClear" data-value="clear" id="mpin_clear">
+            <button class="mpinPadBtn2 mpinBtnDisabled" data-value="clear" id="mpin_clear">
                 clear
             </button>
             <button class="mpinPadBtn" data-value="0">
                 0
             </button>
-            <button class="mpinPadBtn mpinPadBtnLogin" data-value="go" id="mpin_setup">
+            <button class="mpinPadBtn2 mpinBtnDisabled" data-value="go" id="mpin_login">
                 setup
             </button>
         </div>
     </div>
 
 </div>
-
-
 
 
 

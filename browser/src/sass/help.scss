@@ -48,16 +48,16 @@ help#mpinHelpTag {
 	.mpinGrey {
 		background: #7E7E7E;
 	}
-	
+
 	.mpinGreen {
 		background: #44A800;
 		margin-bottom: 10px;
 	}
-	
+
 	.mpinHelpText {
 		height: 75%;
 	}
-	
+
 }
 
 info.mpinHelpInfo {
@@ -79,26 +79,37 @@ info.mpinHelpInfo {
 		position: relative;
 		top: 5px;
 	}
-	
+
 	&.helpHubTitle {
 		bottom: auto;
 		position: relative;
 		font-weight: bold;
 		padding: 10px;
-		border-bottom: 1px solid grey;
+		border-bottom: 1px solid #EAEAEA;
 		font-size: 100%;
 	}
+	&.mpinInitialPos {
+		position: initial;
+	}
+	
 }
 
 .mpinHelpBlock {
+	/*width: 90%;*/
+	margin: 0px auto;
+	overflow: hidden;
+	/*margin-bottom: 15px;*/
 	& ul {
 		/*list-style-type:disc;*/
 	}
 	& li {
-		border-bottom: 1px solid grey;
-		padding: 8px;
+		border-bottom: 1px solid #EAEAEA;
+		padding: 10px 20px;
 		margin: 0px;
 		cursor: pointer;
+	}
+	p {
+		padding: 10px 20px;
 	}
 }
 
@@ -112,15 +123,4 @@ info.mpinHelpInfo {
 
 .mpinPurple {
 	color: #F44373;
-}
-
-.mpinHelpBlock {
-	width: 90%;
-	margin: 0px auto;
-	overflow: hidden;
-	margin-bottom: 15px;
-
-	p {
-		padding: 5px;
-	}
 }

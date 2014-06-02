@@ -4,10 +4,29 @@
 	margin: 0 auto;
 	padding: 1%;
 
+
+
+	&.mpinInputError {
+		border: 1px solid red;
+		color: red;
+	}
+
 	.mpinInputIn {
 		margin: 0 auto;
-		width: 65%;
+		width: 67%;
 		padding: 1%;
+
+		& i {
+			background-image: url('#{$IMAGES}info.svg');
+			display: block;
+			width: 21px;
+			height: 35px;
+			float:left;
+			background-repeat: no-repeat;
+			background-position:center; 
+			margin-right: 5px;
+			cursor: pointer;
+		}
 	}
 
 	.mpinCircle {
@@ -26,7 +45,7 @@
 			border-radius: 48px;
 			position: absolute;
 			z-index: 1000;
-			
+
 			@include border-radius(48px);
 		}
 		.mpinCircleOut {
@@ -41,20 +60,28 @@
 			z-index: 800;
 		}
 	}
-	
-	
+
+
 	.mpinInputText {
 		text-align: center;
-		line-height: 16px;
+		line-height: 20px;
 		font-weight: bold;
+		&.mpinInputTop {
+			display: block;
+			margin-top: 9px;
+		}
 	}
-	
-	.mpin75width {
+
+	.mpin80width {
 		/*width: 75% !important;*/
-		width: 75%;
+		width: 80%;
+		text-align: center;
 	}
 	
-	
+	.mpin70width {
+		width: 70%;
+		text-align: center;
+	}
 }
 
 .mpin-pre-row {
@@ -66,7 +93,7 @@
 
 		height: 100%;
 
-		.mpinPadBtn {
+		.mpinPadBtn, .mpinPadBtn2 {
 			border: 0;
 			background: none;
 			color: #fff;
@@ -78,6 +105,9 @@
 			&:active {
 				background: #3777ba;
 			}
+		}
+		.mpinBtnDisabled {
+			opacity: 0.5;
 		}
 	}
 

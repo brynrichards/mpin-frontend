@@ -3,7 +3,8 @@
 	margin: 0 auto;
 	border: 1px solid grey;
 
-	max-height: 50%;
+	/*max-height: 70%;*/
+	height: 60%;
 	overflow: hidden;
 
 	@include border-radius(7px);
@@ -14,6 +15,10 @@
 		width: 100%;
 		line-height: 35px;
 		border-bottom: 1px solid grey;
+		&.mpinRowActive {
+			background: #007cc2;
+			color: #fff;
+		}
 	}
 
 	.mpinRow:hover {
