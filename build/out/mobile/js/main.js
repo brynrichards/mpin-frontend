@@ -1370,7 +1370,9 @@ var mpin = mpin || {};
                     console.log("authenticate arguments :", arguments);
                     if (success) {
                         self.successLogin(authData);
-                    } else if (errorCode === "INVALID") {
+                    } else if (arguments[1] === "INVALID") {
+
+                        console.log("Err code INVADLID", errorCode);
                         self.display(hlp.text("authPin_errorInvalidPin"), false);
  
                         self.enableNumberButtons(true);
@@ -1642,7 +1644,10 @@ var mpin = mpin || {};
         if (this.opts.successLoginURL) {
             window.location = this.opts.successLoginURL;
         } else if (this.opts.onSuccessLogin) {
-            this.opts.onSuccessLogin(authData);
+
+            console.log("Dump na authData, ", authData.logoutData.userId);
+
+            this.render("success-login", {}, {email: authData.logoutData.userId});
         }
     };
  
@@ -1854,7 +1859,10 @@ var mpin = mpin || {};
         "mobile_add_home_ios7": "Tap the <img src='resources/templates/gradient/img/ios7-share.png'/> icon to 'Add to homescreen'",
         "help_text_1": "Simply choose a memorable <b>[4 digit]</b> PIN to assign to this identity by pressing the numbers in sequence followed by the 'Setup' button to setup your PIN for this identity",
         "help_ok_btn": "Ok, Got it",
-        "help_more_btn": "I'm not sure, tell me more"
+        "help_more_btn": "I'm not sure, tell me more",
+        "logout_btn": "Sign out",
+        "success_header": "Success",
+        "success_text": "You are now signed in as:"
     };
     //  image should have config properties
     hlp.img = function(imgSrc) {

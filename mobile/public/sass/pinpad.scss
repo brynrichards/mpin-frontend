@@ -11,6 +11,8 @@
 	padding-top: 10px;
 	margin-top: 40px;
 
+	width:100%;
+
 	-webkit-box-orient: horizontal;
 	-ms-flex-direction: row;
 	flex-direction: row;
@@ -41,7 +43,8 @@
 }
 
 #circlesHolder {
-
+	text-align: center;
+	margin:0 auto;
 }
 
 #pinsHolder {
