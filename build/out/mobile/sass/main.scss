@@ -186,6 +186,15 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		
 		@include account-top-bar();
 
+		transition: all 0.5s ease-in-out;
+		overflow: hidden;
+
+		position: relative;
+		width: 100%;
+		z-index: 9999;
+		height: 35px;
+		position: absolute;
+
 		-webkit-box-orient: horizontal !important;
 		-ms-flex-direction: row !important;
 		flex-direction: row !important;
@@ -210,9 +219,15 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			
 			@include box-flex-value(1.0);
 			@include mpin-user();
+
+			position: absolute;
+			top: 0;
 		}
 
 		#menuBtn {
+			z-index: 10000;
+			position: absolute;
+			right: 0;
 			display: block;
 			overflow: hidden;
 			border: none;
@@ -224,6 +239,32 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			min-height: 1.8em;
 			padding: .3em .6em;
 			@include mpin-menu();
+
+
+			-moz-transition: all 0.5s ease;
+			-webkit-transition: all 0.5s ease;
+			-o-transition: all 0.5s ease;
+			transition: all 0.5s ease;
+
+			&.close {
+				bottom: 0;
+				right: 10px;
+				-webkit-transition-timing-function: ease-in-out;
+				-moz-transform:rotate(180deg);
+				-webkit-transform: rotate(180deg);
+				-o-transform:rotate(180deg);
+				transform:rotate(180deg);
+			}
+
+			&.up {
+				bottom: 0;
+				right: 10px;
+				-moz-transform:rotate(0deg);
+				-webkit-transform: rotate(0deg);
+				-o-transform:rotate(0deg);
+				transform:rotate(0deg);
+
+			}
 		}
 
 	}
@@ -307,6 +348,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		.inputContainer {
 
 			min-height: 0 !important;
+
+			position: relative;
 
 			display: flex;
 			display: -webkit-box;
@@ -528,7 +571,16 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 // Activate Identity Screen
 
 #mp_accountListView {
+
+	// Style rounded
+
+	border: 1px solid black;
 	color: white;
+	margin-left: 30px;
+	margin-right: 30px;
+	border-radius: 9px;
+	overflow-x: hidden;
+	overflow-y: auto;
 
 	.default {
 		background: #3c9dcb;
@@ -538,10 +590,16 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		float: right;
 	}
 
+	.mp_titleItem {
+		position: relative;
+		top: 17px;
+		text-align: center;
+	}
+
 	.mp_buttonItem {
 		display: block;
 		position: absolute;
-		top: 10px;
+		top: 7px;
 		right: 10px;
 		z-index: 9999;
 		cursor: pointer;
@@ -549,6 +607,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		img {
 			background-color: white;
 			border-radius: 4px;
+			width: 40px;
 		}
 	}
 }
@@ -560,20 +619,26 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 }
 
 #mp_back {
-	position: absolute;
+	position: relative;
 	width: 100%;
 	height: 100%;
-	top: 0;
+	top: 100px;
 	left: 0;
 	right: 0;
-	@include bg-color();
 	z-index: 999;
+
+	-webkit-transition: all .05 ease-in-out;
+	-moz-transition: all .05 ease-in-out;
+	-o-transition: all .05 ease-in-out;
+	transition: all .05 ease-in-out;
 }
 
 .circle {
 	width: 50px;
 	height: 50px;
-	
+
+	display: inline-block;
+
 	.outer-circle {
 		background: #E4E4E4;
 		width: 32px;
@@ -581,23 +646,19 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		-webkit-border-radius: 61px;
 		-moz-border-radius: 61px;
 		border-radius: 61px;
-		border: 1px solid #aaaaaa;
+		border: 2px solid #666666;
 		position: absolute;
 		z-index: 800;
-		-webkit-transition: all .2s ease-in-out;
-		-moz-transition: all .2s ease-in-out;
-		-o-transition: all .2s ease-in-out;
-		transition: all .2s ease-in-out;
 	}
 
 	.inner-circle {
-		margin: 4px;
+		margin: 7px;
 		background: #3A7FB9;
-		width: 24px;
-		height: 24px;
+		width: 18px;
+		height: 18px;
 		font-size: 11px;
 		color: #FFF;
-		line-height: 24px;
+		line-height: 18px;
 		text-align: center;
 		font-family: Arial;
 		-webkit-border-radius: 48px;
@@ -606,10 +667,18 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		-webkit-box-shadow: inset 0px 1px 1px 0px #575757;
 		-moz-box-shadow: inset 0px 1px 1px 0px #575757;
 		box-shadow: inset 0px 1px 1px 0px #575757;
-		border-bottom: 1px solid #D8F8F8;
+		border: 2px solid #d1f7ff;
 		position: absolute;
 		z-index: 1000;
+		-webkit-transition: all .5s ease-in-out;
+		-moz-transition: all .5s ease-in-out;
+		-o-transition: all .5s ease-in-out;
+		transition: all .5s ease-in-out;
 	}
+}
+
+#rotateLock {
+	display: none;
 }
 
 // Import mediaqueries

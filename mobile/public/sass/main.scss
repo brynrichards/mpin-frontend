@@ -50,13 +50,6 @@ html, body {
 	margin: 0;
 }
 
-// Animations
-
-@-webkit-keyframes rotate {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(180deg); }
-}
-
 body {
 
 
@@ -193,6 +186,15 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		
 		@include account-top-bar();
 
+		transition: all 0.5s ease-in-out;
+		overflow: hidden;
+
+		position: relative;
+		width: 100%;
+		z-index: 9999;
+		height: 35px;
+		position: absolute;
+
 		-webkit-box-orient: horizontal !important;
 		-ms-flex-direction: row !important;
 		flex-direction: row !important;
@@ -217,9 +219,15 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			
 			@include box-flex-value(1.0);
 			@include mpin-user();
+
+			position: absolute;
+			top: 0;
 		}
 
 		#menuBtn {
+			z-index: 10000;
+			position: absolute;
+			right: 0;
 			display: block;
 			overflow: hidden;
 			border: none;
@@ -232,12 +240,29 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			padding: .3em .6em;
 			@include mpin-menu();
 
+
+			-moz-transition: all 0.5s ease;
+			-webkit-transition: all 0.5s ease;
+			-o-transition: all 0.5s ease;
+			transition: all 0.5s ease;
+
 			&.close {
-				-webkit-animation-name: rotate; 
-				-webkit-animation-duration: 0.5s; 
-				-webkit-animation-iteration-count: 1;
-				-webkit-animation-fill-mode: forwards;
+				bottom: 0;
+				right: 10px;
 				-webkit-transition-timing-function: ease-in-out;
+				-moz-transform:rotate(180deg);
+				-webkit-transform: rotate(180deg);
+				-o-transform:rotate(180deg);
+				transform:rotate(180deg);
+			}
+
+			&.up {
+				bottom: 0;
+				right: 10px;
+				-moz-transform:rotate(0deg);
+				-webkit-transform: rotate(0deg);
+				-o-transform:rotate(0deg);
+				transform:rotate(0deg);
 
 			}
 		}
@@ -323,6 +348,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		.inputContainer {
 
 			min-height: 0 !important;
+
+			position: relative;
 
 			display: flex;
 			display: -webkit-box;
@@ -544,9 +571,16 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 // Activate Identity Screen
 
 #mp_accountListView {
+
+	// Style rounded
+
+	border: 1px solid black;
 	color: white;
-	padding-left: 30px;
-	padding-right: 30px;
+	margin-left: 30px;
+	margin-right: 30px;
+	border-radius: 9px;
+	overflow-x: hidden;
+	overflow-y: auto;
 
 	.default {
 		background: #3c9dcb;
@@ -585,13 +619,12 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 }
 
 #mp_back {
-	position: absolute;
+	position: relative;
 	width: 100%;
 	height: 100%;
-	top: 0;
+	top: 100px;
 	left: 0;
 	right: 0;
-	@include bg-color();
 	z-index: 999;
 
 	-webkit-transition: all .05 ease-in-out;

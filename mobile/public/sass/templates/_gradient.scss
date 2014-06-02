@@ -52,7 +52,7 @@ $BORDERLESS : true;
 	}
 }
 
-@mixin pins-holder() {
+@mixin pinpad() {
 	background: #3777ba; /* Old browsers */
 	background: -moz-linear-gradient(top,  #3777ba 0%, #2989d8 10%, #56bce0 47%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3777ba), color-stop(10%,#2989d8), color-stop(47%,#56bce0)); /* Chrome,Safari4+ */
@@ -62,6 +62,18 @@ $BORDERLESS : true;
 	background: linear-gradient(to bottom,  #3777ba 0%,#2989d8 10%,#56bce0 47%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3777ba', endColorstr='#56bce0',GradientType=0 ); /* IE6-9 */
 }
+
+@mixin pinpad-accessnumber() {
+	background: #45a900; /* Old browsers */
+	background: -moz-linear-gradient(top,  #45a900 0%, #45a900 53%, #45a900 53%, #72cf41 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#45a900), color-stop(53%,#45a900), color-stop(53%,#45a900), color-stop(100%,#72cf41)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #45a900 0%,#45a900 53%,#45a900 53%,#72cf41 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #45a900 0%,#45a900 53%,#45a900 53%,#72cf41 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #45a900 0%,#45a900 53%,#45a900 53%,#72cf41 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #45a900 0%,#45a900 53%,#45a900 53%,#72cf41 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45a900', endColorstr='#72cf41',GradientType=0 ); /* IE6-9 */
+}
+
 
 @mixin account-top-bar() {
 	color: black;

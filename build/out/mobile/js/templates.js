@@ -2,13 +2,6 @@
     mpin.template = {};
     mpin.template['accounts-panel'] = ['<!-- Home/Top Nav Bar -->',
         '',
-        '<header id="topNav">',
-        '    <div id="mp_action_home">',
-        '    </div>',
-        '    <div id="mpinLogo">',
-        '    </div>',
-        '</header>',
-        '',
         '<div id="mp_accountListView" class="PinPadListViewSkin">',
         '    <div class="mp_customScrollBox">',
         '        <div class="mp_container">',
@@ -24,8 +17,7 @@
         '          <span class="btnLabel"><%=hlp.text( "noaccount_button_add") %></span>',
         '    </div>',
         '',
-        '</div>',
-        ''].join('');
+        '</div>'].join('');
 
     mpin.template['activate-identity'] = ['<!-- Home/Top Nav Bar -->',
         '',
@@ -633,16 +625,17 @@
         '',
         '<div id="accountTopBar">',
         '    <div id="mpinUser">',
-        '        <p><%= email %> <% console.log("cfg :::", cfg); %></p>',
+        '        <!-- <p><%= email %> <% console.log("cfg :::", cfg); %></p> -->',
+        '        <p>alice@domaintest.com</p>',
         '    </div>',
         '		<a href="#" id="menuBtn"></a>',
         '</div>',
         '',
         '<div id="inputContainer">',
-        '    <input id="pinpad-input" type="password" readonly="true" placeholder="<%= hlp.text("pinpad_placeholder_text") %>">',
+        '',
+        '    <input style="display: none;" id="pinpad-input" type="password" readonly="true" placeholder="<%= hlp.text("pinpad_placeholder_text") %>">',
         '    <div class="circle">',
         '        <div class="outer-circle"></div>',
-        '        <div class="inner-circle"></div>',
         '    </div>',
         '    <div class="circle">',
         '        <div class="outer-circle"></div>',
@@ -723,10 +716,10 @@
 
     mpin.template['user-row'] = ['<div id="mp_StarIcon_<%= iNumber %>" class="mp_starIcon" tabindex=-1></div>',
         '<div class="mp_titleItem" title="<%= name %>">',
-        '    <%=name %>',
+        '    <%=name %> alice@your-domain.com',
         '</div>',
         '<div id="mp_btIdSettings_<%= iNumber %>" class="mp_buttonItem">',
-        '    <img src="<%= hlp.img("id-settings.svg") %>" tabindex=-1/>',
+        '    <img src="<%= hlp.img("cog-setting.svg") %>" tabindex=-1/>',
         '</div>'].join('');
 
     mpin.template['user-settings'] = ['    <!-- Home/Top Nav Bar -->',

@@ -99,17 +99,17 @@ var mpin = mpin || {};
         document.ontouchmove = function(e){ e.preventDefault(); }
  
         //this.renderSetupHome();
-//      this.renderMobileSetup();
+        // this.renderMobileSetup();
         // Check for appID
-        // this.renderHomeMobile();
-        this.renderSetup();
+        this.renderHomeMobile();
+        // this.renderSetup()
         // this.setOptions(options).renderHome();
         // this.setOptions(options).renderSetupHome();
         // this.setOptions(options);
  
         // Caching - monitor if new version of the cache exists
  
-        setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
+        setInterval(function () { window.applicationCache.update(); }, 1000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
  
         window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
                 window.applicationCache.swapCache(); //swap to the newest version of the cache
@@ -194,7 +194,6 @@ var mpin = mpin || {};
 
         for (k in callbacks) {
             if (document.getElementById(k)) {
-                console.log('I render the callback', callbacks[k]);
                 document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
                 document.getElementById(k).addEventListener('click', callbacks[k], false);
     
@@ -203,7 +202,6 @@ var mpin = mpin || {};
         if (typeof mpin.custom !== 'undefined') {
             this.setCustomStyle();
         }
-
     };
 
     mpin.prototype.dismissHelp = function() {
@@ -227,6 +225,7 @@ var mpin = mpin || {};
     };
  
     mpin.prototype.renderHome = function() {
+
         var callbacks = {}, self = this;
  
         if (this.opts.prerollid) {
@@ -257,7 +256,7 @@ var mpin = mpin || {};
     };
     mpin.prototype.renderHomeMobile = function() {
         var callbacks = {}, self = this, identity;
- 
+
         if (this.opts.prerollid) {
             this.renderSetup(this.opts.prerollid);
         }
@@ -280,6 +279,10 @@ var mpin = mpin || {};
         callbacks.info = function(evt) {
             // Show the help item
             self.renderHelp("help-setup-home", callbacks);
+        };
+
+        callbacks.mp_action_setup = function(evt) {
+            self.actionSetupHome.call(self, evt);
         };
  
         identity = this.ds.getDefaultIdentity();
@@ -364,7 +367,7 @@ var mpin = mpin || {};
  
         this.render("setup", callbacks, {email: email});
  
-        document.body.className = 'pinpadGlobal'
+        document.body.className = 'pinpadGlobal';
  
         this.enableNumberButtons(true);
         this.bindNumberButtons();
@@ -374,9 +377,11 @@ var mpin = mpin || {};
     };
  
     mpin.prototype.renderLogin = function(listAccounts) {
+
         var callbacks = {}, self = this;
  
         this.isAccNumber = true;
+
         var identity = this.ds.getDefaultIdentity();
         var email = this.getDisplayName(identity);
         if (!identity) {
@@ -397,7 +402,7 @@ var mpin = mpin || {};
         callbacks.mpinLogin = function() {
             var pinpadDisplay = document.getElementById("pinpad-input");
  
-            console.log('isAccNumber', self.isAccNumber);
+            console.log('###############################isAccNumber', self.isAccNumber);
  
             if (self.isAccNumber) {
                 self.accessNumber = pinpadDisplay.value;
@@ -420,6 +425,37 @@ var mpin = mpin || {};
         //set placeholder to access Number text
         pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
         pinpadDisplay.type = "text";
+
+        // Remove circles
+
+        var circles = document.getElementsByClassName("circle");
+        for (var i = 0; i < circles.length; i++) {
+
+            circles[i].style.display = 'none';
+        }
+
+        // Change class if ac number
+
+        var pinPad = document.getElementById('pinsHolder');
+        var pinpadContainer = document.getElementById('inputContainer');
+        pinPad.className = 'access-number';
+
+        var renderElem = pinpadContainer.appendChild(document.createElement("div"));
+        renderElem.id = "enterAccNumber";
+        renderElem.innerHTML = "Enter you access number";
+        
+        // Create dummy input els
+        if (this.isAccNumber) {
+
+            console.log('I am ac num', this.opts.accessNumberDigits )
+            for (var i = this.opts.accessNumberDigits - 1; i >= 0; i--) {
+                var circleA = document.createElement("div");
+                circleA.className = "circle";
+                pinpadContainer.appendChild(circleA);
+            };
+        };
+        
+        
  
         //fix - there are two more conditions ...
         if (listAccounts) {
@@ -588,21 +624,29 @@ var mpin = mpin || {};
  
 //custom render 
     mpin.prototype.renderAccountsPanel = function() {
+
         var self = this, 
+            callbacks = {},
             renderElem, 
             addEmptyItem, 
             c = 0, 
-            mpBack = document.getElementById('mp_back');
- 
+            mpBack = document.getElementById('mp_back'),
+            menuBtn = document.getElementById('menuBtn');
+
+        menuBtn.onclick = function(evt) {
+            document.getElementById('accountTopBar').style.height = "";
+            menuBtn.className = 'up';
+
+        };
+
         addEmptyItem = function(cnt) {
             var p = document.createElement("div");
             p.className = "mp_contentEmptyItem";
             cnt.appendChild(p);
         };
  
- 
         addMpinBack = function () {
-            renderElem = document.getElementById('mpinMaster').appendChild(document.createElement("div"));
+            renderElem = document.getElementById('accountTopBar').appendChild(document.createElement("div"));
             renderElem.id = "mp_back";
             mpBack = document.getElementById("mp_back");
             mpBack.innerHTML = self.readyHtml("accounts-panel", {});
@@ -614,8 +658,6 @@ var mpin = mpin || {};
             addMpinBack();
             mpBack.style.display = 'block';
  
-            console.log("Trying to call here again");
- 
  
             document.getElementById("mp_acclist_adduser").onclick = function(evt) {
                 self.renderSetupHome.call(self, evt);
@@ -624,6 +666,9 @@ var mpin = mpin || {};
         }
  
         //default IDENTITY
+
+        // Appending happens here
+
         var cnt = document.getElementById("mp_accountContent");
         this.addUserToList(cnt, this.ds.getDefaultIdentity(), true, 0);
  
@@ -632,6 +677,7 @@ var mpin = mpin || {};
             if (i != this.ds.getDefaultIdentity())
                 this.addUserToList(cnt, i, false, c);
         }
+
         addEmptyItem(cnt);
     };
  
@@ -910,7 +956,22 @@ var mpin = mpin || {};
             // document.getElementById('mp_back').remove();
  
             function mEventsHandler(e) {
+
+                var parent = document.getElementById("inputContainer");
+                var child = document.getElementById("enterAccNumber");
+                
                 // if (e.type == "touchstart") {
+
+                if(self.isAccNumber && parent.contains(child)) {
+                    parent.removeChild(child);
+                }
+
+                var circles = document.getElementsByClassName("circle");
+
+                for (var i = circles.length - 1; i >= 0; i--) {
+                    circles[i].style.display = 'block';
+                };
+
                 self.addToPin(e.target.getAttribute("data-value"));
                 // return false;
  
@@ -934,8 +995,36 @@ var mpin = mpin || {};
     };
     //
     mpin.prototype.addToPin = function(digit) {
- 
+
+        // console.log("%c Getting here", "background: blue; color: white;");
+
+        var pinpadContainer = document.getElementById('inputContainer');
+        
         var pinElement = document.getElementById('pinpad-input');
+        var circles = document.getElementsByClassName("circle");
+
+        // Add circles
+
+        var element = document.createElement("div");
+        element.className = 'inner-circle';
+        element.style.opacity = 0;
+        element.style.width = "36px";
+        element.style.height = "36px";
+        element.style.margin = "0px";
+
+        // window.getComputedStyle(element).opacity;
+
+        // // Fade it in.
+        // element.style.opacity = 1;
+
+        setTimeout(function () {
+          // Fade it in.
+          element.style.opacity = 1;
+          element.style.width = "18px";
+          element.style.height = "18px";
+          element.style.margin = "7px";
+        }, 0);
+
         //pinElement.setAttribute('type', 'password')
  
         if (digit === 'clear') {
@@ -943,6 +1032,13 @@ var mpin = mpin || {};
             this.enableNumberButtons(true);
             this.enableButton(false, "go");
             this.enableButton(false, "clear");
+            for (var i = 0; i < circles.length; i++) {
+
+                if (circles[i].querySelector('.inner-circle')) {
+                    circles[i].removeChild(element);
+                }
+            }
+            
             return;
         }
  
@@ -961,21 +1057,27 @@ var mpin = mpin || {};
         }
  
         pinElement.value += digit;
+        console.log("LENGTH::", pinElement.value.length);
+
+        var addToDivNum =  pinElement.value.length -1;
+        circles[addToDivNum].appendChild(element);
+
+        // for (var i = 0; i < circles.length; i++) {
+        //     console.log("What I dump here", circles[i], "+", i, (!circles[i].querySelector('.inner-circle')));
+
+        //     if (!circles[i].querySelector('.inner-circle')) {
+        //     }
+        // }
  
         if (pinElement.value.length === 1) {
             this.enableButton(true, "clear");
-
-            var circles = document.getElementsByClassName("circle");
-            var element = document.createElement("div");
-            element.className = 'inner-circle';
-
-            for (var i = 0; i < circles.length; i++) {
-                circles[i].appendChild(element);
-            }
         }
  
         else if (this.isAccNumber) {
             if (pinElement.value.length === this.opts.accessNumberDigits) {
+
+                // Append the number of circles
+
                 this.enableNumberButtons(false);
                 this.enableButton(true, "go");
                 this.enableButton(true, "clear");
@@ -983,6 +1085,7 @@ var mpin = mpin || {};
         }
  
         else if (pinElement.value.length === this.cfg.pinSize) {
+
             this.enableNumberButtons(false);
             this.enableButton(true, "go");
             this.enableButton(true, "clear");
@@ -1013,11 +1116,6 @@ var mpin = mpin || {};
  
         var elemPass;
         elemPass = document.getElementById('pinpad-input');
-        // elemPass.classList.add('blue-bg');
-        if (this.isAccNumber) {
-            // Add class for the old version
-            // addClass(elemPass, "blue-bg");
-        }
         // Changed to convert the existing input to password type
 //      elemPass.setAttribute('type', 'password')
         elemPass.value = message;
@@ -1044,10 +1142,16 @@ var mpin = mpin || {};
  
     mpin.prototype.toggleButton = function() {
         var self = this;
- 
+        var accountTopBar = document.getElementById('accountTopBar')
+        var menuBtn = document.getElementById("menuBtn");
+
         // console.log(self);
- 
-        if (document.getElementById("menuBtn")) {
+
+        // if(menuBtn.classList.contains("close")) {
+        //     return;
+        // }
+
+        if (menuBtn && !menuBtn.classList.contains("close")) {
  
             console.log("set IDENTITY ;::", typeof this.setIdentity);
  
@@ -1056,17 +1160,16 @@ var mpin = mpin || {};
             }, function() {
                 return false;
             });
- 
+
+            accountTopBar.style.height = "calc(100% - 100px)"
+            menuBtn.className = 'close';
+
             this.renderAccountsPanel();
  
             removeClass("mp_toggleButton", "mp_SelectedState");
             removeClass("mp_panel", "mp_flip");
-        } else {
-            document.getElementById('mp_accountID').style.display = 'none';
-            this.renderAccountsPanel();
-            addClass("mp_toggleButton", "mp_SelectedState");
-            addClass("mp_panel", "mp_flip");
         }
+        
         return false;
     };
  
