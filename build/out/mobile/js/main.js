@@ -109,7 +109,7 @@ var mpin = mpin || {};
  
         // Caching - monitor if new version of the cache exists
  
-        setInterval(function () { window.applicationCache.update(); }, 1000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
+        // setInterval(function () { window.applicationCache.update(); }, 1000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
  
         window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
                 window.applicationCache.swapCache(); //swap to the newest version of the cache
@@ -1045,45 +1045,66 @@ var mpin = mpin || {};
         var pinpadContainer = document.getElementById('inputContainer');
         
         var pinElement = document.getElementById('pinpad-input');
-        var circles = document.getElementsByClassName("circle");
 
-        // Add circles
+        var ifDigit = new RegExp('[0-9]');
 
-        var element = document.createElement("div");
-        if(this.isAccNumber) {
-            element.className = 'inner-circle-green';
-        } else {
-            element.className = 'inner-circle';
+        console.log("############ ifDigit", (ifDigit.test(parseInt(digit))));
+
+        if(ifDigit.test(digit)) {
+
+            var circles = document.getElementsByClassName("circle");
+
+            // Add circles
+
+            var element = document.createElement("div");
+
+            if(this.isAccNumber) {
+                element.className = 'inner-circle-green';
+            } else {
+                element.className = 'inner-circle';
+            }
+            element.style.opacity = 0;
+            element.style.width = "36px";
+            element.style.height = "36px";
+            element.style.margin = "0px";
+
+            // window.getComputedStyle(element).opacity;
+
+            // // Fade it in.
+            // element.style.opacity = 1;
+
+            setTimeout(function () {
+              // Fade it in.
+              element.style.opacity = 1;
+              element.style.width = "18px";
+              element.style.height = "18px";
+              element.style.margin = "7px";
+            }, 0);
+
+            pinElement.value += digit;
+            console.log("LENGTH::", pinElement.value.length);
+
+            var addToDivNum =  pinElement.value.length -1;
+            circles[addToDivNum].appendChild(element);
         }
-        element.style.opacity = 0;
-        element.style.width = "36px";
-        element.style.height = "36px";
-        element.style.margin = "0px";
-
-        // window.getComputedStyle(element).opacity;
-
-        // // Fade it in.
-        // element.style.opacity = 1;
-
-        setTimeout(function () {
-          // Fade it in.
-          element.style.opacity = 1;
-          element.style.width = "18px";
-          element.style.height = "18px";
-          element.style.margin = "7px";
-        }, 0);
 
         //pinElement.setAttribute('type', 'password')
  
         if (digit === 'clear') {
 
-            console.log("Click here?");
+           var circles2 = document.getElementsByClassName("circle");
 
-            for (var i = 0; i < circles.length; i++) {
+            for (var i = 0; i < circles2.length; i++) {
 
-                if (circles[i].querySelector('.inner-circle')) {
-                    circles[i].removeChild(element);
+                var nodes = circles2[i].querySelector('.' + element.className);
+
+                if (circles2[i].querySelector('.' + element.className)) {
+
+                    console.log("Removing inner-circle?", circles2[i].querySelector('.' + element.className));
+                    circles2[i].removeChild(nodes);
                 }
+
+                pinElement.value = 0;
             }
             
             return;
@@ -1109,11 +1130,6 @@ var mpin = mpin || {};
             }
         }
  
-        pinElement.value += digit;
-        console.log("LENGTH::", pinElement.value.length);
-
-        var addToDivNum =  pinElement.value.length -1;
-        circles[addToDivNum].appendChild(element);
 
         // for (var i = 0; i < circles.length; i++) {
         //     console.log("What I dump here", circles[i], "+", i, (!circles[i].querySelector('.inner-circle')));
@@ -1166,6 +1182,8 @@ var mpin = mpin || {};
     };
     //showInPinPadDisplay
     mpin.prototype.display = function(message, isError) {
+
+        var self = this;
  
         var elemForErrcode = document.getElementById('codes');
 
@@ -1174,16 +1192,10 @@ var mpin = mpin || {};
             elemForErrcode.style.display = "block";
             elemForErrcode.className = "error";
             elemForErrcode.innerHTML = message;
+
+            self.addToPin("clear");
         } 
         
-        console.log("Comming here if error", message, isError);
-
-        /*
-         if (isError)
-         addClass(d, "pinpad-input_error")
-         else
-         removeClass(d, "pinpad-input_error")
-         */
     };
  
     mpin.prototype.getDisplayName = function(uId) {
