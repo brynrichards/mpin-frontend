@@ -1046,23 +1046,27 @@ var mpin = mpin || {};
         
         var pinElement = document.getElementById('pinpad-input');
 
+        var element;
+
         var ifDigit = new RegExp('[0-9]');
 
         console.log("############ ifDigit", (ifDigit.test(parseInt(digit))));
 
-        if(ifDigit.test(digit)) {
+        if(ifDigit.test(parseInt(digit))) {
 
             var circles = document.getElementsByClassName("circle");
 
             // Add circles
 
-            var element = document.createElement("div");
+            element = document.createElement("div");
 
             if(this.isAccNumber) {
                 element.className = 'inner-circle-green';
             } else {
                 element.className = 'inner-circle';
             }
+
+
             element.style.opacity = 0;
             element.style.width = "36px";
             element.style.height = "36px";
@@ -1082,6 +1086,8 @@ var mpin = mpin || {};
             }, 0);
 
             pinElement.value += digit;
+
+            console.log("pinElm value", pinElement.value);
             console.log("LENGTH::", pinElement.value.length);
 
             var addToDivNum =  pinElement.value.length -1;
@@ -1093,6 +1099,13 @@ var mpin = mpin || {};
         if (digit === 'clear') {
 
            var circles2 = document.getElementsByClassName("circle");
+           var element = {};
+
+           if(this.isAccNumber) {
+               element.className = 'inner-circle-green';
+           } else {
+               element.className = 'inner-circle';
+           }
 
             for (var i = 0; i < circles2.length; i++) {
 
@@ -1102,14 +1115,15 @@ var mpin = mpin || {};
 
                     console.log("Removing inner-circle?", circles2[i].querySelector('.' + element.className));
                     circles2[i].removeChild(nodes);
+
+                    pinElement.value = "";
+                    this.enableNumberButtons(true);
                 }
 
-                pinElement.value = 0;
             }
             
             return;
 
-            this.enableNumberButtons(true);
             this.enableButton(false, "go");
             this.enableButton(false, "clear");
 
