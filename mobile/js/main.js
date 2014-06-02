@@ -1048,11 +1048,20 @@ var mpin = mpin || {};
 
         var element;
 
+        var elemForErrcode = document.getElementById('codes');
+
+        var circlesHolder = document.getElementById('circlesHolder');
+
         var ifDigit = new RegExp('[0-9]');
 
         console.log("############ ifDigit", (ifDigit.test(parseInt(digit))));
 
         if(ifDigit.test(parseInt(digit))) {
+
+            // Hide codes
+
+            elemForErrcode.style.display = 'none';
+            circlesHolder.style.display = 'block';
 
             var circles = document.getElementsByClassName("circle");
 
@@ -1127,15 +1136,18 @@ var mpin = mpin || {};
             this.enableButton(false, "go");
             this.enableButton(false, "clear");
 
-
         }
  
         if (digit === 'login') {
  
             if (!this.isAccNumber) {
- 
+
                 pinElement.value = "";
-                pinElement.placeholder = hlp.text("pinpad_placeholder_text");
+ 
+                elemForErrcode.style.display = "block";
+                elemForErrcode.innerHTML = "Enter your pin";
+                circlesHolder.style.display = 'none';
+
                 pinElement.type = "password";
  
                 this.enableNumberButtons(true);
