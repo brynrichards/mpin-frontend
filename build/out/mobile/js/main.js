@@ -362,10 +362,28 @@ var mpin = mpin || {};
         callbacks.menuBtn = function() {
             self.toggleButton.call(self);
         };
- 
- 
- 
+
         this.render("setup", callbacks, {email: email});
+
+
+        var pinpadContainer = document.getElementById('inputContainer');
+
+        // Create dummy input els
+        if (!this.isAccNumber) {
+
+            console.log('I am pinpad', this.cfg.pinSize )
+            for (var i = this.cfg.pinSize - 1; i >= 0; i--) {
+                var circleA = document.createElement("div");
+                var circleB = document.createElement("div");
+
+                circleA.className = "circle";
+                circleB.className = "outer-circle";
+
+                circleA.appendChild(circleB);
+                pinpadContainer.appendChild(circleA);
+            };
+        } 
+        
  
         document.body.className = 'pinpadGlobal';
  
@@ -426,14 +444,6 @@ var mpin = mpin || {};
         pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
         pinpadDisplay.type = "text";
 
-        // Remove circles
-
-        var circles = document.getElementsByClassName("circle");
-        for (var i = 0; i < circles.length; i++) {
-
-            circles[i].style.display = 'none';
-        }
-
         // Change class if ac number
 
         var pinPad = document.getElementById('pinsHolder');
@@ -443,19 +453,22 @@ var mpin = mpin || {};
         var renderElem = pinpadContainer.appendChild(document.createElement("div"));
         renderElem.id = "enterAccNumber";
         renderElem.innerHTML = "Enter you access number";
-        
+
         // Create dummy input els
         if (this.isAccNumber) {
 
             console.log('I am ac num', this.opts.accessNumberDigits )
             for (var i = this.opts.accessNumberDigits - 1; i >= 0; i--) {
                 var circleA = document.createElement("div");
+                var circleB = document.createElement("div");
+
                 circleA.className = "circle";
+                circleB.className = "outer-circle";
+
+                circleA.appendChild(circleB);
                 pinpadContainer.appendChild(circleA);
             };
-        };
-        
-        
+        } 
  
         //fix - there are two more conditions ...
         if (listAccounts) {
