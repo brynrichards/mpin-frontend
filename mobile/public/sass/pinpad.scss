@@ -8,7 +8,6 @@
 	display: -ms-flexbox;
 
 	margin: 0 auto;
-	padding-top: 10px;
 	margin-top: 40px;
 
 	width:100%;
@@ -40,6 +39,20 @@
 
 	text-transform: uppercase;
 	font-weight: bold;
+
+	#codes {
+		
+		display: none;
+		text-align: center;
+		color: black;
+		width: 100%;
+		padding: 20px;
+
+		&.error {
+			color: red;
+			border: 1px solid red;
+		}
+	}
 }
 
 #circlesHolder {

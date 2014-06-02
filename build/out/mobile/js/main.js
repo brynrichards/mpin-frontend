@@ -470,8 +470,8 @@ var mpin = mpin || {};
         var circlesHolder = document.getElementById('circlesHolder');
         var pinpadContainer = document.getElementById('inputContainer');
 
-        var renderElem = pinpadContainer.appendChild(document.createElement("div"));
-        renderElem.id = "enterAccNumber";
+        var renderElem = document.getElementById('codes');
+        renderElem.style.display = 'block';
         renderElem.innerHTML = "Enter you access number";
 
         // Create dummy input els
@@ -995,12 +995,12 @@ var mpin = mpin || {};
             function mEventsHandler(e) {
 
                 var parent = document.getElementById("inputContainer");
-                var child = document.getElementById("enterAccNumber");
+                var child = document.getElementById("codes");
                 
                 // if (e.type == "touchstart") {
 
                 if(self.isAccNumber && parent.contains(child)) {
-                    parent.removeChild(child);
+                    child.style.display = 'none';
                 }
 
                 var circles = document.getElementsByClassName("circle");
@@ -1038,6 +1038,8 @@ var mpin = mpin || {};
     //
     mpin.prototype.addToPin = function(digit) {
 
+        this.display("");
+
         // console.log("%c Getting here", "background: blue; color: white;");
 
         var pinpadContainer = document.getElementById('inputContainer');
@@ -1074,10 +1076,9 @@ var mpin = mpin || {};
         //pinElement.setAttribute('type', 'password')
  
         if (digit === 'clear') {
-            this.display("");
-            this.enableNumberButtons(true);
-            this.enableButton(false, "go");
-            this.enableButton(false, "clear");
+
+            console.log("Click here?");
+
             for (var i = 0; i < circles.length; i++) {
 
                 if (circles[i].querySelector('.inner-circle')) {
@@ -1086,6 +1087,12 @@ var mpin = mpin || {};
             }
             
             return;
+
+            this.enableNumberButtons(true);
+            this.enableButton(false, "go");
+            this.enableButton(false, "clear");
+
+
         }
  
         if (digit === 'login') {
@@ -1160,14 +1167,17 @@ var mpin = mpin || {};
     //showInPinPadDisplay
     mpin.prototype.display = function(message, isError) {
  
-        var elemPass;
-        elemPass = document.getElementById('pinpad-input');
-        // Changed to convert the existing input to password type
-//      elemPass.setAttribute('type', 'password')
-        elemPass.value = message;
-        elemPass.value = '';
- 
- 
+        var elemForErrcode = document.getElementById('codes');
+
+        if(message === 'INCORRECT M-PIN!') {
+
+            elemForErrcode.style.display = "block";
+            elemForErrcode.className = "error";
+            elemForErrcode.innerHTML = message;
+        } 
+        
+        console.log("Comming here if error", message, isError);
+
         /*
          if (isError)
          addClass(d, "pinpad-input_error")
@@ -1367,12 +1377,11 @@ var mpin = mpin || {};
         getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
                 this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
                 function(success, errorCode, errorMessage, authData) {
-                    console.log("authenticate arguments :", arguments);
+                    console.log("authenticate arguments :", errorCode);
                     if (success) {
                         self.successLogin(authData);
-                    } else if (arguments[1] === "INVALID") {
+                    } else if (errorCode === "INVALID") {
 
-                        console.log("Err code INVADLID", errorCode);
                         self.display(hlp.text("authPin_errorInvalidPin"), false);
  
                         self.enableNumberButtons(true);
