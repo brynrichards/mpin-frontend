@@ -416,7 +416,9 @@ var mpin = mpin || {};
         callbacks.menuBtn = function() {
             self.toggleButton.call(self);
         };
- 
+
+
+
         callbacks.mpinLogin = function() {
             var pinpadDisplay = document.getElementById("pinpad-input");
  
@@ -427,6 +429,26 @@ var mpin = mpin || {};
                 self.isAccNumber = false;
                 // Add class for the v3 version before the redesign
                 // removeClass(pinpadDisplay, "blue-bg");
+
+                var pinPad = document.getElementById('pinsHolder');
+                pinPad.className = '';
+
+                // Empty the div
+                document.getElementById('circlesHolder').innerHTML = "";
+
+                var circlesHolder = document.getElementById('circlesHolder');
+
+                for (var i = self.cfg.pinSize - 1; i >= 0; i--) {
+                   var circleA = document.createElement("div");
+                   var circleB = document.createElement("div");
+
+                   circleA.className = "circle";
+                   circleB.className = "outer-circle";
+
+                   circleA.appendChild(circleB);
+                   circlesHolder.appendChild(circleA);
+                };
+
                 self.addToPin("login");
             } else {
                 self.actionLogin.call(self);
@@ -444,12 +466,9 @@ var mpin = mpin || {};
         pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
         pinpadDisplay.type = "text";
 
-        // Change class if ac number
-
         var pinPad = document.getElementById('pinsHolder');
         var circlesHolder = document.getElementById('circlesHolder');
         var pinpadContainer = document.getElementById('inputContainer');
-        pinPad.className = 'access-number';
 
         var renderElem = pinpadContainer.appendChild(document.createElement("div"));
         renderElem.id = "enterAccNumber";
@@ -457,6 +476,10 @@ var mpin = mpin || {};
 
         // Create dummy input els
         if (this.isAccNumber) {
+
+            // Change class if ac number
+
+            pinPad.className = 'access-number';
 
             console.log('I am ac num', this.opts.accessNumberDigits )
             for (var i = this.opts.accessNumberDigits - 1; i >= 0; i--) {
@@ -470,7 +493,7 @@ var mpin = mpin || {};
                 circlesHolder.appendChild(circleA);
             };
         } 
- 
+
         //fix - there are two more conditions ...
         if (listAccounts) {
             this.toggleButton();
@@ -983,13 +1006,13 @@ var mpin = mpin || {};
                 var circles = document.getElementsByClassName("circle");
 
                 for (var i = circles.length - 1; i >= 0; i--) {
-                    circles[i].style.display = 'block';
+                    circles[i].style.display = 'inline-block';
                 };
 
 
                 var circlesHolder = document.getElementById("circlesHolder");
 
-                circlesHolder.style.display = 'block';
+                circlesHolder.style.display = 'flex';
 
                 self.addToPin(e.target.getAttribute("data-value"));
                 // return false;
@@ -1025,7 +1048,11 @@ var mpin = mpin || {};
         // Add circles
 
         var element = document.createElement("div");
-        element.className = 'inner-circle';
+        if(this.isAccNumber) {
+            element.className = 'inner-circle-green';
+        } else {
+            element.className = 'inner-circle';
+        }
         element.style.opacity = 0;
         element.style.width = "36px";
         element.style.height = "36px";

@@ -689,7 +689,7 @@
         '                0',
         '            </button>',
         '            <button class="btnLogin" data-value="go" id="mpinLogin">',
-        '                login',
+        '                Sign In',
         '                <!-- <span class="label">login</span> -->',
         '            </button>',
         '        </div>',

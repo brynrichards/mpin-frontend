@@ -1048,7 +1048,11 @@ var mpin = mpin || {};
         // Add circles
 
         var element = document.createElement("div");
-        element.className = 'inner-circle';
+        if(this.isAccNumber) {
+            element.className = 'inner-circle-green';
+        } else {
+            element.className = 'inner-circle';
+        }
         element.style.opacity = 0;
         element.style.width = "36px";
         element.style.height = "36px";

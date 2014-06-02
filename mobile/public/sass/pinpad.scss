@@ -1,7 +1,7 @@
 
 // Input field
 
-#inputContainer, #circlesHolder {
+#inputContainer {
 
 	display: flex;
 	display: -webkit-box;
@@ -35,6 +35,13 @@
 	.blue-bg {
 		background: #006b9e !important;
 	}
+
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+#circlesHolder {
+
 }
 
 #pinsHolder {
