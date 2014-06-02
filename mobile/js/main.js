@@ -447,6 +447,7 @@ var mpin = mpin || {};
         // Change class if ac number
 
         var pinPad = document.getElementById('pinsHolder');
+        var circlesHolder = document.getElementById('circlesHolder');
         var pinpadContainer = document.getElementById('inputContainer');
         pinPad.className = 'access-number';
 
@@ -466,7 +467,7 @@ var mpin = mpin || {};
                 circleB.className = "outer-circle";
 
                 circleA.appendChild(circleB);
-                pinpadContainer.appendChild(circleA);
+                circlesHolder.appendChild(circleA);
             };
         } 
  
@@ -984,6 +985,11 @@ var mpin = mpin || {};
                 for (var i = circles.length - 1; i >= 0; i--) {
                     circles[i].style.display = 'block';
                 };
+
+
+                var circlesHolder = document.getElementById("circlesHolder");
+
+                circlesHolder.style.display = 'block';
 
                 self.addToPin(e.target.getAttribute("data-value"));
                 // return false;
