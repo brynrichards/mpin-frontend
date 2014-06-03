@@ -255,6 +255,7 @@ var mpin = mpin || {};
         }
     };
     mpin.prototype.renderHomeMobile = function() {
+
         var callbacks = {}, self = this, identity;
 
         if (this.opts.prerollid) {
@@ -322,7 +323,18 @@ var mpin = mpin || {};
  
             // Check if there's identity, redirect to login where 'Add to identity will appear'
             else if (identity) {
-                this.renderLogin();
+
+                totalAccounts = this.ds.getAccounts();
+                totalAccounts = Object.keys(totalAccounts).length;
+
+                 if (totalAccounts === 0) {
+                  this.renderSetupHome();
+                 } else if (totalAccounts === 1) {
+                  this.renderLogin();
+                 } else if (totalAccounts > 1) {
+                  this.renderLogin(true);
+                 }
+
             } else {
                 // Render the home mobile button, if no identity exists
                 this.render('setup-home', callbacks);
