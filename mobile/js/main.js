@@ -376,10 +376,15 @@ var mpin = mpin || {};
         this.render("setup", callbacks, {email: email});
 
 
-        var pinpadContainer = document.getElementById('inputContainer');
+        var pinpadContainer = document.getElementById('circlesHolder');
 
         // Create dummy input els
         if (!this.isAccNumber) {
+
+            var renderElem = document.getElementById('codes');
+            renderElem.style.display = 'block';
+            renderElem.innerHTML = "Enter your pin";
+
 
             console.log('I am pinpad', this.cfg.pinSize )
             for (var i = this.cfg.pinSize - 1; i >= 0; i--) {
@@ -1402,6 +1407,9 @@ var mpin = mpin || {};
      * @returns {undefined}
      */
     mpin.prototype.actionLogin = function() {
+
+        var callbacks = {};
+
         var authServer, getAuth, self = this, pinValue = document.getElementById('pinpad-input').value, accessNumber;
         //AlertMessage.clearDisplayWrap();
         this.enableNumberButtons(false);
@@ -1438,11 +1446,22 @@ var mpin = mpin || {};
                         self.enableButton(false, "clear");
                         self.enableButton(true, "toggle");
                     } else if (errorCode === "MAXATTEMPTS") {
+
                         var iD = self.identity;
                         self.deleteIdentity(iD);
                         if (self.opts.onAccountDisabled) {
                             self.opts.onAccountDisabled(iD);
                         }
+
+                        callbacks.mp_action_register = function(evt) {
+
+                            console.log("%%%%%%%%%%%%%%%%Go to register page");
+                            self.renderSetupHome.call(self, evt);
+                        };
+
+                        self.render('access-denied', callbacks, {email: self.getDisplayName(iD)});
+
+
                     }
  
                 }, function() {
@@ -1919,7 +1938,13 @@ var mpin = mpin || {};
         "help_more_btn": "I'm not sure, tell me more",
         "logout_btn": "Sign out",
         "success_header": "Success",
-        "success_text": "You are now signed in as:"
+        "success_text": "You are now signed in as:",
+        "accessdenied_header": "Access Denied",
+        "accessdenied_text": "Your M-Pin identity",
+        "accessdenied_text_cont": "has been removed from this device.",
+        "accessdenied_btn": "Register again"
+
+
     };
     //  image should have config properties
     hlp.img = function(imgSrc) {
