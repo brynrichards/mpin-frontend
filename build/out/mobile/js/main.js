@@ -725,9 +725,10 @@ var mpin = mpin || {};
             mpBack.innerHTML = self.readyHtml("accounts-panel", {});
         }
  
-        console.log("Trying to call here");
+        console.log("Trying to call here contains", document.contains(mpBack));
  
         if(document.contains(mpBack) === false) {
+
             addMpinBack();
             mpBack.style.display = 'block';
  
@@ -735,23 +736,25 @@ var mpin = mpin || {};
             document.getElementById("mp_acclist_adduser").onclick = function(evt) {
                 self.renderSetupHome.call(self, evt);
             };
+
+            // Appending happens here
+
+            var cnt = document.getElementById("mp_accountContent");
+            this.addUserToList(cnt, this.ds.getDefaultIdentity(), true, 0);
+            
+            for (var i in this.ds.getAccounts()) {
+                c += 1;
+                if (i != this.ds.getDefaultIdentity())
+                    this.addUserToList(cnt, i, false, c);
+            }
+
+            addEmptyItem(cnt);
  
         }
  
         //default IDENTITY
 
-        // Appending happens here
 
-        var cnt = document.getElementById("mp_accountContent");
-        this.addUserToList(cnt, this.ds.getDefaultIdentity(), true, 0);
- 
-        for (var i in this.ds.getAccounts()) {
-            c += 1;
-            if (i != this.ds.getDefaultIdentity())
-                this.addUserToList(cnt, i, false, c);
-        }
-
-        addEmptyItem(cnt);
     };
  
     mpin.prototype.renderUserSettingsPanel = function(iD) {
@@ -804,7 +807,8 @@ var mpin = mpin || {};
  
         document.getElementById("mp_acclist_deluser").onclick = function(evt) {
             self.deleteIdentity(iD);
- 
+            
+            self.renderHomeMobile.call(self, evt);
             // Render the identity list too
  
  
@@ -909,7 +913,7 @@ var mpin = mpin || {};
 
             document.getElementById('accountTopBar').style.height = "";
             menuBtn.className = 'up';
-            
+
           }
         }
  
@@ -1306,7 +1310,7 @@ var mpin = mpin || {};
             removeClass("mp_toggleButton", "mp_SelectedState");
             removeClass("mp_panel", "mp_flip");
         }
-        
+
         return false;
     };
  

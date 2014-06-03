@@ -122,7 +122,7 @@ $BORDERLESS : true;
 // User
 
 @mixin mpin-user() {
-	color: rgb(60, 157, 203);
+	color: black;
 	font-size: 114%;
 }
 
@@ -249,6 +249,12 @@ $BORDERLESS : true;
 	&.grey {
 		background: #7E7E7E;
 	}
+
+	&.white {
+		background: none;
+		border: 2px solid #56C05A !important;
+		color: #56C05A;
+	} 
 }
 
 @mixin identity-container() {

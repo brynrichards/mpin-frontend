@@ -191,7 +191,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 		position: relative;
 		width: 100%;
-		z-index: 9999;
+		z-index: 10000;
 		height: 35px;
 		position: absolute;
 
@@ -221,7 +221,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			@include mpin-user();
 
 			position: absolute;
-			top: 0;
+			left: 40%;
+			top: 10px;
 		}
 
 		#menuBtn {
@@ -593,6 +594,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	.mp_titleItem {
 		position: relative;
 		top: 17px;
+		color: black;
 		text-align: center;
 	}
 
