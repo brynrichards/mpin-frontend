@@ -3,6 +3,9 @@
 $IMAGES : "../mpinImages/";
 $BORDERLESS : true;
 
+$BUTTON_COLOR: #ffffff;
+$BUTTON_BGCOLOR: #007cc2;
+
 //HEADER
 @mixin header-logo() {
 	margin: 5px 0;
@@ -200,11 +203,12 @@ $BORDERLESS : true;
 	@include box-flex-value(1.0);
 }
 
+//almost deprecate
 @mixin mpin-button() {
 	-moz-transition: all 0.5s ease 0s;
 	border: 1px solid transparent !important;
 	border-radius: 0.3em 0.3em 0.3em 0.3em;
-	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 25px 30px -12px rgba(255, 255, 255, 0.4) inset, 0 1px 2px rgba(0, 0, 0, 0.6);
+	/*box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 25px 30px -12px rgba(255, 255, 255, 0.4) inset, 0 1px 2px rgba(0, 0, 0, 0.6);*/
 	outline: medium none;
 	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 	background: #0073AA;
@@ -215,6 +219,23 @@ $BORDERLESS : true;
 	margin-top: 10px;
 	margin: 3px 0 .5em;
 	font-size: 14px;
+}
+
+//except mobile buttons
+@mixin mpinButton {
+	border: 1px solid transparent;
+	border-radius: 0.3em;
+	background: $BUTTON_BGCOLOR;
+	cursor: pointer;
+	color: $BUTTON_COLOR;
+	font-weight: bold;
+	min-height: 1.8em;
+	margin-top: 10px;
+	padding: 5px 10px;
+	align-items: center;
+	text-align: center;
+	margin-bottom: 3%;
+	line-height: 120%;
 }
 
 @mixin central-content() {
@@ -298,7 +319,7 @@ $BORDERLESS : true;
 }
 
 @mixin mpin-copyright {
-	
+
 }
 
 /// FOOTER

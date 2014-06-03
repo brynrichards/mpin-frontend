@@ -200,7 +200,7 @@ var mpin = mpin || {};
 	};
 
 	//common callbacks;
-	mpin.prototype.commonCB = function() {
+	mpin.prototype.commonCB = function(callbacks) {
 
 	};
 
@@ -459,6 +459,9 @@ var mpin = mpin || {};
 	mpin.prototype.renderHelpHub = function() {
 		var callbacks = {}, self = this;
 
+		callbacks.mpin_home = function() {
+			self.renderHome.call(self);
+		};
 		callbacks.mpin_hub_li1 = function() {
 			self.renderHelpHubPage.call(self, 1);
 		};
@@ -615,6 +618,7 @@ var mpin = mpin || {};
 
 		//fix - there are two more conditions ...
 		if (listAccounts) {
+			self.display(self.cfg.pinpadDefaultMessage);
 			this.toggleButton();
 		} else {
 			this.setIdentity(this.ds.getDefaultIdentity(), true, function() {
@@ -732,6 +736,10 @@ var mpin = mpin || {};
 		callbacks.mpinbtn_mobile = function() {
 			self.renderMobile.call(self);
 		};
+		callbacks.mpin_helphub = function() {
+			self.lastView = "renderMobileSetup";
+			self.renderHelpHub.call(self);
+		};
 
 		this.render("mobile-setup", callbacks, {mobileAppFullURL: this.opts.mobileAppFullURL});
 
@@ -842,7 +850,7 @@ var mpin = mpin || {};
 		document.getElementById("mpin_add_identity").onclick = function() {
 			self.lastViewParam = true;
 			self.accountsLinkFlag = true;
-			self.renderSetupHome.call(self, true);
+			self.renderSetupHome.call(self);
 		};
 		// button
 		document.getElementById("mpin_phone").onclick = function() {
@@ -852,6 +860,15 @@ var mpin = mpin || {};
 
 		//arrow show pinpad
 		document.getElementById("mpin_pinpad_show").onclick = function() {
+			//setIdentity if empty
+			if (document.getElementById("mpinUser").innerHTML === "") {
+				self.setIdentity(self.ds.getDefaultIdentity(), true, function() {
+					self.display(self.cfg.pinpadDefaultMessage);
+				}, function() {
+					return false;
+				});
+			}
+
 			self.lastViewParam = false;
 			self.toggleButton.call(self);
 		};
@@ -977,8 +994,6 @@ var mpin = mpin || {};
 		cnt.appendChild(userRow);
 
 		userRow.onclick = function() {
-			removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
-			addClass(userRow, "mp_itemSelected");
 			self.ds.setDefaultIdentity(uId);
 			self.setIdentity(uId, true, function() {
 				self.display(self.cfg.pinpadDefaultMessage);
@@ -1284,44 +1299,23 @@ var mpin = mpin || {};
 
 //		if (pinpadElem.style.display === "none") {
 		if (pinpadElem.className.indexOf("mpZero") !== -1) {
-			/*
-			 document.getElementById('mpinUser').style.display = '';
-			 this.setIdentity(this.identity, true, function() {
-			 self.display(self.cfg.pinpadDefaultMessage);
-			 }, function() {
-			 return false;
-			 });
-			 
-			 removeClass("mpin_identity", "mpHide");
-			 pinpadElem.style.display = "";
-			 idenElem.style.display = "none";
-			 addClass("mpin_identities", "mpZero");
-			 */
-			removeClass("mpin_pinpad", "mpZero");
-			removeClass("mpin_identities", "mpPaddTop10");
-			document.getElementById("mpinUser").parentNode.style.display = "";
-			addClass("mpin_identities", "mpZero");
+			removeClass(pinpadElem, "mpZero");
+			removeClass(idenElem, "mpPaddTop10");
+			addClass(idenElem, "mpZero");
 
+			document.getElementById("mpinUser").parentNode.style.display = "";
 			document.getElementById("mpin_input_text").style.display = "";
 			document.getElementById("mpin_pinpad_show").parentNode.style.display = "none";
 			document.getElementById("mpin_phone").style.display = "none";
+			document.getElementById("mpin_add_identity").style.display = "none";
 		} else {
-			//add CLASS === mpPaddTop10
 			this.renderAccountsPanel();
-			addClass("mpin_pinpad", "mpZero");
-
-			removeClass("mpin_identities", "mpZero");
-			addClass("mpin_identities", "mpPaddTop10");
+			addClass(pinpadElem, "mpZero");
+			removeClass(idenElem, "mpZero");
+			addClass(idenElem, "mpPaddTop10");
 
 			document.getElementById("mpinUser").parentNode.style.display = "none";
 			document.getElementById("mpin_input_text").style.display = "none";
-//			document.getElementById('mpinUser').style.display = 'none';
-//			pinpadElem.style.height = "0%";
-			/*
-			 pinpadElem.style.display = "none";
-			 idenElem.style.display = "";
-			 addClass("mpin_identity", "mpHide");
-			 */
 		}
 		return false;
 	};
