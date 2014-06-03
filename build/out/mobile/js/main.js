@@ -894,8 +894,7 @@ var mpin = mpin || {};
  
         function mEventsHandler(e) {
           if (e.type == "touchstart" || e.type == "click") {
-            // alert("Touch start....");
- 
+
             var elem = document.getElementById("mp_back");
             elem.parentNode.removeChild(elem);
  
@@ -903,6 +902,14 @@ var mpin = mpin || {};
             // addClass(rowElem, "mp_itemSelected");
             self.ds.setDefaultIdentity(uId);
             self.setIdentity(uId, true);
+
+            // Hide the identity list
+
+            menuBtn = document.getElementById('menuBtn');
+
+            document.getElementById('accountTopBar').style.height = "";
+            menuBtn.className = 'up';
+            
           }
         }
  
@@ -1517,7 +1524,6 @@ var mpin = mpin || {};
             this.requestPermit(newIdentity, function(timePermitHex) {
                 console.log("call IDENTITY PERMIT :::");
                 self.enableNumberButtons(true);
-                onSuccess();
             }, function(message, statusCode) {
                 if (statusCode === 404) {
                     self.renderIdentityNotActive(displayName);
