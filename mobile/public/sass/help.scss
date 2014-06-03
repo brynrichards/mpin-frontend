@@ -9,7 +9,7 @@ help {
 	right: 0;
 	left: 0;
 	bottom: 0;
-	z-index: 999;
+	z-index: 9999;
 
 	#helpContainer {
 		display: none;
@@ -55,6 +55,27 @@ info {
 	position: absolute;
 	bottom: 30px;
 	left: 20px;
+
+	i {
+		background-image: url('../resources/templates/gradient/img/info.svg');
+		display: block;
+		width: 21px;
+		height: 20px;
+		display: inline-block;
+	}
+
+}
+
+info-inline {
+
+	display: inline-block;
+	color: black;
+	cursor: pointer;
+	text-align: center;
+	bottom: 30px;
+	left: 20px;
+	position: relative;
+	top: 4px;
 
 	i {
 		background-image: url('../resources/templates/gradient/img/info.svg');

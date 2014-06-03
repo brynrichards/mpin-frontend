@@ -447,6 +447,9 @@ var mpin = mpin || {};
 
 
         callbacks.mpinLogin = function() {
+
+            var callbacks = {};
+
             var pinpadDisplay = document.getElementById("pinpad-input");
  
             console.log('###############################isAccNumber', self.isAccNumber);
@@ -481,8 +484,7 @@ var mpin = mpin || {};
                 self.actionLogin.call(self);
             }
         };
- 
- 
+         
 //      this.render("login", callbacks, {email: email});
         this.render("setup", callbacks, {email: email, menu: true});
         this.enableNumberButtons(true);
@@ -499,7 +501,14 @@ var mpin = mpin || {};
 
         var renderElem = document.getElementById('codes');
         renderElem.style.display = 'block';
-        renderElem.innerHTML = "Enter you access number";
+        renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info> Enter your access number";
+
+        document.getElementById('acInfo').onclick = function(evt) {
+            console.log("Click here?");
+            // Show the help item
+            self.renderHelp("help-setup-home", callbacks);
+        };
+
 
         // Create dummy input els
         if (this.isAccNumber) {
