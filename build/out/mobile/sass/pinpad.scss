@@ -48,6 +48,10 @@
 		width: 100%;
 		padding: 20px;
 
+		position: absolute;
+		background-color: white;
+		z-index: 9999;
+
 		&.error {
 			color: red;
 			border: 1px solid red;

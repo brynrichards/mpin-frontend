@@ -757,7 +757,7 @@
 
     mpin.template['user-row'] = ['<div id="mp_StarIcon_<%= iNumber %>" class="mp_starIcon" tabindex=-1></div>',
         '<div class="mp_titleItem" title="<%= name %>">',
-        '    <%=name %> alice@your-domain.com',
+        '    <%=name %>',
         '</div>',
         '<div id="mp_btIdSettings_<%= iNumber %>" class="mp_buttonItem">',
         '    <img src="<%= hlp.img("cog-setting.svg") %>" tabindex=-1/>',

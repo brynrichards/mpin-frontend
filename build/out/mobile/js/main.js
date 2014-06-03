@@ -109,7 +109,7 @@ var mpin = mpin || {};
  
         // Caching - monitor if new version of the cache exists
  
-        // setInterval(function () { window.applicationCache.update(); }, 1000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
+        setInterval(function () { window.applicationCache.update(); }, 1000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
  
         window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
                 window.applicationCache.swapCache(); //swap to the newest version of the cache
@@ -361,6 +361,16 @@ var mpin = mpin || {};
  
         callbacks.menuBtn = function() {
             self.toggleButton.call(self);
+        };
+
+        callbacks.show_more = function(evt) {
+            // Modify the sequence for the templates
+            self.renderHelp("help-helphub", callbacks);
+        };
+
+        callbacks.info = function(evt) {
+            // Show the help item
+            self.renderHelp("help-setup-home", callbacks);
         };
 
         this.render("setup", callbacks, {email: email});
