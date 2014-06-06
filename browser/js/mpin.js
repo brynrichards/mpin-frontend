@@ -610,7 +610,7 @@ var mpin = mpin || {};
 		};
 
 
-
+		this.lastViewParam = false;
 
 		this.render("login", callbacks);
 		this.enableNumberButtons(true);

@@ -40,6 +40,33 @@
 	text-transform: uppercase;
 	text-align: center;
 	font-weight: bold;
+
+	&.mpHeaderPadd {
+		padding: 0px;
+		font-size: 15px;
+	}
+
+	&.mpHeaderTable {
+		display: table;
+		width: 90%;
+		margin: 0 auto;
+	}
+
+	.mpinTextGreenBorder {
+		border-bottom: 1px solid #06B405;
+		color: #06B405;
+		text-transform: none;
+		div {
+			display: table-cell;
+			vertical-align: middle;
+		}
+	}
+
+	.mpinMobileIcon {
+		@include mobile-icon();
+	}
+
+
 }
 
 .mpinIdentityRow {
@@ -94,7 +121,7 @@
 		padding-bottom: 0;
 	}
 
-	.mpinCenter {
+	.mpinCenter { 
 		width: 90%;
 		margin:0 auto;
 		text-align: center;
@@ -149,7 +176,7 @@
 	position: absolute;
 	left: 18%;
 	cursor: pointer;
-	
+
 }
 
 .mpLeft20 {
@@ -211,6 +238,6 @@
 
 	&.mpinFooterHome {
 		border: none;
-		bottom: 2vh;
+		/*bottom: 2vh;*/
 	}
 }
