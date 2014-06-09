@@ -1296,7 +1296,11 @@ var mpin = mpin || {};
 
 		pinpadElem = document.getElementById("mpin_pinpad");
 		idenElem = document.getElementById("mpin_identities");
-
+		if (!pinpadElem) {
+			console.log("missing ELement.");
+			return;
+		}
+		
 //		if (pinpadElem.style.display === "none") {
 		if (pinpadElem.className.indexOf("mpZero") !== -1) {
 			removeClass(pinpadElem, "mpZero");
