@@ -494,7 +494,11 @@ var mpin = mpin || {};
 	//
 	mpin.prototype.renderLastView = function() {
 		var lastViewParam;
+		//for render accounts
 		lastViewParam = (this.lastViewParam) ? this.lastViewParam : false;
+		
+		console.info("lastVIEW :::", this.lastView);
+		console.info("lastVIEW PARAMS:::", lastViewParam);
 		//call renderHome
 		this[this.lastView](lastViewParam);
 	};
@@ -600,6 +604,7 @@ var mpin = mpin || {};
 			self.actionLogin.call(self);
 		};
 		callbacks.mpin_helphub = function() {
+//			self.lastView || (self.lastView = "renderLogin");
 			self.lastView = "renderLogin";
 			self.renderHelpHub.call(self);
 		};
@@ -608,9 +613,6 @@ var mpin = mpin || {};
 			self.toggleHelp.call(self);
 			self.renderHelpTooltip.call(self);
 		};
-
-
-		this.lastViewParam = false;
 
 		this.render("login", callbacks);
 		this.enableNumberButtons(true);
@@ -839,7 +841,6 @@ var mpin = mpin || {};
 			p.className = "mp_contentEmptyItem";
 			cnt.appendChild(p);
 		};
-		this.lastViewParam = true;
 
 		//inner ELEMENT
 		renderElem = document.getElementById("mpin_identities");
@@ -848,13 +849,11 @@ var mpin = mpin || {};
 
 		// button
 		document.getElementById("mpin_add_identity").onclick = function() {
-			self.lastViewParam = true;
 			self.accountsLinkFlag = true;
 			self.renderSetupHome.call(self);
 		};
 		// button
 		document.getElementById("mpin_phone").onclick = function() {
-			self.lastViewParam = true;
 			self.renderMobileSetup.call(self);
 		};
 
@@ -869,7 +868,6 @@ var mpin = mpin || {};
 				});
 			}
 
-			self.lastViewParam = false;
 			self.toggleButton.call(self);
 		};
 
@@ -897,7 +895,9 @@ var mpin = mpin || {};
 		renderElem = document.getElementById("mpin_identities");
 //		renderElem = document.getElementById("mp_accountListView");
 		renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
-
+		
+		this.lastView = "renderUserSettingsPanel";
+		
 		document.getElementById("mpin_deluser_btn").onclick = function(evt) {
 			self.renderDeletePanel.call(self, iD);
 		};
@@ -912,14 +912,14 @@ var mpin = mpin || {};
 	mpin.prototype.renderReactivatePanel = function(iD) {
 		var renderElem, name, self = this;
 		name = this.getDisplayName(iD);
+		
+		this.lastView = "renderReactivatePanel";
+		
 		renderElem = document.getElementById("mpin_identities");
 		renderElem.innerHTML = this.readyHtml("reactivate-panel", {name: name});
 
+		
 		document.getElementById("mpin_reactivate_btn").onclick = function() {
-//			self.renderSetup(self.getDisplayName(iD));
-			console.log("resend :", self.getDisplayName(iD));
-			console.log("resend :", name);
-//			return ;
 			self.actionSetupHome.call(self, self.getDisplayName(iD));
 		};
 		document.getElementById("mpin_cancel_btn").onclick = function() {
@@ -930,8 +930,11 @@ var mpin = mpin || {};
 	mpin.prototype.renderDeletePanel = function(iD) {
 		var renderElem, name, self = this;
 		name = this.getDisplayName(iD);
-
+		
+		this.lastView = "renderDeletePanel";
+		
 		renderElem = document.getElementById("mpin_identities");
+		addClass(renderElem, "mpPaddTop10");
 		renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
 
 		document.getElementById("mpin_deluser_btn").onclick = function(evt) {
@@ -979,7 +982,6 @@ var mpin = mpin || {};
 		var rowClass, self = this;
 
 		rowClass = (isDefault) ? "mpinRow mpinRowActive" : "mpinRow";
-
 
 		var name = this.getDisplayName(uId);
 		var userRow = document.createElement("li");
@@ -1044,53 +1046,9 @@ var mpin = mpin || {};
 		};
 		//email
 		callbacks.mpin_resend_btn = function() {
-			var btn, regOTT, _email, _reqData = {};
-
-			btn = self.mpinButton(this, "setupNotReady_resend_info1");
-
-			regOTT = self.ds.getIdentityData(self.identity, "regOTT");
-			_email = self.getDisplayName(self.identity);
-
-			_reqData.URL = self.opts.registerURL;
-			_reqData.URL += "/" + self.identity;
-			_reqData.method = "PUT";
-			_reqData.data = {
-				userId: _email,
-				mobile: 0,
-				regOTT: regOTT
-			};
-
-			if (self.opts.registerRequestFormatter) {
-				_reqData.postDataFormatter = self.opts.registerRequestFormatter;
-			}
-			if (self.opts.customHeaders) {
-				_reqData.customHeaders = self.opts.customHeaders;
-			}
-			//registerRequestFormatter
-
-			//resend email 
-			// add identity into URL + regOTT
-			requestRPS(_reqData, function(rpsData) {
-				if (rpsData.error || rpsData.errorStatus) {
-					self.error("Resend problem");
-
-					btn.error("setupNotReady_resend_error");
-					return;
-				}
-//				self.identity = rpsData.mpinId;
-
-				//should be already exist only update regOTT
-				self.ds.setIdentityData(self.identity, {regOTT: rpsData.regOTT});
-
-				// Check for existing userid and delete the old one
-				self.ds.deleteOldIdentity(rpsData.mpinId);
-
-				btn.ok("setupNotReady_resend_info2");
-//			self.renderActivateIdentity();
-			});
+			self.actionResend.call(self, this);
 		};
 
-		//identities list
 		callbacks.mpin_accounts_btn = function() {
 			self.renderLogin.call(self, true, email);
 		};

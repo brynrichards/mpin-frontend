@@ -15,6 +15,13 @@
 			font-size: 16px;
 			margin-bottom: 5px;
 		}
+		
+		&.mpinBtnOk {
+			color: #00a800;
+		}
+		&.mpinBtnError {
+			color: red;
+		}
 
 		p {
 			font-size: 85%;
