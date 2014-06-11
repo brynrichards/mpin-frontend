@@ -1,18 +1,19 @@
 var mpin = mpin || {};
 (function() {
 	var lang = {}, hlp = {}, loader;
-	var IMAGES_PATH = "public/mpinImages/";
+	var MPIN_URL_BASE = "public/mpin"
+	var IMAGES_PATH = MPIN_URL_BASE+"/images/";
 
 	//CONSTRUCTOR 
 	mpin = function(domID, options) {
 		var self = this;
-		loader("public/mpin/underscore-min.js", function() {
-			loader("public/mpin/mpin-all.js", function() {
-				loader("public/mpin/templates.js", function() {
-					loader("public/mpinCss/main.css", function() {
+		loader(MPIN_URL_BASE+"/js/underscore-min.js", function() {
+			loader(MPIN_URL_BASE+"/js/mpin-all.js", function() {
+				loader(MPIN_URL_BASE+"/js/templates.js", function() {
+					loader(MPIN_URL_BASE+"/css/main.css", function() {
 						var _options = {};
 						if (!options.clientSettingsURL)
-							return console.error("set client Settings");
+							return console.error("M-Pin: clientSettings not set!");
 
 						//remove _ from global SCOPE
 						mpin._ = _.noConflict();
@@ -29,11 +30,7 @@ var mpin = mpin || {};
 
 	//CONFIGS
 	mpin.prototype.cfg = {
-//		apiVersion: "v0.3",
-//		apiUrl: "https://m-pinapi.certivox.net/",
-//		apiUrl: "http://dtatest.certivox.me/",
 		language: "en",
-		pinpadDefaultMessage: "ENTER YOUR PIN",
 		pinSize: 4,
 		requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue"
 	};
@@ -162,6 +159,10 @@ var mpin = mpin || {};
 			_optionName = _opts[_i];
 			if (typeof options[_optionName] !== "undefined")
 				this.opts[_optionName] = options[_optionName];
+		}
+
+		if (this.opts.mpinAuthServerURL.mpin_startsWith("http")) {
+			this.opts.useWebSockets = false;
 		}
 
 		return this;
@@ -611,7 +612,7 @@ var mpin = mpin || {};
 
 		//fix - there are two more conditions ...
 		if (listAccounts) {
-			self.display(self.cfg.pinpadDefaultMessage);
+			self.display(hlp.text("pinpad_default_message"));
 			this.toggleButton();
 			
 			if (subView) {
@@ -619,7 +620,7 @@ var mpin = mpin || {};
 			}
 		} else {
 			this.setIdentity(this.ds.getDefaultIdentity(), true, function() {
-				self.display(self.cfg.pinpadDefaultMessage);
+				self.display(hlp.text("pinpad_default_message"));
 			}, function() {
 				return false;
 			});
@@ -859,7 +860,7 @@ var mpin = mpin || {};
 			//setIdentity if empty
 			if (document.getElementById("mpinUser").innerHTML === "") {
 				self.setIdentity(self.ds.getDefaultIdentity(), true, function() {
-					self.display(self.cfg.pinpadDefaultMessage);
+					self.display(hlp.text("pinpad_default_message"));
 				}, function() {
 					return false;
 				});
@@ -1000,7 +1001,7 @@ var mpin = mpin || {};
 		userRow.onclick = function() {
 			self.ds.setDefaultIdentity(uId);
 			self.setIdentity(uId, true, function() {
-				self.display(self.cfg.pinpadDefaultMessage);
+				self.display(hlp.text("pinpad_default_message"));
 			}, function() {
 				return false;
 			});
@@ -1117,7 +1118,7 @@ var mpin = mpin || {};
 
 		//click clear BUTTON
 		if (digit === 'clear') {
-			this.display(this.cfg.pinpadDefaultMessage);
+			this.display(hlp.text("pinpad_default_message"));
 			this.enableNumberButtons(true);
 			this.enableButton(false, "go");
 			this.enableButton(false, "clear");
@@ -1132,8 +1133,7 @@ var mpin = mpin || {};
 		}
 
 		if (digit === 'clear') {
-//			this.display(this.cfg.pinpadDefaultMessage);
-			this.displayText(this.cfg.pinpadDefaultMessage);
+			this.displayText(hlp.text("pinpad_default_message"));
 			this.enableNumberButtons(true);
 			this.enableButton(false, "go");
 			this.enableButton(false, "clear");
@@ -1340,7 +1340,6 @@ var mpin = mpin || {};
 			self.enableNumberButtons(true);
 
 			self.clientSecret = clientSecret;
-//			document.getElementById("pinpad-input").value = self.cfg.pinpadDefaultMessage;
 			self.display(hlp.text("pinpad_setup_screen_text"), false);
 
 			if (self.opts.onGetSecret) {
@@ -1608,7 +1607,7 @@ var mpin = mpin || {};
 			this.ds.setDefaultIdentity(newDefaultAccount);
 
 			this.setIdentity(newDefaultAccount, true, function() {
-				self.display(self.cfg.pinpadDefaultMessage);
+				self.display(hlp.text("pinpad_default_message"));
 			}, function() {
 				return false;
 			});
@@ -1961,7 +1960,8 @@ var mpin = mpin || {};
 		"landing_button_newuser": "I'm new to M-Pin, get me started",
 		"mobile_header": "GET THE M-PIN SMARTPHONE APP",
 		"mobile_footer_btn": "Now, sign in with your Smartphone",
-		"pinpad_setup_screen_text": "CREATE YOUR M-PIN:<br> CHOOSE 4 DIGIT"
+		"pinpad_setup_screen_text": "CREATE YOUR M-PIN:<br> CHOOSE 4 DIGIT",
+		"pinpad_default_message": "ENTER YOUR PIN"
 
 	};
 	//	image should have config properties
@@ -1987,6 +1987,10 @@ var mpin = mpin || {};
 
 		String.prototype.mpin_endsWith = function(substr) {
 			return this.length >= substr.length && this.substr(this.length - substr.length) == substr;
+		}
+
+		String.prototype.mpin_startsWith = function(substr) {
+  			return this.indexOf(substr) == 0;
 		}
 
 
