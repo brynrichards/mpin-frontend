@@ -493,17 +493,18 @@ var mpin = mpin || {};
 
 	//
 	mpin.prototype.renderLastView = function() {
-		var lastViewParam;
+		var param1, param2;
 		//for render accounts
-		lastViewParam = (this.lastViewParam) ? this.lastViewParam : false;
-		
+		this.lastViewParams || (this.lastViewParams = []);
+		param1 = this.lastViewParams[0] || false;
+		param2 = this.lastViewParams[1] || false;
 		console.info("lastVIEW :::", this.lastView);
-		console.info("lastVIEW PARAMS:::", lastViewParam);
+		console.info("lastVIEW :::", this.lastViewParams);
 		//call renderHome
-		this[this.lastView](lastViewParam);
+		this[this.lastView](param1,param2);
 	};
 
-	mpin.prototype.renderSetupHome = function(email, errorID) {
+	mpin.prototype.renderSetupHome = function(email) {
 		var callbacks = {}, self = this, descHtml, userId;
 
 		callbacks.mpin_home = function(evt) {
@@ -528,23 +529,13 @@ var mpin = mpin || {};
 				self.renderLogin.call(self, true);
 			};
 		}
-
-		if (errorID) {
-			var descText = hlp.text(errorID);
-			descText = descText.mpin_format(email);
-			descHtml = '<div class="mp_infoDescription mp_error">' + descText + '</div>';
-		} else {
-			descHtml = '<div class="mp_infoDescription">' + hlp.text("setup_text2") + '</div>';
-		}
+		
 		userId = (email) ? email : "";
 
-		this.render("setup-home", callbacks, {description: descHtml, userId: userId});
+		this.render("setup-home", callbacks, {userId: userId});
 
 		if (this.accountsLinkFlag) {
 			removeClass("mpin_accounts_list", "mpHide");
-			callbacks.mpin_accounts_show = function() {
-				self.renderLogin.call(self, true);
-			};
 			document.getElementById("mpin_help").style.bottom = "18%";
 			this.accountsLinkFlag = false;
 		}
@@ -580,7 +571,7 @@ var mpin = mpin || {};
 		this.requestSignature(email, clientSecretShare, clientSecretParams);
 	};
 
-	mpin.prototype.renderLogin = function(listAccounts) {
+	mpin.prototype.renderLogin = function(listAccounts, subView) {
 		var callbacks = {}, self = this;
 
 		var identity = this.ds.getDefaultIdentity();
@@ -622,6 +613,10 @@ var mpin = mpin || {};
 		if (listAccounts) {
 			self.display(self.cfg.pinpadDefaultMessage);
 			this.toggleButton();
+			
+			if (subView) {
+				this[subView]();
+			}
 		} else {
 			this.setIdentity(this.ds.getDefaultIdentity(), true, function() {
 				self.display(self.cfg.pinpadDefaultMessage);
@@ -841,6 +836,8 @@ var mpin = mpin || {};
 			p.className = "mp_contentEmptyItem";
 			cnt.appendChild(p);
 		};
+		
+		
 
 		//inner ELEMENT
 		renderElem = document.getElementById("mpin_identities");
@@ -891,7 +888,12 @@ var mpin = mpin || {};
 
 	mpin.prototype.renderUserSettingsPanel = function(iD) {
 		var renderElem, name, self = this;
+
 		name = this.getDisplayName(iD);
+		
+		//lastView settings
+		this.lastViewParams = [true, "renderUserSettingsPanel"];
+		
 		renderElem = document.getElementById("mpin_identities");
 //		renderElem = document.getElementById("mp_accountListView");
 		renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
@@ -913,7 +915,7 @@ var mpin = mpin || {};
 		var renderElem, name, self = this;
 		name = this.getDisplayName(iD);
 		
-		this.lastView = "renderReactivatePanel";
+		this.lastViewParams = [true, "renderReactivatePanel"];
 		
 		renderElem = document.getElementById("mpin_identities");
 		renderElem.innerHTML = this.readyHtml("reactivate-panel", {name: name});
@@ -931,7 +933,7 @@ var mpin = mpin || {};
 		var renderElem, name, self = this;
 		name = this.getDisplayName(iD);
 		
-		this.lastView = "renderDeletePanel";
+		this.lastViewParams = [true, "renderDeletePanel"];
 		
 		renderElem = document.getElementById("mpin_identities");
 		addClass(renderElem, "mpPaddTop10");
@@ -1254,6 +1256,7 @@ var mpin = mpin || {};
 
 		pinpadElem = document.getElementById("mpin_pinpad");
 		idenElem = document.getElementById("mpin_identities");
+		
 		if (!pinpadElem) {
 			console.log("missing ELement.");
 			return;
@@ -1270,6 +1273,8 @@ var mpin = mpin || {};
 			document.getElementById("mpin_pinpad_show").parentNode.style.display = "none";
 			document.getElementById("mpin_phone").style.display = "none";
 			document.getElementById("mpin_add_identity").style.display = "none";
+			//lastView
+			this.lastViewParams = [false];
 		} else {
 			this.renderAccountsPanel();
 			addClass(pinpadElem, "mpZero");
@@ -1278,6 +1283,9 @@ var mpin = mpin || {};
 
 			document.getElementById("mpinUser").parentNode.style.display = "none";
 			document.getElementById("mpin_input_text").style.display = "none";
+			
+			//lastView
+			this.lastViewParams = [true];
 		}
 		return false;
 	};

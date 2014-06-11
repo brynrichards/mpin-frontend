@@ -29,9 +29,16 @@
 }
 
 .mpinHeaderBig {
+	width: 90%;
+	margin: auto;
+	padding: 2%;
+
+
 	#mpinLogo {
 		@include logo();
 	}
+
+
 }
 
 .mpinHeaderRow {
@@ -65,8 +72,6 @@
 	.mpinMobileIcon {
 		@include mobile-icon();
 	}
-
-
 }
 
 .mpinIdentityRow {
@@ -103,6 +108,8 @@
 
 	@import 'pinpads';
 }
+
+@import 'help';
 
 .mpinMain {
 	height: 75%;

@@ -115,11 +115,11 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			// padding: 10px 10px 0 10px;
 
 			// Import the pinpad SASS
-			@import 'pinpad';
+			/*@import 'pinpad';*/
 
 			// Import the home view
 
-			@import 'home';
+			/*@import 'home';*/
 
 
 		}
@@ -775,7 +775,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	}
 }
 
-@import 'help';
+/*@import 'help';*/ 
 
 
 @import 'general';
