@@ -202,7 +202,10 @@
 	height: 0px;
 	padding: 0px;
 }
-
+.mpinColorRed {
+	color: #FC0409;
+	font-style: italic;
+}
 .mpPointer {
 	cursor:pointer;
 }
@@ -233,6 +236,7 @@
 	-webkit-box-align: center;
 
 	height: 10%;
+	background: white;
 
 	.mpinHelpHub {
 		@include footer-helphub();
