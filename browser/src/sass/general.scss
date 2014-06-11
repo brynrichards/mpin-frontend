@@ -31,8 +31,6 @@
 .mpinHeaderBig {
 	width: 90%;
 	margin: auto;
-	padding: 2%;
-
 
 	#mpinLogo {
 		@include logo();
@@ -77,7 +75,7 @@
 .mpinIdentityRow {
 
 	@include gradient(#FFFFFF, #E8E8E8);
-
+	z-index: 99;
 	/*width: 100%;*/
 	.mpinArrowDown {
 		height: 20px;
