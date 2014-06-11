@@ -33,7 +33,10 @@ var mpin = mpin || {};
 		language: "en",
 		pinSize: 4,
 		requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue",
-		restrictedOptions: "signatureURL; mpinAuthServerURL; timePermitsURL"
+		restrictedOptions: "signatureURL; mpinAuthServerURL; timePermitsURL",
+		defaultOptions: {
+			identityCheckRegex : /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+		}
 	};
 
 	/**
@@ -62,8 +65,8 @@ var mpin = mpin || {};
 		this.ds = this.dataSource();
 
 		//set Options
-		this.setOptions(options.server).setOptions(options.client);
-
+		this.setDefaults().setOptions(options.server).setOptions(options.client);
+		
 		if (!this.opts.certivoxURL.mpin_endsWith("/")) {
 			this.opts.certivoxURL += "/";
 		}
@@ -143,6 +146,15 @@ var mpin = mpin || {};
 		}
 		return true;
 	};
+	
+	//set defaults OPTIONS
+	mpin.prototype.setDefaults = function () {
+		this.opts || (this.opts = {});
+		for (var i in this.cfg.defaultOptions) {
+			this.opts[i] = this.cfg.defaultOptions[i];
+		}
+		return this;
+	};
 
 	mpin.prototype.setOptions = function(options) {
 		var _i, _opts, _optionName, _options = "requestOTP; successSetupURL; onSuccessSetup; successLoginURL; onSuccessLogin; onLoaded; onGetPermit; ";
@@ -201,11 +213,6 @@ var mpin = mpin || {};
 		}
 	};
 
-	//common callbacks;
-	mpin.prototype.commonCB = function(callbacks) {
-
-	};
-
 	/**
 	 * funciton	setLanguageText
 	 * 
@@ -246,9 +253,10 @@ var mpin = mpin || {};
 		function clearIntervals() {
 			clearInterval(self.intervalID);
 			clearTimeout(self.intervalID2);
-		}
-		;
+		};
+		
 		clearIntervals();
+		
 		callbacks.mpinLogo = function(evt) {
 			clearIntervals();
 			self.renderHome.call(self, evt);
@@ -265,14 +273,12 @@ var mpin = mpin || {};
 		};
 
 		callbacks.mpin_access_help = function() {
-//			clearIntervals();
 			self.lastView = "renderLanding";
 			self.toggleHelp.call(self);
 			self.renderHelpTooltip.call(self);
 		};
 
 		callbacks.mpin_help = function() {
-//			clearIntervals();
 			self.lastView = "renderLanding";
 			self.toggleHelp.call(self);
 			self.renderHelpTooltip.call(self);
