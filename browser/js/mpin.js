@@ -35,7 +35,7 @@ var mpin = mpin || {};
 		requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue",
 		restrictedOptions: "signatureURL; mpinAuthServerURL; timePermitsURL",
 		defaultOptions: {
-			identityCheckRegex : /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+			identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 		}
 	};
 
@@ -66,7 +66,7 @@ var mpin = mpin || {};
 
 		//set Options
 		this.setDefaults().setOptions(options.server).setOptions(options.client);
-		
+
 		if (!this.opts.certivoxURL.mpin_endsWith("/")) {
 			this.opts.certivoxURL += "/";
 		}
@@ -146,9 +146,9 @@ var mpin = mpin || {};
 		}
 		return true;
 	};
-	
+
 	//set defaults OPTIONS
-	mpin.prototype.setDefaults = function () {
+	mpin.prototype.setDefaults = function() {
 		this.opts || (this.opts = {});
 		for (var i in this.cfg.defaultOptions) {
 			this.opts[i] = this.cfg.defaultOptions[i];
@@ -248,15 +248,32 @@ var mpin = mpin || {};
 
 	//landing Page
 	mpin.prototype.renderLanding = function() {
-		var callbacks = {}, self = this;
+		var callbacks = {}, self = this, totalAccounts;
 
 		function clearIntervals() {
 			clearInterval(self.intervalID);
 			clearTimeout(self.intervalID2);
-		};
-		
+		}
+		;
+
 		clearIntervals();
-		
+
+
+
+		totalAccounts = this.ds.getAccounts();
+		totalAccounts = Object.keys(totalAccounts).length;
+		if (totalAccounts === 1) {
+			this.renderLogin();
+			return ;
+		} else if (totalAccounts > 1) {
+			this.renderLogin(true);
+			return ;
+		}
+
+
+
+
+
 		callbacks.mpinLogo = function(evt) {
 			clearIntervals();
 			self.renderHome.call(self, evt);
