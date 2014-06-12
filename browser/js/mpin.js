@@ -5,15 +5,15 @@ var mpin = mpin || {};
 	var IMAGES_PATH = MPIN_URL_BASE + "/images/";
 
 	//CONSTRUCTOR 
-	mpin = function(domID, options) {
-		var self = this;
+	mpin = function(options) {
+		var self = this, domID;
 
 		loader(MPIN_URL_BASE + "/css/main.css", function() {
 			var _options = {};
 			if (!options.clientSettingsURL)
 				return console.error("M-Pin: clientSettings not set!");
 
-			
+			domID = options.targetElement;
 			//remove _ from global SCOPE
 			mpin._ = _.noConflict();
 			_options.client = options;
