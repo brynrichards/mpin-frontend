@@ -15,6 +15,7 @@ var mpin = mpin || {};
 						if (!options.clientSettingsURL)
 							return console.error("M-Pin: clientSettings not set!");
 
+						
 						//remove _ from global SCOPE
 						mpin._ = _.noConflict();
 						_options.client = options;
@@ -50,7 +51,8 @@ var mpin = mpin || {};
 	mpin.prototype.initialize = function(domID, options) {
 		this.el = document.getElementById(domID);
 		addClass(this.el, "mpinMaster");
-
+		
+		this.setupHtml();
 		this.addHelp();
 
 		//options CHECK
@@ -103,6 +105,11 @@ var mpin = mpin || {};
 //		this.renderSetup("123da");
 //		this.renderDeleteWarning("dada");
 //		this.renderBlank();
+	};
+	
+	mpin.prototype.setupHtml = function () {
+		this.el.innerHTML =  mpin._.template(mpin.template["mpin"], {});
+		this.el = document.getElementById("mpinMiracle");
 	};
 
 	mpin.prototype.checkBrowser = function() {

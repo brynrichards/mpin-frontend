@@ -741,6 +741,14 @@
         '</div>',
         ''].join('');
 
+    mpin.template['mpin'] = ['﻿	<div class="mpinContainer">',
+        '		<div id="mpinHolder">',
+        '			<div id="mpinMiracle" class="mpinMaster">',
+        '				',
+        '			</div>',
+        '		</div>',
+        '	</div>'].join('');
+
     mpin.template['help-hub-1'] = ['﻿<div class="mpinHeader">',
         '    <div class="mpinLogo mpPointer"></div>',
         '	<div class="mpinHome mpPointer" id="mpin_home"></div>',
