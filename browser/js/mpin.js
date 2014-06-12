@@ -643,7 +643,8 @@ var mpin = mpin || {};
 		if (listAccounts) {
 			self.display(hlp.text("pinpad_default_message"));
 			this.toggleButton();
-
+			
+			
 			if (subView) {
 				this[subView]();
 			}
@@ -1082,7 +1083,8 @@ var mpin = mpin || {};
 		};
 
 		callbacks.mpin_accounts_btn = function() {
-			self.renderLogin.call(self, true, email);
+//			self.renderLogin.call(self, true, email);
+			self.renderLogin.call(self, true);
 		};
 		callbacks.mpin_helphub = function(evt) {
 			self.lastView = "renderIdentityNotActive";
