@@ -7,26 +7,22 @@ var mpin = mpin || {};
 	//CONSTRUCTOR 
 	mpin = function(domID, options) {
 		var self = this;
-		loader(MPIN_URL_BASE + "/js/underscore-min.js", function() {
-			loader(MPIN_URL_BASE + "/js/mpin-all.js", function() {
-				loader(MPIN_URL_BASE + "/js/templates.js", function() {
-					loader(MPIN_URL_BASE + "/css/main.css", function() {
-						var _options = {};
-						if (!options.clientSettingsURL)
-							return console.error("M-Pin: clientSettings not set!");
 
-						
-						//remove _ from global SCOPE
-						mpin._ = _.noConflict();
-						_options.client = options;
-						self.ajax(options.clientSettingsURL, function(serverOptions) {
-							_options.server = serverOptions;
-							self.initialize.call(self, domID, _options);
-						});
-					});
-				});
+		loader(MPIN_URL_BASE + "/css/main.css", function() {
+			var _options = {};
+			if (!options.clientSettingsURL)
+				return console.error("M-Pin: clientSettings not set!");
+
+			
+			//remove _ from global SCOPE
+			mpin._ = _.noConflict();
+			_options.client = options;
+			self.ajax(options.clientSettingsURL, function(serverOptions) {
+				_options.server = serverOptions;
+				self.initialize.call(self, domID, _options);
 			});
 		});
+
 	};
 
 	//CONFIGS
