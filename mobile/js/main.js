@@ -348,7 +348,13 @@ var mpin = mpin || {};
         var callbacks = {}, self = this, descHtml;
         
         callbacks.mp_action_home = function(evt) {
-            self.renderHome.call(self, evt);
+            if (totalAccounts === 0) {
+             this.renderSetupHome();
+            } else if (totalAccounts === 1) {
+             this.renderLogin();
+            } else if (totalAccounts > 1) {
+             this.renderLogin(true);
+            }
         };
         callbacks.mp_action_setup = function(evt) {
             self.actionSetupHome.call(self, evt);
@@ -362,7 +368,13 @@ var mpin = mpin || {};
         
         var callbacks = {}, self = this;
         callbacks.mp_action_home = function(evt) {
-            self.renderHome.call(self, evt);
+            if (totalAccounts === 0) {
+             this.renderSetupHome();
+            } else if (totalAccounts === 1) {
+             this.renderLogin();
+            } else if (totalAccounts > 1) {
+             this.renderLogin(true);
+            }
         };
         callbacks.mpinClear = function() {
             self.addToPin.call(self, "clear");
@@ -397,8 +409,6 @@ var mpin = mpin || {};
             renderElem.style.display = 'block';
             renderElem.innerHTML = "Enter your pin";
 
-
-            console.log('I am pinpad', this.cfg.pinSize )
             for (var i = this.cfg.pinSize - 1; i >= 0; i--) {
                 var circleA = document.createElement("div");
                 var circleB = document.createElement("div");
@@ -434,7 +444,13 @@ var mpin = mpin || {};
         }
  
         callbacks.mp_action_home = function(evt) {
-            self.renderHome.call(self, evt);
+            if (totalAccounts === 0) {
+             this.renderSetupHome();
+            } else if (totalAccounts === 1) {
+             this.renderLogin();
+            } else if (totalAccounts > 1) {
+             this.renderLogin(true);
+            }
         };
         callbacks.mpinClear = function() {
             self.addToPin.call(self, "clear");
@@ -807,7 +823,7 @@ var mpin = mpin || {};
  
         document.getElementById("mp_acclist_deluser").onclick = function(evt) {
             self.deleteIdentity(iD);
-            
+
             self.renderHomeMobile.call(self, evt);
             // Render the identity list too
  
@@ -1070,6 +1086,8 @@ var mpin = mpin || {};
     };
     mpin.prototype.enableNumberButtons = function(enable) {
         console.log("%c Here", "background: black; color: white;", enable);
+
+        
         var els = document.getElementsByClassName("btn");
         for (var i = 0; i < els.length; i++) {
             var element = els[i];
@@ -1117,7 +1135,7 @@ var mpin = mpin || {};
             element = document.createElement("div");
 
             if(this.isAccNumber) {
-                element.className = 'inner-circle-green';
+                element.innerhtml = pinElement.value;
             } else {
                 element.className = 'inner-circle';
             }
@@ -1158,7 +1176,7 @@ var mpin = mpin || {};
            var element = {};
 
            if(this.isAccNumber) {
-               element.className = 'inner-circle-green';
+               element.innerText = '7';
            } else {
                element.className = 'inner-circle';
            }
