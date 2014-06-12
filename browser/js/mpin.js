@@ -1298,17 +1298,18 @@ var mpin = mpin || {};
 
 //		if (pinpadElem.style.display === "none") {
 		if (pinpadElem.className.indexOf("mpZero") !== -1) {
+
 			removeClass(pinpadElem, "mpZero");
 			removeClass(idenElem, "mpPaddTop10");
 			addClass(idenElem, "mpZero");
 
-			document.getElementById("mpinUser").parentNode.style.display = "";
-			document.getElementById("mpin_input_text").style.display = "";
-			document.getElementById("mpin_input_circle").style.display = "";
-			document.getElementById("mpin_pinpad_show").parentNode.style.display = "none";
-			document.getElementById("mpin_phone").style.display = "none";
-			document.getElementById("mpin_add_identity").style.display = "none";
-			//lastView
+			document.getElementById("mpinUser").parentNode.style.height = "75%";
+			// document.getElementById("mpin_input_text").style.display = "";
+			// document.getElementById("mpin_input_circle").style.display = "";
+			// document.getElementById("mpin_pinpad_show").parentNode.style.display = "none";
+			// document.getElementById("mpin_phone").style.display = "none";
+			// document.getElementById("mpin_add_identity").style.display = "none";
+			// //lastView
 			this.lastViewParams = [false];
 		} else {
 			this.renderAccountsPanel();
@@ -1316,9 +1317,9 @@ var mpin = mpin || {};
 			removeClass(idenElem, "mpZero");
 			addClass(idenElem, "mpPaddTop10");
 
-			document.getElementById("mpinUser").parentNode.style.display = "none";
-			document.getElementById("mpin_input_text").style.display = "none";
-			document.getElementById("mpin_input_circle").style.display = "none";
+			// document.getElementById("mpinUser").parentNode.style.height = "100%";
+			// document.getElementById("mpin_input_text").style.display = "none";
+			// document.getElementById("mpin_input_circle").style.display = "none";
 
 			//lastView
 			this.lastViewParams = [true];
@@ -1536,7 +1537,7 @@ var mpin = mpin || {};
 		}
 
 		accId = document.getElementById('mpinUser');
-		accId.innerHTML = "<p>" + displayName + "</p>";
+		// accId.innerHTML = "<p>" + displayName + "</p>";
 		accId.setAttribute("title", displayName);
 
 		// no Identity go to setup HOME

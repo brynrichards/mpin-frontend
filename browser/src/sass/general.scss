@@ -78,13 +78,19 @@
 	z-index: 99;
 	/*width: 100%;*/
 	.mpinArrowDown {
-		height: 20px;
-		width: 20px;
-		float: right;
-		margin: 3px;
-		background: url('#{$IMAGES}arrow-down-black.svg') no-repeat;
-		background-size: auto 100%;
-		background-position: right bottom;
+
+		img {
+			height: 20px;
+			width: 20px;
+			float: right;
+			top: -16px;
+			transition: 1s all ease-in-out;
+			position: relative;
+
+			&.rotated {
+				-webkit-transform: rotate(180deg);
+			}
+		}
 	}
 	.mpinArrowUp {
 		height: 20px;
