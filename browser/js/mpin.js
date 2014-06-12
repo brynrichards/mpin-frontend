@@ -561,11 +561,14 @@ var mpin = mpin || {};
 
 		this.render("setup-home", callbacks, {userId: userId});
 
+		
 		if (this.accountsLinkFlag) {
 			removeClass("mpin_accounts_list", "mpHide");
 			document.getElementById("mpin_help").style.bottom = "18%";
 			this.accountsLinkFlag = false;
 		}
+		
+		document.getElementById("emailInput").focus();
 	};
 
 
@@ -1296,6 +1299,7 @@ var mpin = mpin || {};
 
 			document.getElementById("mpinUser").parentNode.style.display = "";
 			document.getElementById("mpin_input_text").style.display = "";
+			document.getElementById("mpin_input_circle").style.display = "";
 			document.getElementById("mpin_pinpad_show").parentNode.style.display = "none";
 			document.getElementById("mpin_phone").style.display = "none";
 			document.getElementById("mpin_add_identity").style.display = "none";
@@ -1309,6 +1313,7 @@ var mpin = mpin || {};
 
 			document.getElementById("mpinUser").parentNode.style.display = "none";
 			document.getElementById("mpin_input_text").style.display = "none";
+			document.getElementById("mpin_input_circle").style.display = "none";
 
 			//lastView
 			this.lastViewParams = [true];
@@ -1732,7 +1737,6 @@ var mpin = mpin || {};
 		mpinDs.setIdentityData = function(uId, values) {
 			for (var v in values) {
 				mpinDs.mpin.accounts[uId][v] = values[v];
-
 			}
 			mpinDs.save();
 		};

@@ -1,7 +1,9 @@
 .mpinBtnBox {
 	//instead of width: 90%
 	padding: 5%;
-
+	background: #fff;
+	z-index: 99;
+	
 	.mpinButton {
 		@include mpinButton();
 
