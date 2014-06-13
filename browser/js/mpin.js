@@ -871,6 +871,16 @@ var mpin = mpin || {};
 			cnt.appendChild(p);
 		};
 
+		// Add logic to close the identity screen
+
+		menuBtn = document.getElementById('mpin_identity');
+
+	    menuBtn.onclick = function(evt) {
+	        document.getElementById('mpinUser').style.height = "";
+	        removeClass(menuBtn, 'close');
+	        addClass(menuBtn, 'up');
+	    };
+
 
 
 		//inner ELEMENT
@@ -1291,35 +1301,27 @@ var mpin = mpin || {};
 		pinpadElem = document.getElementById("mpin_pinpad");
 		idenElem = document.getElementById("mpin_identities");
 
+		var menuBtn = document.getElementById("mpin_identity");
+
 		if (!pinpadElem) {
 			console.log("missing ELement.");
 			return;
 		}
 
-//		if (pinpadElem.style.display === "none") {
-		if (pinpadElem.className.indexOf("mpZero") !== -1) {
+		if (menuBtn && !menuBtn.classList.contains("close")) {
 
-			removeClass(pinpadElem, "mpZero");
-			removeClass(idenElem, "mpPaddTop10");
-			addClass(idenElem, "mpZero");
+			document.getElementById("mpinUser").style.height = "75%";
+			addClass(menuBtn, "close");
 
-			document.getElementById("mpinUser").parentNode.style.height = "75%";
-			// document.getElementById("mpin_input_text").style.display = "";
-			// document.getElementById("mpin_input_circle").style.display = "";
-			// document.getElementById("mpin_pinpad_show").parentNode.style.display = "none";
-			// document.getElementById("mpin_phone").style.display = "none";
-			// document.getElementById("mpin_add_identity").style.display = "none";
-			// //lastView
-			this.lastViewParams = [false];
-		} else {
 			this.renderAccountsPanel();
 			addClass(pinpadElem, "mpZero");
 			removeClass(idenElem, "mpZero");
 			addClass(idenElem, "mpPaddTop10");
 
-			// document.getElementById("mpinUser").parentNode.style.height = "100%";
-			// document.getElementById("mpin_input_text").style.display = "none";
-			// document.getElementById("mpin_input_circle").style.display = "none";
+			// //lastView
+			this.lastViewParams = [false];
+		} else {
+
 
 			//lastView
 			this.lastViewParams = [true];
