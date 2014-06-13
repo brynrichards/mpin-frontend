@@ -2,7 +2,7 @@
 
 $MOBILE : false;
 $green : #06B405;
-
+ 
 // Import template
 
 //@import 'templates/_darkgrey';
@@ -40,9 +40,9 @@ $green : #06B405;
 
 	// Include pinpad reset
 
-	@import 'reset';
+	/*@import 'reset';*/
 
-	h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
+	/*h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}*/
 
 	// Body styles here
 
@@ -103,22 +103,44 @@ $green : #06B405;
 			-ms-flex-direction: column !important;
 			flex-direction: column !important;
 
-			//display:-moz-box; /* Firefox */
-			//display:-webkit-box; /* Safari and Chrome */
-			//display:-ms-flexbox; /* Internet Explorer 10 */
+			#mpinUser {
+				position: absolute;
+				height: 37px;
+				width: 100%;
+				transition: all 1s ease-in-out;
+				background-color: white;
+				overflow: hidden;
+				z-index: 999999;
+				border: 1px solid grey;
 
-			// display: flex;
-			// // display: -webkit-box;
-			// // display: -ms-flexbox;
+				#mpin_identity {
+					position: absolute;
+					z-index: 10;
+					right: 0;
+					bottom: 0;
+				}
+			}
 
-			// padding: 10px 10px 0 10px;
+			#mpin_identities {
+				position: absolute;
+				background-color: white;
+				z-index: 9999;
+				top: 100px;
+				left: 0;
+				right: 0;
+			}
 
-			// Import the pinpad SASS
-			/*@import 'pinpad';*/
+			#mpin_pinpad {
 
-			// Import the home view
+			}
 
-			/*@import 'home';*/
+			#pinpadEls {
+				height: 100%;
+				width: 100%;
+				position: relative;
+				top: 28px;
+				z-index: 8000;
+			}
 
 
 		}
@@ -773,8 +795,5 @@ $green : #06B405;
 
 	}
 }
-
-/*@import 'help';*/ 
-
 
 @import 'general';
