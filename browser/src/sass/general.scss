@@ -16,7 +16,7 @@
 
 .mpinHeader {
 	border-bottom: 1px solid #828284;
-	padding: 5px;
+	padding: 5px !important;
 	/*width: 100%;*/
 	height: 40px;
 
@@ -81,7 +81,7 @@
 		&.mpinAUp {
 			-webkit-transform: rotate(180deg);
 		}
-		
+
 		img {
 			height: 20px;
 			width: 20px;
@@ -89,26 +89,29 @@
 			/*top: -16px;*/
 			transition: 1s all ease-in-out;
 			position: relative;
+			margin-bottom: 5px;
 		}
 	}
-/*	.mpinArrowUp {
-		height: 20px;
-		width: 20px;
-		float: right;
-		margin: 3px;
-		background: url('#{$IMAGES}arrow-up-black.svg') no-repeat;
-		background-size: auto 100%;
-		background-position: right bottom;
-	}*/
+	/*	.mpinArrowUp {
+			height: 20px;
+			width: 20px;
+			float: right;
+			margin: 3px;
+			background: url('#{$IMAGES}arrow-up-black.svg') no-repeat;
+			background-size: auto 100%;
+			background-position: right bottom;
+		}*/
 	.mpinIdentity {
 		text-align: center;
 		padding: 5px 0px;
+	}
+	.mpinIdentityGradient {
+		@include gradient(#FFFFFF, #E8E8E8);
 	}
 }
 
 .mpinPinpad {
 	@include gradient(#3777ba, #56bce0);
-
 	@import 'pinpads';
 }
 
@@ -226,22 +229,20 @@
 }
 
 .mpinFooterRow {
-	position: absolute;
 	bottom: 10%;
 	min-height: 6%;
 	width: 100%;
 	z-index: 99;
 }
- 
+
 .mpinFooter {
 	position: absolute;
 	border-top: 1px solid #828284;
 	bottom: 0px;
-	padding: 5px;
+	padding: 5px !important;
 	width: 100%;
 	-webkit-box-align: center;
-
-	height: 10%;
+	height: 9%;
 	background: white;
 
 	.mpinHelpHub {

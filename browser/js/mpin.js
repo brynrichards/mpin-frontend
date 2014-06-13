@@ -652,6 +652,7 @@ var mpin = mpin || {};
 				this[subView]();
 			}
 		} else {
+			addClass("mpinUser", "mpinIdentityGradient");
 			this.setIdentity(this.ds.getDefaultIdentity(), true, function() {
 				self.display(hlp.text("pinpad_default_message"));
 			}, function() {
@@ -1055,7 +1056,9 @@ var mpin = mpin || {};
 		};
 
 		document.getElementById("mpin_settings_" + iNumber).onclick = function(ev) {
+			console.log("render SETTINGS ::::");
 			self.renderUserSettingsPanel.call(self, uId);
+			return false;
 		};
 	};
 
@@ -1307,25 +1310,21 @@ var mpin = mpin || {};
 			return;
 		}
 
-		console.log(" ---------- ", menuBtn.style.height);
-
 		if (menuBtn && !menuBtn.classList.contains("mpinAUp")) {
-			console.info("IDENTITY CASEEEE ");
-
-			document.getElementById("mpinUser").style.height = "75%";
+			document.getElementById("mpinUser").style.height = "81.5%";
 			addClass(menuBtn, "close");
-
 			this.renderAccountsPanel();
 //			addClass(pinpadElem, "mpZero");
 //			removeClass(idenElem, "mpZero");
 			addClass(idenElem, "mpPaddTop10");
+			removeClass("mpinUser", "mpinIdentityGradient");
 
 			// //lastView
 			this.lastViewParams = [false];
 		} else {
-			console.info("PINPAD CASEEEE ");
-			document.getElementById("mpinUser").style.height = "35px";
+			document.getElementById("mpinUser").style.height = "28px";
 			removeClass(menuBtn, "mpinAUp");
+			addClass("mpinUser", "mpinIdentityGradient");
 			//lastView
 			this.lastViewParams = [true];
 		}
@@ -1541,8 +1540,9 @@ var mpin = mpin || {};
 			displayName = this.getDisplayName(this.identity);
 		}
 
-		accId = document.getElementById('mpinUser');
-		// accId.innerHTML = "<p>" + displayName + "</p>";
+		accId = document.getElementById('mpinCurrentIden');
+		accId.innerHTML = displayName;
+		
 		accId.setAttribute("title", displayName);
 
 		// no Identity go to setup HOME

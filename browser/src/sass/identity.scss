@@ -4,11 +4,15 @@
 	border: 1px solid grey;
 
 	/*max-height: 70%;*/
-/*	height: 60%;*/
+	height: 60%;
 	overflow: auto;
 
 	@include border-radius(7px);
-
+	
+	ul {
+		padding: 0px;
+		margin: 0px;
+	}
 
 	.mpinRow {
 		padding: 5px;

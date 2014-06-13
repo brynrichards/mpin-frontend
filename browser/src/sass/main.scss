@@ -2,7 +2,7 @@
 
 $MOBILE : false;
 $green : #06B405;
- 
+
 // Import template
 
 //@import 'templates/_darkgrey';
@@ -37,8 +37,14 @@ $green : #06B405;
 }
 
 .mpinContainer {
+
 	@import '_reset';
-	h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
+	@import 'general';
+
+	h1,h2,h3,h4,h5,h6{
+		font-size:100%;
+		font-weight:normal;
+	}
 
 	// Include pinpad reset
 
@@ -111,7 +117,7 @@ $green : #06B405;
 				background-color: white;
 				overflow: hidden;
 				z-index: 999999;
-				border: 1px solid grey;
+				margin: 0px;
 
 				#mpin_identity {
 					position: absolute;
@@ -128,6 +134,7 @@ $green : #06B405;
 				top: 40px;
 				left: 0;
 				right: 0;
+				height: 80%;
 			}
 
 			#mpin_pinpad {
@@ -135,6 +142,7 @@ $green : #06B405;
 			}
 
 			#pinpadEls {
+				@include gradient(#3777ba, #56bce0);
 				height: 100%;
 				width: 100%;
 				position: relative;
@@ -795,5 +803,3 @@ $green : #06B405;
 
 	}
 }
-
-@import 'general';
