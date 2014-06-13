@@ -78,21 +78,20 @@
 	z-index: 99;
 	/*width: 100%;*/
 	.mpinArrowDown {
-
+		&.mpinAUp {
+			-webkit-transform: rotate(180deg);
+		}
+		
 		img {
 			height: 20px;
 			width: 20px;
 			float: right;
-			top: -16px;
+			/*top: -16px;*/
 			transition: 1s all ease-in-out;
 			position: relative;
-
-			&.rotated {
-				-webkit-transform: rotate(180deg);
-			}
 		}
 	}
-	.mpinArrowUp {
+/*	.mpinArrowUp {
 		height: 20px;
 		width: 20px;
 		float: right;
@@ -100,7 +99,7 @@
 		background: url('#{$IMAGES}arrow-up-black.svg') no-repeat;
 		background-size: auto 100%;
 		background-position: right bottom;
-	}
+	}*/
 	.mpinIdentity {
 		text-align: center;
 		padding: 5px 0px;
@@ -233,7 +232,7 @@
 	width: 100%;
 	z-index: 99;
 }
-
+ 
 .mpinFooter {
 	position: absolute;
 	border-top: 1px solid #828284;

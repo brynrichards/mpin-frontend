@@ -47,7 +47,7 @@ var mpin = mpin || {};
 	mpin.prototype.initialize = function(domID, options) {
 		this.el = document.getElementById(domID);
 		addClass(this.el, "mpinMaster");
-		
+
 		this.setupHtml();
 		this.addHelp();
 
@@ -102,9 +102,9 @@ var mpin = mpin || {};
 //		this.renderDeleteWarning("dada");
 //		this.renderBlank();
 	};
-	
-	mpin.prototype.setupHtml = function () {
-		this.el.innerHTML =  mpin._.template(mpin.template["mpin"], {});
+
+	mpin.prototype.setupHtml = function() {
+		this.el.innerHTML = mpin._.template(mpin.template["mpin"], {});
 		this.el = document.getElementById("mpinMiracle");
 	};
 
@@ -267,10 +267,10 @@ var mpin = mpin || {};
 		totalAccounts = Object.keys(totalAccounts).length;
 		if (totalAccounts === 1) {
 			this.renderLogin();
-			return ;
+			return;
 		} else if (totalAccounts > 1) {
 			this.renderLogin(true);
-			return ;
+			return;
 		}
 
 
@@ -564,13 +564,13 @@ var mpin = mpin || {};
 
 		this.render("setup-home", callbacks, {userId: userId});
 
-		
+
 		if (this.accountsLinkFlag) {
 			removeClass("mpin_accounts_list", "mpHide");
 			document.getElementById("mpin_help").style.bottom = "18%";
 			this.accountsLinkFlag = false;
 		}
-		
+
 		document.getElementById("emailInput").focus();
 	};
 
@@ -646,8 +646,8 @@ var mpin = mpin || {};
 		if (listAccounts) {
 			self.display(hlp.text("pinpad_default_message"));
 			this.toggleButton();
-			
-			
+
+
 			if (subView) {
 				this[subView]();
 			}
@@ -872,15 +872,8 @@ var mpin = mpin || {};
 		};
 
 		// Add logic to close the identity screen
-
-		menuBtn = document.getElementById('mpin_identity');
-
-	    menuBtn.onclick = function(evt) {
-	        document.getElementById('mpinUser').style.height = "";
-	        removeClass(menuBtn, 'close');
-	        addClass(menuBtn, 'up');
-	    };
-
+		var menuBtn = document.getElementById('mpin_identity');
+		addClass(menuBtn, "mpinAUp");
 
 
 		//inner ELEMENT
@@ -898,10 +891,16 @@ var mpin = mpin || {};
 			self.renderMobileSetup.call(self);
 		};
 
+
 		//arrow show pinpad
-		document.getElementById("mpin_pinpad_show").onclick = function() {
+		menuBtn.onclick = function() {
+
+			document.getElementById('mpinUser').style.height = "";
+			removeClass(menuBtn, 'close');
 			//setIdentity if empty
+
 			if (document.getElementById("mpinUser").innerHTML === "") {
+
 				self.setIdentity(self.ds.getDefaultIdentity(), true, function() {
 					self.display(hlp.text("pinpad_default_message"));
 				}, function() {
@@ -1308,21 +1307,25 @@ var mpin = mpin || {};
 			return;
 		}
 
-		if (menuBtn && !menuBtn.classList.contains("close")) {
+		console.log(" ---------- ", menuBtn.style.height);
+
+		if (menuBtn && !menuBtn.classList.contains("mpinAUp")) {
+			console.info("IDENTITY CASEEEE ");
 
 			document.getElementById("mpinUser").style.height = "75%";
 			addClass(menuBtn, "close");
 
 			this.renderAccountsPanel();
-			addClass(pinpadElem, "mpZero");
-			removeClass(idenElem, "mpZero");
+//			addClass(pinpadElem, "mpZero");
+//			removeClass(idenElem, "mpZero");
 			addClass(idenElem, "mpPaddTop10");
 
 			// //lastView
 			this.lastViewParams = [false];
 		} else {
-
-
+			console.info("PINPAD CASEEEE ");
+			document.getElementById("mpinUser").style.height = "35px";
+			removeClass(menuBtn, "mpinAUp");
 			//lastView
 			this.lastViewParams = [true];
 		}

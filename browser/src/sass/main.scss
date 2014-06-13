@@ -37,12 +37,12 @@ $green : #06B405;
 }
 
 .mpinContainer {
+	@import '_reset';
+	h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 	// Include pinpad reset
 
-	/*@import 'reset';*/
 
-	/*h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}*/
 
 	// Body styles here
 
@@ -125,7 +125,7 @@ $green : #06B405;
 				position: absolute;
 				background-color: white;
 				z-index: 9999;
-				top: 100px;
+				top: 40px;
 				left: 0;
 				right: 0;
 			}
