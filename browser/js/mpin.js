@@ -645,6 +645,7 @@ var mpin = mpin || {};
 		//fix - there are two more conditions ...
 		if (listAccounts) {
 			self.display(hlp.text("pinpad_default_message"));
+			
 			this.toggleButton();
 
 
@@ -938,7 +939,8 @@ var mpin = mpin || {};
 		//lastView settings
 		this.lastViewParams = [true, "renderUserSettingsPanel"];
 
-		renderElem = document.getElementById("mpin_identities");
+//		renderElem = document.getElementById("mpin_identities");
+		renderElem = document.getElementById("mpinUser");
 //		renderElem = document.getElementById("mp_accountListView");
 		renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
 
@@ -961,7 +963,8 @@ var mpin = mpin || {};
 
 		this.lastViewParams = [true, "renderReactivatePanel"];
 
-		renderElem = document.getElementById("mpin_identities");
+//		renderElem = document.getElementById("mpin_identities");
+		renderElem = document.getElementById("mpinUser");
 		renderElem.innerHTML = this.readyHtml("reactivate-panel", {name: name});
 
 
@@ -979,7 +982,7 @@ var mpin = mpin || {};
 
 		this.lastViewParams = [true, "renderDeletePanel"];
 
-		renderElem = document.getElementById("mpin_identities");
+		renderElem = document.getElementById("mpinUser");
 		addClass(renderElem, "mpPaddTop10");
 		renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
 
@@ -1056,7 +1059,6 @@ var mpin = mpin || {};
 		};
 
 		document.getElementById("mpin_settings_" + iNumber).onclick = function(ev) {
-			console.log("render SETTINGS ::::");
 			self.renderUserSettingsPanel.call(self, uId);
 			return false;
 		};
@@ -1532,7 +1534,6 @@ var mpin = mpin || {};
 
 	mpin.prototype.setIdentity = function(newIdentity, requestPermit, onSuccess, onFail) {
 		var displayName, accId, self = this;
-		console.info("call setIdentity:", newIdentity);
 		if ((typeof (newIdentity) === "undefined") || (!newIdentity)) {
 			displayName = "";
 		} else {

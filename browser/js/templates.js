@@ -651,6 +651,10 @@
         '		</p>	',
         '	</div>',
         '		',
+        '',
+        '	',
+        '</div>',
+        '',
         '	<div class="mpinFooterRow">',
         '',
         '		<div class="mpinBtnBox">',
@@ -663,9 +667,7 @@
         '			</div>',
         '		</div>',
         '		',
-        '	</div>',
-        '	',
-        '</div>'].join('');
+        '	</div>'].join('');
 
     mpin.template['home'] = ['<div class="mpinHeaderBig">',
         '	<div id="mpinLogo"></div>',
