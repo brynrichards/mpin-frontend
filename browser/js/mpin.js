@@ -867,6 +867,10 @@ var mpin = mpin || {};
 	mpin.prototype.renderAccountsPanel = function() {
 		var self = this, renderElem, addEmptyItem, c = 0, defaultIdentity;
 
+		if (! this.identity) {
+			self.setIdentity(self.ds.getDefaultIdentity(), false);
+		}
+
 		addEmptyItem = function(cnt) {
 			var p = document.createElement("div");
 			p.className = "mp_contentEmptyItem";
@@ -876,7 +880,6 @@ var mpin = mpin || {};
 		// Add logic to close the identity screen
 		var menuBtn = document.getElementById('mpin_identity');
 		addClass(menuBtn, "mpinAUp");
-
 
 		//inner ELEMENT
 		renderElem = document.getElementById("mpin_identities");
@@ -912,6 +915,7 @@ var mpin = mpin || {};
 
 			self.toggleButton.call(self);
 		};
+
 
 		//default IDENTITY
 		var cnt = document.getElementById("mpin_accounts_list");
@@ -1044,6 +1048,14 @@ var mpin = mpin || {};
 
 		cnt.appendChild(userRow);
 
+		document.getElementById("mpin_settings_" + iNumber).onclick = function(ev) {
+
+			self.renderUserSettingsPanel.call(self, uId);
+			ev.stopPropagation();
+
+			return false;
+		};
+
 		userRow.onclick = function() {
 			self.ds.setDefaultIdentity(uId);
 			self.setIdentity(uId, true, function() {
@@ -1058,10 +1070,6 @@ var mpin = mpin || {};
 			self.toggleButton.call(self);
 		};
 
-		document.getElementById("mpin_settings_" + iNumber).onclick = function(ev) {
-			self.renderUserSettingsPanel.call(self, uId);
-			return false;
-		};
 	};
 
 	mpin.prototype.renderIdentityNotActive = function(email) {
@@ -1543,7 +1551,7 @@ var mpin = mpin || {};
 
 		accId = document.getElementById('mpinCurrentIden');
 		accId.innerHTML = displayName;
-		
+
 		accId.setAttribute("title", displayName);
 
 		// no Identity go to setup HOME
