@@ -554,8 +554,9 @@ var mpin = mpin || {};
 			self.actionSetupHome.call(self);
 		};
 
+
 		if (this.accountsLinkFlag) {
-			callbacks.mpin_accounts_show = function() {
+			callbacks.mpin_arrow = function() {
 				self.renderLogin.call(self, true);
 			};
 		}
@@ -566,8 +567,9 @@ var mpin = mpin || {};
 
 
 		if (this.accountsLinkFlag) {
-			removeClass("mpin_accounts_list", "mpHide");
 			document.getElementById("mpin_help").style.bottom = "18%";
+			document.getElementById("mpin_accounts_list").style.bottom = "9%";
+			removeClass("mpin_accounts_list", "mpHide");
 			this.accountsLinkFlag = false;
 		}
 
@@ -621,7 +623,7 @@ var mpin = mpin || {};
 		callbacks.mpin_clear = function() {
 			self.addToPin.call(self, "clear");
 		};
-		callbacks.mpin_identity = function() {
+		callbacks.mpin_arrow = function() {
 			self.toggleButton.call(self);
 		};
 		callbacks.mpin_login = function() {
@@ -645,13 +647,14 @@ var mpin = mpin || {};
 		//fix - there are two more conditions ...
 		if (listAccounts) {
 			self.display(hlp.text("pinpad_default_message"));
-			
+//			this.ds.getDefaultIdentity()
+			document.getElementById("mpinCurrentIden").innerHTML = this.getDisplayName(this.ds.getDefaultIdentity());
+
 			this.toggleButton();
-
-
 			if (subView) {
 				this[subView]();
 			}
+
 		} else {
 			addClass("mpinUser", "mpinIdentityGradient");
 			this.setIdentity(this.ds.getDefaultIdentity(), true, function() {
@@ -878,7 +881,7 @@ var mpin = mpin || {};
 		};
 
 		// Add logic to close the identity screen
-		var menuBtn = document.getElementById('mpin_identity');
+		var menuBtn = document.getElementById('mpin_arrow');
 		addClass(menuBtn, "mpinAUp");
 
 		//inner ELEMENT
@@ -957,7 +960,8 @@ var mpin = mpin || {};
 			self.renderReactivatePanel.call(self, iD);
 		};
 		document.getElementById("mpin_cancel_btn").onclick = function(evt) {
-			self.renderAccountsPanel.call(self, evt);
+//			self.renderAccountsPanel.call(self, evt);
+			self.renderLogin.call(self, true);
 		};
 	};
 
@@ -976,7 +980,8 @@ var mpin = mpin || {};
 			self.actionSetupHome.call(self, self.getDisplayName(iD));
 		};
 		document.getElementById("mpin_cancel_btn").onclick = function() {
-			self.renderAccountsPanel();
+			//self.renderAccountsPanel();
+			self.renderLogin.call(self, true);
 		};
 	};
 
@@ -995,7 +1000,8 @@ var mpin = mpin || {};
 		};
 
 		document.getElementById("mpin_cancel_btn").onclick = function(evt) {
-			self.renderAccountsPanel.call(self, evt);
+//			self.renderAccountsPanel.call(self, evt);
+			self.renderLogin.call(self, true);
 		};
 	};
 
@@ -1313,7 +1319,7 @@ var mpin = mpin || {};
 		pinpadElem = document.getElementById("mpin_pinpad");
 		idenElem = document.getElementById("mpin_identities");
 
-		var menuBtn = document.getElementById("mpin_identity");
+		var menuBtn = document.getElementById("mpin_arrow");
 
 		if (!pinpadElem) {
 			console.log("missing ELement.");
@@ -1550,9 +1556,12 @@ var mpin = mpin || {};
 		}
 
 		accId = document.getElementById('mpinCurrentIden');
-		accId.innerHTML = displayName;
 
-		accId.setAttribute("title", displayName);
+		if (accId) {
+			accId.innerHTML = displayName;
+			accId.setAttribute("title", displayName);
+		}
+
 
 		// no Identity go to setup HOME
 		if (!this.identity) {
