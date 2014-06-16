@@ -1973,7 +1973,7 @@ var mpin = mpin || {};
 		"setupNotReady_header": "YOU MUST VERIFY <br/>YOUR IDENTITY",
 		"setupNotReady_text1": "Your identity",
 		"setupNotReady_text2": "has not been verified.",
-		"setupNotReady_text3": "You need to click the link in the email we sent you, and then choose <br/> 'Setup M-Pin'.",
+		"setupNotReady_text3": "You need to click the link in the email we sent you, and then choose 'Setup M-Pin'.",
 		"setupNotReady_check_info1": "Checking",
 		"setupNotReady_check_info2": "Identity not verified!",
 		"setupNotReady_resend_info1": "Sending email",
