@@ -124,6 +124,8 @@ $BORDERLESS : true;
 @mixin mpin-user() {
 	color: black;
 	font-size: 114%;
+	display: inline-block;
+	width: 90%;
 }
 
 

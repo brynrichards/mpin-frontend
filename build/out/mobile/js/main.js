@@ -901,15 +901,7 @@ var mpin = mpin || {};
  
         cnt.appendChild(rowElem);
  
-        // rowElem.onclick = function() {
-        //  removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
-        //  // addClass(rowElem, "mp_itemSelected");
-        //  document.getElementById('mp_back').remove();
-        //  self.ds.setDefaultIdentity(uId);
-        //  self.setIdentity(uId, true);
-        // };
- 
-        rowElem.addEventListener('touchstart', mEventsHandler, false);
+        // rowElem.addEventListener('touchenter', mEventsHandler, false);
         rowElem.addEventListener('click', mEventsHandler, false);
  
         // document.getElementById('mp_back').remove();

@@ -901,15 +901,7 @@ var mpin = mpin || {};
  
         cnt.appendChild(rowElem);
  
-        // rowElem.onclick = function() {
-        //  removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
-        //  // addClass(rowElem, "mp_itemSelected");
-        //  document.getElementById('mp_back').remove();
-        //  self.ds.setDefaultIdentity(uId);
-        //  self.setIdentity(uId, true);
-        // };
- 
-        rowElem.addEventListener('touchstart', mEventsHandler, false);
+        // rowElem.addEventListener('touchenter', mEventsHandler, false);
         rowElem.addEventListener('click', mEventsHandler, false);
  
         // document.getElementById('mp_back').remove();
@@ -1107,21 +1099,12 @@ var mpin = mpin || {};
 
         this.display("");
 
-        // console.log("%c Getting here", "background: blue; color: white;");
-
-        var pinpadContainer = document.getElementById('inputContainer');
-        
-        var pinElement = document.getElementById('pinpad-input');
-
-        var element;
-
-        var elemForErrcode = document.getElementById('codes');
-
-        var circlesHolder = document.getElementById('circlesHolder');
-
-        var ifDigit = new RegExp('[0-9]');
-
-        console.log("############ ifDigit", (ifDigit.test(parseInt(digit))));
+        var pinpadContainer = document.getElementById('inputContainer')
+            , pinElement = document.getElementById('pinpad-input')
+            , element
+            , elemForErrcode = document.getElementById('codes')
+            , circlesHolder = document.getElementById('circlesHolder')
+            , ifDigit = new RegExp('[0-9]');
 
         if(ifDigit.test(parseInt(digit))) {
 
@@ -1137,7 +1120,6 @@ var mpin = mpin || {};
             element = document.createElement("div");
 
             if(this.isAccNumber) {
-                console.log("COmming pan here", pinElement.value);
                 element.className = 'inner-circle-ac';
                 element.innerHTML = digit;
             } else {
@@ -1149,10 +1131,7 @@ var mpin = mpin || {};
             element.style.height = "36px";
             element.style.margin = "0px";
 
-            // window.getComputedStyle(element).opacity;
-
-            // // Fade it in.
-            // element.style.opacity = 1;
+            // Use setTimeout to trigger the animation
 
             setTimeout(function () {
               // Fade it in.
@@ -1164,19 +1143,16 @@ var mpin = mpin || {};
 
             pinElement.value += digit;
 
-            console.log("pinElm value", pinElement.value);
-            console.log("LENGTH::", pinElement.value.length);
-
             var addToDivNum =  pinElement.value.length -1;
+
+            // Append the circle element here
             circles[addToDivNum].appendChild(element);
         }
 
-        //pinElement.setAttribute('type', 'password')
- 
         if (digit === 'clear') {
 
-           var circles2 = document.getElementsByClassName("circle");
-           var element = {};
+           var circlesClear = document.getElementsByClassName("circle")
+             , element = {};
 
            if(this.isAccNumber) {
                element.className = 'inner-circle-ac';
@@ -1184,14 +1160,16 @@ var mpin = mpin || {};
                element.className = 'inner-circle';
            }
 
-            for (var i = 0; i < circles2.length; i++) {
+           // Rotate the circles
 
-                var nodes = circles2[i].querySelector('.' + element.className);
+            for (var i = 0; i < circlesClear.length; i++) {
 
-                if (circles2[i].querySelector('.' + element.className)) {
+                var nodes = circlesClear[i].querySelector('.' + element.className);
 
-                    console.log("Removing inner-circle?", circles2[i].querySelector('.' + element.className));
-                    circles2[i].removeChild(nodes);
+                if (circlesClear[i].querySelector('.' + element.className)) {
+
+                    console.log("Removing inner-circle?", circlesClear[i].querySelector('.' + element.className));
+                    circlesClear[i].removeChild(nodes);
 
                     pinElement.value = "";
                     this.enableNumberButtons(true);
@@ -1200,7 +1178,7 @@ var mpin = mpin || {};
             }
             
             return;
-
+            
             this.enableButton(false, "go");
             this.enableButton(false, "clear");
 
