@@ -8,7 +8,7 @@
 	overflow: auto;
 
 	@include border-radius(7px);
-	
+
 	ul {
 		padding: 0px;
 		margin: 0px;
@@ -17,16 +17,22 @@
 	.mpinRow {
 		padding: 5px;
 		width: 100%;
-		line-height: 35px;
+		/*line-height: 35px;*/
+		min-height: 45px;
 		border-bottom: 1px solid grey;
 		&.mpinRowActive {
+			background: #007cc2;
+			color: #fff;
+		}
+		&.mpinRowActive:hover {
 			background: #007cc2;
 			color: #fff;
 		}
 	}
 
 	.mpinRow:hover {
-		background: #007cc2;
+		/*background: #007cc2;*/
+		background: #7DD1FF;
 		color: #fff;
 	}
 
@@ -39,5 +45,15 @@
 		height: 30px;
 		margin: 3px;
 		@include border-radius(7px);
+	}
+
+	.mpinSettingsRow {
+		word-break: break-all;
+		width: 75%;
+		line-height: 22px;
+		text-align: left;
+		margin-left: 13px;
+		cursor: pointer;
+		padding-top: 6px;
 	}
 }

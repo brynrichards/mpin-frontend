@@ -576,6 +576,58 @@ var mpin = mpin || {};
 		document.getElementById("emailInput").focus();
 	};
 
+	//with embeded animation
+	mpin.prototype.renderSetupHome2 = function() {
+		var renderElem, self = this;
+
+//		renderElem = document.getElementById("mpinUser");
+		renderElem = document.getElementById("mpin_identities");
+		renderElem.innerHTML = this.readyHtml("setup-home-2", {userId: ""});
+		
+		renderElem.style.top = "0px";
+//		removeClass("mpin_accounts_list", "mpHide");
+		addClass("mpinCurrentIden", "mpHide");
+		document.getElementById("mpin_help").style.bottom = "-13%";
+		
+		
+		document.getElementById("mpin_arrow").onclick = function(evt) {
+//			addClass("mpin_help", "mpHide");
+			document.getElementById("mpin_help").style.display = "none";
+			self.toggleButton();
+			renderElem.style.top = "40px";
+		};
+		
+		document.getElementById("mpin_setup").onclick = function() {
+			self.actionSetupHome.call(self);
+		};
+
+
+
+
+
+		/*
+		 renderElem = document.getElementById("mpinUser");
+		 addClass(renderElem, "mpPaddTop10");
+		 renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
+		 
+		 document.getElementById("mpin_deluser_btn").onclick = function(evt) {
+		 self.deleteIdentity(iD);
+		 };
+		 
+		 
+		 var menuBtn = document.getElementById('mpin_arrow');
+		 addClass(menuBtn, "mpinAUp");
+		 
+		 //inner ELEMENT
+		 renderElem = document.getElementById("mpin_identities");
+		 renderElem.innerHTML = this.readyHtml("accounts-panel", {});
+		 renderElem.style.display = "block";
+		 
+		 
+		 
+		 */
+	};
+
 
 	mpin.prototype.renderSetup = function(email, clientSecretShare, clientSecretParams) {
 		var callbacks = {}, self = this;
@@ -870,7 +922,7 @@ var mpin = mpin || {};
 	mpin.prototype.renderAccountsPanel = function() {
 		var self = this, renderElem, addEmptyItem, c = 0, defaultIdentity;
 
-		if (! this.identity) {
+		if (!this.identity) {
 			self.setIdentity(self.ds.getDefaultIdentity(), false);
 		}
 
@@ -892,7 +944,8 @@ var mpin = mpin || {};
 		// button
 		document.getElementById("mpin_add_identity").onclick = function() {
 			self.accountsLinkFlag = true;
-			self.renderSetupHome.call(self);
+//			self.renderSetupHome.call(self);
+			self.renderSetupHome2.call(self);
 		};
 		// button
 		document.getElementById("mpin_phone").onclick = function() {
@@ -1325,7 +1378,8 @@ var mpin = mpin || {};
 			console.log("missing ELement.");
 			return;
 		}
-
+		
+		//
 		if (menuBtn && !menuBtn.classList.contains("mpinAUp")) {
 			document.getElementById("mpinUser").style.height = "81.5%";
 			addClass(menuBtn, "close");
@@ -1340,6 +1394,8 @@ var mpin = mpin || {};
 		} else {
 			document.getElementById("mpinUser").style.height = "28px";
 			removeClass(menuBtn, "mpinAUp");
+			//if come from add identity remove HIDDEN
+			removeClass("mpinCurrentIden", "mpHide");
 			addClass("mpinUser", "mpinIdentityGradient");
 			//lastView
 			this.lastViewParams = [true];
@@ -1643,7 +1699,7 @@ var mpin = mpin || {};
 	mpin.prototype.requestPermit = function(identity, onSuccess, onFail) {
 		var self = this;
 		requestTimePermit(self.certivoxPermitsURL(), self.dtaPermitsURL(), self.opts.customHeaders,
-			self.ds.getIdentityPermitCache(this.identity), this.certivoxPermitsStorageURL(),
+				self.ds.getIdentityPermitCache(this.identity), this.certivoxPermitsStorageURL(),
 				function(timePermitHex, timePermitCache) {
 					self.ds.setIdentityPermit(self.identity, timePermitHex);
 					self.ds.setIdentityPermitCache(mpin.identity, timePermitCache);
@@ -1807,7 +1863,7 @@ var mpin = mpin || {};
 
 
 	mpin.prototype.certivoxPermitsURL = function() {
-        var hash_mpin_id_hex = mpinAuth.sha256_hex(this.identity);
+		var hash_mpin_id_hex = mpinAuth.sha256_hex(this.identity);
 		return this.opts.certivoxURL + "timePermit?app_id=" + this.opts.appID + "&mobile=0&hash_mpin_id=" + hash_mpin_id_hex;
 	};
 
