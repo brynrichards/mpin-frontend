@@ -445,7 +445,7 @@ var mpin = mpin || {};
 		_reqData.method = "GET";
 
 		//get signature
-		requestRPS(_reqData, function(rpsData) {
+		requestRPS(_reqData, function(rpsData) {	
 			if (rpsData.errorStatus) {
 				spanElem.className = "info-error";
 				spanElem.innerHTML = hlp.text("setupNotReady_check_info2") + "<br/>";

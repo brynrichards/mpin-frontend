@@ -836,6 +836,8 @@ var mpin = mpin || {};
  
     mpin.prototype.renderSetupDone = function() {
         var callbacks = {}, self = this, userId;
+
+        console.log("Get the user identity", this.getDisplayName(this.identity));
  
         userId = this.getDisplayName(this.identity);
  
@@ -1135,11 +1137,12 @@ var mpin = mpin || {};
             element = document.createElement("div");
 
             if(this.isAccNumber) {
-                element.innerhtml = pinElement.value;
+                console.log("COmming pan here", pinElement.value);
+                element.className = 'inner-circle-ac';
+                element.innerHTML = digit;
             } else {
                 element.className = 'inner-circle';
             }
-
 
             element.style.opacity = 0;
             element.style.width = "36px";
@@ -1176,7 +1179,7 @@ var mpin = mpin || {};
            var element = {};
 
            if(this.isAccNumber) {
-               element.innerText = '7';
+               element.className = 'inner-circle-ac';
            } else {
                element.className = 'inner-circle';
            }
