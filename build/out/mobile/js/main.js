@@ -405,6 +405,8 @@ var mpin = mpin || {};
         // Create dummy input els
         if (!this.isAccNumber) {
 
+            console.log("Create dummy els if not isAccNumber");
+
             var renderElem = document.getElementById('codes');
             renderElem.style.display = 'block';
             renderElem.innerHTML = "Enter your pin";
@@ -678,10 +680,7 @@ var mpin = mpin || {};
             self.renderHome.call(self, evt);
         };
         callbacks.mpin_action_setup = function(evt) {
-//          self.renderSetup
             self.beforeRenderSetup.call(self);
-//          self.renderSetup.call(self, self.getDisplayName(email));
-//          self.renderLogin.call(self, evt);
         };
         callbacks.mpin_action_resend = function(evt) {
             self.actionResend.call(self, evt);
@@ -694,7 +693,9 @@ var mpin = mpin || {};
         var _reqData = {}, regOTT, url, self = this;
         regOTT = this.ds.getIdentityData(this.identity, "regOTT");
         url = this.opts.signatureURL + "/" + this.identity + "?regOTT=" + regOTT;
- 
+
+        this.isAccNumber = false;
+        
         _reqData.URL = url;
         _reqData.method = "GET";
  
@@ -1023,8 +1024,6 @@ var mpin = mpin || {};
         }
     };
     mpin.prototype.enableNumberButtons = function(enable) {
-        console.log("%c Here", "background: black; color: white;", enable);
-
         
         var els = document.getElementsByClassName("btn");
         for (var i = 0; i < els.length; i++) {
@@ -1112,7 +1111,6 @@ var mpin = mpin || {};
 
                 if (circlesClear[i].querySelector('.' + element.className)) {
 
-                    console.log("Removing inner-circle?", circlesClear[i].querySelector('.' + element.className));
                     circlesClear[i].removeChild(nodes);
 
                     pinElement.value = "";
@@ -1145,14 +1143,6 @@ var mpin = mpin || {};
                 return;
             }
         }
- 
-
-        // for (var i = 0; i < circles.length; i++) {
-        //     console.log("What I dump here", circles[i], "+", i, (!circles[i].querySelector('.inner-circle')));
-
-        //     if (!circles[i].querySelector('.inner-circle')) {
-        //     }
-        // }
  
         if (pinElement.value.length === 1) {
             this.enableButton(true, "clear");
