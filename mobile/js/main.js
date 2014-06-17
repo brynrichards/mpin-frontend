@@ -468,8 +468,14 @@ var mpin = mpin || {};
 
         var identity = this.ds.getDefaultIdentity();
         var email = this.getDisplayName(identity);
+
         if (!identity) {
             this.renderSetupHome();
+        }
+
+        if (!this.identity) {
+            console.log("COmming here???");
+            self.setIdentity(self.ds.getDefaultIdentity(), false);
         }
  
         callbacks.mp_action_home = function(evt) {
@@ -764,10 +770,6 @@ var mpin = mpin || {};
             c = 0,
             mpBack = document.getElementById('mp_back'),
             menuBtn = document.getElementById('menuBtn');
-
-        if (!this.identity) {
-            self.setIdentity(self.ds.getDefaultIdentity(), false);
-        }
 
         menuBtn.onclick = function(evt) {
             document.getElementById('accountTopBar').style.height = "";
@@ -1495,11 +1497,16 @@ var mpin = mpin || {};
             this.identity = newIdentity;
             displayName = this.getDisplayName(this.identity);
         }
- 
+        
         accId = document.getElementById('mpinUser');
-        accId.children[0].innerText = displayName;
-        accId.setAttribute("title", displayName);
- 
+
+        console.log("################ accId", accId);
+
+        if(accId) {
+            accId.children[0].innerText = displayName;
+            accId.setAttribute("title", displayName);
+        }
+
         if (requestPermit) {
             this.addToPin("clear");
             this.display(hlp.text("pinpad_initializing"), false);

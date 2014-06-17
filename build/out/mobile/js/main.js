@@ -132,7 +132,7 @@ var mpin = mpin || {};
         var _i, _opts, _optionName, _options = "stage; allowAddUser; requestOTP; successSetupURL; onSuccessSetup; successLoginURL; onSuccessLogin; onLoaded; onGetPermit; ";
         _options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; mpinDTAServerURL; signatureURL; verifyTokenURL; certivoxURL; ";
         _options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; authenticateHeaders; authTokenFormatter; accessNumberRequestFormatter; ";
-        _options += "registerRequestFormatter; onVerifySuccess; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
+        _options += "registerRequestFormatter; onVerifySuccess; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; timePermitsStorageURL; authenticateURL; ";
         _options += "language; customLanguageTexts; accessNumberDigits; mobileAuthenticateURL";
         _opts = _options.split("; ");
         this.opts || (this.opts = {});
@@ -468,8 +468,14 @@ var mpin = mpin || {};
 
         var identity = this.ds.getDefaultIdentity();
         var email = this.getDisplayName(identity);
+
         if (!identity) {
             this.renderSetupHome();
+        }
+
+        if (!this.identity) {
+            console.log("COmming here???");
+            self.setIdentity(self.ds.getDefaultIdentity(), false);
         }
  
         callbacks.mp_action_home = function(evt) {
@@ -1491,11 +1497,16 @@ var mpin = mpin || {};
             this.identity = newIdentity;
             displayName = this.getDisplayName(this.identity);
         }
- 
+        
         accId = document.getElementById('mpinUser');
-        accId.children[0].innerText = displayName;
-        accId.setAttribute("title", displayName);
- 
+
+        console.log("################ accId", accId);
+
+        if(accId) {
+            accId.children[0].innerText = displayName;
+            accId.setAttribute("title", displayName);
+        }
+
         if (requestPermit) {
             this.addToPin("clear");
             this.display(hlp.text("pinpad_initializing"), false);
@@ -1603,8 +1614,10 @@ var mpin = mpin || {};
     mpin.prototype.requestPermit = function(identity, onSuccess, onFail) {
         var self = this;
         requestTimePermit(self.certivoxPermitsURL(), self.dtaPermitsURL(), self.opts.authenticateHeaders,
-                function(timePermitHex) {
+                self.ds.getIdentityPermitCache(this.identity), this.certivoxPermitsStorageURL(),
+                function(timePermitHex, timePermitCache) {
                     self.ds.setIdentityPermit(self.identity, timePermitHex);
+                    self.ds.setIdentityPermitCache(mpin.identity, timePermitCache);
                     self.ds.save();
                     self.gotPermit(timePermitHex);
                     onSuccess(timePermitHex);
@@ -1678,6 +1691,19 @@ var mpin = mpin || {};
                 uId = mpinDs.getDefaultIdentity();
             return mpinDs.mpin.accounts[uId]["MPinPermit"];
         };
+        mpinDs.setIdentityPermitCache = function(uId, cache) {
+            if (!uId) {
+                uId = mpinDs.getDefaultIdentity();
+            }
+            mpinDs.mpin.accounts[uId]["timePermitCache"] = cache;
+            mpinDs.save();
+        };
+        mpinDs.getIdentityPermitCache = function(uId) {
+            if (!uId) {
+                uId = mpinDs.getDefaultIdentity();
+            }
+            return mpinDs.mpin.accounts[uId]["timePermitCache"] || {};
+        };        
         mpinDs.getIdentityToken = function(uId) {
             if (!uId)
                 uId = mpinDs.getDefaultIdentity();
@@ -1748,17 +1774,30 @@ var mpin = mpin || {};
         return this.opts.mpinDTAServerURL + "clientSecret?" + params;
     };
  
- 
-    mpin.prototype.certivoxPermitsURL = function() {
-        var mpin_idHex = this.identity;
-        return this.opts.certivoxURL + "timePermit?app_id=" + this.opts.appID + "&mobile=0&mpin_id=" + mpin_idHex;
+     mpin.prototype.certivoxPermitsURL = function() {
+        var hash_mpin_id_hex = mpinAuth.sha256_hex(this.identity);
+        return this.opts.certivoxURL + "timePermit?app_id=" + this.opts.appID + "&mobile=0&hash_mpin_id=" + hash_mpin_id_hex;
     };
- 
+
     mpin.prototype.dtaPermitsURL = function() {
         var mpin_idHex = this.identity;
 //      return this.opts.timePermitsURL + "timePermit?app_id=" + this.opts.appID + "&mobile=0&mpin_id=" + mpin_idHex;
         return this.opts.timePermitsURL + "/" + mpin_idHex;
     };
+
+    mpin.prototype.certivoxPermitsStorageURL = function() {
+        var that = this;
+        return function(date, storageId) {
+            console.log("timePermitsStorageURL Base: " + that.opts.timePermitsStorageURL)
+            if ((date) && (that.opts.timePermitsStorageURL) && (storageId)) {
+                return that.opts.timePermitsStorageURL + "/" + mpin.appID + "/" + date + "/" + storageId;
+            } else {
+                return null;
+            }
+        }
+    };
+
+
     mpin.prototype.gotPermit = function(timePermit) {
         if (this.opts.onGetPermit)
             this.opts.onGetPermit(timePermit);
