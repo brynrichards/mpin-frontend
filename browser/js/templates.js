@@ -950,24 +950,9 @@
         '</div>'].join('');
 
     mpin.template['user-row'] = ['<div class="mpinSettings" id="mpin_settings_<%= iNumber %>"></div>',
-        '<p class="mpinSettingsRow"><%= name %></p>',
+        '<a href="" class="mpinSettingsRow" title="<%= name %>" alt="<%= name %>"><%= name %></p>',
         '',
-        '',
-        '',
-        '<!--',
-        '<div id="mp_StarIcon_<%= iNumber %>" class="mp_starIcon" tabindex=-1></div>',
-        '<div class="mp_titleItem" title="<%= name %>">',
-        '    <%=name %>',
-        '</div>',
-        '<div id="mp_btIdSettings_<%= iNumber %>" class="mp_buttonItem">',
-        '    <img src="<%= hlp.img("id-settings.svg") %>" tabindex=-1/>',
-        '</div>',
-        '-->',
-        '',
-        '',
-        '',
-        '',
-        ''].join('');
+        '<!-- <p class="mpinSettingsRow"><%= name %></p> -->'].join('');
 
     mpin.template['help-hub-4'] = ['﻿<div class="mpinHeader">',
         '    <div class="mpinLogo mpPointer"></div>',
