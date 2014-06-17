@@ -519,7 +519,19 @@ var mpin = mpin || {};
 
         var renderElem = document.getElementById('codes');
         renderElem.style.display = 'block';
-        renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info> Enter your access number";
+        renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text2");
+
+        // Help hub callbacks
+
+        callbacks.ok_dismiss = function(evt) {
+            // Modify the sequence for the templates
+            self.dismissHelp.call(self);
+        };
+
+        callbacks.show_more = function(evt) {
+            // Modify the sequence for the templates
+            self.renderHelp("help-helphub", callbacks);
+        };
 
         document.getElementById('acInfo').onclick = function(evt) {
             console.log("Click here?");
@@ -695,7 +707,7 @@ var mpin = mpin || {};
         url = this.opts.signatureURL + "/" + this.identity + "?regOTT=" + regOTT;
 
         this.isAccNumber = false;
-        
+
         _reqData.URL = url;
         _reqData.method = "GET";
  
