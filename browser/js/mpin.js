@@ -1,7 +1,7 @@
 var mpin = mpin || {};
 (function() {
 	var lang = {}, hlp = {}, loader;
-	var MPIN_URL_BASE = "public/mpin"
+	var MPIN_URL_BASE = "%URL_BASE%"
 	var IMAGES_PATH = MPIN_URL_BASE + "/images/";
 
 	//CONSTRUCTOR 
