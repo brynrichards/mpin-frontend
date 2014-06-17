@@ -62,6 +62,9 @@ var mpin = mpin || {};
         this.elHelp = document.getElementById('helpContainer');
         this.elHelpOverlay = document.getElementsByTagName("help")[0];
 
+        this.elHelpHub = document.getElementById('helpHubContainer');
+        this.elHelpHubOverlay = document.getElementsByTagName("helpHub")[0];
+
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
 //          this.error(" Some options are required :" + this.cfg.requiredOptions);
@@ -94,19 +97,12 @@ var mpin = mpin || {};
         console.log("language:: ", lang);
  
          
-        // Disable scroll areas
+        // Prevent user from scrolling on touch
  
         document.ontouchmove = function(e){ e.preventDefault(); }
  
-        //this.renderSetupHome();
-        // this.renderMobileSetup();
-        // Check for appID
         this.renderHomeMobile();
-        // this.renderSetup()
-        // this.setOptions(options).renderHome();
-        // this.setOptions(options).renderSetupHome();
-        // this.setOptions(options);
- 
+
         // Caching - monitor if new version of the cache exists
  
         setInterval(function () { window.applicationCache.update(); }, 1000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
@@ -166,6 +162,14 @@ var mpin = mpin || {};
         html = mpin._.template(mpin.template[tmplName], data);
         return html;
     };
+
+    mpin.prototype.readyHelpHub= function(tmplName, tmplData) {
+        var data = tmplData, html;
+        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
+        html = mpin._.template(mpin.template[tmplName], data);
+        return html;
+    };
+    
  
     mpin.prototype.render = function(tmplName, callbacks, tmplData) {
         var data = tmplData || {}, k;
@@ -204,10 +208,35 @@ var mpin = mpin || {};
         }
     };
 
+    mpin.prototype.renderHelpHub = function(tmplName, callbacks, tmplData) {
+        var data = tmplData || {}, k;
+
+        this.elHelpHubOverlay.style.display = 'block';
+        this.elHelpHubOverlay.style.opacity = "1";
+        this.elHelpHub.innerHTML = this.readyHelpHub(tmplName, data);
+        this.elHelpHub.style.display = 'block';
+
+        for (k in callbacks) {
+            if (document.getElementById(k)) {
+                document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                document.getElementById(k).addEventListener('click', callbacks[k], false);
+            }
+        }
+        if (typeof mpin.custom !== 'undefined') {
+            this.setCustomStyle();
+        }
+    };
+
     mpin.prototype.dismissHelp = function() {
             this.elHelpOverlay.style.display = 'none';
             this.elHelpOverlay.style.opacity = '0';
             this.elHelp.style.display = 'none';
+    }
+
+    mpin.prototype.dismissHelpHub = function() {
+            this.elHelpHubOverlay.style.display = 'none';
+            this.elHelpHubOverlay.style.opacity = '0';
+            this.elHelpHub.style.display = 'none';
     }
  
     mpin.prototype.setLanguageText = function() {
@@ -405,8 +434,6 @@ var mpin = mpin || {};
         // Create dummy input els
         if (!this.isAccNumber) {
 
-            console.log("Create dummy els if not isAccNumber");
-
             var renderElem = document.getElementById('codes');
             renderElem.style.display = 'block';
             renderElem.innerHTML = "Enter your pin";
@@ -463,14 +490,11 @@ var mpin = mpin || {};
         };
 
 
-
         callbacks.mpinLogin = function() {
 
             var callbacks = {};
 
             var pinpadDisplay = document.getElementById("pinpad-input");
- 
-            console.log('###############################isAccNumber', self.isAccNumber);
  
             if (self.isAccNumber) {
                 self.accessNumber = pinpadDisplay.value;
@@ -503,12 +527,12 @@ var mpin = mpin || {};
             }
         };
          
-//      this.render("login", callbacks, {email: email});
         this.render("setup", callbacks, {email: email, menu: true});
         this.enableNumberButtons(true);
         this.bindNumberButtons();
  
         var pinpadDisplay = document.getElementById("pinpad-input");
+
         //set placeholder to access Number text
         pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
         pinpadDisplay.type = "text";
@@ -537,6 +561,12 @@ var mpin = mpin || {};
             console.log("Click here?");
             // Show the help item
             self.renderHelp("help-setup-home", callbacks);
+        };
+
+        // Helphub calbacks
+
+        document.getElementById('openHelpHub').onclick = function(evt) {
+            self.renderHelpHub("helphub-index", callbacks);
         };
 
 
@@ -1433,7 +1463,6 @@ var mpin = mpin || {};
 
                         callbacks.mp_action_register = function(evt) {
 
-                            console.log("%%%%%%%%%%%%%%%%Go to register page");
                             self.renderSetupHome.call(self, evt);
                         };
 

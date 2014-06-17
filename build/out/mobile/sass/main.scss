@@ -531,6 +531,13 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		#mpinLogo {
 			@include mpin-logo();
 			display: block;
+
+			#openHelpHub {
+				display: block;
+			    height: 100%;
+			    width: 100%;
+			    text-decoration: none;
+			}
 		}
 	}
 	
