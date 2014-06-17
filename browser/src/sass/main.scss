@@ -597,11 +597,9 @@ $green : #06B405;
 
 	}
 
-	@import 'mobile';
- 
 	#mpinFooter {
 
-		-webkit-box-orient: horizontal;
+		-webkit-box-orient: horizontal; 
 		-ms-flex-direction: row;
 		flex-direction: row;
 
