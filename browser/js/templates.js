@@ -382,15 +382,7 @@
         '		<%= hlp.text( "home_hlp_link") %>',
         '	</info>',
         '	',
-        '</div>',
-        '',
-        '<!--',
-        '<div class="mpinIdentityRow mpinFooterRow mpHide" id="mpin_accounts_list">',
-        '	<div class="mpinArrowDown mpPointer close mpinAUp" id="mpin_arrow">',
-        '		<img src="public/mpin/images/arrow-down-black.svg">',
-        '	</div>',
-        '</div>',
-        '-->'].join('');
+        '</div>'].join('');
 
     mpin.template['setup'] = ['<div class="mpinHeader">',
         '    <div class="mpinLogo mpPointer"></div>',
@@ -939,7 +931,8 @@
         '',
         '<div class="mpinIdentityRow mpinFooterRow mpHide" id="mpin_accounts_list">',
         '	<div class="mpinArrowDown mpPointer close mpinAUp" id="mpin_arrow">',
-        '		<img src="public/mpin/images/arrow-down-black.svg">',
+        '		<img src="<%= hlp.img("arrow-down-black.svg") %>">',
+        '		',
         '	</div>',
         '</div>',
         '',
