@@ -22,6 +22,12 @@ module.exports = function(grunt) {
 				   grunt.task.run('uglify');
 				 }
 			},
+			buildMPinAll: {
+				cmd: 'cd js; ./buildMPin.sh > mpin-all.js',
+ 				options: {
+                                        stdout: true,
+                                }
+			},
 			copyResources: {
 				cmd: 'cp -R resources/ ../build/out/mobile/resources/',
 				options: {
