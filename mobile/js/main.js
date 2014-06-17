@@ -765,6 +765,10 @@ var mpin = mpin || {};
             mpBack = document.getElementById('mp_back'),
             menuBtn = document.getElementById('menuBtn');
 
+        if (!this.identity) {
+            self.setIdentity(self.ds.getDefaultIdentity(), false);
+        }
+
         menuBtn.onclick = function(evt) {
             document.getElementById('accountTopBar').style.height = "";
             menuBtn.className = 'up';
