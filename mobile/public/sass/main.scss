@@ -178,6 +178,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		#logo {
 			@include custom-logo();
 			display: block;
+			position: relative;
 		}
 
 	}
@@ -600,6 +601,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	overflow-y: auto;
 
 	.default {
+		color: white;
 		background: #3c9dcb;
 	}
 
@@ -611,7 +613,10 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		position: relative;
 		top: 17px;
 		color: black;
-		text-align: center;
+		text-align: left;
+		width: 90%;
+		padding-left: 10px;
+
 	}
 
 	.mp_buttonItem {
@@ -621,6 +626,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		right: 10px;
 		z-index: 9999;
 		cursor: pointer;
+		width: 10%;
 
 		img {
 			background-color: white;
@@ -632,7 +638,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 .mp_contentItem {
 	position: relative;
-	height: 58px;
+	min-height: 58px;
 	border-bottom: 2px solid #666666;
 }
 
