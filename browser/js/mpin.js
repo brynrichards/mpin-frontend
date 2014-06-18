@@ -256,12 +256,9 @@ var mpin = mpin || {};
 		function clearIntervals() {
 			clearInterval(self.intervalID);
 			clearTimeout(self.intervalID2);
-		}
-		;
+		};
 
 		clearIntervals();
-
-
 
 		totalAccounts = this.ds.getAccounts();
 		totalAccounts = Object.keys(totalAccounts).length;
@@ -399,7 +396,7 @@ var mpin = mpin || {};
 			clearTimeout(self.intervalID2);
 		}
 		;
-
+		clearIntervals();
 		callbacks.mp_action_home = function(evt) {
 //			_request.abort();
 			clearInterval(self.intervalID);
