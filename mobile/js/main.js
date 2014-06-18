@@ -824,7 +824,7 @@ var mpin = mpin || {};
     };
 
     mpin.prototype.renderUserSettingsPanel = function(iD) {
-        
+
         var renderElem, name, self = this;
         name = this.getDisplayName(iD);
         renderElem = document.getElementById("mp_back");
@@ -1044,7 +1044,11 @@ var mpin = mpin || {};
         for (var i = 0; i < btEls.length; i++) {
 
  
-			btEls[i].addEventListener('click', mEventsHandler, false);
+			// btEls[i].addEventListener('click', mEventsHandler, false);
+
+            // Mobile touch events
+            btEls[i].addEventListener('touchstart', mEventsHandler, false);
+
  
             function mEventsHandler(e) {
 
