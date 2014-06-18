@@ -905,7 +905,7 @@
         '',
         '<div class="mpinHeaderRow">',
         '	<%=hlp.text( "setup_header") %>',
-        '</div>',
+        '</div> ',
         '',
         '',
         '<div class="mpinMain mpPaddTop10">',
