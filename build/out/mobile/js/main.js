@@ -489,6 +489,7 @@ var mpin = mpin || {};
              self.renderLogin(true);
             }
         };
+
         callbacks.mpinClear = function() {
             self.addToPin.call(self, "clear");
         };
@@ -900,25 +901,7 @@ var mpin = mpin || {};
  
         this.render("setup-done", callbacks, {userId: userId});
     };
- 
-    mpin.prototype.renderLogout = function(authData) {
-        var callbacks = {}, self = this, userId;
- 
-        callbacks.mpin_action_logout = function() {
- 
-            console.log("smth..............", authData);
- 
-            self.ajaxPost("http://192.168.10.107:8005/logout", authData, function(res) {
- 
-                if (res) {
-                    self.renderLogin();
-                }
-            });
- 
-        };
- 
-        this.render("logout", callbacks, {userId: userId});
-    };
+
  
     mpin.prototype.addUserToList = function(cnt, uId, isDefault, iNumber) {
         var starClass, divClass, self = this, starButton;
@@ -1461,7 +1444,8 @@ var mpin = mpin || {};
                 function(success, errorCode, errorMessage, authData) {
                     console.log("authenticate arguments :", errorCode);
                     if (success) {
-                        self.successLogin(authData);
+                        var iD = self.identity;
+                        self.successLogin(authData, iD);
                     } else if (errorCode === "INVALID") {
 
                         self.display(hlp.text("authPin_errorInvalidPin"), false);
@@ -1767,17 +1751,36 @@ var mpin = mpin || {};
         return mpinDs;
     };
  
-    mpin.prototype.successLogin = function(authData) {
-        if (this.opts.successLoginURL) {
-            window.location = this.opts.successLoginURL;
-        } else if (this.opts.onSuccessLogin) {
+    mpin.prototype.successLogin = function(authData, iD) {
+        var callbacks = {}, self = this;
 
-            console.log("Dump na authData, ", authData.logoutData.userId);
+        callbacks.mp_action_home = function(evt) {
+            if (totalAccounts === 0) {
+             self.renderSetupHome();
+            } else if (totalAccounts === 1) {
+             self.renderLogin();
+            } else if (totalAccounts > 1) {
+             self.renderLogin(true);
+            }
+        };
 
-            this.render("success-login", {}, {email: authData.logoutData.userId});
-        }
+        callbacks.mp_action_logout = function(evt) {
+
+            if(authData.logoutURL) {
+                self.ajaxPost( authData.logoutURL, authData.logoutData, function(res) {
+                    if (res) {
+                        self.renderLogin();
+                    }
+                });
+            } else {
+                self.renderLogin();
+            }
+
+        };
+
+        this.render("success-login", callbacks, {email: self.getDisplayName(iD)});
     };
- 
+
     mpin.prototype.certivoxClientSecretURL = function(params) {
 //      return this.cfg.apiUrl + this.cfg.apiVersion + "/clientSecret?" + params;
         return this.opts.certivoxURL + "clientSecret?" + params;
