@@ -375,14 +375,17 @@ var mpin = mpin || {};
     mpin.prototype.renderSetupHome = function(email, errorID) {
 
         var callbacks = {}, self = this, descHtml;
+
+        totalAccounts = this.ds.getAccounts();
+        totalAccounts = Object.keys(totalAccounts).length;
         
         callbacks.mp_action_home = function(evt) {
             if (totalAccounts === 0) {
-             this.renderSetupHome();
+             self.renderSetupHome();
             } else if (totalAccounts === 1) {
-             this.renderLogin();
+             self.renderLogin();
             } else if (totalAccounts > 1) {
-             this.renderLogin(true);
+             self.renderLogin(true);
             }
         };
         callbacks.mp_action_setup = function(evt) {
@@ -480,11 +483,11 @@ var mpin = mpin || {};
  
         callbacks.mp_action_home = function(evt) {
             if (totalAccounts === 0) {
-             this.renderSetupHome();
+             self.renderSetupHome();
             } else if (totalAccounts === 1) {
-             this.renderLogin();
+             self.renderLogin();
             } else if (totalAccounts > 1) {
-             this.renderLogin(true);
+             self.renderLogin(true);
             }
         };
         callbacks.mpinClear = function() {
