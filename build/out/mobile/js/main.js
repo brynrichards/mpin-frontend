@@ -477,7 +477,6 @@ var mpin = mpin || {};
         }
 
         if (!this.identity) {
-            console.log("COmming here???");
             self.setIdentity(self.ds.getDefaultIdentity(), false);
         }
  
@@ -507,9 +506,12 @@ var mpin = mpin || {};
  
             if (self.isAccNumber) {
                 self.accessNumber = pinpadDisplay.value;
+
+                if(self.accessNumber.length < self.opts.accessNumberDigits ) {
+                    return;
+                }
+
                 self.isAccNumber = false;
-                // Add class for the v3 version before the redesign
-                // removeClass(pinpadDisplay, "blue-bg");
 
                 var pinPad = document.getElementById('pinsHolder');
                 pinPad.className = '';
@@ -520,6 +522,7 @@ var mpin = mpin || {};
                 var circlesHolder = document.getElementById('circlesHolder');
 
                 for (var i = self.cfg.pinSize - 1; i >= 0; i--) {
+
                    var circleA = document.createElement("div");
                    var circleB = document.createElement("div");
 
@@ -532,6 +535,12 @@ var mpin = mpin || {};
 
                 self.addToPin("login");
             } else {
+
+                self.pinPadLength = pinpadDisplay.value;
+
+                if(self.pinPadLength.length < self.cfg.pinSize ) {
+                    return;
+                }
                 self.actionLogin.call(self);
             }
         };
@@ -1043,11 +1052,11 @@ var mpin = mpin || {};
 
         for (var i = 0; i < btEls.length; i++) {
 
- 
-			// btEls[i].addEventListener('click', mEventsHandler, false);
-
             // Mobile touch events
-            btEls[i].addEventListener('touchstart', mEventsHandler, false);
+ 
+			btEls[i].addEventListener('click', mEventsHandler, false);
+
+            // btEls[i].addEventListener('touchstart', mEventsHandler, false);
 
  
             function mEventsHandler(e) {
@@ -1088,7 +1097,7 @@ var mpin = mpin || {};
                 element.className = "btn";
                 element.disabled = false;
             } else {
-                element.className = "btn mp_inactive";
+                element.className = "btn disabled";
                 element.disabled = true;
             }
         }
@@ -1192,11 +1201,15 @@ var mpin = mpin || {};
         }
  
         if (pinElement.value.length === 1) {
+
+            console.log("Comming here to enable the clear");
             this.enableButton(true, "clear");
         }
  
         else if (this.isAccNumber) {
             if (pinElement.value.length === this.opts.accessNumberDigits) {
+
+                console.log("Comming here to enable the digits");
 
                 // Append the number of circles
 
@@ -1221,9 +1234,10 @@ var mpin = mpin || {};
      * @returns {undefined}
      */
     mpin.prototype.enableButton = function(enable, buttonName) {
+
         var buttonValue = {}, _element;
-        buttonValue.go = {id: "mpinLogin", trueClass: "btn", falseClass: "btn mp_inactive"};
-        buttonValue.clear = {id: "mpinClear", trueClass: "btn", falseClass: "btn mp_inactive"};
+        buttonValue.go = {id: "mpinLogin", trueClass: "btnLogin", falseClass: "btnLogin disabled"};
+        buttonValue.clear = {id: "mpinClear", trueClass: "btnClear", falseClass: "btnClear disabled"};
         buttonValue.toggle = {id: "mp_toggleButton", trueClass: "mp_DisabledState", falseClass: ""};
         _element = document.getElementById(buttonValue[buttonName].id);
         if (!buttonValue[buttonName] || !_element) {
