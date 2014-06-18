@@ -1121,20 +1121,11 @@ var mpin = mpin || {};
                 element.className = 'inner-circle';
             }
 
-            element.style.opacity = 0;
-            element.style.width = "36px";
-            element.style.height = "36px";
-            element.style.margin = "0px";
-
             // Use setTimeout to trigger the animation
 
-            setTimeout(function () {
-              // Fade it in.
-              element.style.opacity = 1;
-              element.style.width = "18px";
-              element.style.height = "18px";
-              element.style.margin = "7px";
-            }, 0);
+            element.style.width = "18px";
+            element.style.height = "18px";
+            element.style.margin = "7px";
 
             pinElement.value += digit;
 
