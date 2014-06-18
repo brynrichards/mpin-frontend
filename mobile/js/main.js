@@ -824,6 +824,7 @@ var mpin = mpin || {};
     };
 
     mpin.prototype.renderUserSettingsPanel = function(iD) {
+        
         var renderElem, name, self = this;
         name = this.getDisplayName(iD);
         renderElem = document.getElementById("mp_back");
@@ -851,7 +852,7 @@ var mpin = mpin || {};
             self.renderSetup(self.getDisplayName(iD));
         };
         document.getElementById("mp_acclist_cancel").onclick = function() {
-            self.renderUserSettingsPanel();
+            self.renderUserSettingsPanel(iD);
         };
     };
  
@@ -870,7 +871,7 @@ var mpin = mpin || {};
  
         };
         document.getElementById("mp_acclist_cancel").onclick = function(evt) {
-            self.renderUserSettingsPanel();
+            self.renderUserSettingsPanel(iD);
         };
     };
  
