@@ -563,7 +563,7 @@
         '  </div>',
         '',
         '  <div id="buttonsContainer">',
-        '      <div class="mpinBtn" id="mp_action_logout">',
+        '      <div class="mpinBtn" id="mp_action_go">',
         '          <span class="iconArrow"></span>',
         '          <span class="btnLabel"><%= hlp.text("setupDone_button_go") %></span>',
         '      </div>',

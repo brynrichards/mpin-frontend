@@ -514,6 +514,9 @@ var mpin = mpin || {};
 
                 self.isAccNumber = false;
 
+                self.enableButton(false, "go");
+                self.enableButton(false, "clear");
+
                 var pinPad = document.getElementById('pinsHolder');
                 pinPad.className = '';
 
@@ -1157,11 +1160,6 @@ var mpin = mpin || {};
                 }
 
             }
-            
-            return;
-
-            this.enableButton(false, "go");
-            this.enableButton(false, "clear");
 
         }
  
