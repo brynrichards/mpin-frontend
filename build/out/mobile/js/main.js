@@ -1161,6 +1161,11 @@ var mpin = mpin || {};
 
             }
 
+            // Disable the clear and the sign in buttons
+
+            this.enableButton(false, "go");
+            this.enableButton(false, "clear");
+
         }
  
         if (digit === 'login') {
