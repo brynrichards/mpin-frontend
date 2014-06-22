@@ -16,7 +16,7 @@
 	display: flex;
 	display: -webkit-box;
 	display: -ms-flexbox;
-	
+
 	#mpinLogo {
 		@include logo();
 
@@ -54,9 +54,41 @@
 	}
 }
 
+.mpinIntroText {
+	width: 90%;
+	margin: 10px auto;
+}
+
+.mpinCenterTxt {
+	text-align: center;
+	font-weight: bold;
+	width: 90%;
+	padding: 10px;
+}
+.mpinJustifyTxt {
+	text-align: justify;
+	line-height: 17px;
+	margin: 5px;
+}
+
+.mpinColorGreen {
+	color: #06B405;
+	font-style: italic;
+}
+
+.mpinColorRed {
+	color: #FC0409;
+	font-style: italic;
+}
+
+.mpinBtm10 {
+	margin-bottom: 10px;
+}
+
+
 #homeIcon {
 
-	margin-top: 10px;
+	margin-top: 5px;
 
 	-webkit-box-orient: horizontal !important;
 	-ms-flex-direction: row !important;
@@ -81,17 +113,19 @@
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-color: white;
-	padding: 10% 0px 20px;
+	/*padding: 10% 0px 20px;*/
+	/*float:right;*/
 
 	#mobileIcon {
-		
 		@include mobile-icon();
+	}
+	#desktopIcon {
+		@include desktop-icon();
 	}
 
 }
 
 #buttonsContainer {
-	margin-top: 3vh;
 	display: flex;
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -112,9 +146,57 @@
 	align-items: center;
 
 	width: 100%;
-	
+
 	.mpinBtn {
 		width: 90%;
+
+		&.mpinBtnBusy {
+			background: url('#{$IMAGES}checking.gif') no-repeat 95% center;
+			padding: 10px;
+		}
+
+		&.mpinBtnError {
+			color: red;
+			padding: 10px;
+			box-shadow: none;
+			background: none;
+			text-align: center;
+		}
+		&.mpinBtnOk	{
+			padding: 10px;
+		}
+		&.green {
+			background: #44A800;
+		}
+		&.grey {
+			background: #7E7E7E;
+		}
 	}
 
+	.mpinBlueBtn {
+		background: #0686CF;
+		padding: 10px;
+	}
+
+	.mpinGreenBtn {
+		background: #06B405;
+		padding: 10px;
+	}
+	.mpinBold {
+		font-weight: bold;
+		display: block;
+	}
+}
+
+.mpinWhiteGrBtn {
+	@include mpin-button();
+	background: none;
+	border: 1px solid $green !important;
+	padding: 5px;
+	color: $green;
+	width: 90%;
+	margin-top: 30px;
+	text-align: center;
+	text-shadow: none;
+	font-weight: bold;
 }

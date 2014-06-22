@@ -1,12 +1,14 @@
-<div id="mp_accountListView" class="PinPadListViewSkin">
-    <div class="mp_customScrollBox">
-        <div class="mp_container">
-            <div id="mp_accountContent" class="mp_content"></div>
-        </div>
-    </div>
+<div class="mpinLists" >
+	<ul id="mpin_accounts_list">
+		<!-- identities(accounts) list here -->
+	</ul>
 </div>
-<div style="padding:0px 10px">
-    <button id="mp_acclist_adduser" class="mp_blueSkin" tabindex=-1>
-        <%=hlp.text( "setupReady_button_resend") %>
-    </button>
+
+<div class="mpinBtnBox">
+	<div class="mpinButton" id="mpin_add_identity">
+		<%=hlp.text("account_button_addnew") %>
+	</div>
+	<div class="mpinButton mpGreen" id="mpin_phone">
+		<%=hlp.text("signin_mobile_btn_text") %>
+	</div>
 </div>

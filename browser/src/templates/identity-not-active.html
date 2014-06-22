@@ -1,57 +1,42 @@
-<!-- Home/Top Nav Bar -->
-
-<header id="topNav">
-    <div id="homeBtn">
-    </div>
-    <div id="mpinLogo">
-    </div>
-</header>
-
-<!-- User section -->
-
-<header id="header">
-  <div id="mpinLogo"></div>
-</header>
-
-<!-- Input button -->
-
-<div id="identityContainer">
-
-  <div class="identityMainText">
-      <div>
-        Your email address will be used as your identity when M-Pin authenticates you to this service.
-      </div>
-
-      <div class="mp_note" style="margin:0pxpadding:0px">
-          <p class="mp_center" style="width:240px">
-              <%=hlp.text( "setupNotReady_text1") %>
-                  <br/>
-                  <span style="padding: 10px 5px 20px 5px" class="mp_accountField">
-                      jordan@dasdsa.com
-                  </span>
-                  <br/>
-                  <%=hlp.text( "setupReady_text2") %>
-          </p>
-          <p>
-              <%=hlp.text( "setupReady_text3") %>
-          </p>
-      </div>
-  </div>
-
-  <div id="buttonsContainer">
-      <div class="mpinBtn" id="mpin_authenticate">
-          <span class="iconArrow"></span>
-          <span class="btnLabel"><%=hlp.text( "setupReady_button_go") %></span>
-      </div>
-      <div class="mpinBtn" id="deviceIdentity">
-          <span class="iconArrow"></span>
-          <span class="btnLabel"><%=hlp.text( "setupNotReady_button_resend")%></span>
-      </div>
-  </div>
-
+<div class="mpinHeader">
+    <div class="mpinLogo mpPointer"></div>
+	<div class="mpinHome mpPointer" id="mpin_home"></div>
 </div>
 
-<footer id="mpinFooter">
-    <div id="homeBtn">
+<div class="mpinHeaderRow">
+	<%=hlp.text( "setupNotReady_header") %>
+</div>
+
+<div class="mpinMain mpPaddTop10">
+	<div class="mpinCenter mpinCenter5">
+		<%=hlp.text( "setupNotReady_text1") %>
+		<p class="mpinIdentityText">
+			<%= email %>
+		</p>		
+		<%=hlp.text( "setupNotReady_text2") %>
+		<p>
+			<%=hlp.text( "setupNotReady_text3") %>
+		</p>
     </div>
-</footer>
+	
+	<!-- <div class="mpinFooterRow"> -->
+		<div class="mpinBtnBox">
+			<div class="mpinButton" id="mpin_activate_btn">
+				<%=hlp.text( "setupNotReady_button_check")%>
+			</div>
+			
+			<div class="mpinButton" id="mpin_resend_btn">
+				<%=hlp.text( "setupNotReady_button_resend")%>
+			</div>
+
+			<div class="mpinButton mpBtnOnlyGreen" id="mpin_accounts_btn">
+				<%=hlp.text( "setupNotReady_button_back")%>
+			</div>
+		</div>
+	<!-- </div> -->
+</div>
+
+<div class="mpinFooter">
+	<div class="mpinPowered"></div>
+	<div class="mpinHelpHub mpPointer" id="mpin_helphub"></div>
+</div>

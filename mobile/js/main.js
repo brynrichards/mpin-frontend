@@ -79,6 +79,7 @@ var mpin = mpin || {};
  
         //set Options
         this.setOptions(options.server).setOptions(options.client);
+
 		
 		if (!this.opts.certivoxURL.mpin_endsWith("/")) {
 			this.opts.certivoxURL += "/";
@@ -2035,5 +2036,4 @@ var mpin = mpin || {};
             };
         }
     };
- 
 })();

@@ -1,32 +1,39 @@
-<div id="mp_pinpadHolder">
-    <div id="mp_headersml">
-        <section class="mp_floatLeft"><a href="#" id="mp_action_home"><img src="<%= hlp.img("icon-home-sml.png") %>" alt="Home" /></a>
-        </section>
-        <section class="mp_floatRight">
-            <img src="<%= hlp.img(" m-pin-logo-white-sml.png ") %>" alt="M-Pin Logo" />
-        </section>
-        <div class="mp_clear"></div>
-    </div>
-    <div id="mp_contentPadWithHeaderthin">
-        <div id="mp_wrapperthin">
-            <h1>
-                <%=hlp.text( "mobileGet_header") %>
-            </h1>
-            <div class="mp_qrHolder">
-                <p>
-                    <%=hlp.text( "mobileGet_text1") %>
-                </p>
-                <div id="mp_qrcode" style="margin: 0 autowidth: 129px height: 129px padding: 5px background-color: white" alt="QR"></div>
-                <p class="mp_scanUrl">
-                    <%=hlp.text( "mobileGet_text2") %>
-                        <br />
-                        <%=mobileAppFullURL %>
-                </p>
-                <div class="mp_clear"></div>
-            </div>
-            <a href="#" id="mp_action_cancel" class="mp_button">
-                <%=hlp.text( "mobileGet_button_back") %>
-            </a>
-        </div>
-    </div>
+<div class="mpinHeader">
+    <div class="mpinLogo mpPointer"></div>
+	<div class="mpinHome mpPointer" id="mpin_home"></div>
+</div>
+
+<div class="mpinHeaderRow">
+	<%=hlp.text( "mobileGet_header") %>
+</div>
+
+<div class="mpinMain">
+	<div class="mpinCenter mpinCenter5">
+		
+		<span id="mpin_qrcode">
+		</span>
+
+		<p class="mpinJustifyTxt">
+			<i class="mpinInfo"></i>
+			<%=hlp.text( "mobileGet_text1") %>
+		</p>
+		<span class="mpinPurple mpWrapped">
+			<%= mobileAppFullURL %>
+		</span>
+	</div>
+	
+		<div class="mpinBtnBox">
+
+			<div class="mpinButton mpGreen" id="mpinbtn_mobile">
+				<span class="iconArrow"></span>
+				<%=hlp.text( "mobile_footer_btn")%>
+			</div>
+		</div>
+	
+</div>
+
+
+<div class="mpinFooter">
+	<div class="mpinPowered"></div>
+	<div class="mpinHelpHub mpPointer" id="mpin_helphub"></div>
 </div>

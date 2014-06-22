@@ -1,58 +1,37 @@
-<!-- Home/Top Nav Bar -->
-
-<header id="topNav">
-    <div id="mp_action_home">
-    </div>
-    <div id="mpinLogo">
-    </div>
-</header>
-
-<!-- User section -->
-
-<header id="header">
-  <div id="menuIcon"></div>
-  <div id="mpinLogo"></div>
-</header>
-
-<!-- Input button -->
-
-<div id="identityContainer">
-
-  <div class="identityMainText">
-      <div class="congrats">
-        <%=hlp.text( "setupReady_header") %>
-      </div>
-
-      <div class="identityBodyText">
-          <p>
-              <%=hlp.text( "setupReady_text1") %>
-                  <span class="email">
-                      <%= email %>
-                  </span>
-          </p>
-          <p>
-            <%=hlp.text( "setupReady_text2") %>
-          </p>
-          <p>
-              <%=hlp.text( "setupReady_text3") %>
-          </p>
-      </div>
-  </div>
-
-  <div id="buttonsContainer">
-      <div class="mpinBtn" id="mpin_action_setup">
-          <span class="iconArrow"></span>
-          <span class="btnLabel"><%=hlp.text( "setupReady_button_go") %></span>
-      </div>
-      <div class="mpinBtn" id="mpin_action_resend">
-          <span class="iconArrow"></span>
-          <span class="btnLabel"><%=hlp.text( "setupReady_button_resend")%></span>
-      </div>
-  </div> 
-
+<div class="mpinHeader">
+    <div class="mpinLogo mpPointer"></div>
+	<div class="mpinHome mpPointer" id="mpin_home"></div>
 </div>
 
-<footer id="mpinFooter">
-    <div id="homeBtn">
+<div class="mpinHeaderRow">
+	<%=hlp.text( "activate_header") %>
+</div>
+
+<div class="mpinMain mpPaddTop10">
+	<div class="mpinCenter mpinCenter5">
+		<%=hlp.text( "activate_text1") %>
+		
+		<p class="mpinIdentityText"><%= email %></p>
+		
+		<%=hlp.text( "activate_text2") %>
+		<p>
+			<%=hlp.text( "activate_text3") %>
+		</p>
     </div>
-</footer>
+	
+	<div class="mpinBtnBox">
+		<div class="mpinButton" id="mpin_activate">
+			<%=hlp.text( "activate_btn1") %>
+		</div>
+		<div class="mpinButton" id="mpin_resend">
+			<%=hlp.text( "activate_btn2") %>
+		</div>
+	</div>
+		
+</div>
+
+
+<div class="mpinFooter">
+	<div class="mpinPowered"></div>
+	<div class="mpinHelpHub mpPointer" id="mpin_helphub"></div>
+</div>

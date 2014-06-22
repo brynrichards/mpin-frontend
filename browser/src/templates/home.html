@@ -1,24 +1,39 @@
-<header id="header">
-    <div id="mpinLogo"></div>
-</header>
-<div id="homeIcon">
-    <div id="mobileIcon"></div>
+<div class="mpinHeaderBig">
+	<div id="mpinLogo"></div>
 </div>
-<div id="buttonsContainer">
-    <div class="mpinBtn" id="mpin_authenticate">
-        <span class="iconArrow"></span>
-        <span class="btnLabel"><%=hlp.text( "home_button_authenticateMobile") %></span>
-    </div>
-    <div class="mpinBtn" id="getPassword">
-        <span class="iconArrow"></span>
-        <span class="btnLabel">Get One-Time Password</span>
-    </div>
-    <div class="mpinBtn" id="deviceIdentity">
-        <span class="iconArrow"></span>
-        <span class="btnLabel"><%=hlp.text( "home_button_setupMobile")%></span>
-    </div>
-         
+
+<div class="mpinHeaderBig">
+	<%=hlp.text( "home_intro_text") %>
 </div>
-<footer id="mpinFooter">
-    <div id="homeBtn"></div>
-</footer>
+
+<div class="mpinMain mpPaddTop10"> 
+	<div class="mpinBtnBox">
+	
+		<div class="mpinButton mpGreen mpBtnHome" id="mpin_mobile">
+			<%=hlp.text( "signin_mobile_btn_text") %>
+			<p>
+				<%=hlp.text( "signin_btn_mobile2")%>
+			</p>
+			
+		</div>
+		
+		<div class="mpinCenter mpinCenter5 mpHomeTxt">
+			<%=hlp.text( "home_txt_between_btns") %>
+		</div>
+		
+
+		<div class="mpinButton mpBtnHome" id="mpin_desktop">
+			<%=hlp.text( "signin_btn_desktop1") %>
+			<p>
+			<%=hlp.text( "signin_btn_desktop2")%>
+			</p>
+		</div>
+	</div>
+</div>
+
+<div class="mpinFooter mpinFooterHome">
+	<info class="mpinHelpInfo" id="mpin_help">
+		<i></i>
+		<%= hlp.text( "home_hlp_link") %>
+	</info>
+</div>
