@@ -1,22 +1,25 @@
 {
-  "name": "mpinmobile",
-  "type": "mobile",
+  "name": "mpinpinpad",
+  "type": "browser",
   "version": "0.0.1",
-  "description": "M-PIN Mobile app in pure JavaScript without dependency from Sencha",
+  "description": "M-PIN Browser PinPad",
   "main": "Gruntfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://jordan.katsarov@stash.certivox.com/scm/skypin/mpinmobile.git"
+    "url": "https://stash.certivox.com/scm/mpin/frontend.git"
   },
   "author": "Jordan Katsarov",
   "license": "ISC",
   "devDependencies": {
-      "grunt": "~0.4.1",
-      "grunt-contrib-sass": "~0.3.0",
-      "grunt-contrib-watch": "~0.4.4",
-      "grunt-shell": "*"
+    "grunt": "~0.4.1",
+    "grunt-contrib-sass": "~0.3.0",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-replace": "~0.7.7",
+    "grunt-bg-shell": "~2.3.1"
   }
 }

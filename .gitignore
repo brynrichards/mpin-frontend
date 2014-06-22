@@ -6,7 +6,8 @@ mobile/.sass-cache/
 mobile/in/
 build/out
 mobile/in/
-mobile/settings.json
+settings.json
 dist/
 npm-debug.log
 .DS_Store
+browser/css
