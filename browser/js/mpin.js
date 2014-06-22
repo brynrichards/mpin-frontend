@@ -900,7 +900,7 @@ var mpin = mpin || {};
 		_reqData.method = "GET";
 
 		//get signature
-		requestRPS(_reqData, function(rpsData) {
+		requestRPS(_reqData, function(rpsData) {	
 			if (rpsData.errorStatus) {
 
 				btn.error("setupNotReady_check_info2");

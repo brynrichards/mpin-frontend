@@ -1,6 +1,6 @@
 CACHE MANIFEST
 # v0.1 Jordan - Apr 11 2014
-
+# Timestamp Fri Jun 20 2014 18:35:17
 # Explicitly cached 'master entries'.
 
 CACHE:
@@ -14,11 +14,10 @@ js/main.js
 
 #Cache images
 
-resources/templates/darkgrey/img/mpin_logo.svg
-resources/templates/darkgrey/img/arrow.svg
-resources/templates/darkgrey/img/byCertivox.svg
-resources/templates/darkgrey/img/home.svg
-resources/templates/darkgrey/img/phone.svg
+resources/templates/gradient/img/m-pin-header-logo.svg
+resources/templates/gradient/img/byCertivox.svg
+resources/templates/gradient/img/home.svg
+resources/templates/gradient/img/phone.svg
 
 NETWORK:
 *

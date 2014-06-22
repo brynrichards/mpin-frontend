@@ -9,16 +9,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 	<meta name="apple-touch-fullscreen" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
-	<link rel="apple-touch-icon" href="resources/templates/darkgrey/icons/Icon@2x.png" />
+	<link rel="apple-touch-icon" href="resources/templates/gradient/icons/Icon@2x.png" />
 	<meta http-equiv="cleartype" content="on">
 	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-	<div>
-		<script type="text/javascript">
-			var isOnline = navigator.onLine ? 'online' : 'offline';
-			document.write("<p style='color:white'>" + isOnline + "</p>");
-		</script>
+	<div id="rotateLock">
+		<img src="resources/templates/gradient/img/rotate.svg" alt="">
+		<h1>Rotate Device to Portrait</h1>
 	</div>
 	<div id="mpinContainer">
 
@@ -31,13 +29,33 @@
 
 			</div>
 
+			
+			<help>
+			  
+			  <div id="helpContainer">
+
+
+			  </div>
+
+			</help>
+
+			<!-- Helphub -->
+
+			<helpHub>
+			  
+			  <div id="helpHubContainer">
+
+
+			  </div>
+
+			</helpHub>
+
 		</div>
 	</div>
 
 	<!-- Load JS files -->
 
 	<script src="js/main.js"></script>
-
 	<!-- Initialize MPIN -->
 
 	<script>

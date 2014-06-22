@@ -1,6 +1,6 @@
 CACHE MANIFEST
 # v0.1 Jordan - Apr 11 2014
-
+# Timestamp @@timestamp
 # Explicitly cached 'master entries'.
 
 CACHE:
@@ -14,8 +14,7 @@ js/main.js
 
 #Cache images
 
-resources/templates/@@templatename/img/mpin_logo.svg
-resources/templates/@@templatename/img/arrow.svg
+resources/templates/@@templatename/img/m-pin-header-logo.svg
 resources/templates/@@templatename/img/byCertivox.svg
 resources/templates/@@templatename/img/home.svg
 resources/templates/@@templatename/img/phone.svg

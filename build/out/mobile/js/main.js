@@ -1,10 +1,9 @@
-
 var mpin = mpin || {};
  
 (function() {
     var lang = {}, hlp = {};
     var loader;
-    var IMAGES_PATH = "resources/templates/grey/img/";
+    var IMAGES_PATH = "resources/templates/gradient/img/";
  
     //CONSTRUCTOR
     mpin = function(domID, options) {
@@ -60,6 +59,12 @@ var mpin = mpin || {};
      */
     mpin.prototype.initialize = function(domID, options) {
         this.el = document.getElementById(domID);
+        this.elHelp = document.getElementById('helpContainer');
+        this.elHelpOverlay = document.getElementsByTagName("help")[0];
+
+        this.elHelpHub = document.getElementById('helpHubContainer');
+        this.elHelpHubOverlay = document.getElementsByTagName("helpHub")[0];
+
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
 //          this.error(" Some options are required :" + this.cfg.requiredOptions);
@@ -74,6 +79,10 @@ var mpin = mpin || {};
  
         //set Options
         this.setOptions(options.server).setOptions(options.client);
+		
+		if (!this.opts.certivoxURL.mpin_endsWith("/")) {
+			this.opts.certivoxURL += "/";
+		}
  
         //if set & exist
         if (this.opts.language && lang[this.opts.language]) {
@@ -88,26 +97,20 @@ var mpin = mpin || {};
         console.log("language:: ", lang);
  
          
-        // Disable scroll areas
+        // Prevent user from scrolling on touch
  
         document.ontouchmove = function(e){ e.preventDefault(); }
  
-        //this.renderSetupHome();
-//      this.renderMobileSetup();
-        // Check for appID
         this.renderHomeMobile();
-        // this.renderLogin();
-        // this.setOptions(options).renderHome();
-        // this.setOptions(options).renderSetupHome();
-        // this.setOptions(options);
- 
+
         // Caching - monitor if new version of the cache exists
  
-        setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
+        setTimeout(function () { window.applicationCache.update(); }, 1000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
  
         window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
                 window.applicationCache.swapCache(); //swap to the newest version of the cache
                 alert("I updated the cache");
+                window.location.reload();
         }, false);
     };
  
@@ -129,7 +132,7 @@ var mpin = mpin || {};
         var _i, _opts, _optionName, _options = "stage; allowAddUser; requestOTP; successSetupURL; onSuccessSetup; successLoginURL; onSuccessLogin; onLoaded; onGetPermit; ";
         _options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; mpinDTAServerURL; signatureURL; verifyTokenURL; certivoxURL; ";
         _options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; authenticateHeaders; authTokenFormatter; accessNumberRequestFormatter; ";
-        _options += "registerRequestFormatter; onVerifySuccess; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; authenticateURL; ";
+        _options += "registerRequestFormatter; onVerifySuccess; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; timePermitsStorageURL; authenticateURL; ";
         _options += "language; customLanguageTexts; accessNumberDigits; mobileAuthenticateURL";
         _opts = _options.split("; ");
         this.opts || (this.opts = {});
@@ -152,6 +155,21 @@ var mpin = mpin || {};
         html = mpin._.template(mpin.template[tmplName], data);
         return html;
     };
+
+    mpin.prototype.readyHelp= function(tmplName, tmplData) {
+        var data = tmplData, html;
+        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
+        html = mpin._.template(mpin.template[tmplName], data);
+        return html;
+    };
+
+    mpin.prototype.readyHelpHub= function(tmplName, tmplData) {
+        var data = tmplData, html;
+        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
+        html = mpin._.template(mpin.template[tmplName], data);
+        return html;
+    };
+    
  
     mpin.prototype.render = function(tmplName, callbacks, tmplData) {
         var data = tmplData || {}, k;
@@ -160,7 +178,6 @@ var mpin = mpin || {};
         for (k in callbacks) {
             if (document.getElementById(k)) {
                 // document.getElementById(k).onclick = callbacks[k];
- 
                 document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
                 document.getElementById(k).addEventListener('click', callbacks[k], false);
  
@@ -170,6 +187,57 @@ var mpin = mpin || {};
             this.setCustomStyle();
         }
     };
+
+    mpin.prototype.renderHelp = function(tmplName, callbacks, tmplData) {
+        var data = tmplData || {}, k;
+
+        this.elHelpOverlay.style.display = 'block';
+        this.elHelpOverlay.style.opacity = "1";
+        this.elHelp.innerHTML = this.readyHelp(tmplName, data);
+        this.elHelp.style.display = 'block';
+
+        for (k in callbacks) {
+            if (document.getElementById(k)) {
+                document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                document.getElementById(k).addEventListener('click', callbacks[k], false);
+    
+            }
+        }
+        if (typeof mpin.custom !== 'undefined') {
+            this.setCustomStyle();
+        }
+    };
+
+    mpin.prototype.renderHelpHub = function(tmplName, callbacks, tmplData) {
+        var data = tmplData || {}, k;
+
+        this.elHelpHubOverlay.style.display = 'block';
+        this.elHelpHubOverlay.style.opacity = "1";
+        this.elHelpHub.innerHTML = this.readyHelpHub(tmplName, data);
+        this.elHelpHub.style.display = 'block';
+
+        for (k in callbacks) {
+            if (document.getElementById(k)) {
+                document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                document.getElementById(k).addEventListener('click', callbacks[k], false);
+            }
+        }
+        if (typeof mpin.custom !== 'undefined') {
+            this.setCustomStyle();
+        }
+    };
+
+    mpin.prototype.dismissHelp = function() {
+            this.elHelpOverlay.style.display = 'none';
+            this.elHelpOverlay.style.opacity = '0';
+            this.elHelp.style.display = 'none';
+    }
+
+    mpin.prototype.dismissHelpHub = function() {
+            this.elHelpHubOverlay.style.display = 'none';
+            this.elHelpHubOverlay.style.opacity = '0';
+            this.elHelpHub.style.display = 'none';
+    }
  
     mpin.prototype.setLanguageText = function() {
         hlp.language = this.language;
@@ -186,6 +254,7 @@ var mpin = mpin || {};
     };
  
     mpin.prototype.renderHome = function() {
+
         var callbacks = {}, self = this;
  
         if (this.opts.prerollid) {
@@ -215,8 +284,9 @@ var mpin = mpin || {};
         }
     };
     mpin.prototype.renderHomeMobile = function() {
+
         var callbacks = {}, self = this, identity;
- 
+
         if (this.opts.prerollid) {
             this.renderSetup(this.opts.prerollid);
         }
@@ -224,6 +294,25 @@ var mpin = mpin || {};
         callbacks.mpin_authenticate = function(evt) {
             // Modify the sequence for the templates
             self.renderSetupHome.call(self);
+        };
+
+        callbacks.ok_dismiss = function(evt) {
+            // Modify the sequence for the templates
+            self.dismissHelp.call(self);
+        };
+
+        callbacks.show_more = function(evt) {
+            // Modify the sequence for the templates
+            self.renderHelp("help-helphub", callbacks);
+        };
+
+        callbacks.info = function(evt) {
+            // Show the help item
+            self.renderHelp("help-setup-home", callbacks);
+        };
+
+        callbacks.mp_action_setup = function(evt) {
+            self.actionSetupHome.call(self, evt);
         };
  
         identity = this.ds.getDefaultIdentity();
@@ -263,21 +352,41 @@ var mpin = mpin || {};
  
             // Check if there's identity, redirect to login where 'Add to identity will appear'
             else if (identity) {
-                this.renderLogin();
+
+                totalAccounts = this.ds.getAccounts();
+                totalAccounts = Object.keys(totalAccounts).length;
+
+                 if (totalAccounts === 0) {
+                  this.renderSetupHome();
+                 } else if (totalAccounts === 1) {
+                  this.renderLogin();
+                 } else if (totalAccounts > 1) {
+                  this.renderLogin(true);
+                 }
+
             } else {
                 // Render the home mobile button, if no identity exists
-                this.render('home_mobile', callbacks);
+                this.render('setup-home', callbacks);
             }
         }
  
     };
  
     mpin.prototype.renderSetupHome = function(email, errorID) {
- 
+
         var callbacks = {}, self = this, descHtml;
- 
+
+        totalAccounts = this.ds.getAccounts();
+        totalAccounts = Object.keys(totalAccounts).length;
+        
         callbacks.mp_action_home = function(evt) {
-            self.renderHome.call(self, evt);
+            if (totalAccounts === 0) {
+             self.renderSetupHome();
+            } else if (totalAccounts === 1) {
+             self.renderLogin();
+            } else if (totalAccounts > 1) {
+             self.renderLogin(true);
+            }
         };
         callbacks.mp_action_setup = function(evt) {
             self.actionSetupHome.call(self, evt);
@@ -288,10 +397,17 @@ var mpin = mpin || {};
  
  
     mpin.prototype.renderSetup = function(email, clientSecretShare, clientSecretParams) {
- 
+        
         var callbacks = {}, self = this;
+
         callbacks.mp_action_home = function(evt) {
-            self.renderHome.call(self, evt);
+            if (totalAccounts === 0) {
+             this.renderSetupHome();
+            } else if (totalAccounts === 1) {
+             this.renderLogin();
+            } else if (totalAccounts > 1) {
+             this.renderLogin(true);
+            }
         };
         callbacks.mpinClear = function() {
             self.addToPin.call(self, "clear");
@@ -303,12 +419,43 @@ var mpin = mpin || {};
         callbacks.menuBtn = function() {
             self.toggleButton.call(self);
         };
- 
- 
- 
+
+        callbacks.show_more = function(evt) {
+            // Modify the sequence for the templates
+            self.renderHelp("help-helphub", callbacks);
+        };
+
+        callbacks.info = function(evt) {
+            // Show the help item
+            self.renderHelp("help-setup-home", callbacks);
+        };
+
         this.render("setup", callbacks, {email: email});
+
+
+        var pinpadContainer = document.getElementById('circlesHolder');
+
+        // Create dummy input els
+        if (!this.isAccNumber) {
+
+            var renderElem = document.getElementById('codes');
+            renderElem.style.display = 'block';
+            renderElem.innerHTML = "Enter your pin";
+
+            for (var i = this.cfg.pinSize - 1; i >= 0; i--) {
+                var circleA = document.createElement("div");
+                var circleB = document.createElement("div");
+
+                circleA.className = "circle";
+                circleB.className = "outer-circle";
+
+                circleA.appendChild(circleB);
+                pinpadContainer.appendChild(circleA);
+            };
+        } 
+        
  
-        document.body.className = 'pinpadGlobal'
+        document.body.className = 'pinpadGlobal';
  
         this.enableNumberButtons(true);
         this.bindNumberButtons();
@@ -318,18 +465,34 @@ var mpin = mpin || {};
     };
  
     mpin.prototype.renderLogin = function(listAccounts) {
+
         var callbacks = {}, self = this;
  
         this.isAccNumber = true;
+
         var identity = this.ds.getDefaultIdentity();
         var email = this.getDisplayName(identity);
+
         if (!identity) {
             this.renderSetupHome();
         }
+
+        if (!this.identity) {
+            console.log("Comming even here");
+            self.setIdentity(self.ds.getDefaultIdentity(), true);
+
+        }
  
         callbacks.mp_action_home = function(evt) {
-            self.renderHome.call(self, evt);
+            if (totalAccounts === 0) {
+             self.renderSetupHome();
+            } else if (totalAccounts === 1) {
+             self.renderLogin();
+            } else if (totalAccounts > 1) {
+             self.renderLogin(true);
+            }
         };
+
         callbacks.mpinClear = function() {
             self.addToPin.call(self, "clear");
         };
@@ -337,42 +500,130 @@ var mpin = mpin || {};
         callbacks.menuBtn = function() {
             self.toggleButton.call(self);
         };
- 
+
+
         callbacks.mpinLogin = function() {
+
+            var callbacks = {};
+
             var pinpadDisplay = document.getElementById("pinpad-input");
- 
-            console.log('isAccNumber', self.isAccNumber);
  
             if (self.isAccNumber) {
                 self.accessNumber = pinpadDisplay.value;
+
+                if(self.accessNumber.length < self.opts.accessNumberDigits ) {
+                    return;
+                }
+
                 self.isAccNumber = false;
-                removeClass(pinpadDisplay, "blue-bg");
+
+                self.enableButton(false, "go");
+                self.enableButton(false, "clear");
+
+                var pinPad = document.getElementById('pinsHolder');
+                pinPad.className = '';
+
+                // Empty the div
+                document.getElementById('circlesHolder').innerHTML = "";
+
+                var circlesHolder = document.getElementById('circlesHolder');
+
+                for (var i = self.cfg.pinSize - 1; i >= 0; i--) {
+
+                   var circleA = document.createElement("div");
+                   var circleB = document.createElement("div");
+
+                   circleA.className = "circle";
+                   circleB.className = "outer-circle";
+
+                   circleA.appendChild(circleB);
+                   circlesHolder.appendChild(circleA);
+                };
+
                 self.addToPin("login");
             } else {
+
+                self.pinPadLength = pinpadDisplay.value;
+
+                if(self.pinPadLength.length < self.cfg.pinSize ) {
+                    return;
+                }
                 self.actionLogin.call(self);
             }
         };
- 
- 
-//      this.render("login", callbacks, {email: email});
+         
         this.render("setup", callbacks, {email: email, menu: true});
         this.enableNumberButtons(true);
         this.bindNumberButtons();
  
         var pinpadDisplay = document.getElementById("pinpad-input");
+
         //set placeholder to access Number text
         pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
         pinpadDisplay.type = "text";
- 
-        //fix - there are two more conditions ...
+
+        var pinPad = document.getElementById('pinsHolder');
+        var circlesHolder = document.getElementById('circlesHolder');
+        var pinpadContainer = document.getElementById('inputContainer');
+
+        var renderElem = document.getElementById('codes');
+        renderElem.style.display = 'block';
+        renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text2");
+
+        // Help hub callbacks
+
+        callbacks.ok_dismiss = function(evt) {
+            // Modify the sequence for the templates
+            self.dismissHelp.call(self);
+        };
+
+        callbacks.show_more = function(evt) {
+            // Modify the sequence for the templates
+            self.renderHelp("help-helphub", callbacks);
+        };
+
+        document.getElementById('acInfo').onclick = function(evt) {
+            console.log("Click here?");
+            // Show the help item
+            self.renderHelp("help-setup-home", callbacks);
+        };
+
+        // Helphub calbacks
+
+        document.getElementById('openHelpHub').onclick = function(evt) {
+            self.renderHelpHub("helphub-index", callbacks);
+        };
+
+
+        // Create dummy input els
+        if (this.isAccNumber) {
+
+            // Change class if ac number
+
+            pinPad.className = 'access-number';
+
+            for (var i = this.opts.accessNumberDigits - 1; i >= 0; i--) {
+                var circleA = document.createElement("div");
+                var circleB = document.createElement("div");
+
+                circleA.className = "circle";
+                circleB.className = "outer-circle";
+
+                circleA.appendChild(circleB);
+                circlesHolder.appendChild(circleA);
+            };
+        } 
+
         if (listAccounts) {
             this.toggleButton();
         } else {
+
+            console.log("This is the before identttyty!!!!##!##");
             this.setIdentity(this.ds.getDefaultIdentity(), true, function() {
-                self.display(self.cfg.pinpadDefaultMessage);
-            }, function() {
+                self.display(hlp.text("pinpad_default_message"));
+               }, function() {
                 return false;
-            });
+               });
         }
     };
  
@@ -496,10 +747,7 @@ var mpin = mpin || {};
             self.renderHome.call(self, evt);
         };
         callbacks.mpin_action_setup = function(evt) {
-//          self.renderSetup
             self.beforeRenderSetup.call(self);
-//          self.renderSetup.call(self, self.getDisplayName(email));
-//          self.renderLogin.call(self, evt);
         };
         callbacks.mpin_action_resend = function(evt) {
             self.actionResend.call(self, evt);
@@ -509,10 +757,13 @@ var mpin = mpin || {};
  
  
     mpin.prototype.beforeRenderSetup = function() {
-        var _reqData = {}, regOTP, url, self = this;
-        regOTP = this.ds.getIdentityData(this.identity, "regOTP");
-        url = this.opts.signatureURL + "/" + this.identity + "?regOTP=" + regOTP;
- 
+
+        var _reqData = {}, regOTT, url, self = this;
+        regOTT = this.ds.getIdentityData(this.identity, "regOTT");
+        url = this.opts.signatureURL + "/" + this.identity + "?regOTT=" + regOTT;
+
+        this.isAccNumber = false;
+
         _reqData.URL = url;
         _reqData.method = "GET";
  
@@ -530,63 +781,71 @@ var mpin = mpin || {};
     };
  
 //custom render 
-    mpin.prototype.renderAccountsPanel = function() {
+    mpin.prototype.renderAccountsPanel = function(back) {
+
         var self = this, 
+            callbacks = {},
             renderElem, 
             addEmptyItem, 
-            c = 0, 
-            mpBack = document.getElementById('mp_back');
- 
+            c = 0,
+            mpBack = document.getElementById('mp_back'),
+            menuBtn = document.getElementById('menuBtn');
+
+        menuBtn.onclick = function(evt) {
+            document.getElementById('accountTopBar').style.height = "";
+            menuBtn.className = 'up';
+
+        };
+
         addEmptyItem = function(cnt) {
             var p = document.createElement("div");
             p.className = "mp_contentEmptyItem";
             cnt.appendChild(p);
         };
  
- 
         addMpinBack = function () {
-            renderElem = document.getElementById('mpinMaster').appendChild(document.createElement("div"));
+            renderElem = document.getElementById('accountTopBar').appendChild(document.createElement("div"));
             renderElem.id = "mp_back";
             mpBack = document.getElementById("mp_back");
             mpBack.innerHTML = self.readyHtml("accounts-panel", {});
         }
  
-        console.log("Trying to call here");
- 
         if(document.contains(mpBack) === false) {
+
             addMpinBack();
             mpBack.style.display = 'block';
- 
-            console.log("Trying to call here again");
  
  
             document.getElementById("mp_acclist_adduser").onclick = function(evt) {
                 self.renderSetupHome.call(self, evt);
             };
+
+            // Appending happens here
+
+            var cnt = document.getElementById("mp_accountContent");
+            this.addUserToList(cnt, this.ds.getDefaultIdentity(), true, 0);
+            
+            for (var i in this.ds.getAccounts()) {
+                c += 1;
+                if (i != this.ds.getDefaultIdentity())
+                    this.addUserToList(cnt, i, false, c);
+            }
+
+            addEmptyItem(cnt);
  
         }
  
         //default IDENTITY
-        var cnt = document.getElementById("mp_accountContent");
-        this.addUserToList(cnt, this.ds.getDefaultIdentity(), true, 0);
- 
-        for (var i in this.ds.getAccounts()) {
-            c += 1;
-            if (i != this.ds.getDefaultIdentity())
-                this.addUserToList(cnt, i, false, c);
-        }
-        addEmptyItem(cnt);
+
+
     };
- 
+
     mpin.prototype.renderUserSettingsPanel = function(iD) {
+
         var renderElem, name, self = this;
         name = this.getDisplayName(iD);
         renderElem = document.getElementById("mp_back");
-        console.log('%c Hey!', renderElem, 'background: #222; color: red');
-        console.log(">>>>", name);
-        console.log(">>>>", this.readyHtml("user-settings", {name: name}));
         renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
- 
         document.getElementById("mp_deluser").onclick = function(evt) {
             self.renderDeletePanel.call(self, iD);
         };
@@ -594,10 +853,9 @@ var mpin = mpin || {};
             self.renderReactivatePanel.call(self, iD);
         };
         document.getElementById("mp_acclist_cancel").onclick = function(evt) {
-            // Call the setup screen first
-            self.renderSetup.call(self, evt);
-            // Render after that the accounts panel
-            self.renderAccountsPanel.call(self, evt);
+            mpBack = document.getElementById('mp_back');
+            mpBack.parentNode.removeChild(mpBack);
+            self.renderAccountsPanel();
         };
     };
  
@@ -611,13 +869,9 @@ var mpin = mpin || {};
             self.renderSetup(self.getDisplayName(iD));
         };
         document.getElementById("mp_acclist_cancel").onclick = function() {
-            self.renderAccountsPanel();
+            self.renderUserSettingsPanel(iD);
         };
     };
- 
- 
- 
- 
  
     mpin.prototype.renderDeletePanel = function(iD) {
         var renderElem, name, self = this;
@@ -628,19 +882,19 @@ var mpin = mpin || {};
  
         document.getElementById("mp_acclist_deluser").onclick = function(evt) {
             self.deleteIdentity(iD);
- 
+
+            self.renderHomeMobile.call(self, evt);
             // Render the identity list too
- 
  
         };
         document.getElementById("mp_acclist_cancel").onclick = function(evt) {
-            self.renderAccountsPanel.call(self, evt);
+            self.renderUserSettingsPanel(iD);
         };
     };
  
     mpin.prototype.renderSetupDone = function() {
         var callbacks = {}, self = this, userId;
- 
+
         userId = this.getDisplayName(this.identity);
  
         callbacks.mp_action_home = function() {
@@ -652,27 +906,7 @@ var mpin = mpin || {};
  
         this.render("setup-done", callbacks, {userId: userId});
     };
- 
-    mpin.prototype.renderLogout = function(authData) {
-        var callbacks = {}, self = this, userId;
- 
-        callbacks.mpin_action_logout = function() {
- 
-            console.log("smth..............", authData);
- 
-            self.ajaxPost("http://192.168.10.197:8005/logout", authData, function(res) {
- 
-                if (res) {
-                    self.renderLogin();
-                }
-            });
- 
-        };
- 
-//      console.log("tmpl :::", this.template['logout']);
-//      console.log("tmpl :::", this.readyHtml('logout', {}));
-        this.render("logout", callbacks, {userId: userId});
-    };
+
  
     mpin.prototype.addUserToList = function(cnt, uId, isDefault, iNumber) {
         var starClass, divClass, self = this, starButton;
@@ -703,23 +937,14 @@ var mpin = mpin || {};
  
         cnt.appendChild(rowElem);
  
-        // rowElem.onclick = function() {
-        //  removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
-        //  // addClass(rowElem, "mp_itemSelected");
-        //  document.getElementById('mp_back').remove();
-        //  self.ds.setDefaultIdentity(uId);
-        //  self.setIdentity(uId, true);
-        // };
- 
-        rowElem.addEventListener('touchstart', mEventsHandler, false);
+        // rowElem.addEventListener('touchenter', mEventsHandler, false);
         rowElem.addEventListener('click', mEventsHandler, false);
  
         // document.getElementById('mp_back').remove();
  
         function mEventsHandler(e) {
           if (e.type == "touchstart" || e.type == "click") {
-            // alert("Touch start....");
- 
+
             var elem = document.getElementById("mp_back");
             elem.parentNode.removeChild(elem);
  
@@ -727,24 +952,16 @@ var mpin = mpin || {};
             // addClass(rowElem, "mp_itemSelected");
             self.ds.setDefaultIdentity(uId);
             self.setIdentity(uId, true);
+
+            // Hide the identity list
+
+            menuBtn = document.getElementById('menuBtn');
+
+            document.getElementById('accountTopBar').style.height = "";
+            menuBtn.className = 'up';
+
           }
         }
- 
- 
-        // rowElem.ondoubleclick = function() {
- 
-        //   removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
-        //   // addClass(rowElem, "mp_itemSelected");
- 
-        //   self.ds.setDefaultIdentity(uId);
-        //   self.setIdentity(uId, true, function() {
-        //      self.display(self.cfg.pinpadDefaultMessage);
-        //   }, function() {
-        //      return false;
-        //   });
-        //   return false;
-        // };
- 
  
         document.getElementById("mp_btIdSettings_" + iNumber).onclick = function(ev) {
             console.log(uId);
@@ -753,74 +970,31 @@ var mpin = mpin || {};
             return false;
         };
  
-        // var btDel = document.getElementById("mp_btDel_" + iNumber);
-        // btDel.onclick = function(){
-        //  p.onclick();
-        //  mpin.renderDeletePanel(uId);
-        //  return false;
-        // }
- 
-        // mp_AddTooltip(btDel, "right", "Delete this token from this machine")
- 
-        // var btReact = document.getElementById("mp_btReactivate_" + iNumber);
-        //  btReact.onclick = function(){
-        //      p.onclick();
-        //      mpin.renderReactivatePanel(uId);
-        //      return false;
-        //  }
-        // mp_AddTooltip(btReact, "right", "Verify your identity if you have forgotten your pin number")
- 
- 
-//      return p;
     };
  
     mpin.prototype.renderIdentityNotActive = function(email) {
         var callbacks = {}, self = this;
  
         callbacks.mp_action_home = function(evt) {
-            self.renderHome.call(self, evt);
+            if (totalAccounts === 0) {
+             self.renderSetupHome();
+            } else if (totalAccounts === 1) {
+             self.renderLogin();
+            } else if (totalAccounts > 1) {
+             self.renderLogin(true);
+            }
         };
         //Check again
-        callbacks.mp_action_login = function() {
-            var spanElem = document.getElementById("mp_info_recheck"), that = this;
-            this.style.display = "none";
-            spanElem.className = "info-checking";
-            spanElem.style.display = "inline";
-            spanElem.innerHTML = hlp.text("setupNotReady_check_info1") + "<br/>";
- 
-            self.requestPermit(self.identity,
-                    function() {
-                        spanElem.style.display = "none";
-                        self.renderLogin(true);
-                    },
-                    function(message, status) {
-                        var e = document.getElementById("mp_info_recheck");
-                        spanElem.className = "info-error";
-                        spanElem.innerHTML = hlp.text("setupNotReady_check_info2") + "<br/>";
- 
-                        setTimeout(function() {
-                            spanElem.style.display = "none";
-                            that.style.display = "inline-block";
-                        }, 1500);
-                    }
-            );
+        callbacks.mpin_action_setup = function() {
+            // var _reqData = {}, regOTT, url, btn;
+            self.beforeRenderSetup.call(self);
         };
         //email
         callbacks.mp_action_resend = function() {
-            var spanElem = document.getElementById("mp_info_resend"), that = this;
-            this.style.display = "none";
-            spanElem.className = "info-checking";
-            spanElem.innerHTML = hlp.text("setupNotReady_resend_info1");
- 
+
             requestRegister(self.opts.registerURL, self.identity, self.opts.authenticateHeaders, self.opts.registerRequestFormatter,
                     function() {
-                        spanElem.className = "info-error";
-                        spanElem.innerHTML = hlp.text("setupNotReady_resend_info2");
-                        spanElem.style.display = "inline-block";
-                        setTimeout(function() {
-                            spanElem.style.display = "none";
-                            that.style.display = "inline-block";
-                        }, 1500);
+      
                     },
                     function(message, status) {
                         self.error(message, status);
@@ -829,41 +1003,56 @@ var mpin = mpin || {};
         };
         //identities list
         callbacks.mp_action_accounts = function() {
-            console.log(" CREATE frame ELEMENT before use this render HINT !!!");
-//          self.renderAccountsPanel(self);
             self.renderLogin.call(self, true, email);
         };
+
         this.render("identity-not-active", callbacks, {email: email});
     };
  
     mpin.prototype.bindNumberButtons = function() {
         var self = this, btEls;
         btEls = document.getElementsByClassName("btn");
+
         for (var i = 0; i < btEls.length; i++) {
-            // btEls[i].onclick = function(el) {
-            //  self.addToPin(el.target.getAttribute("data-value"));
-            //  return false;
-            // };
+
+            // Mobile touch events
  
-            btEls[i].addEventListener('touchstart', mEventsHandler, false);
- 
-            // Tempory for development
- 
-            // btEls[i].addEventListener('click', mEventsHandler, false);
- 
-            // document.getElementById('mp_back').remove();
+			btEls[i].addEventListener('click', mEventsHandler, false);
+
+            // btEls[i].addEventListener('touchstart', mEventsHandler, false);
+
  
             function mEventsHandler(e) {
-              // if (e.type == "touchstart") {
- 
-              self.addToPin(e.target.getAttribute("data-value"));
-              // return false;
+
+                var parent = document.getElementById("inputContainer");
+                var child = document.getElementById("codes");
+                
+                // if (e.type == "touchstart") {
+
+                if(self.isAccNumber && parent.contains(child)) {
+                    child.style.display = 'none';
+                }
+
+                var circles = document.getElementsByClassName("circle");
+
+                for (var i = circles.length - 1; i >= 0; i--) {
+                    circles[i].style.display = 'inline-block';
+                };
+
+
+                var circlesHolder = document.getElementById("circlesHolder");
+
+                circlesHolder.style.display = 'flex';
+
+                self.addToPin(e.target.getAttribute("data-value"));
+                // return false;
  
               // }
             }
         }
     };
     mpin.prototype.enableNumberButtons = function(enable) {
+        
         var els = document.getElementsByClassName("btn");
         for (var i = 0; i < els.length; i++) {
             var element = els[i];
@@ -871,31 +1060,101 @@ var mpin = mpin || {};
                 element.className = "btn";
                 element.disabled = false;
             } else {
-                element.className = "btn mp_inactive";
+                element.className = "btn disabled";
                 element.disabled = true;
             }
         }
     };
     //
     mpin.prototype.addToPin = function(digit) {
- 
-        var pinElement = document.getElementById('pinpad-input');
-        //pinElement.setAttribute('type', 'password')
- 
+
+        this.display("");
+
+        var pinpadContainer = document.getElementById('inputContainer')
+            , pinElement = document.getElementById('pinpad-input')
+            , element
+            , elemForErrcode = document.getElementById('codes')
+            , circlesHolder = document.getElementById('circlesHolder')
+            , ifDigit = new RegExp('[0-9]');
+
+        if(ifDigit.test(parseInt(digit))) {
+
+            // Hide codes
+
+            elemForErrcode.style.display = 'none';
+            circlesHolder.style.display = 'block';
+
+            var circles = document.getElementsByClassName("circle");
+
+            // Add circles
+
+            element = document.createElement("div");
+
+            if(this.isAccNumber) {
+                element.className = 'inner-circle-ac';
+                element.innerHTML = digit;
+            } else {
+                element.className = 'inner-circle';
+            }
+
+            // Use setTimeout to trigger the animation
+
+            element.style.width = "18px";
+            element.style.height = "18px";
+            element.style.margin = "7px";
+
+            pinElement.value += digit;
+
+            var addToDivNum =  pinElement.value.length -1;
+
+            // Append the circle element here
+            circles[addToDivNum].appendChild(element);
+        }
+
         if (digit === 'clear') {
-            this.display("");
-            this.enableNumberButtons(true);
+
+           var circlesClear = document.getElementsByClassName("circle")
+             , element = {};
+
+           if(this.isAccNumber) {
+               element.className = 'inner-circle-ac';
+           } else {
+               element.className = 'inner-circle';
+           }
+
+           // Rotate the circles
+
+            for (var i = 0; i < circlesClear.length; i++) {
+
+                var nodes = circlesClear[i].querySelector('.' + element.className);
+
+                if (circlesClear[i].querySelector('.' + element.className)) {
+
+                    circlesClear[i].removeChild(nodes);
+
+                    pinElement.value = "";
+                    this.enableNumberButtons(true);
+                }
+
+            }
+
+            // Disable the clear and the sign in buttons
+
             this.enableButton(false, "go");
             this.enableButton(false, "clear");
-            return;
+
         }
  
         if (digit === 'login') {
  
             if (!this.isAccNumber) {
- 
+
                 pinElement.value = "";
-                pinElement.placeholder = hlp.text("pinpad_placeholder_text");
+ 
+                elemForErrcode.style.display = "block";
+                elemForErrcode.innerHTML = "Enter your pin";
+                circlesHolder.style.display = 'none';
+
                 pinElement.type = "password";
  
                 this.enableNumberButtons(true);
@@ -904,14 +1163,19 @@ var mpin = mpin || {};
             }
         }
  
-        pinElement.value += digit;
- 
         if (pinElement.value.length === 1) {
+
+            console.log("Comming here to enable the clear");
             this.enableButton(true, "clear");
         }
  
         else if (this.isAccNumber) {
             if (pinElement.value.length === this.opts.accessNumberDigits) {
+
+                console.log("Comming here to enable the digits");
+
+                // Append the number of circles
+
                 this.enableNumberButtons(false);
                 this.enableButton(true, "go");
                 this.enableButton(true, "clear");
@@ -919,6 +1183,7 @@ var mpin = mpin || {};
         }
  
         else if (pinElement.value.length === this.cfg.pinSize) {
+
             this.enableNumberButtons(false);
             this.enableButton(true, "go");
             this.enableButton(true, "clear");
@@ -932,9 +1197,10 @@ var mpin = mpin || {};
      * @returns {undefined}
      */
     mpin.prototype.enableButton = function(enable, buttonName) {
+
         var buttonValue = {}, _element;
-        buttonValue.go = {id: "mpinLogin", trueClass: "btn", falseClass: "btn mp_inactive"};
-        buttonValue.clear = {id: "mpinClear", trueClass: "btn", falseClass: "btn mp_inactive"};
+        buttonValue.go = {id: "mpinLogin", trueClass: "btnLogin", falseClass: "btnLogin disabled"};
+        buttonValue.clear = {id: "mpinClear", trueClass: "btnClear", falseClass: "btnClear disabled"};
         buttonValue.toggle = {id: "mp_toggleButton", trueClass: "mp_DisabledState", falseClass: ""};
         _element = document.getElementById(buttonValue[buttonName].id);
         if (!buttonValue[buttonName] || !_element) {
@@ -946,25 +1212,20 @@ var mpin = mpin || {};
     };
     //showInPinPadDisplay
     mpin.prototype.display = function(message, isError) {
+
+        var self = this;
  
-        var elemPass;
-        elemPass = document.getElementById('pinpad-input');
-        // elemPass.classList.add('blue-bg');
-        if (this.isAccNumber) {
-            addClass(elemPass, "blue-bg");
-        }
-        // Changed to convert the existing input to password type
-//      elemPass.setAttribute('type', 'password')
-        elemPass.value = message;
-        elemPass.value = '';
- 
- 
-        /*
-         if (isError)
-         addClass(d, "pinpad-input_error")
-         else
-         removeClass(d, "pinpad-input_error")
-         */
+        var elemForErrcode = document.getElementById('codes');
+
+        if(message === 'INCORRECT M-PIN!') {
+
+            elemForErrcode.style.display = "block";
+            elemForErrcode.className = "error";
+            elemForErrcode.innerHTML = message;
+
+            self.addToPin("clear");
+        } 
+        
     };
  
     mpin.prototype.getDisplayName = function(uId) {
@@ -979,10 +1240,16 @@ var mpin = mpin || {};
  
     mpin.prototype.toggleButton = function() {
         var self = this;
- 
+        var accountTopBar = document.getElementById('accountTopBar')
+        var menuBtn = document.getElementById("menuBtn");
+
         // console.log(self);
- 
-        if (document.getElementById("menuBtn")) {
+
+        // if(menuBtn.classList.contains("close")) {
+        //     return;
+        // }
+
+        if (menuBtn && !menuBtn.classList.contains("close")) {
  
             console.log("set IDENTITY ;::", typeof this.setIdentity);
  
@@ -991,28 +1258,27 @@ var mpin = mpin || {};
             }, function() {
                 return false;
             });
- 
+
+            accountTopBar.style.height = "calc(100% - 100px)"
+            menuBtn.className = 'close';
+
             this.renderAccountsPanel();
  
             removeClass("mp_toggleButton", "mp_SelectedState");
             removeClass("mp_panel", "mp_flip");
-        } else {
-            document.getElementById('mp_accountID').style.display = 'none';
-            this.renderAccountsPanel();
-            addClass("mp_toggleButton", "mp_SelectedState");
-            addClass("mp_panel", "mp_flip");
         }
+
         return false;
     };
  
     mpin.prototype.actionSetupHome = function() {
+
         var _email = document.getElementById("emailInput").value, self = this;
         if (_email.length === 0 || !this.opts.emailCheckRegex.test(_email)) {
             document.getElementById("emailInput").focus();
             return;
         }
  
-        console.log("here :::");
         var _reqData = {};
         _reqData.URL = this.opts.registerURL;
         _reqData.method = "PUT";
@@ -1028,9 +1294,11 @@ var mpin = mpin || {};
                 self.error("Activate First");
                 return;
             }
-            self.identity = rpsData.mpinId;
             self.ds.addIdentity(rpsData.mpinId, "");
-            self.ds.setIdentityData(rpsData.mpinId, {regOTP: rpsData.regOTP});
+            self.ds.setIdentityData(rpsData.mpinId, {regOTT: rpsData.regOTT});
+
+            self.ds.setDefaultIdentity(rpsData.mpinId);
+            self.identity = rpsData.mpinId;
  
             // Check for existing userid and delete the old one
             self.ds.deleteOldIdentity(rpsData.mpinId);
@@ -1042,7 +1310,6 @@ var mpin = mpin || {};
     mpin.prototype.requestSignature = function(email, clientSecretShare, clientSecretParams) {
         var self = this;
  
-        console.log('requestSignature :::', arguments);
         /*
          requestSignature(email, 0, this.opts.signatureURL, this.opts.authenticateHeaders, function(params) {
          var _urlParams = ["app_id=" + encodeURIComponent(params.app_id), "mpin_id=" + encodeURIComponent(params.mpin_id), "expires=" + encodeURIComponent(params.expires),
@@ -1090,6 +1357,7 @@ var mpin = mpin || {};
     };
  
     mpin.prototype.actionSetup = function() {
+
         var self = this, _pin = document.getElementById('pinpad-input').value;
         this.ds.addIdentity(this.identity, "");
         this.display("Verifying PIN...");
@@ -1130,6 +1398,9 @@ var mpin = mpin || {};
      * @returns {undefined}
      */
     mpin.prototype.actionLogin = function() {
+
+        var callbacks = {};
+
         var authServer, getAuth, self = this, pinValue = document.getElementById('pinpad-input').value, accessNumber;
         //AlertMessage.clearDisplayWrap();
         this.enableNumberButtons(false);
@@ -1151,12 +1422,14 @@ var mpin = mpin || {};
         accessNumber = this.accessNumber;
         //authServer = this.opts.authenticateURL;
         getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-                this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
+                this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
                 function(success, errorCode, errorMessage, authData) {
-                    console.log("authenticate arguments :", arguments);
+                    console.log("authenticate arguments :", errorCode);
                     if (success) {
-                        self.successLogin(authData);
+                        var iD = self.identity;
+                        self.successLogin(authData, iD);
                     } else if (errorCode === "INVALID") {
+
                         self.display(hlp.text("authPin_errorInvalidPin"), false);
  
                         self.enableNumberButtons(true);
@@ -1164,12 +1437,29 @@ var mpin = mpin || {};
                         self.enableButton(false, "go");
                         self.enableButton(false, "clear");
                         self.enableButton(true, "toggle");
+
                     } else if (errorCode === "MAXATTEMPTS") {
+
                         var iD = self.identity;
                         self.deleteIdentity(iD);
                         if (self.opts.onAccountDisabled) {
                             self.opts.onAccountDisabled(iD);
                         }
+
+                        callbacks.mp_action_register = function(evt) {
+
+                            self.renderSetupHome.call(self, evt);
+                        };
+
+                        // TODO: Register again or select new identity
+
+                        self.render('access-denied', callbacks, {email: self.getDisplayName(iD)});
+
+                    } else if (errorCode === "INVALIDACCESSNUMBER") {
+
+                        // Render the access number again
+
+                        self.renderLogin.call(self);
                     }
  
                 }, function() {
@@ -1180,20 +1470,27 @@ var mpin = mpin || {};
  
     mpin.prototype.setIdentity = function(newIdentity, requestPermit, onSuccess, onFail) {
         var displayName, accId, self = this;
+        
         if ((typeof(newIdentity) === "undefined") || (!newIdentity))
             displayName = "";
         else {
             this.identity = newIdentity;
             displayName = this.getDisplayName(this.identity);
         }
- 
+        
         accId = document.getElementById('mpinUser');
-        accId.children[0].innerText = displayName;
-        accId.setAttribute("title", displayName);
- 
+
+        if(accId) {
+            accId.children[0].innerText = displayName;
+            accId.setAttribute("title", displayName);
+        }
+
         if (requestPermit) {
-            this.addToPin("clear");
-            this.display(hlp.text("pinpad_initializing"), false);
+
+            if (this.ds.getIdentityToken(this.identity) == "") {
+                this.renderIdentityNotActive(displayName);
+                return;
+            }
  
             this.enableNumberButtons(false);
             this.enableButton(false, "go");
@@ -1204,7 +1501,6 @@ var mpin = mpin || {};
             this.requestPermit(newIdentity, function(timePermitHex) {
                 console.log("call IDENTITY PERMIT :::");
                 self.enableNumberButtons(true);
-                onSuccess();
             }, function(message, statusCode) {
                 if (statusCode === 404) {
                     self.renderIdentityNotActive(displayName);
@@ -1299,8 +1595,10 @@ var mpin = mpin || {};
     mpin.prototype.requestPermit = function(identity, onSuccess, onFail) {
         var self = this;
         requestTimePermit(self.certivoxPermitsURL(), self.dtaPermitsURL(), self.opts.authenticateHeaders,
-                function(timePermitHex) {
+                self.ds.getIdentityPermitCache(this.identity), this.certivoxPermitsStorageURL(),
+                function(timePermitHex, timePermitCache) {
                     self.ds.setIdentityPermit(self.identity, timePermitHex);
+                    self.ds.setIdentityPermitCache(mpin.identity, timePermitCache);
                     self.ds.save();
                     self.gotPermit(timePermitHex);
                     onSuccess(timePermitHex);
@@ -1374,6 +1672,19 @@ var mpin = mpin || {};
                 uId = mpinDs.getDefaultIdentity();
             return mpinDs.mpin.accounts[uId]["MPinPermit"];
         };
+        mpinDs.setIdentityPermitCache = function(uId, cache) {
+            if (!uId) {
+                uId = mpinDs.getDefaultIdentity();
+            }
+            mpinDs.mpin.accounts[uId]["timePermitCache"] = cache;
+            mpinDs.save();
+        };
+        mpinDs.getIdentityPermitCache = function(uId) {
+            if (!uId) {
+                uId = mpinDs.getDefaultIdentity();
+            }
+            return mpinDs.mpin.accounts[uId]["timePermitCache"] || {};
+        };        
         mpinDs.getIdentityToken = function(uId) {
             if (!uId)
                 uId = mpinDs.getDefaultIdentity();
@@ -1424,34 +1735,69 @@ var mpin = mpin || {};
         return mpinDs;
     };
  
-    mpin.prototype.successLogin = function(authData) {
-        if (this.opts.successLoginURL) {
-            window.location = this.opts.successLoginURL;
-        } else if (this.opts.onSuccessLogin) {
-            this.opts.onSuccessLogin(authData);
-        }
+    mpin.prototype.successLogin = function(authData, iD) {
+        var callbacks = {}, self = this;
+
+        callbacks.mp_action_home = function(evt) {
+            if (totalAccounts === 0) {
+             self.renderSetupHome();
+            } else if (totalAccounts === 1) {
+             self.renderLogin();
+            } else if (totalAccounts > 1) {
+             self.renderLogin(true);
+            }
+        };
+
+        callbacks.mp_action_logout = function(evt) {
+
+            if(authData.logoutURL) {
+                self.ajaxPost( authData.logoutURL, authData.logoutData, function(res) {
+                    if (res) {
+                        self.renderLogin();
+                    }
+                });
+            } else {
+                self.renderLogin();
+            }
+
+        };
+
+        this.render("success-login", callbacks, {email: self.getDisplayName(iD)});
     };
- 
+
     mpin.prototype.certivoxClientSecretURL = function(params) {
 //      return this.cfg.apiUrl + this.cfg.apiVersion + "/clientSecret?" + params;
-        return this.opts.certivoxURL + "/clientSecret?" + params;
+        return this.opts.certivoxURL + "clientSecret?" + params;
     };
  
     mpin.prototype.dtaClientSecretURL = function(params) {
         return this.opts.mpinDTAServerURL + "clientSecret?" + params;
     };
  
- 
-    mpin.prototype.certivoxPermitsURL = function() {
-        var mpin_idHex = this.identity;
-        return this.opts.certivoxURL + "/timePermit?app_id=" + this.opts.appID + "&mobile=0&mpin_id=" + mpin_idHex;
+     mpin.prototype.certivoxPermitsURL = function() {
+        var hash_mpin_id_hex = mpinAuth.sha256_hex(this.identity);
+        return this.opts.certivoxURL + "timePermit?app_id=" + this.opts.appID + "&mobile=0&hash_mpin_id=" + hash_mpin_id_hex;
     };
- 
+
     mpin.prototype.dtaPermitsURL = function() {
         var mpin_idHex = this.identity;
 //      return this.opts.timePermitsURL + "timePermit?app_id=" + this.opts.appID + "&mobile=0&mpin_id=" + mpin_idHex;
         return this.opts.timePermitsURL + "/" + mpin_idHex;
     };
+
+    mpin.prototype.certivoxPermitsStorageURL = function() {
+        var that = this;
+        return function(date, storageId) {
+            console.log("timePermitsStorageURL Base: " + that.opts.timePermitsStorageURL)
+            if ((date) && (that.opts.timePermitsStorageURL) && (storageId)) {
+                return that.opts.timePermitsStorageURL + "/" + mpin.appID + "/" + date + "/" + storageId;
+            } else {
+                return null;
+            }
+        }
+    };
+
+
     mpin.prototype.gotPermit = function(timePermit) {
         if (this.opts.onGetPermit)
             this.opts.onGetPermit(timePermit);
@@ -1545,7 +1891,9 @@ var mpin = mpin || {};
         "pinpad_initializing": "Initializing...",
         "pinpad_errorTimePermit": "ERROR GETTING PERMIT:",
         "home_alt_mobileOptions": "Mobile Options",
-        "home_button_authenticateMobile": "Authenticate <br/>with your Smartphone",
+        "home_button_authenticateMobile_noTrust": "Sign in with Smartphone <br> (This is a PUBLIC device which I DO NOT trust)",
+        "home_button_authenticateMobile_trust": "Sign in with Browser <br> (This is a PERSONAL device which I DO trust)",
+        "home_button_authenticateMobile_intro": "First let's establish trust to choose the best way for you to access this service:",
         "home_button_authenticateMobile_description": "Get your Mobile Access Number to use with your M-Pin Mobile App to securely authenticate yourself to this service.",
         "home_button_getMobile": "Get <br/>M-Pin Mobile App",
         "home_button_getMobile_description": "Install the free M-Pin Mobile App on your Smartphone now!  This will enable you to securely authenticate yourself to this service.",
@@ -1568,13 +1916,14 @@ var mpin = mpin || {};
         "otp_seconds": "Remaining: {0} sec.", // {0} will be replaced with the remaining seconds
         "otp_expired_header": "Your One-Time Password has expired.",
         "otp_expired_button_home": "Login again to get a new OTP",
-        "setup_header": "ADD AN IDENTITY TO THIS BROWSER",
+        "setup_header": "ADD AN IDENTITY TO THIS DEVICE",
         "setup_text1": "Enter your email address:",
         "setup_text2": "Your email address will be used as your identity when M-Pin authenticates you to this service.",
+        "setup_text3": "your email address",
         "setup_error_unathorized": "{0} has not been registered in the system.", // {0} will be replaced with the userID
         "setup_error_server": "Cannot process the request. Please try again later.",
         "setup_error_signupexpired": "Your signup request has been expired. Please try again.",
-        "setup_button_setup": "Setup M-Pin&trade;",
+        "setup_button_setup": "Setup M-Pin",
         "setupPin_header": "Create your M-Pin with {0} digits", // {0} will be replaced with the pin length
         "setupPin_initializing": "Initializing...",
         "setupPin_pleasewait": "Please wait...",
@@ -1633,9 +1982,20 @@ var mpin = mpin || {};
         "logout_button": "Logout",
         "home_button_setupMobile": "Add an identity to this browser",
         "mobile_splash_text": "INSTALL THE M-PIN MOBILE APP",
-        "mobile_add_home_ios6": "Tap the <img src='/build/out/mobile/resources/templates/grey/img/ios6-share.png'/> icon to 'Add to homescreen'",
-        "mobile_add_home_ios7": "Tap the <img src='/build/out/mobile/resources/templates/grey/img/ios7-share.png'/> icon to 'Add to homescreen'"
- 
+        "mobile_add_home_ios6": "Tap the <img src='resources/templates/gradient/img/ios6-share.png'/> icon to 'Add to homescreen'",
+        "mobile_add_home_ios7": "Tap the <img src='resources/templates/gradient/img/ios7-share.png'/> icon to 'Add to homescreen'",
+        "help_text_1": "Simply choose a memorable <b>[4 digit]</b> PIN to assign to this identity by pressing the numbers in sequence followed by the 'Setup' button to setup your PIN for this identity",
+        "help_ok_btn": "Ok, Got it",
+        "help_more_btn": "I'm not sure, tell me more",
+        "logout_btn": "Sign out",
+        "success_header": "Success",
+        "success_text": "You are now signed in as:",
+        "accessdenied_header": "Access Denied",
+        "accessdenied_text": "Your M-Pin identity",
+        "accessdenied_text_cont": "has been removed from this device.",
+        "accessdenied_btn": "Register again"
+
+
     };
     //  image should have config properties
     hlp.img = function(imgSrc) {

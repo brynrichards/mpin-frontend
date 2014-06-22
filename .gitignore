@@ -4,4 +4,7 @@ browser/.sass-cache/
 browser/nbproject/
 mobile/.sass-cache/
 mobile/in/
+build/out/mobile
+mobile/in/
+mobile/settings.json
 dist/

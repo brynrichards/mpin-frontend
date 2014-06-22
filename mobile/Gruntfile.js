@@ -22,16 +22,16 @@ module.exports = function(grunt) {
 				   grunt.task.run('uglify');
 				 }
 			},
+			buildMPinAll: {
+				cmd: 'cd js; ./buildMPin.sh > mpin-all.js',
+ 				options: {
+                                        stdout: true,
+                                }
+			},
 			copyResources: {
 				cmd: 'cp -R resources/ ../build/out/mobile/resources/',
 				options: {
                 			stdout: true,
-				}
-			},
-			copyMainJS: {
-				cmd: 'cp -R js/main.js ../build/out/mobile/js/',
-				options: {
-	            			stdout: true,
 				}
 			},
 			copyUnderscoreJS: {
@@ -57,13 +57,9 @@ module.exports = function(grunt) {
 			}
 		},
 		watch: {
-			css: {
-				files: 'public/sass/*.scss',
-				tasks: ['sass']
-			},
-			views: {
-				files: 'public/views/*.html',
-				tasks: ['bgShell:makeViews']
+			resourceFiles: {
+				files: ['public/sass/*.scss','public/views/*.html'],
+				tasks: ['bgShell', 'sass']
 			}
 		},
 		uglify: {
@@ -90,6 +86,10 @@ module.exports = function(grunt) {
 		            {
 		              match: 'emailregex',
 		              replacement: '<%= settings.emailRegex %>'
+		            },
+		            {
+		              match: 'timestamp',
+		              replacement: '<%= grunt.template.today() %>'
 		            }
 		          ]
 		        },
@@ -97,7 +97,8 @@ module.exports = function(grunt) {
 		          {expand: true, flatten: true, src: ['index.html'], dest: '../build/out/mobile/'},
 		          {expand: true, flatten: true, src: ['mpin.appcache'], dest: '../build/out/mobile/'},
 		          {expand: true, flatten: true, src: ['public/sass/main.scss'], dest: '../build/out/mobile/sass/'},
-		          {expand: true, flatten: true, src: ['public/sass/templates/*.scss'], dest: '../build/out/mobile/sass/templates/'}
+		          {expand: true, flatten: true, src: ['public/sass/templates/*.scss'], dest: '../build/out/mobile/sass/templates/'},
+		          {expand: true, flatten: true, src: ['js/main.js'], dest: '../build/out/mobile/js/'},
 		        ]
 		      }
 		    }
@@ -108,7 +109,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-replace');
-	grunt.registerTask('default',['watch', 'uglify']);
+	grunt.registerTask('default',['watch']);
 	grunt.registerTask('build',  ['bgShell', 'sass']);
-
 }

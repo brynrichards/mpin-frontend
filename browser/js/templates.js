@@ -1,5 +1,6 @@
 (function() {
     mpin.template = {};
+
     mpin.template['mobile-setup'] = ['<div class="mpinHeader">',
         '    <div class="mpinLogo mpPointer"></div>',
         '	<div class="mpinHome mpPointer" id="mpin_home"></div>',
