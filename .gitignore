@@ -9,3 +9,4 @@ mobile/in/
 mobile/settings.json
 dist/
 npm-debug.log
+.DS_Store
