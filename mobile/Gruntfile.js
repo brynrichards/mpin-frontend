@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 		},
 		bgShell: {
 			makeViews: {
-				cmd: 'python ../build/buildTemplates.py ./public/views ../build/out/mobile/js/templates.js',
+				cmd: 'python ../build/buildTemplates.py ./src/views ../build/out/mobile/js/templates.js',
 				options: {
                 			stdout: true,
 				},
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
 				}
 			},
 			copySASS: {
-				cmd: 'cp -R public/sass/ ../build/out/mobile/sass/',
+				cmd: 'cp -R src/sass/ ../build/out/mobile/sass/',
 				options: {
 	            			stdout: true,
 				},
@@ -58,7 +58,7 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			resourceFiles: {
-				files: ['public/sass/*.scss','public/views/*.html'],
+				files: ['src/sass/*.scss','src/views/*.html'],
 				tasks: ['bgShell', 'sass']
 			}
 		},
@@ -96,8 +96,8 @@ module.exports = function(grunt) {
 		        files: [
 		          {expand: true, flatten: true, src: ['index.html'], dest: '../build/out/mobile/'},
 		          {expand: true, flatten: true, src: ['mpin.appcache'], dest: '../build/out/mobile/'},
-		          {expand: true, flatten: true, src: ['public/sass/main.scss'], dest: '../build/out/mobile/sass/'},
-		          {expand: true, flatten: true, src: ['public/sass/templates/*.scss'], dest: '../build/out/mobile/sass/templates/'},
+		          {expand: true, flatten: true, src: ['src/sass/main.scss'], dest: '../build/out/mobile/sass/'},
+		          {expand: true, flatten: true, src: ['src/sass/templates/*.scss'], dest: '../build/out/mobile/sass/templates/'},
 		          {expand: true, flatten: true, src: ['js/main.js'], dest: '../build/out/mobile/js/'},
 		        ]
 		      }
