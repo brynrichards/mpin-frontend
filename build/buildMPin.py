@@ -25,7 +25,7 @@ for f in files:
         print "FILE NOT FOUND!: {0}".format(os.path.abspath(fname))
         sys.exit(1)
 
-    buf = buf + ";" + open(fname, "r").read()
+    buf = buf + ";\n" + open(fname, "r").read()
 
 
 if outFile:
