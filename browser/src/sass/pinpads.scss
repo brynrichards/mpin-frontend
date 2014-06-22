@@ -1,0 +1,116 @@
+.mpinInput {
+	height: 15%;
+	background: #fff;
+	margin: 0 auto;
+	padding: 1%;
+
+
+
+	&.mpinInputError {
+		border: 1px solid red;
+		color: red;
+	}
+
+	.mpinInputIn {
+		margin: 0 auto;
+		width: 67%;
+		padding: 1%;
+
+		& i {
+			background-image: url('#{$IMAGES}info.svg');
+			display: block;
+			width: 21px;
+			height: 35px;
+			float:left;
+			background-repeat: no-repeat;
+			background-position:center; 
+			margin-right: 5px;
+			cursor: pointer;
+		}
+	}
+
+	.mpinCircle {
+		width: 35px;
+		height: 35px;
+		float: left;
+		margin: 1%;
+
+		.mpinCircleIn {
+			margin: 4px;
+			background: #3A7FB9;
+			width: 24px;
+			height: 24px;
+			-webkit-border-radius: 48px;
+			-moz-border-radius: 48px;
+			border-radius: 48px;
+			position: absolute;
+			z-index: 1000;
+
+			@include border-radius(48px);
+		}
+		.mpinCircleOut {
+			background: #E4E4E4;
+			width: 32px;
+			height: 32px;
+			-webkit-border-radius: 61px;
+			-moz-border-radius: 61px;
+			border-radius: 61px;
+			border: 1px solid #aaaaaa;
+			position: absolute;
+			z-index: 800;
+		}
+	}
+
+
+	.mpinInputText {
+		text-align: center;
+		line-height: 20px;
+		font-weight: bold;
+		&.mpinInputTop {
+			display: block;
+			margin-top: 9px;
+		}
+	}
+
+	.mpin80width {
+		/*width: 75% !important;*/
+		width: 80%;
+		text-align: center;
+	}
+	
+	.mpin70width {
+		width: 70%;
+		text-align: center;
+	}
+}
+
+.mpin-pre-row {
+
+	height: 21%;
+
+	.mpin-row {
+		@include display-box-flex();
+
+		height: 100%;
+
+		.mpinPadBtn, .mpinPadBtn2 {
+			border: 0;
+			background: none;
+			color: #fff;
+			text-shadow: 2px 2px 2px #000000;
+			display: block;
+			text-align: center;
+			width: 90%;
+			font-size: 120%;
+			&:active {
+				background: #3777ba;
+			}
+		}
+		.mpinBtnDisabled {
+			opacity: 0.5;
+		}
+	}
+
+}
+
+

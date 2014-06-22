@@ -1,74 +1,101 @@
-<div class="pinpad" id="topNav">
-    <a id="mp_action_home" href="#">
-        <div id="homeBtn"></div>
-    </a>
-    <div id="mpinLogo"></div>
+<div class="mpinHeader">
+    <div class="mpinLogo mpPointer"></div>
+	<div class="mpinHome mpPointer" id="mpin_home"></div>
 </div>
-<div id="accountTopBar">
-    <div id="mpinUser">
-        <p><%= email %> <% console.log("cfg :::", cfg); %></p>
-    </div>
+
+<div class="mpinIdentityRow">
+	<div class="mpinArrowDown mpPointer mpHide" id="show_identity"></div>
+	<div class="mpinIdentity mpLeft20"><%= email %></div>
 </div>
- 
-<div id="pinsHolder">
 
-    <div id="inputContainer">
-        <input id="pinpad-input" type="text" readonly="true" placeholder="<%= hlp.text("pinpad_placeholder_text") %>">
+
+<div class="mpinMain mpinPinpad">
+	<div class="mpinInput" id="mpin_input_parent">
+	
+		<div class="mpinInputIn mpHide" id="mpin_input_circle">
+			<div class="mpinCircle" id="mpin_circle_1">
+				<div class="mpinCircleOut"></div>
+			</div>
+			
+			<div class="mpinCircle" id="mpin_circle_2">
+				<div class="mpinCircleOut"></div>
+			</div>
+			<div class="mpinCircle" id="mpin_circle_3">
+				<div class="mpinCircleOut"></div>
+			</div>
+			<div class="mpinCircle" id="mpin_circle_4">
+				<div class="mpinCircleOut"></div>
+			</div>
+		</div>
+		
+		<div class="mpinInputIn mpin80width" id="mpin_input_text">
+			<i id="mpin_help_pinpad"></i>
+				<span class="mpinInputText" id="mpin_inner_text">		
+					Initializing...
+				</span>
+		</div>
+		
     </div>
-
-    <div class="pre-row">
-        <div class="row">
-            <button class="btn" data-value="1">
+	
+	
+	<div class="mpin-pre-row">
+        <div class="mpin-row">
+            <button class="mpinPadBtn" data-value="1">
                 1
             </button>
-            <button class="btn" data-value="2">
+            <button class="mpinPadBtn" data-value="2">
                 2
             </button>
-            <button class="btn" data-value="3">
+            <button class="mpinPadBtn" data-value="3">
                 3
             </button>
         </div>
     </div>
-    <div class="pre-row">
-        <div class="row">
-            <button class="btn" data-value="4">
+    <div class="mpin-pre-row">
+        <div class="mpin-row">
+            <button class="mpinPadBtn" data-value="4">
                 4
             </button>
-            <button class="btn" data-value="5">
+            <button class="mpinPadBtn" data-value="5">
                 5
             </button>
-            <button class="btn" data-value="6">
+            <button class="mpinPadBtn" data-value="6">
                 6
             </button>
         </div>
     </div>
-    <div class="pre-row">
-        <div class="row">
-            <button class="btn" data-value="7">
+    <div class="mpin-pre-row">
+        <div class="mpin-row">
+            <button class="mpinPadBtn" data-value="7">
                 7
             </button>
-            <button class="btn" data-value="8">
+            <button class="mpinPadBtn" data-value="8">
                 8
             </button>
-            <button class="btn" data-value="9">
+            <button class="mpinPadBtn" data-value="9">
                 9
-            </button>
-        </div> 
-    </div>
-    <div class="pre-row">
-        <div class="row bottom">
-            <button class="btnClear" data-value="clear" id="mpinClear" disabled>
-                <span class="label"><%= hlp.text("setupPin_button_clear") %></span>
-            </button>
-            <button class="btn" data-value="0">
-                <span class="label mp_pindigit">0</span>
-            </button>
-            <button class="btnLogin" data-value="go" id="mpinLogin" disabled>
-                <span class="label"><%= hlp.text("setupPin_button_done") %></span>
             </button>
         </div>
     </div>
+    <div class="mpin-pre-row">
+        <div class="mpin-row mpin-bottom">
+            <button class="mpinPadBtn2 mpinBtnDisabled" data-value="clear" id="mpin_clear">
+                clear
+            </button>
+            <button class="mpinPadBtn" data-value="0">
+                0
+            </button>
+            <button class="mpinPadBtn2 mpinBtnDisabled" data-value="go" id="mpin_login">
+                setup
+            </button>
+        </div>
+    </div>
+
 </div>
-<div class="pinpad" id="mpinFooter">
-    <div id="homeBtn"></div>
+
+
+
+<div class="mpinFooter">
+	<div class="mpinPowered"></div>
+	<div class="mpinHelpHub mpPointer" id="mpin_helphub"></div>
 </div>

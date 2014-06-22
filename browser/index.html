@@ -15,12 +15,14 @@
 <script type="text/javascript" src="js/mpin.js?r=139636144551"></script>
 <script type="text/javascript">
 (function() {
-new mpin("pinHolder", {
-clientSettingsURL: "http://192.168.10.109:8011/rps/clientSettings",
-mobileAppFullURL: "http://192.1678.10.109:8005/m/index.html",
-emailCheckRegex: /.*/,
-onSuccessLogin: function() {
-alert(" :: on SUCCESS LOGIN ::");
+new mpin({
+targetElement: "pinHolder",
+clientSettingsURL: "http://192.168.10.114:8011/rps/clientSettings",
+mobileAppFullURL: "http://192.168.10.114:8005/m/index.html",
+// identityCheckRegex: /.*/,
+useWebSocket: false,
+onSuccessLogin: function(authData) {
+window.location = "/protected";
 }
 });
 })();
@@ -28,6 +30,7 @@ alert(" :: on SUCCESS LOGIN ::");
 </head>
 <body>
 <div id="pinHolder" style="margin:auto; width:260px;">
+	
 </div>
 </body>
 </html>

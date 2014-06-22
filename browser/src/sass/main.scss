@@ -1,12 +1,13 @@
 // Import CSS3 reset
 
 $MOBILE : false;
-@import 'reset';
+$green : #06B405;
 
 // Import template
 
-@import 'templates/_darkgrey';
+//@import 'templates/_darkgrey';
 //@import 'templates/_flatwhite';
+@import 'templates/_light';
 
 // General mixins
 
@@ -23,12 +24,34 @@ $MOBILE : false;
 @mixin box-flex-value($value) {
 	-moz-box-flex:$value; /* Firefox */
 	-webkit-box-flex:$value; /* Safari and Chrome */
-	-ms-flex:$value; /* Internet Explorer 10 */
+	-ms-flex:$value; /* Internet Explorer 10 */ 
 	box-flex:$value;
 }
 
+@mixin border-radius($value) {
+	border-radius: $value;
+	-webkit-border-radius: $value;
+	-moz-border-radius: $value;
+	-o-border-radius: $value;
+	-ms-border-radius: $value;
+}
 
-body {
+.mpinContainer {
+
+	@import '_reset';
+	@import 'general';
+
+	h1,h2,h3,h4,h5,h6{
+		font-size:100%;
+		font-weight:normal;
+	}
+
+	// Include pinpad reset
+
+
+
+	// Body styles here
+
 	font-size: 104%;
 	@include font-family();
 
@@ -42,14 +65,6 @@ body {
 	-webkit-text-size-adjust: 100%; /* 2 */
 	-ms-text-size-adjust: 100%; /* 2 */
 
-	position: relative;
-
-}
-
-h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
-
-
-.mpinContainer {
 	clear: both;
 	position: relative;
 	width: 260px;
@@ -61,7 +76,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	#mpinHolder {
 
 		width: 100%;
-		position: absolute;
+		position: relative;
 		width: 100;
 		z-index: 0;
 		top: 0;
@@ -71,17 +86,20 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 		background-color: inherit;
 
+		/*padding: 5px;*/
+
 		.mpinMaster {
-			position: absolute;
+			position: relative;
 			top: 0;
 			right: 0;
 			bottom: 0;
 			left: 0;
 			width: 100%;
 			min-height: 430px;
+			height: 430px;
 			// background color
 			@include bg-color();
-
+			border: 1px solid grey;
 
 			-webkit-box-align: stretch;
 			-ms-flex-align: stretch;
@@ -91,22 +109,47 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			-ms-flex-direction: column !important;
 			flex-direction: column !important;
 
-			display:-moz-box; /* Firefox */
-			display:-webkit-box; /* Safari and Chrome */
-			display:-ms-flexbox; /* Internet Explorer 10 */
+			#mpinUser {
+				position: absolute;
+				height: 28px;
+				width: 100%;
+				transition: all 0.5s ease-in-out;
+				background-color: white;
+				overflow: hidden;
+				z-index: 999999;
+				margin: 0px;
 
-			// display: flex;
-			// // display: -webkit-box;
-			// // display: -ms-flexbox;
+				#mpin_arrow {
+					position: absolute;
+					z-index: 10;
+					right: 0;
+					bottom: 0;
+				}
+			}
 
-			// padding: 10px 10px 0 10px;
+			#mpin_identities {
+				position: absolute;
+				background-color: white;
+				z-index: 9999;
+				top: 40px;
+				left: 0;
+				right: 0;
+				height: 80%;
+			}
 
-			// Import the pinpad SASS
-			@import 'pinpad';
+			#mpin_pinpad {
 
-			// Import the home view
+			}
 
-			@import 'home';
+			#pinpadEls {
+				@include gradient(#3777ba, #56bce0);
+				height: 100%;
+				width: 100%;
+				position: relative;
+				top: 28px;
+				z-index: 8000;
+			}
+
 
 		}
 	}
@@ -302,7 +345,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 				background: url('#{$IMAGES}/star_active.svg') right top no-repeat;
 			}
 		}
-		
+
 		.one-edge-shadow {
 			box-shadow: 0 8px 6px -6px #000000;
 			font-size: 12px;
@@ -351,30 +394,30 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		}
 
 
-			button.mpinGreyButton {
-				border-color: #aaa #888 #888 #aaa;
-				border-image: none;
-				border-right: 1px solid #888;
-				border-style: solid;
-				border-width: 1px;
-				border: 1px solid transparent!important;
-				border-radius: .3em .3em .3em .3em;
-				box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset,0 25px 30px -12px rgba(255,255,255,0.4) inset,0 1px 2px rgba(0,0,0,0.6);
-				outline: medium none;
-				background-color: #fff;
-				cursor: pointer;
-				color: #3c3c3c;
-				font-family: 'Helvetica',serif;
-				font-size: 12px;
-				font-weight: bold;
-				padding: 13px 10px 10px;
-				margin-top: 10px;
-			}
-			button.mpinGreyButton:hover {
-				background-color: #e2e2e2;
-				color: #3c3c3c;
-				cursor: pointer;
-			}
+		button.mpinGreyButton {
+			border-color: #aaa #888 #888 #aaa;
+			border-image: none;
+			border-right: 1px solid #888;
+			border-style: solid;
+			border-width: 1px;
+			border: 1px solid transparent!important;
+			border-radius: .3em .3em .3em .3em;
+			box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset,0 25px 30px -12px rgba(255,255,255,0.4) inset,0 1px 2px rgba(0,0,0,0.6);
+			outline: medium none;
+			background-color: #fff;
+			cursor: pointer;
+			color: #3c3c3c;
+			font-family: 'Helvetica',serif;
+			font-size: 12px;
+			font-weight: bold;
+			padding: 13px 10px 10px;
+			margin-top: 10px;
+		}
+		button.mpinGreyButton:hover {
+			background-color: #e2e2e2;
+			color: #3c3c3c;
+			cursor: pointer;
+		}
 
 
 		.mp_headerFrame {
@@ -416,9 +459,9 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		-ms-flex-pack: center;
 		justify-content: center;
 		-webkit-box-align: center;
-		
+
 		box-shadow: 0 8px 6px -6px #000000;
-		
+
 		display: -webkit-box;
 		display: -ms-flexbox;
 		-webkit-box-orient: vertical;
@@ -554,52 +597,9 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 	}
 
-
-
-	#bottomBtnHolder {
-
-		margin-left: 10px;
-		margin-right: 10px;
-
-		-webkit-box-pack: center;
-		-ms-flex-pack: center;
-		justify-content: center;
-
-		// Align items center
-
-		-webkit-box-align: center;
-		-ms-flex-align: center;
-
-		background-color: rgb(86, 86, 86);
-		background-position: initial initial;
-		background-repeat: initial initial;
-
-		padding-top: 5px;
-		padding-bottom: 5px;
-
-		display: flex;
-		display: -webkit-box;
-		display: -ms-flexbox;
-
-		/* -webkit-box-flex: 1; */
-		-ms-flex: 1 0 auto;
-		/* flex: 1 0 auto; */
-		/* -webkit-box-orient: vertical; */
-		-ms-flex-direction: column;
-		/* flex-direction: column; */
-		/* min-height: 0px; */
-
-		.mpinBtn {
-			width: 90%;
-		}
-	}
-
-
-	@import 'mobile';
-
 	#mpinFooter {
 
-		-webkit-box-orient: horizontal;
+		-webkit-box-orient: horizontal; 
 		-ms-flex-direction: row;
 		flex-direction: row;
 
@@ -620,6 +620,15 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		display: -ms-flexbox;
 
 		@include mpin-copyright();
+
+		.mpinHelpHub {
+			height: 30px;
+			width: 100px;
+			background: url('#{$IMAGES}m-pin-header-logo.svg') no-repeat;
+			background-size: 100px 30px;
+			background-position: center;
+			display: block;
+		}
 	}
 
 	// General button styling
@@ -670,13 +679,13 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			-webkit-box-align: center;
 			-ms-flex-align: center;
 			align-items: center;
-			white-space: nowrap;
+			// white-space: nowrap;
 			text-overflow: ellipsis;
 			text-align: center;
 			display: block;
 			overflow: hidden;
 		}
-		
+
 		.btnLabelArrow {
 			margin-left: 40px;
 		}

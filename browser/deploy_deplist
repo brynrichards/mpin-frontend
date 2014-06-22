@@ -1,0 +1,13 @@
+qrcode.min.js
+json2.js
+bn.js
+ecc.js
+idak.js
+aes.js
+sha256.js
+seeder.js
+random.js
+util.js
+mpin.js
+mpinAuth.js
+topLevelCode.js

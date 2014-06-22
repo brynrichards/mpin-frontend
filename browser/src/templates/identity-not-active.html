@@ -1,54 +1,42 @@
-<!-- Home/Top Nav Bar -->
-<div class="pinpad" id="topNav">
-    <a id="mp_action_home" href="#">
-        <div id="homeBtn"></div>
-    </a>
-    <div id="mpinLogo"></div>
+<div class="mpinHeader">
+    <div class="mpinLogo mpPointer"></div>
+	<div class="mpinHome mpPointer" id="mpin_home"></div>
 </div>
 
-<!-- Input button -->
-
-<div id="identityContainer">
-
-  <div class="identityMainText">
-      <div>
-	  <h1><%= hlp.text("setupNotReady_header") %></h1>
-      </div>
-
-      <div class="mp_note" style="margin:0pxpadding:0px">
-          <p class="mp_center">
-              <%=hlp.text( "setupNotReady_text1") %>
-                  <br/>
-                  <span style="padding: 10px 5px 20px 5px" class="mp_accountField">
-                      <%= email %>
-                  </span>
-                  <br/>
-                  <%=hlp.text( "setupNotReady_text2") %>
-          </p>
-          <p class="mp_after_center">
-              <%=hlp.text( "setupNotReady_text3") %>
-          </p>
-      </div>
-  </div>
-
-  <div id="buttonsContainer">
-      <div class="mpinBtn" id="mpin_setup">
-          <span class="iconArrow"></span>
-          <span class="btnLabel btnLabelArrow"><%=hlp.text( "setupNotReady_button_check") %></span>
-      </div>
-      <div class="mpinBtn" id="mpin_resend">
-          <span class="iconArrow"></span>
-          <span class="btnLabel btnLabelArrow"><%=hlp.text( "setupNotReady_button_resend")%></span>
-      </div>
-	  <div class="mpinBtn" id="mpin_accounts">
-          <span class="iconArrow"></span>
-          <span class="btnLabel btnLabelArrow"><%=hlp.text( "setupNotReady_button_back")%></span>
-      </div>
-  </div>
-
+<div class="mpinHeaderRow">
+	<%=hlp.text( "setupNotReady_header") %>
 </div>
 
-<div id="mpinFooter">
-    <div id="homeBtn">
+<div class="mpinMain mpPaddTop10">
+	<div class="mpinCenter mpinCenter5">
+		<%=hlp.text( "setupNotReady_text1") %>
+		<p class="mpinIdentityText">
+			<%= email %>
+		</p>		
+		<%=hlp.text( "setupNotReady_text2") %>
+		<p>
+			<%=hlp.text( "setupNotReady_text3") %>
+		</p>
     </div>
+	
+	<!-- <div class="mpinFooterRow"> -->
+		<div class="mpinBtnBox">
+			<div class="mpinButton" id="mpin_activate_btn">
+				<%=hlp.text( "setupNotReady_button_check")%>
+			</div>
+			
+			<div class="mpinButton" id="mpin_resend_btn">
+				<%=hlp.text( "setupNotReady_button_resend")%>
+			</div>
+
+			<div class="mpinButton mpBtnOnlyGreen" id="mpin_accounts_btn">
+				<%=hlp.text( "setupNotReady_button_back")%>
+			</div>
+		</div>
+	<!-- </div> -->
+</div>
+
+<div class="mpinFooter">
+	<div class="mpinPowered"></div>
+	<div class="mpinHelpHub mpPointer" id="mpin_helphub"></div>
 </div>
