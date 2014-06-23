@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 		},
 		bgShell: {
 			makeViews: {
-				cmd: 'python ../build/buildTemplates.py ../build/out/mobile/js/templates.js',
+				cmd: 'python ../build/buildTemplates.py ./src/views ../build/out/mobile/js/templates.js',
 				options: {
                 			stdout: true,
 				},
@@ -23,10 +23,10 @@ module.exports = function(grunt) {
 				 }
 			},
 			buildMPinAll: {
-				cmd: 'cd js; ./buildMPin.sh > mpin-all.js',
+				cmd: 'python ../build/buildMPin.py ../libs/jslib ../build/mpin_deplist ../build/out/mobile/js/mpin-all.min.js',
  				options: {
-                                        stdout: true,
-                                }
+                	stdout: true,
+                }
 			},
 			copyResources: {
 				cmd: 'cp -R resources/ ../build/out/mobile/resources/',
@@ -35,19 +35,19 @@ module.exports = function(grunt) {
 				}
 			},
 			copyUnderscoreJS: {
-				cmd: 'cp -R js/underscore-min.js ../build/out/mobile/js/',
+				cmd: 'cp -R ../libs/underscore-min.js ../build/out/mobile/js/',
 				options: {
 	            			stdout: true,
 				}
 			},
 			copyUnderscoreJSMap: {
-				cmd: 'cp -R js/underscore-min.map ../build/out/mobile/js/',
+				cmd: 'cp -R ../libs/underscore-min.map ../build/out/mobile/js/',
 				options: {
 	            			stdout: true,
 				}
 			},
 			copySASS: {
-				cmd: 'cp -R public/sass/ ../build/out/mobile/sass/',
+				cmd: 'cp -R src/sass/ ../build/out/mobile/sass/',
 				options: {
 	            			stdout: true,
 				},
@@ -58,7 +58,7 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			resourceFiles: {
-				files: ['public/sass/*.scss','public/views/*.html'],
+				files: ['src/sass/*.scss','src/views/*.html'],
 				tasks: ['bgShell', 'sass']
 			}
 		},
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
 			static_mappings: {
 				// Static mappings of files to be minified
 			  files: [
-			    {src: 'js/mpin-all.js', dest: '../build/out/mobile/js/mpin-all.min.js'},
+//			    {src: 'js/mpin-all.js', dest: '../build/out/mobile/js/mpin-all.min.js'},
 			    {src: '../build/out/mobile/js/templates.js', dest: '../build/out/mobile/js/templates.min.js'}
 			  ],
 			}
@@ -96,8 +96,8 @@ module.exports = function(grunt) {
 		        files: [
 		          {expand: true, flatten: true, src: ['index.html'], dest: '../build/out/mobile/'},
 		          {expand: true, flatten: true, src: ['mpin.appcache'], dest: '../build/out/mobile/'},
-		          {expand: true, flatten: true, src: ['public/sass/main.scss'], dest: '../build/out/mobile/sass/'},
-		          {expand: true, flatten: true, src: ['public/sass/templates/*.scss'], dest: '../build/out/mobile/sass/templates/'},
+		          {expand: true, flatten: true, src: ['src/sass/main.scss'], dest: '../build/out/mobile/sass/'},
+		          {expand: true, flatten: true, src: ['src/sass/templates/*.scss'], dest: '../build/out/mobile/sass/templates/'},
 		          {expand: true, flatten: true, src: ['js/main.js'], dest: '../build/out/mobile/js/'},
 		        ]
 		      }

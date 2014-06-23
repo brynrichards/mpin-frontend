@@ -2,13 +2,12 @@
 
 import os, glob, sys
 
-if (len(sys.argv)) < 2:
-    print "Usage buildTemplates out-file"
+if (len(sys.argv)) < 3:
+    print "Usage buildTemplates in-folder out-file"
     sys.exit(1)
 
-outFile = sys.argv[1]
-
-templateFolder = "../mobile/public/views"
+templateFolder = sys.argv[1]
+outFile = sys.argv[2]
 
 outJS = '''(function() {
     mpin.template = {};
