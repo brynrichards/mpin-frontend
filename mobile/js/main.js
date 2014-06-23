@@ -61,9 +61,7 @@ var mpin = mpin || {};
         this.el = document.getElementById(domID);
         this.elHelp = document.getElementById('helpContainer');
         this.elHelpOverlay = document.getElementsByTagName("help")[0];
-
-        this.elHelpHub = document.getElementById('helpHubContainer');
-        this.elHelpHubOverlay = document.getElementsByTagName("helpHub")[0];
+        this.elHelpHub = document.getElementsByTagName("helpHub")[0];
 
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
@@ -106,7 +104,7 @@ var mpin = mpin || {};
 
         // Caching - monitor if new version of the cache exists
  
-        setTimeout(function () { window.applicationCache.update(); }, 1000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
+        setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
  
         window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
                 window.applicationCache.swapCache(); //swap to the newest version of the cache
@@ -209,18 +207,52 @@ var mpin = mpin || {};
         }
     };
 
-    mpin.prototype.renderHelpHub = function(tmplName, callbacks, tmplData) {
-        var data = tmplData || {}, k;
+    mpin.prototype.renderHelpHub = function(tmplName, tmplData) {
+        var data = tmplData || {}, k, self = this, helphubBtns = {};
 
-        this.elHelpHubOverlay.style.display = 'block';
-        this.elHelpHubOverlay.style.opacity = "1";
+        // // Dissmiss any open help menus
+
+        self.dismissHelp();
+
+        this.elHelpHub.style.display = 'flex';
+        this.elHelpHub.style.opacity = "1";
         this.elHelpHub.innerHTML = this.readyHelpHub(tmplName, data);
-        this.elHelpHub.style.display = 'block';
 
-        for (k in callbacks) {
+        helphubBtns.first = function(evt) {
+            // Modify the sequence for the templates
+            // self.renderHelp("help-helphub", callbacks);
+
+            console.log("This is clicked first");
+        };
+
+        helphubBtns.second = function(evt) {
+            // Modify the sequence for the templates
+            // self.renderHelp("help-helphub", callbacks);
+
+            console.log("This is clicked seconds");
+        };
+
+        helphubBtns.third = function(evt) {
+            // Modify the sequence for the templates
+            // self.renderHelp("help-helphub", callbacks);
+
+            console.log("This is clicked thirds");
+        };
+
+        helphubBtns.forth = function(evt) {
+            // Modify the sequence for the templates
+            // self.renderHelp("help-helphub", callbacks);
+            console.log("This is clicked forth");
+        };
+
+        helphubBtns.exit = function(evt) {
+            self.dismissHelpHub();
+        };
+
+        for (k in helphubBtns) {
             if (document.getElementById(k)) {
-                document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                document.getElementById(k).addEventListener('click', callbacks[k], false);
+                document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
+                document.getElementById(k).addEventListener('click', helphubBtns[k], false);
             }
         }
         if (typeof mpin.custom !== 'undefined') {
@@ -235,9 +267,8 @@ var mpin = mpin || {};
     }
 
     mpin.prototype.dismissHelpHub = function() {
-            this.elHelpHubOverlay.style.display = 'none';
-            this.elHelpHubOverlay.style.opacity = '0';
             this.elHelpHub.style.display = 'none';
+            this.elHelpHub.style.opacity = '0';
     }
  
     mpin.prototype.setLanguageText = function() {
@@ -322,9 +353,11 @@ var mpin = mpin || {};
         // Check browsers
  
         function isMobileSafari() {
-            return navigator.userAgent.match(/(iPad|iPhone|iPod touch)/) && navigator.userAgent.match(/AppleWebKit/)
+            // return navigator.userAgent.match(/(iPad|iPhone|iPod touch)/) && navigator.userAgent.match(/AppleWebKit/)
+            return /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+
         }
- 
+
         function isIos7() {
             return navigator.userAgent.match(/(iPad|iPhone);.*CPU.*OS 7_\d/i)
         }
@@ -423,7 +456,7 @@ var mpin = mpin || {};
 
         callbacks.show_more = function(evt) {
             // Modify the sequence for the templates
-            self.renderHelp("help-helphub", callbacks);
+            self.renderHelpHub("helphub-index", callbacks);
         };
 
         callbacks.info = function(evt) {
@@ -580,7 +613,7 @@ var mpin = mpin || {};
 
         callbacks.show_more = function(evt) {
             // Modify the sequence for the templates
-            self.renderHelp("help-helphub", callbacks);
+            self.renderHelpHub("helphub-index");
         };
 
         document.getElementById('acInfo').onclick = function(evt) {
@@ -592,7 +625,7 @@ var mpin = mpin || {};
         // Helphub calbacks
 
         document.getElementById('openHelpHub').onclick = function(evt) {
-            self.renderHelpHub("helphub-index", callbacks);
+            self.renderHelpHub("helphub-index");
         };
 
 
