@@ -232,18 +232,20 @@ var mpin = mpin || {};
             console.log("This is clicked seconds");
         };
 
-        helphubBtns.third = function(evt) {
+        helphubBtns.details = function(evt) {
             // Modify the sequence for the templates
-            // self.renderHelp("help-helphub", callbacks);
+            self.renderHelpHub("helphub-details");
 
-            console.log("This is clicked thirds");
         };
 
         helphubBtns.forth = function(evt) {
             // Modify the sequence for the templates
             // self.renderHelp("help-helphub", callbacks);
-            console.log("This is clicked forth");
         };
+
+        helphubBtns.return = function(evt) {
+            self.renderHelpHub("helphub-index");
+        }
 
         helphubBtns.exit = function(evt) {
             self.dismissHelpHub();
@@ -548,6 +550,10 @@ var mpin = mpin || {};
                 if(self.accessNumber.length < self.opts.accessNumberDigits ) {
                     return;
                 }
+
+                // Clear the error codes display
+
+                self.display(false, true);
 
                 self.isAccNumber = false;
 
@@ -986,6 +992,7 @@ var mpin = mpin || {};
             // addClass(rowElem, "mp_itemSelected");
             self.ds.setDefaultIdentity(uId);
             self.setIdentity(uId, true);
+            self.renderLogin();
 
             // Hide the identity list
 
@@ -1245,7 +1252,7 @@ var mpin = mpin || {};
         _element.className = buttonValue[buttonName][enable + "Class"];
     };
     //showInPinPadDisplay
-    mpin.prototype.display = function(message, isError) {
+    mpin.prototype.display = function(message, clear) {
 
         var self = this;
  
@@ -1259,6 +1266,19 @@ var mpin = mpin || {};
 
             self.addToPin("clear");
         } 
+
+        if(message === 'INVALID ACCESS NUMBER!') {
+
+            elemForErrcode.style.display = "block";
+            elemForErrcode.className = "error";
+            elemForErrcode.innerHTML = message;
+
+            self.addToPin("clear");
+        }
+
+        if(clear) {
+            elemForErrcode.className = "";
+        }
         
     };
  
@@ -1492,8 +1512,8 @@ var mpin = mpin || {};
                     } else if (errorCode === "INVALIDACCESSNUMBER") {
 
                         // Render the access number again
-
                         self.renderLogin.call(self);
+                        self.display(hlp.text("authPin_errorInvalidAccessNumber"));
                     }
  
                 }, function() {
@@ -1517,6 +1537,12 @@ var mpin = mpin || {};
         if(accId) {
             accId.children[0].innerText = displayName;
             accId.setAttribute("title", displayName);
+        }
+
+        // no Identity go to setup HOME
+        if (!this.identity) {
+            this.renderSetupHome();
+            return;
         }
 
         if (requestPermit) {
@@ -1992,6 +2018,7 @@ var mpin = mpin || {};
         "authPin_pleasewait": "Authenticating...",
         "authPin_success": "Success",
         "authPin_errorInvalidPin": "INCORRECT M-PIN!",
+        "authPin_errorInvalidAccessNumber": "INVALID ACCESS NUMBER!",
         "authPin_errorNotAuthorized": "You are not authorized!",
         "authPin_errorExpired": "The auth request expired!",
         "authPin_errorServer": "Server error!",
