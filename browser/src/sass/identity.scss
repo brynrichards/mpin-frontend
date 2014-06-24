@@ -1,0 +1,76 @@
+.mpinLists {
+	width: 90%;
+	margin: 0 auto;
+	border: 1px solid grey;
+
+	/*max-height: 70%;*/
+	height: 60%;
+	overflow: auto;
+
+	@include border-radius(7px);
+
+	ul {
+		padding: 0px;
+		margin: 0px;
+	}
+
+	.mpinRow {
+		padding: 5px;
+		width: 100%;
+		/*line-height: 35px;*/
+		min-height: 45px;
+		border-bottom: 1px solid grey;
+		&.mpinRowActive {
+			background: #007cc2;
+			color: #fff;
+			.mpinSettingsRow {
+				color: #fff;
+			}
+		}
+		&.mpinRowActive:hover {
+			background: #007cc2;
+			color: #fff;
+			.mpinSettingsRow {
+				color: #fff;
+			}
+		}
+	}
+
+	.mpinRow:hover {
+		/*background: #007cc2;*/
+		background: #7DD1FF;
+		color: #fff;
+		cursor: pointer;
+		.mpinSettingsRow {
+			color: #fff;
+		}
+	}
+
+	.mpinSettings {
+		float: right;
+		border: 1px solid grey;
+		background: #fff url('#{$IMAGES}cog-setting.svg') center no-repeat;
+		background-size: auto 100%;
+		width: 30px;
+		height: 30px;
+		margin: 3px;
+		@include border-radius(7px);
+	}
+
+	a.mpinSettingsRow {
+		/*word-break: break-all;*/
+		/*width: 75%;*/
+		line-height: 22px;
+		text-align: left;
+		margin-left: 2px;
+
+		padding-top: 6px;
+
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		text-decoration: none;
+		display: block;
+
+	}
+}

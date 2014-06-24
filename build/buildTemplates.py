@@ -2,13 +2,12 @@
 
 import os, glob, sys
 
-if (len(sys.argv)) < 2:
-    print "Usage buildTemplates out-file"
+if (len(sys.argv)) < 3:
+    print "Usage buildTemplates in-folder out-file"
     sys.exit(1)
 
-outFile = sys.argv[1]
-
-templateFolder = "../public/views"
+templateFolder = sys.argv[1]
+outFile = sys.argv[2]
 
 outJS = '''(function() {
     mpin.template = {};
@@ -35,5 +34,9 @@ out = '''(function() {
 out += "\n\n".join([buildTemplate(x) for x in templates])
 
 out += '\n})();'
+
+dirname = os.path.dirname(outFile)
+if not os.path.exists(dirname):
+	os.makedirs(dirname, mode=0777)
 
 open(outFile, "w").write(out)

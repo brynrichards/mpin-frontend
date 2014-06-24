@@ -11,12 +11,15 @@
     "type": "git",
     "url": "https://jordan.katsarov@stash.certivox.com/scm/skypin/mpinmobile.git"
   },
-  "author": "Jordan Katsarov",
+  "author": "Jordan Katsarov, CertiVox",
   "license": "ISC",
   "devDependencies": {
-      "grunt": "~0.4.1",
-      "grunt-contrib-sass": "~0.3.0",
-      "grunt-contrib-watch": "~0.4.4",
-      "grunt-shell": "*"
+    "grunt": "~0.4.1",
+    "grunt-contrib-sass": "~0.3.0",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-replace": "~0.7.7",
+    "grunt-bg-shell": "~2.3.1"
   }
 }

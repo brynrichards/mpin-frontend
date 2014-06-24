@@ -1,0 +1,13 @@
+browser/node_modules/
+browser/.sass-cache/
+browser/nbproject/private/
+browser/nbproject/
+mobile/.sass-cache/
+mobile/in/
+build/out
+mobile/in/
+settings.json
+dist/
+npm-debug.log
+.DS_Store
+browser/css

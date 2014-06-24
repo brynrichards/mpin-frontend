@@ -1,0 +1,5 @@
+{
+  "clientSettingsURL": "/rps/clientSettings",
+  "templateName": "gradient",
+  "emailRegex": "/.*/"
+}
