@@ -850,7 +850,10 @@ var mpin = mpin || {};
             mpBack.innerHTML = self.readyHtml("accounts-panel", {});
         }
  
-        if(document.contains(mpBack) === false) {
+        // if(document.contains(mpBack) === false) {
+
+        // Fix for IE compatibillity
+        if(document.body.contains(mpBack) === false) {
 
             addMpinBack();
             mpBack.style.display = 'block';

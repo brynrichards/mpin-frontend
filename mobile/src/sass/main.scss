@@ -160,24 +160,28 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		-ms-flex-pack: start;
 		justify-content: flex-start;
 
-		-webkit-box-align: center;
-		-ms-flex-align: center;
-		align-items: center;
-
 		display: flex;
 		display: -webkit-box;
 		display: -ms-flexbox;
 
 		#mp_action_home {
-			display: block;
+			display: -moz-box; /* Firefox */
+			display: -webkit-box; /* Safari and Chrome */
+			display: -ms-flexbox; /* Internet Explorer 10 */
+			
 			@include home-icon();
 			background-repeat: no-repeat;
 			background-size: auto 100%;
+			position: relative;
+			left: 0;
+			background-position: left;
 		}
 
 		#logo {
 			@include custom-logo();
-			display: block;
+			display: -moz-box; /* Firefox */
+			display: -webkit-box; /* Safari and Chrome */
+			display: -ms-flexbox; /* Internet Explorer 10 */
 			position: relative;
 		}
 
