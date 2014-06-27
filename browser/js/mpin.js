@@ -32,7 +32,8 @@ var mpin = mpin || {};
 		requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue",
 		restrictedOptions: "signatureURL; mpinAuthServerURL; timePermitsURL",
 		defaultOptions: {
-			identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+			identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+			setDeviceName: false
 		}
 	};
 
@@ -164,7 +165,7 @@ var mpin = mpin || {};
 		_options += "onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; signatureURL; certivoxURL; ";
 		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; customHeaders; authenticateRequestFormatter; accessNumberRequestFormatter; ";
 		_options += "registerRequestFormatter; identityCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; timePermitsStorageURL; authenticateURL; ";
-		_options += "language; customLanguageTexts";
+		_options += "language; customLanguageTexts; setDeviceName";
 		_opts = _options.split("; ");
 		this.opts || (this.opts = {});
 
@@ -256,7 +257,8 @@ var mpin = mpin || {};
 		function clearIntervals() {
 			clearInterval(self.intervalID);
 			clearTimeout(self.intervalID2);
-		};
+		}
+		;
 
 		clearIntervals();
 
@@ -532,7 +534,7 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.renderSetupHome = function(email) {
-		var callbacks = {}, self = this, descHtml, userId;
+		var callbacks = {}, self = this, userId, deviceName = "", deviceNameHolder = "";
 
 		callbacks.mpin_home = function(evt) {
 			self.renderHome.call(self, evt);
@@ -559,8 +561,21 @@ var mpin = mpin || {};
 		}
 
 		userId = (email) ? email : "";
+		//one for 
+		if (this.opts.setDeviceName) {
 
-		this.render("setup-home", callbacks, {userId: userId});
+			//get from localStorage - already set
+			if (this.ds.getDeviceName()) {
+				deviceName = this.ds.getDeviceName();
+				deviceNameHolder = deviceName;
+			} else {
+				//set only placeholder value
+				deviceNameHolder = this.suggestDeviceName();
+				deviceName = "";
+			}
+		}
+
+		this.render("setup-home", callbacks, {userId: userId, setDeviceName: this.opts.setDeviceName, deviceName: deviceName, deviceNameHolder: deviceNameHolder});
 
 
 		if (this.accountsLinkFlag) {
@@ -575,56 +590,59 @@ var mpin = mpin || {};
 
 	//with embeded animation
 	mpin.prototype.renderSetupHome2 = function() {
-		var renderElem, self = this;
+		var renderElem, self = this, deviceName = "", deviceNameHolder = "";
 
 //		renderElem = document.getElementById("mpinUser");
 		renderElem = document.getElementById("mpin_identities");
-		renderElem.innerHTML = this.readyHtml("setup-home-2", {userId: ""});
-		
+
+		if (this.opts.setDeviceName) {
+			if (this.ds.getDeviceName()) {
+				deviceName = this.ds.getDeviceName();
+				deviceNameHolder = deviceName;
+			} else {
+				deviceNameHolder = this.suggestDeviceName();
+				deviceName = "";
+			}
+		}
+
+		renderElem.innerHTML = this.readyHtml("setup-home-2", {userId: "", setDeviceName: this.opts.setDeviceName, deviceName: deviceName, deviceNameHolder: deviceNameHolder});
+
 		renderElem.style.top = "0px";
 //		removeClass("mpin_accounts_list", "mpHide");
 		addClass("mpinCurrentIden", "mpHide");
 		document.getElementById("mpin_help").style.bottom = "-13%";
-		
-		
+
+
 		document.getElementById("mpin_arrow").onclick = function(evt) {
 //			addClass("mpin_help", "mpHide");
 			document.getElementById("mpin_help").style.display = "none";
 			self.toggleButton();
 			renderElem.style.top = "40px";
 		};
-		
+
 		document.getElementById("mpin_setup").onclick = function() {
 			self.actionSetupHome.call(self);
 		};
-
-
-
-
-
-		/*
-		 renderElem = document.getElementById("mpinUser");
-		 addClass(renderElem, "mpPaddTop10");
-		 renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
-		 
-		 document.getElementById("mpin_deluser_btn").onclick = function(evt) {
-		 self.deleteIdentity(iD);
-		 };
-		 
-		 
-		 var menuBtn = document.getElementById('mpin_arrow');
-		 addClass(menuBtn, "mpinAUp");
-		 
-		 //inner ELEMENT
-		 renderElem = document.getElementById("mpin_identities");
-		 renderElem.innerHTML = this.readyHtml("accounts-panel", {});
-		 renderElem.style.display = "block";
-		 
-		 
-		 
-		 */
 	};
 
+	mpin.prototype.suggestDeviceName = function() {
+		var suggestName, platform, browser;
+		platform = navigator.platform.toLowerCase();
+		browser = navigator.appCodeName;
+		if (platform.indexOf("Mac") !== -1) {
+			platform = "mac";
+		} else if (platform.indexOf("linux") !== -1) {
+			platform = "lin";
+		} else if (platform.indexOf("win") !== -1) {
+			platform = "win";
+		} else if (platform.indexOf("sun") !== -1) {
+			platform = "sun";
+		}
+
+		suggestName = platform + browser;
+
+		return suggestName;
+	};
 
 	mpin.prototype.renderSetup = function(email, clientSecretShare, clientSecretParams) {
 		var callbacks = {}, self = this;
@@ -900,7 +918,7 @@ var mpin = mpin || {};
 		_reqData.method = "GET";
 
 		//get signature
-		requestRPS(_reqData, function(rpsData) {	
+		requestRPS(_reqData, function(rpsData) {
 			if (rpsData.errorStatus) {
 
 				btn.error("setupNotReady_check_info2");
@@ -1375,7 +1393,7 @@ var mpin = mpin || {};
 			console.log("missing ELement.");
 			return;
 		}
-		
+
 		//
 		if (menuBtn && !menuBtn.classList.contains("mpinAUp")) {
 			document.getElementById("mpinUser").style.height = "81.5%";
@@ -1401,10 +1419,13 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.actionSetupHome = function(uId) {
-		var _email, _reqData = {}, self = this;
+		var _email, _deviceName, _deviceNameInput, _reqData = {}, self = this;
 
 		_email = (uId) ? uId : document.getElementById("emailInput").value;
 
+
+
+		console.log();
 		if (_email.length === 0 || !this.opts.identityCheckRegex.test(_email)) {
 			document.getElementById("emailInput").focus();
 			return;
@@ -1416,6 +1437,29 @@ var mpin = mpin || {};
 			userId: _email,
 			mobile: 0
 		};
+
+		_deviceNameInput = document.getElementById("deviceInput").value;
+		//DEVICE NAME
+		if (!this.ds.getDeviceName() && _deviceNameInput === "") {
+			console.log("case NONE");
+			_deviceName = this.suggestDeviceName();
+		} else if (!this.ds.getDeviceName() && _deviceNameInput !== "") {
+			console.log("case have INPUT");
+			_deviceName = _deviceNameInput;
+		} else if (_deviceNameInput !== this.ds.getDeviceName()) {
+			console.log("case change");
+			_deviceName = _deviceNameInput;
+		} else {
+			_deviceName = false;
+		}
+
+		if (_deviceName) {
+			console.log("case set DEVICE NAME", _deviceName);
+			
+			_reqData.data.deviceName = _deviceName;
+			this.ds.setDeviceName(_deviceName);
+		}
+
 
 		if (this.opts.registerRequestFormatter) {
 			_reqData.postDataFormatter = this.opts.registerRequestFormatter;
@@ -1842,6 +1886,22 @@ var mpin = mpin || {};
 			return mpinDs.mpin.accounts[uId][key];
 		};
 
+		mpinDs.setDeviceName = function(devId) {
+			mpinDs.mpin.deviceName = devId;
+			console.log("data STORAGE set device ID::");
+			mpinDs.save();
+		};
+
+		mpinDs.getDeviceName = function() {
+			var deviceID;
+			deviceID = mpinDs.mpin.deviceName;
+			if (!deviceID) {
+				return false;
+			}
+
+			return deviceID;
+		};
+
 		return mpinDs;
 	};
 
@@ -2103,7 +2163,9 @@ var mpin = mpin || {};
 		"mobile_header": "GET THE M-PIN SMARTPHONE APP",
 		"mobile_footer_btn": "Now, sign in with your Smartphone",
 		"pinpad_setup_screen_text": "CREATE YOUR M-PIN:<br> CHOOSE 4 DIGIT",
-		"pinpad_default_message": "ENTER YOUR PIN"
+		"pinpad_default_message": "ENTER YOUR PIN",
+		"setup_device_label": "Choose a device friendly name:",
+		"setup_device_default": "(default name)"
 
 	};
 	//	image should have config properties

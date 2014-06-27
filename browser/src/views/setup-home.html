@@ -11,9 +11,15 @@
 
 <div class="mpinMain mpPaddTop10">
 	
-	<div class="mpinCenter">
+	
+	<div class="mpinCenter <%= (setDeviceName) ? "mpCenterTop": "" %>">
 		<%=hlp.text( "setup_text1") %>
 		<input type="email" id="emailInput" class="mpinInput" placeholder="<%=hlp.text( "setup_placeholder") %>" value="<%= userId %>">
+		
+		<% if (setDeviceName) { %>
+			<br><br><label for="deviceInput"><%=hlp.text( "setup_device_label") %></label>
+			<input type="text" id="deviceInput" class="mpinInput" placeholder="<%= deviceNameHolder %> <%=hlp.text( "setup_device_default") %>" value="<%= deviceName %>"><br><br>
+		<% } %>
     </div>
 	
 	<div class="mpinBtnBox">
