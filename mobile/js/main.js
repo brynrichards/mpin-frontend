@@ -61,9 +61,7 @@ var mpin = mpin || {};
         this.el = document.getElementById(domID);
         this.elHelp = document.getElementById('helpContainer');
         this.elHelpOverlay = document.getElementsByTagName("help")[0];
-
-        this.elHelpHub = document.getElementById('helpHubContainer');
-        this.elHelpHubOverlay = document.getElementsByTagName("helpHub")[0];
+        this.elHelpHub = document.getElementsByTagName("helpHub")[0];
 
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
@@ -106,13 +104,13 @@ var mpin = mpin || {};
 
         // Caching - monitor if new version of the cache exists
  
-        setTimeout(function () { window.applicationCache.update(); }, 1000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
+        // setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
  
-        window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
-                window.applicationCache.swapCache(); //swap to the newest version of the cache
-                alert("I updated the cache");
-                window.location.reload();
-        }, false);
+        // window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
+        //         window.applicationCache.swapCache(); //swap to the newest version of the cache
+        //         alert("I updated the cache");
+        //         window.location.reload();
+        // }, false);
     };
  
  
@@ -179,7 +177,7 @@ var mpin = mpin || {};
         for (k in callbacks) {
             if (document.getElementById(k)) {
                 // document.getElementById(k).onclick = callbacks[k];
-                document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
                 document.getElementById(k).addEventListener('click', callbacks[k], false);
  
             }
@@ -209,18 +207,54 @@ var mpin = mpin || {};
         }
     };
 
-    mpin.prototype.renderHelpHub = function(tmplName, callbacks, tmplData) {
-        var data = tmplData || {}, k;
+    mpin.prototype.renderHelpHub = function(tmplName, tmplData) {
+        var data = tmplData || {}, k, self = this, helphubBtns = {};
 
-        this.elHelpHubOverlay.style.display = 'block';
-        this.elHelpHubOverlay.style.opacity = "1";
+        // // Dissmiss any open help menus
+
+        self.dismissHelp();
+
+        this.elHelpHub.style.display = 'flex';
+        this.elHelpHub.style.opacity = "1";
         this.elHelpHub.innerHTML = this.readyHelpHub(tmplName, data);
-        this.elHelpHub.style.display = 'block';
 
-        for (k in callbacks) {
+        helphubBtns.first = function(evt) {
+            // Modify the sequence for the templates
+            // self.renderHelp("help-helphub", callbacks);
+
+            console.log("This is clicked first");
+        };
+
+        helphubBtns.second = function(evt) {
+            // Modify the sequence for the templates
+            // self.renderHelp("help-helphub", callbacks);
+
+            console.log("This is clicked seconds");
+        };
+
+        helphubBtns.details = function(evt) {
+            // Modify the sequence for the templates
+            self.renderHelpHub("helphub-details");
+
+        };
+
+        helphubBtns.forth = function(evt) {
+            // Modify the sequence for the templates
+            // self.renderHelp("help-helphub", callbacks);
+        };
+
+        helphubBtns.return = function(evt) {
+            self.renderHelpHub("helphub-index");
+        }
+
+        helphubBtns.exit = function(evt) {
+            self.dismissHelpHub();
+        };
+
+        for (k in helphubBtns) {
             if (document.getElementById(k)) {
-                document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                document.getElementById(k).addEventListener('click', callbacks[k], false);
+                document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
+                document.getElementById(k).addEventListener('click', helphubBtns[k], false);
             }
         }
         if (typeof mpin.custom !== 'undefined') {
@@ -235,9 +269,8 @@ var mpin = mpin || {};
     }
 
     mpin.prototype.dismissHelpHub = function() {
-            this.elHelpHubOverlay.style.display = 'none';
-            this.elHelpHubOverlay.style.opacity = '0';
             this.elHelpHub.style.display = 'none';
+            this.elHelpHub.style.opacity = '0';
     }
  
     mpin.prototype.setLanguageText = function() {
@@ -322,9 +355,11 @@ var mpin = mpin || {};
         // Check browsers
  
         function isMobileSafari() {
-            return navigator.userAgent.match(/(iPad|iPhone|iPod touch)/) && navigator.userAgent.match(/AppleWebKit/)
+            // return navigator.userAgent.match(/(iPad|iPhone|iPod touch)/) && navigator.userAgent.match(/AppleWebKit/)
+            return /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+
         }
- 
+
         function isIos7() {
             return navigator.userAgent.match(/(iPad|iPhone);.*CPU.*OS 7_\d/i)
         }
@@ -423,7 +458,7 @@ var mpin = mpin || {};
 
         callbacks.show_more = function(evt) {
             // Modify the sequence for the templates
-            self.renderHelp("help-helphub", callbacks);
+            self.renderHelpHub("helphub-index", callbacks);
         };
 
         callbacks.info = function(evt) {
@@ -516,6 +551,10 @@ var mpin = mpin || {};
                     return;
                 }
 
+                // Clear the error codes display
+
+                self.display(false, true);
+
                 self.isAccNumber = false;
 
                 self.enableButton(false, "go");
@@ -580,7 +619,7 @@ var mpin = mpin || {};
 
         callbacks.show_more = function(evt) {
             // Modify the sequence for the templates
-            self.renderHelp("help-helphub", callbacks);
+            self.renderHelpHub("helphub-index");
         };
 
         document.getElementById('acInfo').onclick = function(evt) {
@@ -592,7 +631,7 @@ var mpin = mpin || {};
         // Helphub calbacks
 
         document.getElementById('openHelpHub').onclick = function(evt) {
-            self.renderHelpHub("helphub-index", callbacks);
+            self.renderHelpHub("helphub-index");
         };
 
 
@@ -811,7 +850,10 @@ var mpin = mpin || {};
             mpBack.innerHTML = self.readyHtml("accounts-panel", {});
         }
  
-        if(document.contains(mpBack) === false) {
+        // if(document.contains(mpBack) === false) {
+
+        // Fix for IE compatibillity
+        if(document.body.contains(mpBack) === false) {
 
             addMpinBack();
             mpBack.style.display = 'block';
@@ -953,6 +995,7 @@ var mpin = mpin || {};
             // addClass(rowElem, "mp_itemSelected");
             self.ds.setDefaultIdentity(uId);
             self.setIdentity(uId, true);
+            self.renderLogin();
 
             // Hide the identity list
 
@@ -1212,7 +1255,7 @@ var mpin = mpin || {};
         _element.className = buttonValue[buttonName][enable + "Class"];
     };
     //showInPinPadDisplay
-    mpin.prototype.display = function(message, isError) {
+    mpin.prototype.display = function(message, clear) {
 
         var self = this;
  
@@ -1226,6 +1269,19 @@ var mpin = mpin || {};
 
             self.addToPin("clear");
         } 
+
+        if(message === 'INVALID ACCESS NUMBER!') {
+
+            elemForErrcode.style.display = "block";
+            elemForErrcode.className = "error";
+            elemForErrcode.innerHTML = message;
+
+            self.addToPin("clear");
+        }
+
+        if(clear) {
+            elemForErrcode.className = "";
+        }
         
     };
  
@@ -1260,7 +1316,7 @@ var mpin = mpin || {};
                 return false;
             });
 
-            accountTopBar.style.height = "calc(100% - 100px)"
+            accountTopBar.style.height = "100%"
             menuBtn.className = 'close';
 
             this.renderAccountsPanel();
@@ -1459,8 +1515,8 @@ var mpin = mpin || {};
                     } else if (errorCode === "INVALIDACCESSNUMBER") {
 
                         // Render the access number again
-
                         self.renderLogin.call(self);
+                        self.display(hlp.text("authPin_errorInvalidAccessNumber"));
                     }
  
                 }, function() {
@@ -1484,6 +1540,12 @@ var mpin = mpin || {};
         if(accId) {
             accId.children[0].innerText = displayName;
             accId.setAttribute("title", displayName);
+        }
+
+        // no Identity go to setup HOME
+        if (!this.identity) {
+            this.renderSetupHome();
+            return;
         }
 
         if (requestPermit) {
@@ -1959,6 +2021,7 @@ var mpin = mpin || {};
         "authPin_pleasewait": "Authenticating...",
         "authPin_success": "Success",
         "authPin_errorInvalidPin": "INCORRECT M-PIN!",
+        "authPin_errorInvalidAccessNumber": "INVALID ACCESS NUMBER!",
         "authPin_errorNotAuthorized": "You are not authorized!",
         "authPin_errorExpired": "The auth request expired!",
         "authPin_errorServer": "Server error!",
@@ -1995,8 +2058,6 @@ var mpin = mpin || {};
         "accessdenied_text": "Your M-Pin identity",
         "accessdenied_text_cont": "has been removed from this device.",
         "accessdenied_btn": "Register again"
-
-
     };
     //  image should have config properties
     hlp.img = function(imgSrc) {

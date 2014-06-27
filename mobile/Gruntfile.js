@@ -58,7 +58,7 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			resourceFiles: {
-				files: ['src/sass/*.scss','src/views/*.html'],
+				files: ['src/sass/*.scss','src/views/*.html', 'js/*.js', 'settings.json'],
 				tasks: ['bgShell', 'sass']
 			}
 		},
