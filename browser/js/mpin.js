@@ -534,7 +534,7 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.renderSetupHome = function(email) {
-		var callbacks = {}, self = this, descHtml, userId, deviceName = false, deviceNameHolder;
+		var callbacks = {}, self = this, userId, deviceName = "", deviceNameHolder = "";
 
 		callbacks.mpin_home = function(evt) {
 			self.renderHome.call(self, evt);
@@ -590,11 +590,22 @@ var mpin = mpin || {};
 
 	//with embeded animation
 	mpin.prototype.renderSetupHome2 = function() {
-		var renderElem, self = this;
+		var renderElem, self = this, deviceName = "", deviceNameHolder = "";
 
 //		renderElem = document.getElementById("mpinUser");
 		renderElem = document.getElementById("mpin_identities");
-		renderElem.innerHTML = this.readyHtml("setup-home-2", {userId: ""});
+
+		if (this.opts.setDeviceName) {
+			if (this.ds.getDeviceName()) {
+				deviceName = this.ds.getDeviceName();
+				deviceNameHolder = deviceName;
+			} else {
+				deviceNameHolder = this.suggestDeviceName();
+				deviceName = "";
+			}
+		}
+
+		renderElem.innerHTML = this.readyHtml("setup-home-2", {userId: "", setDeviceName: this.opts.setDeviceName, deviceName: deviceName, deviceNameHolder: deviceNameHolder});
 
 		renderElem.style.top = "0px";
 //		removeClass("mpin_accounts_list", "mpHide");
@@ -612,32 +623,6 @@ var mpin = mpin || {};
 		document.getElementById("mpin_setup").onclick = function() {
 			self.actionSetupHome.call(self);
 		};
-
-
-
-
-
-		/*
-		 renderElem = document.getElementById("mpinUser");
-		 addClass(renderElem, "mpPaddTop10");
-		 renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
-		 
-		 document.getElementById("mpin_deluser_btn").onclick = function(evt) {
-		 self.deleteIdentity(iD);
-		 };
-		 
-		 
-		 var menuBtn = document.getElementById('mpin_arrow');
-		 addClass(menuBtn, "mpinAUp");
-		 
-		 //inner ELEMENT
-		 renderElem = document.getElementById("mpin_identities");
-		 renderElem.innerHTML = this.readyHtml("accounts-panel", {});
-		 renderElem.style.display = "block";
-		 
-		 
-		 
-		 */
 	};
 
 	mpin.prototype.suggestDeviceName = function() {
@@ -1456,16 +1441,21 @@ var mpin = mpin || {};
 		_deviceNameInput = document.getElementById("deviceInput").value;
 		//DEVICE NAME
 		if (!this.ds.getDeviceName() && _deviceNameInput === "") {
+			console.log("case NONE");
 			_deviceName = this.suggestDeviceName();
 		} else if (!this.ds.getDeviceName() && _deviceNameInput !== "") {
+			console.log("case have INPUT");
 			_deviceName = _deviceNameInput;
 		} else if (_deviceNameInput !== this.ds.getDeviceName()) {
+			console.log("case change");
 			_deviceName = _deviceNameInput;
 		} else {
 			_deviceName = false;
 		}
 
 		if (_deviceName) {
+			console.log("case set DEVICE NAME", _deviceName);
+			
 			_reqData.data.deviceName = _deviceName;
 			this.ds.setDeviceName(_deviceName);
 		}
@@ -1897,14 +1887,14 @@ var mpin = mpin || {};
 		};
 
 		mpinDs.setDeviceName = function(devId) {
-			mpinDs.deviceId = devId;
+			mpinDs.mpin.deviceName = devId;
 			console.log("data STORAGE set device ID::");
 			mpinDs.save();
 		};
 
 		mpinDs.getDeviceName = function() {
 			var deviceID;
-			deviceID = mpinDs.mpin.deviceId;
+			deviceID = mpinDs.mpin.deviceName;
 			if (!deviceID) {
 				return false;
 			}
