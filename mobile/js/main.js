@@ -104,13 +104,13 @@ var mpin = mpin || {};
 
         // Caching - monitor if new version of the cache exists
  
-        setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
+        // setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
  
-        window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
-                window.applicationCache.swapCache(); //swap to the newest version of the cache
-                alert("I updated the cache");
-                window.location.reload();
-        }, false);
+        // window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
+        //         window.applicationCache.swapCache(); //swap to the newest version of the cache
+        //         alert("I updated the cache");
+        //         window.location.reload();
+        // }, false);
     };
  
  
@@ -177,7 +177,7 @@ var mpin = mpin || {};
         for (k in callbacks) {
             if (document.getElementById(k)) {
                 // document.getElementById(k).onclick = callbacks[k];
-                document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
                 document.getElementById(k).addEventListener('click', callbacks[k], false);
  
             }
@@ -1316,7 +1316,7 @@ var mpin = mpin || {};
                 return false;
             });
 
-            accountTopBar.style.height = "calc(100% - 100px)"
+            accountTopBar.style.height = "100%"
             menuBtn.className = 'close';
 
             this.renderAccountsPanel();
@@ -2058,8 +2058,6 @@ var mpin = mpin || {};
         "accessdenied_text": "Your M-Pin identity",
         "accessdenied_text_cont": "has been removed from this device.",
         "accessdenied_btn": "Register again"
-
-
     };
     //  image should have config properties
     hlp.img = function(imgSrc) {

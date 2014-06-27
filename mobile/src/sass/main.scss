@@ -281,7 +281,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		}
 
 		.mp_customScrollBox {
-			max-height: 288px;
+			max-height: 230px;
 			overflow-y: scroll;
 			overflow-x: hidden;
 		}
@@ -624,19 +624,17 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		top: 17px;
 		color: black;
 		text-align: left;
-		width: 90%;
-		padding-left: 10px;
+		left: 10px;
 
 	}
 
 	.mp_buttonItem {
 		display: block;
-		position: absolute;
-		top: 7px;
-		right: 10px;
+		position: relative;
+		top: -7px;
+		right: 6px;
 		z-index: 9999;
 		cursor: pointer;
-		width: 10%;
 
 		img {
 			background-color: white;
