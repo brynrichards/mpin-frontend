@@ -628,7 +628,8 @@ var mpin = mpin || {};
 	mpin.prototype.suggestDeviceName = function() {
 		var suggestName, platform, browser;
 		platform = navigator.platform.toLowerCase();
-		browser = navigator.appCodeName;
+//		browser = navigator.appCodeName;
+		browser = navigator.userAgent;
 		if (platform.indexOf("Mac") !== -1) {
 			platform = "mac";
 		} else if (platform.indexOf("linux") !== -1) {
@@ -638,7 +639,17 @@ var mpin = mpin || {};
 		} else if (platform.indexOf("sun") !== -1) {
 			platform = "sun";
 		}
-
+		
+		if (browser.indexOf("Chrome") !== -1) {
+			browser = "Chrome";
+		} else if (browser.indexOf("MSIE") !== -1) {
+			browser = "Explorer";
+		} else if (browser.indexOf("Firefox") !== -1) {
+			browser = "Firefox";
+		} else if (browser.indexOf("Safari") !== -1) {
+			browser = "Safari";
+		}
+		
 		suggestName = platform + browser;
 
 		return suggestName;
