@@ -638,6 +638,8 @@ var mpin = mpin || {};
 			platform = "win";
 		} else if (platform.indexOf("sun") !== -1) {
 			platform = "sun";
+		} else {
+			platform = "__";
 		}
 		
 		if (browser.indexOf("Chrome") !== -1) {
@@ -648,6 +650,8 @@ var mpin = mpin || {};
 			browser = "Firefox";
 		} else if (browser.indexOf("Safari") !== -1) {
 			browser = "Safari";
+		} else {
+			browser = "_";
 		}
 		
 		suggestName = platform + browser;
