@@ -644,7 +644,7 @@ var mpin = mpin || {};
 		
 		if (browser.indexOf("Chrome") !== -1) {
 			browser = "Chrome";
-		} else if (browser.indexOf("MSIE") !== -1) {
+		} else if (browser.indexOf("MSIE") !== -1 || browser.indexOf("Trident") !== -1) {
 			browser = "Explorer";
 		} else if (browser.indexOf("Firefox") !== -1) {
 			browser = "Firefox";
