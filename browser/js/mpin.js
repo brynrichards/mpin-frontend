@@ -14,8 +14,10 @@ var mpin = mpin || {};
 				return console.error("M-Pin: clientSettings not set!");
 
 			domID = options.targetElement;
-			//remove _ from global SCOPE
-			mpin._ = _.noConflict();
+			if (_) {
+				//remove _ from global SCOPE
+				mpin._ = _.noConflict();
+			}
 			_options.client = options;
 			self.ajax(options.clientSettingsURL, function(serverOptions) {
 				_options.server = serverOptions;
@@ -448,7 +450,7 @@ var mpin = mpin || {};
 
 
 	mpin.prototype.renderHelp = function(tmplName, callbacks, tmplData) {
-		var k;
+		var k, self = this;
 		tmplData = tmplData || {};
 		this.elHelp.innerHTML = this.readyHtml(tmplName, tmplData);
 
@@ -456,6 +458,11 @@ var mpin = mpin || {};
 			if (document.getElementById(k)) {
 				document.getElementById(k).addEventListener('click', callbacks[k], false);
 			}
+		}
+
+		//close tooltip by pressing I
+		document.getElementById("infoCloseCorner").onclick = function() {
+			self.toggleHelp.call(self);
 		}
 	};
 
@@ -641,7 +648,7 @@ var mpin = mpin || {};
 		} else {
 			platform = "__";
 		}
-		
+
 		if (browser.indexOf("Chrome") !== -1) {
 			browser = "Chrome";
 		} else if (browser.indexOf("MSIE") !== -1 || browser.indexOf("Trident") !== -1) {
@@ -653,7 +660,7 @@ var mpin = mpin || {};
 		} else {
 			browser = "_";
 		}
-		
+
 		suggestName = platform + browser;
 
 		return suggestName;
@@ -1397,7 +1404,7 @@ var mpin = mpin || {};
 
 
 	mpin.prototype.toggleButton = function() {
-		var self = this, pinpadElem, idenElem;
+		var self = this, pinpadElem, idenElem, identity;
 
 		pinpadElem = document.getElementById("mpin_pinpad");
 		idenElem = document.getElementById("mpin_identities");
@@ -1408,6 +1415,14 @@ var mpin = mpin || {};
 			console.log("missing ELement.");
 			return;
 		}
+
+		/*
+		 * 			if (this.ds.getIdentityToken(this.identity) == "") {
+		 this.renderIdentityNotActive(displayName);
+		 return;
+		 }
+		 * 
+		 */
 
 		//
 		if (menuBtn && !menuBtn.classList.contains("mpinAUp")) {
@@ -1422,6 +1437,14 @@ var mpin = mpin || {};
 			// //lastView
 			this.lastViewParams = [false];
 		} else {
+			//if identity not Active render ACTIVATE
+			if (this.ds.getIdentityToken(this.identity) == "") {
+				identity = this.getDisplayName(this.identity);
+				this.renderIdentityNotActive(identity);
+				return;
+			}
+
+
 			document.getElementById("mpinUser").style.height = "28px";
 			removeClass(menuBtn, "mpinAUp");
 			//if come from add identity remove HIDDEN
@@ -1470,7 +1493,7 @@ var mpin = mpin || {};
 
 		if (_deviceName) {
 			console.log("case set DEVICE NAME", _deviceName);
-			
+
 			_reqData.data.deviceName = _deviceName;
 			this.ds.setDeviceName(_deviceName);
 		}
