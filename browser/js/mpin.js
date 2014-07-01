@@ -440,15 +440,6 @@ var mpin = mpin || {};
 	};
 
 
-
-
-
-
-
-
-
-
-
 	mpin.prototype.renderHelp = function(tmplName, callbacks, tmplData) {
 		var k, self = this;
 		tmplData = tmplData || {};
@@ -461,7 +452,7 @@ var mpin = mpin || {};
 		}
 
 		//close tooltip by pressing I
-		document.getElementById("infoCloseCorner").onclick = function() {
+		document.getElementById("mpinInfoCloseCorner").onclick = function() {
 			self.toggleHelp.call(self);
 		}
 	};
@@ -1415,14 +1406,6 @@ var mpin = mpin || {};
 			console.log("missing ELement.");
 			return;
 		}
-
-		/*
-		 * 			if (this.ds.getIdentityToken(this.identity) == "") {
-		 this.renderIdentityNotActive(displayName);
-		 return;
-		 }
-		 * 
-		 */
 
 		//
 		if (menuBtn && !menuBtn.classList.contains("mpinAUp")) {
