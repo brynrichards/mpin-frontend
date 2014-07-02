@@ -1445,9 +1445,6 @@ var mpin = mpin || {};
 
 		_email = (uId) ? uId : document.getElementById("emailInput").value;
 
-
-
-		console.log();
 		if (_email.length === 0 || !this.opts.identityCheckRegex.test(_email)) {
 			document.getElementById("emailInput").focus();
 			return;
@@ -1460,7 +1457,7 @@ var mpin = mpin || {};
 			mobile: 0
 		};
 
-		_deviceNameInput = document.getElementById("deviceInput").value;
+		_deviceNameInput = (document.getElementById("deviceInput")) ? document.getElementById("deviceInput").value : "";
 		//DEVICE NAME
 		if (!this.ds.getDeviceName() && _deviceNameInput === "") {
 			console.log("case NONE");
@@ -1794,7 +1791,8 @@ var mpin = mpin || {};
 				return false;
 			});
 			if (!renderWarningFlag) {
-				this.renderAccountsPanel();
+//				this.renderAccountsPanel();
+				this.renderLogin(true, "renderAccountsPanel");
 			}
 		} else {
 			this.ds.setDefaultIdentity("");
@@ -2024,11 +2022,11 @@ var mpin = mpin || {};
 			el = elId;
 		}
 
-		if (el.className) {
+		if (el && el.className) {
 			var cNames = el.className.split(/\s+/g);
 			if (cNames.indexOf(className) < 0)
 				el.className += " " + className;
-		} else
+		} else if (el)
 			el.className = className;
 	}
 	;
