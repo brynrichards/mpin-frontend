@@ -207,13 +207,22 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.render = function(tmplName, callbacks, tmplData) {
-		var data = tmplData || {}, k;
+		var data = tmplData || {}, k, self = this, homeElem;
 		this.el.innerHTML = this.readyHtml(tmplName, data);
 		for (k in callbacks) {
 			if (document.getElementById(k)) {
 				document.getElementById(k).onclick = callbacks[k];
 			}
 		}
+
+		//mpin_home - can remove all mpin_home definition
+		homeElem = document.getElementById("mpin_home");
+		if (homeElem) {
+			homeElem.onclick = function() {
+				self.renderHome.call(self);
+			};
+		}
+
 		if (typeof mpin.custom !== 'undefined') {
 			this.setCustomStyle();
 		}
@@ -1535,6 +1544,7 @@ var mpin = mpin || {};
 	mpin.prototype.actionResend = function(btnElem) {
 		var self = this, _reqData = {}, regOTT, _email, btn;
 
+		console.log("this identity :::", this.identity);
 		regOTT = this.ds.getIdentityData(this.identity, "regOTT");
 		_email = this.getDisplayName(this.identity);
 
