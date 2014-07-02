@@ -14,8 +14,10 @@ var mpin = mpin || {};
 				return console.error("M-Pin: clientSettings not set!");
 
 			domID = options.targetElement;
-			//remove _ from global SCOPE
-			mpin._ = _.noConflict();
+			if (_) {
+				//remove _ from global SCOPE
+				mpin._ = _.noConflict();
+			}
 			_options.client = options;
 			self.ajax(options.clientSettingsURL, function(serverOptions) {
 				_options.server = serverOptions;
@@ -438,17 +440,8 @@ var mpin = mpin || {};
 	};
 
 
-
-
-
-
-
-
-
-
-
 	mpin.prototype.renderHelp = function(tmplName, callbacks, tmplData) {
-		var k;
+		var k, self = this;
 		tmplData = tmplData || {};
 		this.elHelp.innerHTML = this.readyHtml(tmplName, tmplData);
 
@@ -456,6 +449,11 @@ var mpin = mpin || {};
 			if (document.getElementById(k)) {
 				document.getElementById(k).addEventListener('click', callbacks[k], false);
 			}
+		}
+
+		//close tooltip by pressing I
+		document.getElementById("mpinInfoCloseCorner").onclick = function() {
+			self.toggleHelp.call(self);
 		}
 	};
 
@@ -641,7 +639,7 @@ var mpin = mpin || {};
 		} else {
 			platform = "__";
 		}
-		
+
 		if (browser.indexOf("Chrome") !== -1) {
 			browser = "Chrome";
 		} else if (browser.indexOf("MSIE") !== -1 || browser.indexOf("Trident") !== -1) {
@@ -653,7 +651,7 @@ var mpin = mpin || {};
 		} else {
 			browser = "_";
 		}
-		
+
 		suggestName = platform + browser;
 
 		return suggestName;
@@ -935,9 +933,7 @@ var mpin = mpin || {};
 		//get signature
 		requestRPS(_reqData, function(rpsData) {
 			if (rpsData.errorStatus) {
-
 				btn.error("setupNotReady_check_info2");
-
 				self.error("Activate identity");
 				return;
 			}
@@ -1170,10 +1166,13 @@ var mpin = mpin || {};
 
 		//Check again
 		callbacks.mpin_activate_btn = function() {
+
+			//			self.beforeRenderSetup.call(self, this);
+
 			var _reqData = {}, regOTT, url, btn;
 
 			btn = self.mpinButton(this, "setupNotReady_check_info1");
-
+			console.log("identity :::", self.identity);
 			regOTT = self.ds.getIdentityData(self.identity, "regOTT");
 			url = self.opts.signatureURL + "/" + self.identity + "?regOTT=" + regOTT;
 
@@ -1397,7 +1396,7 @@ var mpin = mpin || {};
 
 
 	mpin.prototype.toggleButton = function() {
-		var self = this, pinpadElem, idenElem;
+		var self = this, pinpadElem, idenElem, identity;
 
 		pinpadElem = document.getElementById("mpin_pinpad");
 		idenElem = document.getElementById("mpin_identities");
@@ -1422,6 +1421,14 @@ var mpin = mpin || {};
 			// //lastView
 			this.lastViewParams = [false];
 		} else {
+			//if identity not Active render ACTIVATE
+			if (this.ds.getIdentityToken(this.identity) == "") {
+				identity = this.getDisplayName(this.identity);
+				this.renderIdentityNotActive(identity);
+				return;
+			}
+
+
 			document.getElementById("mpinUser").style.height = "28px";
 			removeClass(menuBtn, "mpinAUp");
 			//if come from add identity remove HIDDEN
@@ -1470,7 +1477,7 @@ var mpin = mpin || {};
 
 		if (_deviceName) {
 			console.log("case set DEVICE NAME", _deviceName);
-			
+
 			_reqData.data.deviceName = _deviceName;
 			this.ds.setDeviceName(_deviceName);
 		}
@@ -1495,6 +1502,7 @@ var mpin = mpin || {};
 			self.ds.setDefaultIdentity(rpsData.mpinId);
 
 			self.identity = rpsData.mpinId;
+
 			// Check for existing userid and delete the old one
 			self.ds.deleteOldIdentity(rpsData.mpinId);
 
