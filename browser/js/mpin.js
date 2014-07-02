@@ -933,9 +933,7 @@ var mpin = mpin || {};
 		//get signature
 		requestRPS(_reqData, function(rpsData) {
 			if (rpsData.errorStatus) {
-
 				btn.error("setupNotReady_check_info2");
-
 				self.error("Activate identity");
 				return;
 			}
@@ -1168,10 +1166,13 @@ var mpin = mpin || {};
 
 		//Check again
 		callbacks.mpin_activate_btn = function() {
+
+			//			self.beforeRenderSetup.call(self, this);
+
 			var _reqData = {}, regOTT, url, btn;
 
 			btn = self.mpinButton(this, "setupNotReady_check_info1");
-
+			console.log("identity :::", self.identity);
 			regOTT = self.ds.getIdentityData(self.identity, "regOTT");
 			url = self.opts.signatureURL + "/" + self.identity + "?regOTT=" + regOTT;
 
@@ -1501,6 +1502,7 @@ var mpin = mpin || {};
 			self.ds.setDefaultIdentity(rpsData.mpinId);
 
 			self.identity = rpsData.mpinId;
+
 			// Check for existing userid and delete the old one
 			self.ds.deleteOldIdentity(rpsData.mpinId);
 
