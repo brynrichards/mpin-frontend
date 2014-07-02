@@ -613,8 +613,11 @@ function requestTimePermit(certivoxURL, MPinDTAServerURL, customHeaders, timePer
   }
 
   requestTimePermitShare(MPinDTAServerURL, customHeaders, function(appShare, response){
-    currentDate = response["date"]
-    storageId = response["storageId"]
+    var currentDate = response["date"];
+    var storageId = response["storageId"];
+    var signature = response["signature"];
+    var signedCertivoxURL = certivoxURL + "&signature=" + signature;
+    
     if ((currentDate) && (currentDate == timePermitCache["date"])) {
       certivoxShare = timePermitCache.timePermit;
       console.log("Getting time permit from the local cache")
@@ -630,7 +633,7 @@ function requestTimePermit(certivoxURL, MPinDTAServerURL, customHeaders, timePer
           combineShares(appShare, certivoxShare, currentDate, onSuccess);
         }, 
         function() {
-          requestTimePermitShare(certivoxURL, {}, function(certivoxShare){
+          requestTimePermitShare(signedCertivoxURL, {}, function(certivoxShare){
           // Get Time Permit Share from Application TA
             // Add shares to form Time Permit
             console.log("Got timePermit from DTA")
