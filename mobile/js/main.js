@@ -788,13 +788,22 @@ var mpin = mpin || {};
             self.renderHome.call(self, evt);
         };
         callbacks.mpin_action_setup = function(evt) {
-            self.beforeRenderSetup.call(self, this);
+            if (self.checkBtn(this))
+                self.beforeRenderSetup.call(self, this);
         };
         callbacks.mpin_action_resend = function(evt) {
-            self.actionResend.call(self, this);
+            if (self.checkBtn(this))
+                self.actionResend.call(self, this);
         };
         this.render("activate-identity", callbacks, {email: email});
     };
+
+    //prevent mpin button multi clicks
+    mpin.prototype.checkBtn = function(btnElem) {
+        var btnClass = btnElem.className;
+        return (btnClass.indexOf("mpinBtnBusy") === -1 && btnClass.indexOf("mpinBtnError") === -1 && btnClass.indexOf("mpinBtnOk") === -1);
+    };
+
 
     mpin.prototype.mpinButton = function(btnElem, busyText) {
 
@@ -1063,11 +1072,13 @@ var mpin = mpin || {};
         };
         //Check again
         callbacks.mpin_action_setup = function() {
-            self.beforeRenderSetup.call(self, this);
+            if (self.checkBtn(this))
+                self.beforeRenderSetup.call(self, this);
         };
         //email
         callbacks.mpin_action_resend = function() {
-            self.actionResend.call(self, this);
+            if (self.checkBtn(this))
+                self.beforeRenderSetup.call(self, this);
         };
         //identities list
         callbacks.mp_action_accounts = function() {
