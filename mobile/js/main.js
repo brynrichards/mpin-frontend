@@ -783,24 +783,56 @@ var mpin = mpin || {};
     mpin.prototype.renderActivateIdentity = function() {
         var callbacks = {}, self = this, email;
         email = this.getDisplayName(this.identity);
+
         callbacks.mp_action_home = function(evt) {
             self.renderHome.call(self, evt);
         };
         callbacks.mpin_action_setup = function(evt) {
-            self.beforeRenderSetup.call(self);
+            self.beforeRenderSetup.call(self, this);
         };
         callbacks.mpin_action_resend = function(evt) {
-            self.actionResend.call(self, evt);
+            self.actionResend.call(self, this);
         };
         this.render("activate-identity", callbacks, {email: email});
     };
+
+    mpin.prototype.mpinButton = function(btnElem, busyText) {
+
+        var oldHtml = btnElem.innerHTML;
+        addClass(btnElem, "mpinBtnBusy");
+
+        btnElem.innerHTML = "<span class='btnLabel'>" + hlp.text(busyText) + "</span>";
+        return {
+            error: function(errorText) {
+                removeClass(btnElem, "mpinBtnBusy");
+                addClass(btnElem, "mpinBtnError");
+                btnElem.innerHTML = "<span class='btnLabel'>" + hlp.text(errorText) + "</span>";
+                setTimeout(function() {
+                    removeClass(btnElem, "mpinBtnError");
+                    btnElem.innerHTML = oldHtml;
+                }, 1500);
+
+            }, ok: function(okText) {
+                removeClass(btnElem, "mpinBtnBusy");
+                addClass(btnElem, "mpinBtnOk");
+                btnElem.innerHTML = "<span class='btnLabel'>" + hlp.text(okText) + "</span>";
+                setTimeout(function() {
+                    removeClass(btnElem, "mpinBtnOk");
+                    btnElem.innerHTML = oldHtml;
+                }, 1500);
+            }};
+    };
  
  
-    mpin.prototype.beforeRenderSetup = function() {
+    mpin.prototype.beforeRenderSetup = function(btnElem) {
 
         var _reqData = {}, regOTT, url, self = this;
         regOTT = this.ds.getIdentityData(this.identity, "regOTT");
         url = this.opts.signatureURL + "/" + this.identity + "?regOTT=" + regOTT;
+
+        console.log("I get the render btn el", btnElem);
+
+        var btn = this.mpinButton(btnElem, "setupNotReady_check_info1");
 
         this.isAccNumber = false;
 
@@ -810,6 +842,7 @@ var mpin = mpin || {};
         //get signature
         requestRPS(_reqData, function(rpsData) {
             if (rpsData.errorStatus) {
+                btn.error("setupNotReady_check_info2");
                 self.error("Activate identity");
                 return;
             }
@@ -1030,20 +1063,11 @@ var mpin = mpin || {};
         };
         //Check again
         callbacks.mpin_action_setup = function() {
-            // var _reqData = {}, regOTT, url, btn;
-            self.beforeRenderSetup.call(self);
+            self.beforeRenderSetup.call(self, this);
         };
         //email
-        callbacks.mp_action_resend = function() {
-
-            requestRegister(self.opts.registerURL, self.identity, self.opts.authenticateHeaders, self.opts.registerRequestFormatter,
-                    function() {
-      
-                    },
-                    function(message, status) {
-                        self.error(message, status);
-                        self.display(hlp.text("setupPin_errorSetupPin").mpin_format(status), true);
-                    });
+        callbacks.mpin_action_resend = function() {
+            self.actionResend.call(self, this);
         };
         //identities list
         callbacks.mp_action_accounts = function() {
@@ -1400,17 +1424,59 @@ var mpin = mpin || {};
         }
     };
  
-    mpin.prototype.actionResend = function() {
-        var self = this;
-        requestRegister(this.opts.registerURL, this.identity, this.opts.authenticateHeaders, this.opts.registerRequestFormatter,
-                function() {
-                    self.renderActivateIdentity();
-                },
-                function(message, status) {
-                    self.error(message, status);
-                    self.display(hlp.text("setupPin_errorSetupPin").mpin_format(status), true);
-                }
-        );
+    mpin.prototype.actionResend = function(btnElem) {
+        var self = this, _reqData = {}, regOTT, _email, btn;
+
+        console.log("this identity :::", this.identity);
+        regOTT = this.ds.getIdentityData(this.identity, "regOTT");
+        _email = this.getDisplayName(this.identity);
+
+        btn = this.mpinButton(btnElem, "setupNotReady_resend_info1");
+
+        _reqData.URL = this.opts.registerURL;
+        _reqData.URL += "/" + this.identity;
+        _reqData.method = "PUT";
+        _reqData.data = {
+            userId: _email,
+            mobile: 0,
+            regOTT: regOTT
+        };
+        if (this.opts.registerRequestFormatter) {
+            _reqData.postDataFormatter = this.opts.registerRequestFormatter;
+        }
+        if (this.opts.customHeaders) {
+            _reqData.customHeaders = this.opts.customHeaders;
+        }
+
+        // add identity into URL + regOTT
+        requestRPS(_reqData, function(rpsData) {
+            if (rpsData.error || rpsData.errorStatus) {
+                self.error("Resend problem");
+                return;
+            }
+
+            if (self.identity !== rpsData.mpinId) {
+                console.log("mpin CHANGED : ", rpsData.mpinId);
+
+                //delete OLD mpinID
+                self.ds.deleteIdentity(self.identity);
+
+                //asign new one, create & set as default
+                self.identity = rpsData.mpinId;
+                self.ds.addIdentity(self.identity, "");
+                self.ds.setDefaultIdentity(self.identity);
+            }
+
+            //should be already exist only update regOTT
+            self.ds.setIdentityData(self.identity, {regOTT: rpsData.regOTT});
+
+            // Check for existing userid and delete the old one
+            self.ds.deleteOldIdentity(rpsData.mpinId);
+
+
+
+            btn.ok("setupNotReady_resend_info2");
+        });
     };
  
     mpin.prototype.actionSetup = function() {
@@ -1850,10 +1916,11 @@ var mpin = mpin || {};
 
     mpin.prototype.certivoxPermitsStorageURL = function() {
         var that = this;
+
         return function(date, storageId) {
             console.log("timePermitsStorageURL Base: " + that.opts.timePermitsStorageURL)
             if ((date) && (that.opts.timePermitsStorageURL) && (storageId)) {
-                return that.opts.timePermitsStorageURL + "/" + mpin.appID + "/" + date + "/" + storageId;
+                return that.opts.timePermitsStorageURL + "/" + that.opts.appID + "/" + date + "/" + storageId;
             } else {
                 return null;
             }
