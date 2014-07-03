@@ -1175,30 +1175,9 @@ var mpin = mpin || {};
 
 		//Check again
 		callbacks.mpin_activate_btn = function() {
-
-			//			self.beforeRenderSetup.call(self, this);
-
-			var _reqData = {}, regOTT, url, btn;
-
-			btn = self.mpinButton(this, "setupNotReady_check_info1");
-			console.log("identity :::", self.identity);
-			regOTT = self.ds.getIdentityData(self.identity, "regOTT");
-			url = self.opts.signatureURL + "/" + self.identity + "?regOTT=" + regOTT;
-
-			_reqData.URL = url;
-			_reqData.method = "GET";
-
-			requestRPS(_reqData, function(rpsData) {
-				if (rpsData.errorStatus) {
-					btn.error("setupNotReady_check_info2");
-					self.error("Activate identity");
-					return;
-				}
-
-				var userId = self.getDisplayName(self.identity);
-				self.renderSetup(userId, rpsData.clientSecretShare, rpsData.params);
-			});
+			self.beforeRenderSetup.call(self, this);
 		};
+
 		//email
 		callbacks.mpin_resend_btn = function() {
 			self.actionResend.call(self, this);
@@ -1572,13 +1551,26 @@ var mpin = mpin || {};
 				self.error("Resend problem");
 				return;
 			}
-			self.identity = rpsData.mpinId;
+
+			if (self.identity !== rpsData.mpinId) {
+				console.log("mpin CHANGED : ", rpsData.mpinId);
+
+				//delete OLD mpinID
+				self.ds.deleteIdentity(self.identity);
+
+				//asign new one, create & set as default
+				self.identity = rpsData.mpinId;
+				self.ds.addIdentity(self.identity, "");
+				self.ds.setDefaultIdentity(self.identity);
+			}
 
 			//should be already exist only update regOTT
-			self.ds.setIdentityData(rpsData.mpinId, {regOTT: rpsData.regOTT});
+			self.ds.setIdentityData(self.identity, {regOTT: rpsData.regOTT});
 
 			// Check for existing userid and delete the old one
 			self.ds.deleteOldIdentity(rpsData.mpinId);
+
+
 
 			btn.ok("setupNotReady_resend_info2");
 		});
