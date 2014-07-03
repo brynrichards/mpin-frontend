@@ -207,13 +207,22 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.render = function(tmplName, callbacks, tmplData) {
-		var data = tmplData || {}, k;
+		var data = tmplData || {}, k, self = this, homeElem;
 		this.el.innerHTML = this.readyHtml(tmplName, data);
 		for (k in callbacks) {
 			if (document.getElementById(k)) {
 				document.getElementById(k).onclick = callbacks[k];
 			}
 		}
+
+		//mpin_home - can remove all mpin_home definition
+		homeElem = document.getElementById("mpin_home");
+		if (homeElem) {
+			homeElem.onclick = function() {
+				self.renderHome.call(self);
+			};
+		}
+
 		if (typeof mpin.custom !== 'undefined') {
 			this.setCustomStyle();
 		}
@@ -1535,6 +1544,7 @@ var mpin = mpin || {};
 	mpin.prototype.actionResend = function(btnElem) {
 		var self = this, _reqData = {}, regOTT, _email, btn;
 
+		console.log("this identity :::", this.identity);
 		regOTT = this.ds.getIdentityData(this.identity, "regOTT");
 		_email = this.getDisplayName(this.identity);
 
@@ -1954,9 +1964,10 @@ var mpin = mpin || {};
 	mpin.prototype.certivoxPermitsStorageURL = function() {
 		var that = this;
 		return function(date, storageId) {
-			console.log("timePermitsStorageURL Base: " + that.opts.timePermitsStorageURL)
+			console.log("timePermitsStorageURL Base: " + that.opts.timePermitsStorageURL);
+			console.log("that.opts.appID: " + that.opts.appID);
 			if ((date) && (that.opts.timePermitsStorageURL) && (storageId)) {
-				return that.opts.timePermitsStorageURL + "/" + mpin.appID + "/" + date + "/" + storageId;
+				return that.opts.timePermitsStorageURL + "/" + that.opts.appID + "/" + date + "/" + storageId;
 			} else {
 				return null;
 			}
