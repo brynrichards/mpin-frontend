@@ -1964,9 +1964,10 @@ var mpin = mpin || {};
 	mpin.prototype.certivoxPermitsStorageURL = function() {
 		var that = this;
 		return function(date, storageId) {
-			console.log("timePermitsStorageURL Base: " + that.opts.timePermitsStorageURL)
+			console.log("timePermitsStorageURL Base: " + that.opts.timePermitsStorageURL);
+			console.log("that.opts.appID: " + that.opts.appID);
 			if ((date) && (that.opts.timePermitsStorageURL) && (storageId)) {
-				return that.opts.timePermitsStorageURL + "/" + mpin.appID + "/" + date + "/" + storageId;
+				return that.opts.timePermitsStorageURL + "/" + that.opts.appID + "/" + date + "/" + storageId;
 			} else {
 				return null;
 			}
