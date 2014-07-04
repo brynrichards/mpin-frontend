@@ -191,8 +191,8 @@ var mpin = mpin || {};
         for (k in callbacks) {
             if (document.getElementById(k)) {
                 // document.getElementById(k).onclick = callbacks[k];
-                // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                document.getElementById(k).addEventListener('click', callbacks[k], false);
+                document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                // document.getElementById(k).addEventListener('click', callbacks[k], false);
  
             }
         }
@@ -212,7 +212,7 @@ var mpin = mpin || {};
         for (k in callbacks) {
             if (document.getElementById(k)) {
                 document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                document.getElementById(k).addEventListener('click', callbacks[k], false);
+                // document.getElementById(k).addEventListener('click', callbacks[k], false);
     
             }
         }
@@ -268,7 +268,7 @@ var mpin = mpin || {};
         for (k in helphubBtns) {
             if (document.getElementById(k)) {
                 document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
-                document.getElementById(k).addEventListener('click', helphubBtns[k], false);
+                // document.getElementById(k).addEventListener('click', helphubBtns[k], false);
             }
         }
         if (typeof mpin.custom !== 'undefined') {
@@ -415,7 +415,7 @@ var mpin = mpin || {};
                  }
 
             } else {
-                // Render the home mobile button, if no identity exists
+                // Render renderSetupHome, if no identity exists
                 this.renderSetupHome();
             }
         }
@@ -1163,7 +1163,7 @@ var mpin = mpin || {};
 
             // Mobile touch events
  
-			btEls[i].addEventListener('click', mEventsHandler, false);
+			btEls[i].addEventListener('touchstart', mEventsHandler, false);
 
             // btEls[i].addEventListener('touchstart', mEventsHandler, false);
 
