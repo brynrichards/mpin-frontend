@@ -45,7 +45,11 @@ var mpin = mpin || {};
         language: "en",
         pinpadDefaultMessage: "",
         pinSize: 4,
-        requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue"
+        requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue",
+        defaultOptions: {
+            identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            setDeviceName: false
+        }
     };
  
  
@@ -76,7 +80,7 @@ var mpin = mpin || {};
         this.ds = this.dataSource();
  
         //set Options
-        this.setOptions(options.server).setOptions(options.client);
+        this.setDefaults().setOptions(options.server).setOptions(options.client);
 
 		
 		if (!this.opts.certivoxURL.mpin_endsWith("/")) {
@@ -126,13 +130,23 @@ var mpin = mpin || {};
         }
         return true;
     };
+
+    //set defaults OPTIONS
+    mpin.prototype.setDefaults = function() {
+        this.opts || (this.opts = {});
+        for (var i in this.cfg.defaultOptions) {
+            this.opts[i] = this.cfg.defaultOptions[i];
+        }
+        return this;
+    };
  
     mpin.prototype.setOptions = function(options) {
         var _i, _opts, _optionName, _options = "stage; allowAddUser; requestOTP; successSetupURL; onSuccessSetup; successLoginURL; onSuccessLogin; onLoaded; onGetPermit; ";
         _options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; mpinDTAServerURL; signatureURL; verifyTokenURL; certivoxURL; ";
         _options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; authenticateHeaders; authTokenFormatter; accessNumberRequestFormatter; ";
         _options += "registerRequestFormatter; onVerifySuccess; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; timePermitsStorageURL; authenticateURL; ";
-        _options += "language; customLanguageTexts; accessNumberDigits; mobileAuthenticateURL";
+        _options += "language; customLanguageTexts; accessNumberDigits; mobileAuthenticateURL; setDeviceName";
+
         _opts = _options.split("; ");
         this.opts || (this.opts = {});
  
@@ -346,7 +360,7 @@ var mpin = mpin || {};
         };
 
         callbacks.mp_action_setup = function(evt) {
-            self.actionSetupHome.call(self, evt);
+            self.actionSetupHome.call(self);
         };
  
         identity = this.ds.getDefaultIdentity();
@@ -402,7 +416,7 @@ var mpin = mpin || {};
 
             } else {
                 // Render the home mobile button, if no identity exists
-                this.render('setup-home', callbacks);
+                this.renderSetupHome();
             }
         }
  
@@ -410,7 +424,8 @@ var mpin = mpin || {};
  
     mpin.prototype.renderSetupHome = function(email, errorID) {
 
-        var callbacks = {}, self = this, descHtml;
+        var callbacks = {}, self = this, userId, descHtml, deviceName = "", deviceNameHolder = "";
+
 
         totalAccounts = this.ds.getAccounts();
         totalAccounts = Object.keys(totalAccounts).length;
@@ -425,10 +440,62 @@ var mpin = mpin || {};
             }
         };
         callbacks.mp_action_setup = function(evt) {
-            self.actionSetupHome.call(self, evt);
+            self.actionSetupHome.call(self);
         };
- 
-        this.render("setup-home", callbacks);
+
+        userId = (email) ? email : "";
+
+        if (this.opts.setDeviceName) {
+
+            //get from localStorage - already set
+            if (this.ds.getDeviceName()) {
+                deviceName = this.ds.getDeviceName();
+                deviceNameHolder = deviceName;
+            } else {
+                //set only placeholder value
+                deviceNameHolder = this.suggestDeviceName();
+                deviceName = "";
+            }
+        }
+
+        console.log("Opts of the device name", this.opts.setDeviceName);
+
+        this.render("setup-home", callbacks, {userId: userId, setDeviceName: this.opts.setDeviceName, deviceName: deviceName, deviceNameHolder: deviceNameHolder});
+
+    };
+
+    mpin.prototype.suggestDeviceName = function() {
+        var suggestName, platform, browser;
+        platform = navigator.platform.toLowerCase();
+//      browser = navigator.appCodeName;
+        browser = navigator.userAgent;
+        if (platform.indexOf("Mac") !== -1) {
+            platform = "mac";
+        } else if (platform.indexOf("linux") !== -1) {
+            platform = "lin";
+        } else if (platform.indexOf("win") !== -1) {
+            platform = "win";
+        } else if (platform.indexOf("sun") !== -1) {
+            platform = "sun";
+        } else {
+            platform = "__";
+        }
+
+        if (browser.indexOf("Chrome") !== -1) {
+            browser = "Chrome";
+        } else if (browser.indexOf("MSIE") !== -1 || browser.indexOf("Trident") !== -1) {
+            browser = "Explorer";
+        } else if (browser.indexOf("Firefox") !== -1) {
+            browser = "Firefox";
+        } else if (browser.indexOf("Safari") !== -1) {
+            browser = "Safari";
+        } else {
+            browser = "_";
+        }
+
+        suggestName = platform + browser;
+
+        return suggestName;
     };
  
  
@@ -1078,7 +1145,7 @@ var mpin = mpin || {};
         //email
         callbacks.mpin_action_resend = function() {
             if (self.checkBtn(this))
-                self.beforeRenderSetup.call(self, this);
+                self.actionResend.call(self, this);
         };
         //identities list
         callbacks.mp_action_accounts = function() {
@@ -1363,21 +1430,47 @@ var mpin = mpin || {};
         return false;
     };
  
-    mpin.prototype.actionSetupHome = function() {
+    mpin.prototype.actionSetupHome = function(uId) {
 
-        var _email = document.getElementById("emailInput").value, self = this;
+        var _email, _deviceName, _deviceNameInput, _reqData = {}, self = this;
+
+        _email = (uId) ? uId : document.getElementById("emailInput").value;
+
         if (_email.length === 0 || !this.opts.emailCheckRegex.test(_email)) {
             document.getElementById("emailInput").focus();
             return;
         }
  
-        var _reqData = {};
         _reqData.URL = this.opts.registerURL;
         _reqData.method = "PUT";
         _reqData.data = {
             userId: _email,
             mobile: 0
         };
+
+        _deviceNameInput = (document.getElementById("deviceInput")) ? document.getElementById("deviceInput").value : "";
+        //DEVICE NAME
+        if (!this.ds.getDeviceName() && _deviceNameInput === "") {
+            console.log("case NONE");
+            _deviceName = this.suggestDeviceName();
+        } else if (!this.ds.getDeviceName() && _deviceNameInput !== "") {
+            console.log("case have INPUT");
+            _deviceName = _deviceNameInput;
+        } else if (_deviceNameInput !== this.ds.getDeviceName()) {
+            console.log("case change");
+            _deviceName = _deviceNameInput;
+        } else {
+            _deviceName = false;
+        }
+
+        if (_deviceName) {
+            console.log("case set DEVICE NAME", _deviceName);
+
+            _reqData.data.deviceName = _deviceName;
+            this.ds.setDeviceName(_deviceName);
+        }
+
+        console.log("############_reqData", _reqData);
  
         //register identity
         requestRPS(_reqData, function(rpsData) {
@@ -1452,6 +1545,7 @@ var mpin = mpin || {};
             mobile: 0,
             regOTT: regOTT
         };
+
         if (this.opts.registerRequestFormatter) {
             _reqData.postDataFormatter = this.opts.registerRequestFormatter;
         }
@@ -1866,6 +1960,22 @@ var mpin = mpin || {};
  
             }
             mpinDs.save();
+        };
+
+        mpinDs.setDeviceName = function(devId) {
+            mpinDs.mpin.deviceName = devId;
+            console.log("data STORAGE set device ID::");
+            mpinDs.save();
+            };
+
+        mpinDs.getDeviceName = function() {
+            var deviceID;
+            deviceID = mpinDs.mpin.deviceName;
+            if (!deviceID) {
+                return false;
+            }
+
+            return deviceID;
         };
  
         mpinDs.getIdentityData = function(uId, key) {
