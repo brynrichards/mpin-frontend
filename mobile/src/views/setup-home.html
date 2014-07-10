@@ -26,6 +26,12 @@
       <div class="identityInput">
         <div>
           <input type="email" id="emailInput" placeholder="<%=hlp.text( "setup_text3") %>" value="">
+
+          <% if (setDeviceName) { %>
+            <br><br><label for="deviceInput"><%=hlp.text( "setup_device_label") %></label>
+            <input type="text" id="deviceInput" class="mpinInput" placeholder="<%= deviceNameHolder %> <%=hlp.text( "setup_device_default") %>" value="<%= deviceName %>">
+          <% } %>
+          
         </div>
       </div>
     </div>
