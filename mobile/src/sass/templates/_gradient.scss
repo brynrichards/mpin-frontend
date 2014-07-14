@@ -319,6 +319,20 @@ $BORDERLESS : true;
 	font-style: italic;
 }
 
+@mixin device-input() {
+	color: black;
+	font-size: 18px;
+	font-weight: normal;
+	background: #fff;
+	width: 100%;
+	background: #fff;
+	width: 100%;
+	padding: .4em;
+	min-height: 2.5em;
+	border: 1px solid #A3A3A3;
+	font-style: italic;
+}
+
 @mixin top-heading() {
 	color: black;
 	padding: 3vh;

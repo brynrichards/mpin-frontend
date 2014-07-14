@@ -430,6 +430,17 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 						text-align: center;
 
 					}
+
+					#deviceInput {
+
+						@include device-input();
+
+						-webkit-user-select: text; 
+						-webkit-appearance: none;
+						-webkit-appearance: none;
+						text-align: center;
+
+					}
 				}
 
 			}

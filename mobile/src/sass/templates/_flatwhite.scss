@@ -263,7 +263,16 @@ $BORDERLESS : false;
 	width: 100%;
 	padding: .4em;
 	min-height: 2.5em;
+}
 
+@mixin device-input() {
+	color: white;
+	font-size: 18px;
+	font-weight: normal;
+	background: #565656;
+	width: 100%;
+	padding: .4em;
+	min-height: 2.5em;
 }
 
 @mixin central-heading() {
