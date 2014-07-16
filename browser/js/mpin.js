@@ -305,13 +305,13 @@ var mpin = mpin || {};
 		callbacks.mpin_access_help = function() {
 			self.lastView = "renderLanding";
 			self.toggleHelp.call(self);
-			self.renderHelpTooltip.call(self);
+			self.renderHelpTooltip.call(self, "landing1");
 		};
 
 		callbacks.mpin_help = function() {
 			self.lastView = "renderLanding";
 			self.toggleHelp.call(self);
-			self.renderHelpTooltip.call(self);
+			self.renderHelpTooltip.call(self, "landing2");
 		};
 
 		callbacks.mpin_desktop_hub = function() {
@@ -477,8 +477,8 @@ var mpin = mpin || {};
 	};
 
 
-	mpin.prototype.renderHelpTooltip = function() {
-		var callbacks = {}, self = this;
+	mpin.prototype.renderHelpTooltip = function(helpLabel) {
+		var callbacks = {}, self = this, helpText, secondBtn = "";
 
 		callbacks.mpin_help_ok = function() {
 			self.toggleHelp.call(self);
@@ -489,7 +489,26 @@ var mpin = mpin || {};
 			self.renderHelpHub.call(self);
 		};
 
-		this.renderHelp("help-tooltip-home", callbacks);
+		if (helpLabel === "login" || helpLabel === "setup" || helpLabel === "loginerr") {
+			secondBtn = '<div class="mpinBtn mpinBtm10" id="mpin_help_second">';
+			secondBtn += '<span class="btnLabel">' + hlp.text("help_text_" + helpLabel + "_button") + '</span>';
+			secondBtn += '</div>';
+			if (helpLabel === "login" || helpLabel === "loginerr") {
+				callbacks.mpin_help_second = function() {
+					self.toggleHelp.call(self);
+					self.renderLogin(true, "renderReactivatePanel");
+				};
+			} else if (helpLabel === "setup") {
+				callbacks.mpin_help_second = function() {
+					self.toggleHelp.call(self);
+					self.renderHelpHubPage.call(self, 5);
+				};
+			}
+		}
+
+		helpText = hlp.text("help_text_" + helpLabel);
+
+		this.renderHelp("help-tooltip-home", callbacks, {helpText: helpText, secondBtn: secondBtn});
 	};
 
 	mpin.prototype.renderHelpHub = function() {
@@ -523,7 +542,7 @@ var mpin = mpin || {};
 		callbacks.mpin_help_hub = function() {
 			self.renderHelpHub.call(self);
 		};
-		tmplName = "help-hub-1";
+		tmplName = "help-hub-" + helpNumber;
 		this.render(tmplName, callbacks);
 	};
 
@@ -549,7 +568,7 @@ var mpin = mpin || {};
 		callbacks.mpin_help = function(evt) {
 			self.lastView = "renderSetupHome";
 			self.toggleHelp.call(self);
-			self.renderHelpTooltip.call(self);
+			self.renderHelpTooltip.call(self, "addidentity");
 		};
 		callbacks.mpin_helphub = function(evt) {
 			self.lastView = "renderSetupHome";
@@ -630,6 +649,16 @@ var mpin = mpin || {};
 		document.getElementById("mpin_setup").onclick = function() {
 			self.actionSetupHome.call(self);
 		};
+
+		document.getElementById("mpin_help").onclick = function() {
+
+			self.lastView = "renderLogin";
+			self.lastViewParams = [true, "renderSetupHome2"];
+			self.toggleHelp.call(self);
+			self.renderHelpTooltip.call(self, "addidentity");
+		};
+
+
 	};
 
 	mpin.prototype.suggestDeviceName = function() {
@@ -669,6 +698,12 @@ var mpin = mpin || {};
 	mpin.prototype.renderSetup = function(email, clientSecretShare, clientSecretParams) {
 		var callbacks = {}, self = this;
 
+		// temporary params >>> use from helpHUB & helpHubTOOLtip when interrupt the flow
+		this.tmp || (this.tmp = {});
+		this.tmp.email = (email) ? email : this.tmp.email;
+		this.tmp.clientSecretShare = (clientSecretShare) ? clientSecretShare : this.tmp.clientSecretShare;
+		this.tmp.clientSecretParams = (clientSecretParams) ? clientSecretParams : this.tmp.clientSecretParams;
+		
 		//text || circle
 		this.setupInputType = "text";
 
@@ -686,13 +721,19 @@ var mpin = mpin || {};
 			self.renderHelpHub.call(self);
 		};
 
+		callbacks.mpin_help_pinpad = function() {
+			self.lastView = "renderSetup";
+			self.toggleHelp.call(self);
+			self.renderHelpTooltip.call(self, "setup");
+		};
 
-		this.render("setup", callbacks, {email: email});
+
+		this.render("setup", callbacks, {email: this.tmp.email});
 		this.enableNumberButtons(true);
 		this.bindNumberButtons();
 
 		//requestSignature
-		this.requestSignature(email, clientSecretShare, clientSecretParams);
+		this.requestSignature(this.tmp.email, this.tmp.clientSecretShare, this.tmp.clientSecretParams);
 	};
 
 	mpin.prototype.renderLogin = function(listAccounts, subView) {
@@ -726,7 +767,7 @@ var mpin = mpin || {};
 		callbacks.mpin_help_pinpad = function() {
 			self.lastView = "renderLogin";
 			self.toggleHelp.call(self);
-			self.renderHelpTooltip.call(self);
+			self.renderHelpTooltip.call(self, "login");
 		};
 
 		this.render("login", callbacks);
@@ -884,11 +925,7 @@ var mpin = mpin || {};
 		callbacks.mpin_home = function(evt) {
 			self.renderHome.call(self, evt);
 		};
-		callbacks.mpin_help = function(evt) {
-			self.lastView = "renderActivateIdentity";
-			self.toggleHelp.call(self);
-			self.renderHelpTooltip.call(self);
-		};
+
 		callbacks.mpin_helphub = function(evt) {
 			self.lastView = "renderActivateIdentity";
 			self.renderHelpHub.call(self);
@@ -1484,6 +1521,8 @@ var mpin = mpin || {};
 		if (this.opts.customHeaders) {
 			_reqData.customHeaders = this.opts.customHeaders;
 		}
+
+		console.log("_reqData ::::", _reqData);
 		//register identity
 		requestRPS(_reqData, function(rpsData) {
 			if (rpsData.error) {
@@ -1668,6 +1707,14 @@ var mpin = mpin || {};
 							self.opts.onAccountDisabled(iD);
 						}
 					}
+					/////// change onClick helpTooltip
+					// change previous state from login render 
+					document.getElementById("mpin_help_pinpad").onclick = function() {
+						self.lastView = "renderLogin";
+						self.toggleHelp.call(self);
+						self.renderHelpTooltip.call(self, "loginerr");
+					};
+
 
 				}, function() {
 			console.log(" Before HandleToken ::::");
@@ -2174,7 +2221,6 @@ var mpin = mpin || {};
 		"mobile_header_donot": "DON'T",
 		"mobile_header_do": "DO",
 		"mobile_header_txt3": "trust this computer",
-		"help_text_1": "Simply choose a memorable <b>[4 digit]</b> PIN to assign to this identity by pressing the numbers in sequence followed by the 'Setup' button to setup your PIN for this identity",
 		"help_ok_btn": "Ok, Got it",
 		"help_more_btn": "I'm not sure, tell me more",
 		"help_hub_title": "M-Pin Help Hub",
@@ -2182,9 +2228,12 @@ var mpin = mpin || {};
 		"help_hub_li2": "Which is the most secure method to sign in?",
 		"help_hub_li3": "What details will i need to provide?",
 		"help_hub_li4": "Who can see my identity?",
+		"help_hub_li5": "How should I choose my PIN number?",
 		"help_hub_button": "Exit Help Hub and return to previous page",
 		"help_hub_3_p1": "You will simply need to provide an <span class=mpinPurple>[email address]</span> in order to set up your identity. You will receive an activation email to complete the set up process.",
 		"help_hub_3_p2": "You will also need to create a PIN number, this will be a secret <span class=mpinPurple>[4 digit]</span> code known only to you which you will use to login to the service.",
+		"help_hub_5_p1": "You can choose any PIN number, and reuse it across different devices, without compromising the security of your credentials. With M-Pin there is no need of complex rules to choose a password, just pick an easy to remember value.",
+		"help_hub_5_p2": "",
 		"help_hub_return_button": "Return to Help Hub",
 		"activate_header": "ACTIVATE YOUR IDENTITY",
 		"activate_text1": "Your M-Pin identity:",
@@ -2199,7 +2248,20 @@ var mpin = mpin || {};
 		"pinpad_setup_screen_text": "CREATE YOUR M-PIN:<br> CHOOSE 4 DIGIT",
 		"pinpad_default_message": "ENTER YOUR PIN",
 		"setup_device_label": "Choose a device friendly name:",
-		"setup_device_default": "(default name)"
+		"setup_device_default": "(default name)",
+		"help_text_1": "Simply choose a memorable <b>[4 digit]</b> PIN to assign to this identity by pressing the numbers in sequence followed by the 'Setup' button to setup your PIN for this identity",
+		//2A
+		"help_text_landing1": "If you have a smartphone and are signing into <span class=mpinPurple>[xxxx]</span> sing someone else’s device or a public computer, then please: <br>1. Download the ‘M-Pin Smartphone App’ <br> 2. Open the App and follow the steps to sign in, this will tell you when you need to enter the access code.",
+		"help_text_landing2": "This Access Number allows you to sign in with M-Pin from your smartphone.  Enter the Access Number into the M-Pin app installed on your Smartphone when prompted and follow the instructions to sign into a browser session. This number is valid for 99 seconds, once this expires a new Access number will be generated.",
+		"help_text_login": "Simply enter your <span class=mpinPurple>[4 digit]</span> PIN that you assigned to this identity by pressing the numbers in sequence followed by the ‘Sign in’ button. If you have forgotten your PIN, then you can reset it by clicking the ‘Reset PIN’ button below.",
+		"help_text_login_button": "Reset my PIN",
+		"help_text_setup": "Simply choose a memorable <span class=mpinPurple>[4 digit]</span> PIN to assign to this identity by pressing the numbers in sequence followed by the ‘Setup’ button to setup your PIN for this identity.",
+		"help_text_setup_button": "Advice on choosing PIN",
+		"help_text_addidentity": "Your <span class=mpinPurple>[email address]</span> will be used as your identity when M-Pin signs you into this service.<br>You will receive an activation email to the address you provide.",
+		"help_text_loginerr": "You have entered your PIN incorrectly.<br><br>You have 3 attempts to enter your PIN, after 3 incorrect attempts your identity will be removed and you will need to re-register.",
+		"help_text_loginerr_button": "I've forgotton my PIN"
+//		"help_text_smart": "If you have a smartphone and are signing into <span class=mpinPurple>[xxxx]</span> sing someone else’s device or a public computer, then please: <ol><li>Download the ‘M-Pin Smartphone App’ </li><li>Open the App and follow the steps to sign in, this will tell you when you need to enter the access code.</li></ol>"
+
 
 	};
 	//	image should have config properties
