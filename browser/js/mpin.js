@@ -344,7 +344,7 @@ var mpin = mpin || {};
 		callbacks.mpin_help = function() {
 			self.lastView = "renderHome";
 			self.toggleHelp.call(self);
-			self.renderHelpTooltip.call(self);
+			self.renderHelpTooltip.call(self, "home");
 		};
 
 		this.render('home', callbacks);
@@ -407,8 +407,7 @@ var mpin = mpin || {};
 		function clearIntervals() {
 			clearInterval(self.intervalID);
 			clearTimeout(self.intervalID2);
-		}
-		;
+		};
 		clearIntervals();
 		callbacks.mp_action_home = function(evt) {
 //			_request.abort();
@@ -432,15 +431,15 @@ var mpin = mpin || {};
 			clearIntervals();
 			self.renderDesktop.call(self);
 		};
-		callbacks.mpin_help = function() {
-			self.lastView = "renderMobile";
-			self.toggleHelp.call(self);
-			self.renderHelpTooltip.call(self);
-		};
 		callbacks.mpin_access_help = function() {
 			self.lastView = "renderMobile";
 			self.toggleHelp.call(self);
-			self.renderHelpTooltip.call(self);
+			self.renderHelpTooltip.call(self, "landing1");
+		};
+		callbacks.mpin_help = function() {
+			self.lastView = "renderMobile";
+			self.toggleHelp.call(self);
+			self.renderHelpTooltip.call(self, "landing2");
 		};
 
 		this.render("mobile", callbacks);
@@ -2251,15 +2250,16 @@ var mpin = mpin || {};
 		"setup_device_default": "(default name)",
 		"help_text_1": "Simply choose a memorable <b>[4 digit]</b> PIN to assign to this identity by pressing the numbers in sequence followed by the 'Setup' button to setup your PIN for this identity",
 		//2A
-		"help_text_landing1": "If you have a smartphone and are signing into <span class=mpinPurple>[xxxx]</span> sing someone else’s device or a public computer, then please: <br>1. Download the ‘M-Pin Smartphone App’ <br> 2. Open the App and follow the steps to sign in, this will tell you when you need to enter the access code.",
-		"help_text_landing2": "This Access Number allows you to sign in with M-Pin from your smartphone.  Enter the Access Number into the M-Pin app installed on your Smartphone when prompted and follow the instructions to sign into a browser session. This number is valid for 99 seconds, once this expires a new Access number will be generated.",
+		"help_text_landing1": "This Access Number allows you to sign in with M-Pin from your smartphone.  Enter the Access Number into the M-Pin app installed on your Smartphone when prompted and follow the instructions to sign into a browser session. This number is valid for 99 seconds, once this expires a new Access number will be generated.",
+		"help_text_landing2": "If you have a smartphone and are signing into <span class=mpinPurple>[xxxx]</span> sing someone else’s device or a public computer, then please: <br>1. Download the ‘M-Pin Smartphone App’ <br> 2. Open the App and follow the steps to sign in, this will tell you when you need to enter the access code.",
 		"help_text_login": "Simply enter your <span class=mpinPurple>[4 digit]</span> PIN that you assigned to this identity by pressing the numbers in sequence followed by the ‘Sign in’ button. If you have forgotten your PIN, then you can reset it by clicking the ‘Reset PIN’ button below.",
 		"help_text_login_button": "Reset my PIN",
 		"help_text_setup": "Simply choose a memorable <span class=mpinPurple>[4 digit]</span> PIN to assign to this identity by pressing the numbers in sequence followed by the ‘Setup’ button to setup your PIN for this identity.",
 		"help_text_setup_button": "Advice on choosing PIN",
 		"help_text_addidentity": "Your <span class=mpinPurple>[email address]</span> will be used as your identity when M-Pin signs you into this service.<br>You will receive an activation email to the address you provide.",
 		"help_text_loginerr": "You have entered your PIN incorrectly.<br><br>You have 3 attempts to enter your PIN, after 3 incorrect attempts your identity will be removed and you will need to re-register.",
-		"help_text_loginerr_button": "I've forgotton my PIN"
+		"help_text_loginerr_button": "I've forgotton my PIN",
+		"help_text_home": "If you are signing into <span class=mpinPurple>[xxxx]</span> with your own personal device like your computer or tablet then you can ‘Sign in with Browser’, but if you are using someone else’s device or a public computer, then ‘Sign in with Smartphone’ is recommended for additional security."
 //		"help_text_smart": "If you have a smartphone and are signing into <span class=mpinPurple>[xxxx]</span> sing someone else’s device or a public computer, then please: <ol><li>Download the ‘M-Pin Smartphone App’ </li><li>Open the App and follow the steps to sign in, this will tell you when you need to enter the access code.</li></ol>"
 
 
