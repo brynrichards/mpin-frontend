@@ -528,6 +528,24 @@ var mpin = mpin || {};
 		callbacks.mpin_hub_li4 = function() {
 			self.renderHelpHubPage.call(self, 4);
 		};
+		callbacks.mpin_hub_li5 = function() {
+			self.renderHelpHubPage.call(self, 5);
+		};
+		callbacks.mpin_hub_li6 = function() {
+			self.renderHelpHubPage.call(self, 6);
+		};
+		callbacks.mpin_hub_li7 = function() {
+			self.renderHelpHubPage.call(self, 7);
+		};
+		callbacks.mpin_hub_li8 = function() {
+			self.renderHelpHubPage.call(self, 8);
+		};
+		callbacks.mpin_hub_li9 = function() {
+			self.renderHelpHubPage.call(self, 9);
+		};
+		callbacks.mpin_hub_li10 = function() {
+			self.renderHelpHubPage.call(self, 10);
+		};
 
 		callbacks.mpin_close_hub = function() {
 			self.renderLastView.call(self);
@@ -635,7 +653,7 @@ var mpin = mpin || {};
 		renderElem.style.top = "0px";
 //		removeClass("mpin_accounts_list", "mpHide");
 		addClass("mpinCurrentIden", "mpHide");
-		document.getElementById("mpin_help").style.bottom = "-13%";
+		document.getElementById("mpin_help").style.bottom = "-15%";
 
 
 		document.getElementById("mpin_arrow").onclick = function(evt) {
@@ -665,7 +683,7 @@ var mpin = mpin || {};
 		platform = navigator.platform.toLowerCase();
 //		browser = navigator.appCodeName;
 		browser = navigator.userAgent;
-		if (platform.indexOf("Mac") !== -1) {
+		if (platform.indexOf("mac") !== -1) {
 			platform = "mac";
 		} else if (platform.indexOf("linux") !== -1) {
 			platform = "lin";
@@ -2223,16 +2241,37 @@ var mpin = mpin || {};
 		"help_ok_btn": "Ok, Got it",
 		"help_more_btn": "I'm not sure, tell me more",
 		"help_hub_title": "M-Pin Help Hub",
-		"help_hub_li1": "What is the difference between signing in with the browser or with Smartphone?",
-		"help_hub_li2": "Which is the most secure method to sign in?",
-		"help_hub_li3": "What details will i need to provide?",
-		"help_hub_li4": "Who can see my identity?",
+		"help_hub_li1": "What’s the difference between browser and smartphone authentication?",
+		"help_hub_li2": "What should I do if I don’t have a smartphone and I don’t trust this computer?",
+		"help_hub_li3": "What happens if I forget my PIN?",
+		"help_hub_li4": "What happens if someone sneaks my PIN?",
 		"help_hub_li5": "How should I choose my PIN number?",
+		"help_hub_li6": "Can I set the same PIN on all devices every time?",
+		"help_hub_li7": "How can a 4 digit PIN be more secure than a long complex password?",
+		"help_hub_li8": "Should I change my PIN often?",
+		"help_hub_li9": "Do [XXX] or CertiVox know my PIN?",
+		"help_hub_li10": "Why do I have to register from each device and browser?",
 		"help_hub_button": "Exit Help Hub and return to previous page",
+		"help_hub_1_p1": "The browser authentication logs you in to your account on a desktop browser using M-Pin two-factor login.",
+		"help_hub_1_p2": "With smartphone authentication you use M-Pin Mobile app as a portable ID card you can use to log in to a desktop browser on any external machine.",
+		"help_hub_2_p1": "You can still use the browser log in, but if you are on a shared computer or feel the machine is not secure, we advise you remove the identity from the browser after you’ve completed your session.",
+		"help_hub_2_p2": "",
 		"help_hub_3_p1": "You will simply need to provide an <span class=mpinPurple>[email address]</span> in order to set up your identity. You will receive an activation email to complete the set up process.",
 		"help_hub_3_p2": "You will also need to create a PIN number, this will be a secret <span class=mpinPurple>[4 digit]</span> code known only to you which you will use to login to the service.",
+		"help_hub_4_p1": "Your PIN can only be used from a machine and browser you’ve previously registered from. If you feel your PIN could be reused from the same machine, simply follow the instructions to reset it clicking the “Forgot my PIN button”.",
+		"help_hub_4_p2": "",
 		"help_hub_5_p1": "You can choose any PIN number, and reuse it across different devices, without compromising the security of your credentials. With M-Pin there is no need of complex rules to choose a password, just pick an easy to remember value.",
 		"help_hub_5_p2": "",
+		"help_hub_6_p1": "Yes, you can use the same PIN for different accounts, different machines and different browsers, across mobile and desktop, without affecting the security of M-Pin Authentication.",
+		"help_hub_6_p2": "",
+		"help_hub_7_p1": "M-Pin is a two-factor authentication, meaning we save “something” in your browser and mobile app to recognise you every time you access a service. The PIN number works only with that “something”, even if you don’t realize you need both things to log in to your account.",
+		"help_hub_7_p2": "",
+		"help_hub_8_p1": "There is no need for the PIN to be changed periodically, unlike what happens with passwords. Anyway, you can still do it any time, clicking the “Forgot my PIN” button and following the instructions.",
+		"help_hub_8_p2": "",
+		"help_hub_9_p1": "With M-Pin, your PIN number is not saved anywhere, not even encrypted. Your PIN is saved only in your head!",
+		"help_hub_9_p2": "",
+		"help_hub_10_p1": "To use M-Pin, you need your PIN number together with “something” saved in your browser, so you need to register from each browser to have that “something” and be able to authenticate with M-Pin.",
+		"help_hub_10_p2": "",
 		"help_hub_return_button": "Return to Help Hub",
 		"activate_header": "ACTIVATE YOUR IDENTITY",
 		"activate_text1": "Your M-Pin identity:",

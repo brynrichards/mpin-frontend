@@ -24,7 +24,7 @@ $green : #06B405;
 @mixin box-flex-value($value) {
 	-moz-box-flex:$value; /* Firefox */
 	-webkit-box-flex:$value; /* Safari and Chrome */
-	-ms-flex:$value; /* Internet Explorer 10 */ 
+	-ms-flex:$value; /* Internet Explorer 10 */
 	box-flex:$value;
 }
 
@@ -99,7 +99,7 @@ $green : #06B405;
 			height: 430px;
 			// background color
 			@include bg-color();
-			border: 1px solid grey;
+			border: 1px solid #acacac;
 
 			-webkit-box-align: stretch;
 			-ms-flex-align: stretch;
@@ -599,7 +599,7 @@ $green : #06B405;
 
 	#mpinFooter {
 
-		-webkit-box-orient: horizontal; 
+		-webkit-box-orient: horizontal;
 		-ms-flex-direction: row;
 		flex-direction: row;
 
@@ -622,12 +622,14 @@ $green : #06B405;
 		@include mpin-copyright();
 
 		.mpinHelpHub {
-			height: 30px;
-			width: 100px;
+			height: 45px;
+			width: 120px;
 			background: url('#{$IMAGES}m-pin-header-logo.svg') no-repeat;
 			background-size: 100px 30px;
 			background-position: center;
 			display: block;
+			position: relative;
+   			top: -8px;
 		}
 	}
 
@@ -684,7 +686,7 @@ $green : #06B405;
 			text-align: center;
 			display: block;
 			overflow: hidden;
-			width: 60%;
+			text-shadow:none;
 		}
 
 		.btnLabelArrow {

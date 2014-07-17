@@ -9,32 +9,34 @@ help#mpinHelpTag {
 	right: 0;
 	left: 0;
 	bottom: 0;
-	width: 100%;
-	height: 100%;
+	width: 99%;
+	height: 95%;
 	z-index: 999999;
+	margin:1px;
 
 	#mpinHelpContainer {
 		display: none;
 		background-color: white;
-		width: 80%;
-		height: 70%;
+		width: 85%;
+		height: 80%;
 		position: relative;
-		text-align: center;
-		border: 3px solid darkgrey;
+		text-align: left;
+		border: 1px solid #acacac;
 		margin: 0 auto;
-		top: 60px;
+		top: 45px;
 		@include  border-radius(5px);
-		padding: 10px;
-		padding-top: 15px;
-		position: relative;
-		
+		padding: 22px 10px 10px;
+		-webkit-box-shadow: 1px 2px 4px 0px rgba(50, 50, 50, 0.50);
+		-moz-box-shadow:    1px 2px 4px 0px rgba(50, 50, 50, 0.50);
+		box-shadow:         1px 2px 4px 0px rgba(50, 50, 50, 0.50);
+
 		//, &:before
 		#mpinInfoCloseCorner {
 			content: '';
 			background-image: url('#{$IMAGES}info.svg');
 			width: 32px;
 			height: 31px;
-			display: block; 
+			display: block;
 			position: absolute;
 			top: -16px;
 			left: -16px;
@@ -44,12 +46,12 @@ help#mpinHelpTag {
 			background-size: auto 100%;
 			cursor: pointer;
 		}
-		
+
 		#mpinButtonsContainer {
 			position: absolute;
 			width: 90%;
 			bottom: 0%;
-			
+
 			.mpinBtm10 {
 				margin-bottom: 10px;
 			}
@@ -59,17 +61,25 @@ help#mpinHelpTag {
 	// Option choose styling
 	.mpinGrey {
 		background: #7E7E7E;
+		padding:12px 0px;
 	}
 
 	.mpinGreen {
 		background: #44A800;
-		margin-bottom: 10px;
+		margin-bottom: 8px;
+	}
+
+	.mpinBlue {
+		background: #0686CF;
+		margin-bottom: 8px;
+		padding:12px 0px;
 	}
 
 	.mpinHelpText {
-		/*min-height: %;*/
-		max-height: 75%;
-		text-align: left;
+		height: 68%;
+		color:#353535;
+		font-size:0.93em;
+		line-height:1.3em;
 	}
 
 }
@@ -82,11 +92,11 @@ info.mpinHelpInfo {
 	text-align: center;
 	/*position: absolute;*/
 	/*bottom: 10%;*/
-	font-size: 12px;
-	
+	font-size: 13px;
+
 	&.mpAbsolute {
 		position: absolute;
-		bottom: 13%;
+		bottom: 14%;
 	}
 
 	i {
@@ -97,20 +107,24 @@ info.mpinHelpInfo {
 		display: inline-block;
 		position: relative;
 		top: 5px;
+		margin: 0px 5px 0px -8px;
 	}
 
 	&.helpHubTitle {
 		bottom: auto;
 		position: relative;
 		font-weight: bold;
-		padding: 10px;
+		padding: 10px 10px 15px;
 		border-bottom: 1px solid #EAEAEA;
-		font-size: 100%;
+		font-size: 90%;
 	}
 	&.mpinInitialPos {
 		position: initial;
 	}
-	
+	&.mpinBorder0 {
+		border:0px
+	}
+
 }
 
 .mpinHelpBlock {
@@ -123,14 +137,29 @@ info.mpinHelpInfo {
 	}
 	& li {
 		border-bottom: 1px solid #EAEAEA;
-		padding: 10px 20px;
+		padding: 10px 10px 10px 30px;
 		margin: 0px;
 		cursor: pointer;
+		text-align:left;
+		background-image: url("#{$IMAGES}bullet.svg");
+		background-position: 10px 12px;
+		background-repeat: no-repeat;
+	}
+	& li a:hover {
+		color:red;
 	}
 	p {
-		padding: 10px 20px;
+		font-size: 90%;
+		padding: 5px 15px 10px;
+		text-align: left;
 	}
 }
+
+.mpinHelpAnswerBlock {
+	border-bottom: 1px solid #EAEAEA;
+	height: 70%;
+    min-height: 70%;
+    overflow-y: auto;}
 
 .mpinHelpHubFooter {
 	/*width: 90%;*/
@@ -140,6 +169,8 @@ info.mpinHelpInfo {
 	border-bottom: 1px solid grey;
 }
 
-.mpinPurple {
+.mpinPurple, .mpinPurple strong {
 	color: #F44373;
+	font-family:Arial, Helvetica, sans-serif;
+	font-weight: bold;
 }
