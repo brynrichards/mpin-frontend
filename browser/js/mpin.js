@@ -635,7 +635,7 @@ var mpin = mpin || {};
 		renderElem.style.top = "0px";
 //		removeClass("mpin_accounts_list", "mpHide");
 		addClass("mpinCurrentIden", "mpHide");
-		document.getElementById("mpin_help").style.bottom = "-13%";
+		document.getElementById("mpin_help").style.bottom = "-15%";
 
 
 		document.getElementById("mpin_arrow").onclick = function(evt) {
@@ -2223,14 +2223,23 @@ var mpin = mpin || {};
 		"help_ok_btn": "Ok, Got it",
 		"help_more_btn": "I'm not sure, tell me more",
 		"help_hub_title": "M-Pin Help Hub",
-		"help_hub_li1": "What is the difference between signing in with the browser or with Smartphone?",
-		"help_hub_li2": "Which is the most secure method to sign in?",
-		"help_hub_li3": "What details will i need to provide?",
-		"help_hub_li4": "Who can see my identity?",
+		"help_hub_li1": "What’s the difference between browser and smartphone authentication?",
+		"help_hub_li2": "What should I do if I don’t have a smartphone and I don’t trust this computer?",
+		"help_hub_li3": "What happens if I forget my PIN?",
+		"help_hub_li4": "What happens if someone sneaks my PIN?",
 		"help_hub_li5": "How should I choose my PIN number?",
 		"help_hub_button": "Exit Help Hub and return to previous page",
+		
+		"help_hub_1_p1": "The browser authentication logs you in to your account on a desktop browser using M-Pin two-factor login.",
+		"help_hub_1_p2": "With smartphone authentication you use M-Pin Mobile app as a portable ID card you can use to log in to a desktop browser on any external machine.",
+		"help_hub_2_p1": "You can still use the browser log in, but if you are on a shared computer or feel the machine is not secure, we advise you remove the identity from the browser after you’ve completed your session.",
+		"help_hub_2_p2": "",
+		
 		"help_hub_3_p1": "You will simply need to provide an <span class=mpinPurple>[email address]</span> in order to set up your identity. You will receive an activation email to complete the set up process.",
 		"help_hub_3_p2": "You will also need to create a PIN number, this will be a secret <span class=mpinPurple>[4 digit]</span> code known only to you which you will use to login to the service.",
+		"help_hub_4_p1": "Your PIN can only be used from a machine and browser you’ve previously registered from. If you feel your PIN could be reused from the same machine, simply follow the instructions to reset it clicking the “Forgot my PIN button”.",
+		"help_hub_4_p2": "",
+		
 		"help_hub_5_p1": "You can choose any PIN number, and reuse it across different devices, without compromising the security of your credentials. With M-Pin there is no need of complex rules to choose a password, just pick an easy to remember value.",
 		"help_hub_5_p2": "",
 		"help_hub_return_button": "Return to Help Hub",
