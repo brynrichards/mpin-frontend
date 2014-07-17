@@ -190,9 +190,14 @@ var mpin = mpin || {};
  
         for (k in callbacks) {
             if (document.getElementById(k)) {
-                // document.getElementById(k).onclick = callbacks[k];
-                document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                // document.getElementById(k).addEventListener('click', callbacks[k], false);
+
+                if (window.navigator.msPointerEnabled) {
+                    document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
+                }
+                else {
+                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+
+                }
  
             }
         }
@@ -211,8 +216,14 @@ var mpin = mpin || {};
 
         for (k in callbacks) {
             if (document.getElementById(k)) {
-                document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                // document.getElementById(k).addEventListener('click', callbacks[k], false);
+
+                if (window.navigator.msPointerEnabled) {
+                    document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
+                }
+                else {
+                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+
+                }
     
             }
         }
@@ -267,8 +278,15 @@ var mpin = mpin || {};
 
         for (k in helphubBtns) {
             if (document.getElementById(k)) {
-                document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
-                // document.getElementById(k).addEventListener('click', helphubBtns[k], false);
+
+                if (window.navigator.msPointerEnabled) {
+                    document.getElementById(k).addEventListener("MSPointerDown", helphubBtns[k], false);
+                }
+                else {
+                    document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
+
+                }
+
             }
         }
         if (typeof mpin.custom !== 'undefined') {
@@ -469,7 +487,7 @@ var mpin = mpin || {};
         platform = navigator.platform.toLowerCase();
 //      browser = navigator.appCodeName;
         browser = navigator.userAgent;
-        if (platform.indexOf("Mac") !== -1) {
+        if (platform.indexOf("mac") !== -1) {
             platform = "mac";
         } else if (platform.indexOf("linux") !== -1) {
             platform = "lin";
@@ -940,6 +958,10 @@ var mpin = mpin || {};
             mpBack = document.getElementById('mp_back'),
             menuBtn = document.getElementById('menuBtn');
 
+            if (window.navigator.msPointerEnabled) {
+                menuBtn.style.top = '0';
+            }
+
         menuBtn.onclick = function(evt) {
             document.getElementById('accountTopBar').style.height = "";
             menuBtn.className = 'up';
@@ -1089,13 +1111,19 @@ var mpin = mpin || {};
  
         cnt.appendChild(rowElem);
  
-        // rowElem.addEventListener('touchenter', mEventsHandler, false);
-        rowElem.addEventListener('click', mEventsHandler, false);
+        if (window.navigator.msPointerEnabled) {
+
+            rowElem.addEventListener('MSPointerDown', mEventsHandler, false);
+        }
+        else {
+            rowElem.addEventListener('touchenter', mEventsHandler, false);
+
+        }
  
         // document.getElementById('mp_back').remove();
  
         function mEventsHandler(e) {
-          if (e.type == "touchstart" || e.type == "click") {
+          if (e.type == "touchstart" || e.type == "MSPointerDown") {
 
             var elem = document.getElementById("mp_back");
             elem.parentNode.removeChild(elem);
@@ -1162,11 +1190,16 @@ var mpin = mpin || {};
         for (var i = 0; i < btEls.length; i++) {
 
             // Mobile touch events
- 
-			btEls[i].addEventListener('touchstart', mEventsHandler, false);
 
-            // btEls[i].addEventListener('touchstart', mEventsHandler, false);
+            if (window.navigator.msPointerEnabled) {
 
+                btEls[i].addEventListener('MSPointerDown', mEventsHandler, false);
+
+            }
+            else {
+                btEls[i].addEventListener('touchstart', mEventsHandler, false);
+
+            }
  
             function mEventsHandler(e) {
 

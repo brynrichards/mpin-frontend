@@ -170,11 +170,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			display: -ms-flexbox; /* Internet Explorer 10 */
 			
 			@include home-icon();
-			background-repeat: no-repeat;
-			background-size: auto 100%;
 			position: relative;
-			left: 0;
-			background-position: left;
 		}
 
 		#logo {

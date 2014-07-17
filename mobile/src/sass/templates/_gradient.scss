@@ -137,17 +137,6 @@ $BORDERLESS : true;
 	height: 30px;
 }
 
-// Mixin home icon
-
-@mixin home-icon() {
-	background-image: url('#{$IMAGES}/home.svg');
-	color: white;
-	height: 24px;
-	width: 24px;
-
-	@include box-flex-value(1.0);		
-}
-
 @mixin powered-by() {
 	background-image: url('#{$IMAGES}/powered-by-certivox-colour.svg');
 	color: white;
@@ -171,6 +160,27 @@ $BORDERLESS : true;
 
 	margin: 5px 10px 5px 0px;
 
+}
+
+// Mixin home icon
+
+@mixin home-icon() {
+	background-image: url('#{$IMAGES}/home.svg');
+
+	height: 24px;
+	width: 24px;
+
+	background-repeat: no-repeat;
+	background-position: left;
+
+	margin:0;
+
+	background-size: auto 100%;
+	left: 0;
+	top: 0;
+	align-self: flex-start;
+	float: left;
+	@include box-flex-value(1.0);		
 }
 
 @mixin custom-logo() {
