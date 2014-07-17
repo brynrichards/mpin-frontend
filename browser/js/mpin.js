@@ -683,7 +683,7 @@ var mpin = mpin || {};
 		platform = navigator.platform.toLowerCase();
 //		browser = navigator.appCodeName;
 		browser = navigator.userAgent;
-		if (platform.indexOf("Mac") !== -1) {
+		if (platform.indexOf("mac") !== -1) {
 			platform = "mac";
 		} else if (platform.indexOf("linux") !== -1) {
 			platform = "lin";
