@@ -88,6 +88,7 @@ var mpin = mpin || {};
 		this.displayType = "text";
 
 		this.renderLanding();
+//		this.renderError();
 
 //		this.renderMobile();
 //		this.renderDesktop();
@@ -407,7 +408,8 @@ var mpin = mpin || {};
 		function clearIntervals() {
 			clearInterval(self.intervalID);
 			clearTimeout(self.intervalID2);
-		};
+		}
+		;
 		clearIntervals();
 		callbacks.mp_action_home = function(evt) {
 //			_request.abort();
@@ -654,6 +656,7 @@ var mpin = mpin || {};
 //		removeClass("mpin_accounts_list", "mpHide");
 		addClass("mpinCurrentIden", "mpHide");
 		document.getElementById("mpin_help").style.bottom = "-15%";
+//		document.getElementById("mpin_help").style.marginTop = "-5px";
 
 
 		document.getElementById("mpin_arrow").onclick = function(evt) {
@@ -720,7 +723,7 @@ var mpin = mpin || {};
 		this.tmp.email = (email) ? email : this.tmp.email;
 		this.tmp.clientSecretShare = (clientSecretShare) ? clientSecretShare : this.tmp.clientSecretShare;
 		this.tmp.clientSecretParams = (clientSecretParams) ? clientSecretParams : this.tmp.clientSecretParams;
-		
+
 		//text || circle
 		this.setupInputType = "text";
 
@@ -1319,39 +1322,8 @@ var mpin = mpin || {};
 			this.enableButton(false, "go");
 			this.enableButton(false, "clear");
 		}
-
-		return;
-		//convert input text to password
-		if (this.displayType === "text") {
-			elemDisplay.value = "";
-			elemDisplay.type = "password";
-			this.displayType = "password";
-		}
-
-		if (digit === 'clear') {
-			this.displayText(hlp.text("pinpad_default_message"));
-			this.enableNumberButtons(true);
-			this.enableButton(false, "go");
-			this.enableButton(false, "clear");
-			return;
-		}
-
-
-		console.log("input VALUE :", this.pinpadInput);
-//		elemDisplay.value += digit;
-		return;
-		if (elemDisplay.value.length === 1) {
-			this.enableButton(true, "clear");
-		} else if (elemDisplay.value.length === this.cfg.pinSize) {
-			this.enableNumberButtons(false);
-			this.enableButton(true, "go");
-			this.enableButton(true, "clear");
-		}
 	};
 
-	mpin.prototype.displayText = function() {
-
-	};
 	/**
 	 *	wrap all buttons function inside ...
 	 * 
@@ -1374,7 +1346,7 @@ var mpin = mpin || {};
 	};
 	//showInPinPadDisplay
 	mpin.prototype.display = function(message, isErrorFlag) {
-		var elem, elemText, elemPass, removeCircles, self = this;
+		var removeCircles, self = this;
 
 		removeCircles = function() {
 			var pinSize = self.cfg.pinSize + 1, circles = [];
@@ -1410,29 +1382,6 @@ var mpin = mpin || {};
 
 			document.getElementById("mpin_inner_text").innerHTML = message;
 		}
-
-		return;
-		//pinpad-input
-		elem = document.getElementById('pinpad-input');
-		elem.type = "text";
-		elem.value = message;
-		this.displayType = "text";
-
-		if (isErrorFlag) {
-			addClass(elem, "errorPin");
-		}
-
-
-		return;
-		//old template
-		elemPass = document.getElementById('mp_pin');
-		elemText = document.getElementById('mp_display');
-		if (!elemPass || !elemText)
-			return;
-		elemPass.value = '';
-		elemPass.style.display = 'none';
-		elemText.style.display = 'block';
-		elemText.value = message;
 	};
 
 
@@ -1491,6 +1440,12 @@ var mpin = mpin || {};
 		}
 		return false;
 	};
+
+	//error PAGE 
+	mpin.prototype.renderError = function(error) {
+		var callbacks = {}, errorMsg = error || "";
+		this.render("error", callbacks, {errorMsg: errorMsg});
+	}
 
 	mpin.prototype.actionSetupHome = function(uId) {
 		var _email, _deviceName, _deviceNameInput, _reqData = {}, self = this;
@@ -1582,6 +1537,7 @@ var mpin = mpin || {};
 		if (this.opts.onError) {
 			this.opts.onError(msg);
 		} else {
+			this.renderError(msg);
 			console.error("Error : " + msg);
 		}
 	};
@@ -2298,10 +2254,8 @@ var mpin = mpin || {};
 		"help_text_addidentity": "Your <span class=mpinPurple>[email address]</span> will be used as your identity when M-Pin signs you into this service.<br>You will receive an activation email to the address you provide.",
 		"help_text_loginerr": "You have entered your PIN incorrectly.<br><br>You have 3 attempts to enter your PIN, after 3 incorrect attempts your identity will be removed and you will need to re-register.",
 		"help_text_loginerr_button": "I've forgotton my PIN",
-		"help_text_home": "If you are signing into <span class=mpinPurple>[xxxx]</span> with your own personal device like your computer or tablet then you can ‘Sign in with Browser’, but if you are using someone else’s device or a public computer, then ‘Sign in with Smartphone’ is recommended for additional security."
-//		"help_text_smart": "If you have a smartphone and are signing into <span class=mpinPurple>[xxxx]</span> sing someone else’s device or a public computer, then please: <ol><li>Download the ‘M-Pin Smartphone App’ </li><li>Open the App and follow the steps to sign in, this will tell you when you need to enter the access code.</li></ol>"
-
-
+		"help_text_home": "If you are signing into <span class=mpinPurple>[xxxx]</span> with your own personal device like your computer or tablet then you can ‘Sign in with Browser’, but if you are using someone else’s device or a public computer, then ‘Sign in with Smartphone’ is recommended for additional security.",
+		"error_page_title": "<span class=mpinPurple>Error page:</span>"
 	};
 	//	image should have config properties
 	hlp.img = function(imgSrc) {
