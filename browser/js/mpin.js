@@ -656,7 +656,6 @@ var mpin = mpin || {};
 //		removeClass("mpin_accounts_list", "mpHide");
 		addClass("mpinCurrentIden", "mpHide");
 		document.getElementById("mpin_help").style.bottom = "-15%";
-//		document.getElementById("mpin_help").style.marginTop = "-5px";
 
 
 		document.getElementById("mpin_arrow").onclick = function(evt) {
