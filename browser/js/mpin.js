@@ -1,5 +1,6 @@
 var mpin = mpin || {};
-(function() {
+(function () {
+	"use strict";
 	var lang = {}, hlp = {}, loader;
 	var MPIN_URL_BASE = "%URL_BASE%"
 	var IMAGES_PATH = MPIN_URL_BASE + "/images/";
@@ -10,16 +11,30 @@ var mpin = mpin || {};
 
 		loader(MPIN_URL_BASE + "/css/main.css", function() {
 			var _options = {};
-			if (!options.clientSettingsURL)
-				return console.error("M-Pin: clientSettings not set!");
 
-			domID = options.targetElement;
 			if (_) {
-				//remove _ from global SCOPE
 				mpin._ = _.noConflict();
 			}
+
+			if (options || options.targetElement) {
+				self.el = document.getElementById(options.targetElement);
+				addClass(self.el, "mpinMaster");
+				self.setupHtml();
+			} else {
+				return console.error("::: TargetElement are missing or wrong !");
+			}
+
+
+			if (!options.clientSettingsURL)
+				return self.error(4002);
+			//				return console.error("M-Pin: clientSettings not set!");
+
+			domID = options.targetElement;
 			_options.client = options;
 			self.ajax(options.clientSettingsURL, function(serverOptions) {
+				if (serverOptions.error) {
+					return self.error(serverOptions.error);
+				}
 				_options.server = serverOptions;
 				self.initialize.call(self, domID, _options);
 			});
@@ -31,7 +46,7 @@ var mpin = mpin || {};
 	mpin.prototype.cfg = {
 		language: "en",
 		pinSize: 4,
-		requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue",
+		requiredOptions: "appID; seedValue; signatureURL; mpinAuthServerURL; timePermitsURL; authenticateURL; registerURL",
 		restrictedOptions: "signatureURL; mpinAuthServerURL; timePermitsURL",
 		defaultOptions: {
 			identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -48,33 +63,34 @@ var mpin = mpin || {};
 	 * @returns {Boolean}
 	 */
 	mpin.prototype.initialize = function(domID, options) {
-		this.el = document.getElementById(domID);
-		addClass(this.el, "mpinMaster");
 
-		this.setupHtml();
+
+//		this.setupHtml();
 		this.addHelp();
+
 
 		//options CHECK
 		if (!options || !this.checkOptions(options.server)) {
-//			this.error(" Some options are required :" + this.cfg.requiredOptions);
-			return console.error("Some options are required: " + this.cfg.requiredOptions);
+			return this.error(4003);
 		}
+
+
 		//Extend string with extra methods
 		setStringOptions();
 
-		//data Source
-		this.ds = this.dataSource();
-
 		//set Options
 		this.setDefaults().setOptions(options.server).setOptions(options.client);
-
-		if (!this.opts.certivoxURL.mpin_endsWith("/")) {
-			this.opts.certivoxURL += "/";
-		}
-
+		
 		//if false browser unsupport 
 		if (!this.checkBrowser()) {
 			return;
+		}
+		
+		//data Source
+		this.ds = this.dataSource();
+
+		if (!this.opts.certivoxURL.mpin_endsWith("/")) {
+			this.opts.certivoxURL += "/";
 		}
 
 		//if set & exist
@@ -84,8 +100,6 @@ var mpin = mpin || {};
 			this.language = this.cfg.language;
 		}
 		this.setLanguageText();
-
-		this.displayType = "text";
 
 		this.renderLanding();
 //		this.renderError();
@@ -119,24 +133,26 @@ var mpin = mpin || {};
 		if (navAgent.indexOf('msie') !== -1) {
 			var ieVer = parseInt(navAgent.split('msie')[1]);
 			if (ieVer < 10) {
-				this.unsupportedBrowser("The browser is not supported");
+				this.unsupportedBrowser(4004);
 				onUnsupport = false;
 			}
 		}
 
 		if (typeof window.localStorage === "undefined") {
-			this.unsupportedBrowser("The browser does not support localStorage");
+			this.unsupportedBrowser(4005);
 			onUnsupport = false;
 		}
 
 		return onUnsupport;
 	};
 
-	mpin.prototype.unsupportedBrowser = function(message) {
+	mpin.prototype.unsupportedBrowser = function(errCode) {
+		var errMessage;
 		if (this.opts.onUnsupportedBrowser) {
-			this.opts.onUnsupportedBrowser(message);
+			errMessage = hlp.text("error_code_" + errCode);
+			this.opts.onUnsupportedBrowser(errMessage);
 		} else {
-			this.el.innerHTML = "<b>" + message + "</b>";
+			this.renderError(errCode);
 		}
 		return;
 	};
@@ -209,6 +225,7 @@ var mpin = mpin || {};
 
 	mpin.prototype.render = function(tmplName, callbacks, tmplData) {
 		var data = tmplData || {}, k, self = this, homeElem;
+
 		this.el.innerHTML = this.readyHtml(tmplName, data);
 		for (k in callbacks) {
 			if (document.getElementById(k)) {
@@ -330,6 +347,9 @@ var mpin = mpin || {};
 	mpin.prototype.renderHome = function() {
 		var callbacks = {}, self = this;
 
+		console.log("render HOME this :::", this);
+		console.log("render HOME this :::", this.opts);
+
 		if (this.opts.prerollid) {
 			this.renderSetup(this.opts.prerollid);
 		}
@@ -443,6 +463,10 @@ var mpin = mpin || {};
 			self.toggleHelp.call(self);
 			self.renderHelpTooltip.call(self, "landing2");
 		};
+
+		if (!this.opts.accessNumberURL) {
+			return this.error(4007);
+		}
 
 		this.render("mobile", callbacks);
 		//get access
@@ -926,6 +950,10 @@ var mpin = mpin || {};
 			self.renderHelpHub.call(self);
 		};
 
+		if (!this.opts.mobileAppFullURL) {
+			return this.error(4006);
+		}
+
 		this.render("mobile-setup", callbacks, {mobileAppFullURL: this.opts.mobileAppFullURL});
 
 		qrElem = document.getElementById("mpin_qrcode");
@@ -1213,6 +1241,7 @@ var mpin = mpin || {};
 			self.setIdentity(uId, true, function() {
 				self.display(hlp.text("pinpad_default_message"));
 			}, function() {
+				self.error(4008);
 				return false;
 			});
 			return false;
@@ -1440,11 +1469,25 @@ var mpin = mpin || {};
 		return false;
 	};
 
+	/*
+	 * 
+	 */
+
 	//error PAGE 
 	mpin.prototype.renderError = function(error) {
-		var callbacks = {}, errorMsg = error || "";
-		this.render("error", callbacks, {errorMsg: errorMsg});
-	}
+		var callbacks = {}, errorMsg, errorCode = "";
+
+		if (error === parseInt(error)) {
+			if (!hlp.language) {
+				hlp.language = this.cfg.language;
+			}
+			errorCode = error;
+			errorMsg = hlp.text("error_code_" + error);
+		} else {
+			errorMsg = error;
+		}
+		this.render("error", callbacks, {errorMsg: errorMsg, errorCode: errorCode});
+	};
 
 	mpin.prototype.actionSetupHome = function(uId) {
 		var _email, _deviceName, _deviceNameInput, _reqData = {}, self = this;
@@ -1533,11 +1576,11 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.error = function(msg) {
-		if (this.opts.onError) {
+		if (this.opts && this.opts.onError) {
 			this.opts.onError(msg);
 		} else {
+//			console.error("Error : " + msg);
 			this.renderError(msg);
-			console.error("Error : " + msg);
 		}
 	};
 
@@ -1728,8 +1771,6 @@ var mpin = mpin || {};
 			this.addToPin("clear");
 			this.display(hlp.text("pinpad_initializing"), false);
 
-			this.displayType = "text";
-
 			this.enableNumberButtons(false);
 			this.enableButton(false, "go");
 			this.enableButton(false, "clear");
@@ -1769,9 +1810,10 @@ var mpin = mpin || {};
 	mpin.prototype.ajax = function(url, cb) {
 		var _request = new XMLHttpRequest();
 		_request.onreadystatechange = function() {
-			if (_request.readyState === 4 && _request.status === 200)
-			{
+			if (_request.readyState === 4 && _request.status === 200) {
 				cb(JSON.parse(_request.responseText));
+			} else {
+				cb({error: 4001});
 			}
 		};
 		_request.open("GET", url, true);
@@ -1819,6 +1861,7 @@ var mpin = mpin || {};
 			this.setIdentity(newDefaultAccount, true, function() {
 				self.display(hlp.text("pinpad_default_message"));
 			}, function() {
+				self.error(4008);
 				return false;
 			});
 			if (!renderWarningFlag) {
@@ -2254,7 +2297,16 @@ var mpin = mpin || {};
 		"help_text_loginerr": "You have entered your PIN incorrectly.<br><br>You have 3 attempts to enter your PIN, after 3 incorrect attempts your identity will be removed and you will need to re-register.",
 		"help_text_loginerr_button": "I've forgotton my PIN",
 		"help_text_home": "If you are signing into <span class=mpinPurple>[xxxx]</span> with your own personal device like your computer or tablet then you can ‘Sign in with Browser’, but if you are using someone else’s device or a public computer, then ‘Sign in with Smartphone’ is recommended for additional security.",
-		"error_page_title": "<span class=mpinPurple>Error page:</span>"
+		"error_page_title": "<span class=mpinPurple>Error page:</span>",
+		"error_page_code": "Error code:",
+		"error_code_4001": "Error fetching settings from server",
+		"error_code_4002": "ClientSettingsURL are missing or incomplete(options parameter)",
+		"error_code_4003": "Some required parameters are missing or incomplete.",
+		"error_code_4004": "The browser is not supported.",
+		"error_code_4005": "The browser does not support localStorage.",
+		"error_code_4006": "mobileAppFullURL are missing or incomplete (options parameter).",
+		"error_code_4007": "accessNumberURL are missing or incomplete (options parameter).",
+		"error_code_4008": "Error occur while you are changing identity.",
 	};
 	//	image should have config properties
 	hlp.img = function(imgSrc) {
