@@ -175,15 +175,13 @@ var mpin = mpin || {};
 
     mpin.prototype.readyHelp= function(tmplName, tmplData) {
         var data = tmplData, html;
-        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
-        html = mpin._.template(mpin.template[tmplName], data);
+        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
 
     mpin.prototype.readyHelpHub= function(tmplName, tmplData) {
         var data = tmplData, html;
-        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
-        html = mpin._.template(mpin.template[tmplName], data);
+        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
     
