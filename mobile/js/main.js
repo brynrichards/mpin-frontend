@@ -66,6 +66,14 @@ var mpin = mpin || {};
         this.elHelpOverlay = document.getElementsByTagName("help")[0];
         this.elHelpHub = document.getElementsByTagName("helpHub")[0];
 
+        // Register handlebars helper
+
+
+        Handlebars.registerHelper("hlp", function(optionalValue) {
+            console.log("Dump the helper text", hlp.text(optionalValue));
+            return hlp.text(optionalValue);
+        });
+
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
 //          this.error(" Some options are required :" + this.cfg.requiredOptions);
@@ -163,15 +171,8 @@ var mpin = mpin || {};
     //return readyHtml
     mpin.prototype.readyHtml = function(tmplName, tmplData) {
         var data = tmplData, html;
-        // mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
-        // html = mpin._.template(mpin.template[tmplName], data);
-
-        html = Handlebars.templates[tmplName](data);
+        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
-
-        // Replate the rendering with handlebars
-
-
     };
 
     mpin.prototype.readyHelp= function(tmplName, tmplData) {

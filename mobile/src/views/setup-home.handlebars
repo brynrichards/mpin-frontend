@@ -10,7 +10,7 @@
 <!-- User section -->
 
 <div id="addIdentity">
-  <div class="identityHeader"><%=hlp.text( "setup_header") %></div>
+  <div class="identityHeader">{{hlp 'setup_header' }}</div>
 </div>
 
 <!-- Input button -->
@@ -25,13 +25,12 @@
 
       <div class="identityInput">
         <div>
-          <input type="email" id="emailInput" placeholder="<%=hlp.text( "setup_text3") %>" value="">
-
-          <% if (setDeviceName) { %>
+          <input type="email" id="emailInput" placeholder="{{hlp 'setup_text3' }}" value="">
+        
+          {{#if data.setDeviceName}}
             <br><br><label for="deviceInput"><%=hlp.text( "setup_device_label") %></label>
-            <input type="text" id="deviceInput" class="mpinInput" placeholder="<%= deviceNameHolder %> <%=hlp.text( "setup_device_default") %>" value="<%= deviceName %>">
-          <% } %>
-          
+            <input type="text" id="deviceInput" class="mpinInput" placeholder="{{data.deviceNameHolder}} {{hlp.text.setup_device_default}}" value="{{deviceName}}">
+          {{/if}}
         </div>
       </div>
     </div>
@@ -40,7 +39,7 @@
 
   <div id="bottomBtnHolder">
       <button class="mpinBtn" id="mp_action_setup">
-          <span class="btnLabel"><%=hlp.text( "setup_button_setup") %></span>
+          <span class="btnLabel">{{hlp 'setup_button_setup' }}</span>
       </button>
   </div>
 
