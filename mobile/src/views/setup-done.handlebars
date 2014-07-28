@@ -19,21 +19,21 @@
 
   <div class="identityMainText">
       <div class="congrats">
-        <%= hlp.text("setupDone_header") %>
+        {{hlp 'setupDone_header'}}
       </div>
 
       <div class="identityBodyText">
           <p>
-              <%= hlp.text("setupDone_text1") %>
+              {{hlp 'setupDone_text1'}}
                   <span class="mp_accountField">
-                      <%=  userId %>
+                      {{data.userId}}
                   </span>
           </p>
           <p>
-            <%= hlp.text("setupDone_text2") %>
+            {{hlp 'setupDone_text2'}}
           </p>
           <p>
-              <%= hlp.text("setupDone_text3") %>
+              {{hlp 'setupDone_text3'}}
           </p>
       </div>
   </div>
@@ -41,7 +41,7 @@
   <div id="buttonsContainer">
       <div class="mpinBtn" id="mp_action_go">
           <span class="iconArrow"></span>
-          <span class="btnLabel"><%= hlp.text("setupDone_button_go") %></span>
+          <span class="btnLabel">{{hlp 'setupDone_button_go'}}</span>
       </div>
   </div> 
 

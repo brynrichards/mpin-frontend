@@ -10,21 +10,21 @@
 
   <div class="identityMainText">
       <div class="congrats">
-        <%=hlp.text( "setupReady_header") %>
+        {{hlp 'setupReady_header' }}
       </div>
 
       <div class="identityBodyText">
           <p>
-              <%=hlp.text( "setupReady_text1") %>
+            {{hlp 'setupReady_text1' }}
                   <span class="email">
-                      <%= email %>
+                    {{data.email}}
                   </span>
           </p>
           <p>
-            <%=hlp.text( "setupReady_text2") %>
+            {{hlp 'setupReady_text2' }}
           </p>
           <p>
-              <%=hlp.text( "setupReady_text3") %>
+            {{hlp 'setupReady_text3' }}
           </p>
       </div>
   </div>
@@ -32,11 +32,11 @@
   <div id="buttonsContainer">
       <div class="mpinBtn" id="mpin_action_setup">
           <span class="iconArrow"></span>
-          <span class="btnLabel"><%=hlp.text( "setupReady_button_go") %></span>
+          <span class="btnLabel">{{hlp 'setupReady_button_go' }}</span>
       </div>
       <div class="mpinBtn" id="mpin_action_resend">
           <span class="iconArrow"></span>
-          <span class="btnLabel"><%=hlp.text( "setupReady_button_resend")%></span>
+          <span class="btnLabel">{{hlp 'setupReady_button_resend' }}</span>
       </div>
   </div> 
 

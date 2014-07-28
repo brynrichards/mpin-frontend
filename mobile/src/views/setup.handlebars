@@ -8,14 +8,14 @@
 
 <div id="accountTopBar">
     <div id="mpinUser">
-       <p><%= email %> <% console.log("cfg :::", cfg); %></p>
+       <p>{{data.email}}></p>
     </div>
 		<a href="#" id="menuBtn"></a>
 </div>
 
 <div id="inputContainer">
 
-    <input style="display: none;" id="pinpad-input" type="password" readonly="true" placeholder="<%= hlp.text("pinpad_placeholder_text") %>">
+    <input style="display: none;" id="pinpad-input" type="password" readonly="true" placeholder="{{hlp 'pinpad_placeholder_text'}}">
 
     <div id="codes"></div>
     

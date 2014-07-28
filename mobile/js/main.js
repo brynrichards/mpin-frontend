@@ -68,9 +68,7 @@ var mpin = mpin || {};
 
         // Register handlebars helper
 
-
         Handlebars.registerHelper("hlp", function(optionalValue) {
-            console.log("Dump the helper text", hlp.text(optionalValue));
             return hlp.text(optionalValue);
         });
 
