@@ -9,16 +9,15 @@ var mpin = mpin || {};
     mpin = function(domID, options) {
         var self = this;
  
-        loader("js/underscore-min.js", function() {
+        loader("js/handlebars.runtime.min.js", function() {
             loader("js/mpin-all.min.js", function() {
-                loader("js/templates.min.js", function() {
+                loader("js/templates.js", function() {
                     var _options = {};
                     if (!options.clientSettingsURL) {
                         return console.error("set client Settings");                    
                     }
  
                     //remove _ from global SCOPE
-                    mpin._ = _.noConflict();
                     _options.client = options;
  
                     self.ajax(options.clientSettingsURL, function(serverOptions) {
@@ -164,9 +163,15 @@ var mpin = mpin || {};
     //return readyHtml
     mpin.prototype.readyHtml = function(tmplName, tmplData) {
         var data = tmplData, html;
-        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
-        html = mpin._.template(mpin.template[tmplName], data);
+        // mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
+        // html = mpin._.template(mpin.template[tmplName], data);
+
+        html = Handlebars.templates[tmplName](data);
         return html;
+
+        // Replate the rendering with handlebars
+
+
     };
 
     mpin.prototype.readyHelp= function(tmplName, tmplData) {
@@ -195,7 +200,8 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
                 }
                 else {
-                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    document.getElementById(k).addEventListener('click', callbacks[k], false);
 
                 }
  
@@ -387,8 +393,8 @@ var mpin = mpin || {};
         // Check browsers
  
         function isMobileSafari() {
-            // return navigator.userAgent.match(/(iPad|iPhone|iPod touch)/) && navigator.userAgent.match(/AppleWebKit/)
-            return /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+            return navigator.userAgent.match(/(iPad|iPhone|iPod touch)/)
+            // return /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
 
         }
 
@@ -401,10 +407,11 @@ var mpin = mpin || {};
  
             // Render IOS7 view
             if(isIos7()) {
- 
+                
                 this.render('ios7-startup', callbacks);
  
             } else {
+
                 // Render the IOS6 view - the difference is in the icons
                 this.render('ios6-startup', callbacks);
  
@@ -413,7 +420,7 @@ var mpin = mpin || {};
         } else {
  
             // Check if online
- 
+            
             if(!navigator.onLine) {
                 this.render('offline', callbacks);
             }
@@ -485,8 +492,8 @@ var mpin = mpin || {};
     mpin.prototype.suggestDeviceName = function() {
         var suggestName, platform, browser;
         platform = navigator.platform.toLowerCase();
-//      browser = navigator.appCodeName;
         browser = navigator.userAgent;
+
         if (platform.indexOf("mac") !== -1) {
             platform = "mac";
         } else if (platform.indexOf("linux") !== -1) {
@@ -495,6 +502,8 @@ var mpin = mpin || {};
             platform = "win";
         } else if (platform.indexOf("sun") !== -1) {
             platform = "sun";
+        } else if (platform.indexOf("iphone") !== -1) {
+            platform = "iOS";
         } else {
             platform = "__";
         }
@@ -507,6 +516,8 @@ var mpin = mpin || {};
             browser = "Firefox";
         } else if (browser.indexOf("Safari") !== -1) {
             browser = "Safari";
+        } else if (browser.indexOf("iPhone") !== -1) {
+            browser = "iPhone";
         } else {
             browser = "_";
         }

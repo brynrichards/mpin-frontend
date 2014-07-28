@@ -14,13 +14,10 @@ module.exports = function(grunt) {
 		},
 		bgShell: {
 			makeViews: {
-				cmd: 'python ../build/buildTemplates.py ./src/views ../build/out/mobile/js/templates.js',
+				cmd: 'handlebars ./src/views/*.handlebars -f ../build/out/mobile/js/templates.js',
 				options: {
                 			stdout: true,
-				},
-				done: function () {
-				   grunt.task.run('uglify');
-				 }
+				}
 			},
 			buildMPinAll: {
 				cmd: 'python ../build/buildMPin.py ../libs/jslib ../build/mpin_deplist ../build/out/mobile/js/mpin-all.min.js',
@@ -34,14 +31,8 @@ module.exports = function(grunt) {
                 			stdout: true,
 				}
 			},
-			copyUnderscoreJS: {
-				cmd: 'cp -R ../libs/underscore-min.js ../build/out/mobile/js/',
-				options: {
-	            			stdout: true,
-				}
-			},
-			copyUnderscoreJSMap: {
-				cmd: 'cp -R ../libs/underscore-min.map ../build/out/mobile/js/',
+			copyHandlebarsRuntime: {
+				cmd: 'cp -R ../libs/handlebars.runtime.min.js ../build/out/mobile/js/',
 				options: {
 	            			stdout: true,
 				}
@@ -62,15 +53,15 @@ module.exports = function(grunt) {
 				tasks: ['bgShell', 'sass']
 			}
 		},
-		uglify: {
-			static_mappings: {
-				// Static mappings of files to be minified
-			  files: [
-//			    {src: 'js/mpin-all.js', dest: '../build/out/mobile/js/mpin-all.min.js'},
-			    {src: '../build/out/mobile/js/templates.js', dest: '../build/out/mobile/js/templates.min.js'}
-			  ],
-			}
-		},
+// 		uglify: {
+// 			static_mappings: {
+// 				// Static mappings of files to be minified
+// 			  files: [
+// //			    {src: 'js/mpin-all.js', dest: '../build/out/mobile/js/mpin-all.min.js'},
+// 			    {src: '../build/out/mobile/js/templates.js', dest: '../build/out/mobile/js/templates.min.js'}
+// 			  ],
+// 			}
+// 		},
 		replace: {
 		      dist: {
 		        options: {
