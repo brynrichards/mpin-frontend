@@ -25,7 +25,7 @@ help#mpinHelpTag {
 		margin: 0 auto;
 		top: 45px;
 		@include  border-radius(5px);
-		padding: 22px 10px 10px;
+		padding: 15px 10px 10px;
 		-webkit-box-shadow: 1px 2px 4px 0px rgba(50, 50, 50, 0.50);
 		-moz-box-shadow:    1px 2px 4px 0px rgba(50, 50, 50, 0.50);
 		box-shadow:         1px 2px 4px 0px rgba(50, 50, 50, 0.50);
@@ -54,6 +54,9 @@ help#mpinHelpTag {
 
 			.mpinBtm10 {
 				margin-bottom: 10px;
+			}
+			.mpinPadd12 {
+				padding:12px 0px;
 			}
 		}
 	}
@@ -158,8 +161,8 @@ info.mpinHelpInfo {
 .mpinHelpAnswerBlock {
 	border-bottom: 1px solid #EAEAEA;
 	height: 70%;
-    min-height: 70%;
-    overflow-y: auto;}
+	min-height: 70%;
+	overflow-y: auto;}
 
 .mpinHelpHubFooter {
 	/*width: 90%;*/

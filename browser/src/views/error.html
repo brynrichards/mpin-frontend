@@ -3,12 +3,18 @@
 	<div class="mpinHome mpPointer" id="mpin_home"></div>
 </div>
 
-<info class="mpinHelpInfo helpHubTitle">
+<div class="mpinHeaderRow">
 	<%= hlp.text( "error_page_title") %>
-</info>
+</div>
 
-<%= errorMsg %>
-
+<div class="mpinMain">
+	<%= errorMsg %>
+	<br><br>
+	<%= hlp.text( "error_page_code") %>
+	<span class="mpinPurple">
+		<%= errorCode %>
+	</span>
+</div>
 <div class="mpinFooter">
 	<div class="mpinPowered"></div>
 	<div class="mpinHelpHub mpPointer"></div>

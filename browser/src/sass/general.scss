@@ -23,12 +23,12 @@
 	.mpinHome {
 		@include header-home();
 		height: 21px;
-	margin: 5px 6px;
+		margin: 5px 6px;
 	}
 	.mpinLogo {
 		@include header-logo();
 		margin: 5px 6px;
-	height: 16px;
+		height: 16px;
 	}
 }
 
@@ -46,8 +46,8 @@
 }
 
 .mpinHeaderRow {
-	padding: 2vh;
-	padding-top: 1vh;
+	padding: 5%;
+	/*padding-top: 1%;*/
 	font-size: 13px;
 	text-transform: uppercase;
 	text-align: center;
@@ -86,8 +86,8 @@
 	.mobIconRight { background-position:24px 0; width:47px !important}
 
 	.mpinBorderBottom {
-	border-bottom:1px solid #00a800;
-	margin:0px 12px;
+		border-bottom:1px solid #00a800;
+		margin:0px 12px;
 	}
 }
 
@@ -178,9 +178,13 @@
 		.mpinIdentityText {
 			color: red;
 		}
+		.mpinInfoText {
+			color: #353535;
+			padding: 10px;
+		}
 		&.mpHomeTxt {
 			font-size: 150%;
-			padding-bottom: 1vh;
+			padding-bottom: 1%;
 		}
 	}
 
