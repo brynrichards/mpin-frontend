@@ -12,9 +12,14 @@ var mpin = mpin || {};
 		loader(MPIN_URL_BASE + "/css/main.css", function () {
 			var opts = {};
 
-			if (_) {
-				mpin._ = _.noConflict();
-			}
+			Handlebars.registerHelper("hlp", function (optionalValue) {
+				return hlp.text(optionalValue);
+			});
+			
+			Handlebars.registerHelper("img", function (optionalValue) {
+				return hlp.img(optionalValue);
+			});
+
 
 			if (options || options.targetElement) {
 				self.el = document.getElementById(options.targetElement);
@@ -23,6 +28,7 @@ var mpin = mpin || {};
 			} else {
 				return console.error("::: TargetElement are missing or wrong !");
 			}
+
 
 
 			if (!options.clientSettingsURL) {
@@ -119,7 +125,7 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.setupHtml = function () {
-		this.el.innerHTML = mpin._.template(mpin.template.mpin, {});
+		this.el.innerHTML = Handlebars.templates["mpin"]();
 		this.el = document.getElementById("mpinMiracle");
 	};
 
@@ -203,7 +209,10 @@ var mpin = mpin || {};
 
 	mpin.prototype.addHelp = function () {
 		var hlpHtml;
-		hlpHtml = mpin._.template(mpin.template["help-tooltip"], {});
+
+//		hlpHtml = mpin._.template(mpin.template["help-tooltip"], {});
+		hlpHtml = Handlebars.templates["help-tooltip"]();
+
 		this.el.insertAdjacentHTML("afterend", hlpHtml);
 
 		this.elHelpOverlay = document.getElementById("mpinHelpTag");
@@ -212,8 +221,12 @@ var mpin = mpin || {};
 
 	mpin.prototype.readyHtml = function (tmplName, tmplData) {
 		var data = tmplData, html;
-		mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
-		html = mpin._.template(mpin.template[tmplName], data);
+
+		/*
+		 mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
+		 html = mpin._.template(mpin.template[tmplName], data);
+		 */
+		html = Handlebars.templates[tmplName]({data: data, cfg: this.cfg});
 		if (html[0] !== "<") {
 			html = html.substr(1);
 		}
@@ -2296,7 +2309,7 @@ var mpin = mpin || {};
 		"help_text_loginerr": "You have entered your PIN incorrectly.<br><br>You have 3 attempts to enter your PIN, after 3 incorrect attempts your identity will be removed and you will need to re-register.",
 		"help_text_loginerr_button": "I've forgotton my PIN",
 		"help_text_home": "If you are signing into <span class=mpinPurple>[xxxx]</span> with your own personal device like your computer or tablet then you can ‘Sign in with Browser’, but if you are using someone else’s device or a public computer, then ‘Sign in with Smartphone’ is recommended for additional security.",
-		"error_page_title": "<span class=mpinPurple>Error page:</span>",
+		"error_page_title": "Error page:",
 		"error_page_code": "Error code:",
 		"error_code_4001": "Error fetching settings from server",
 		"error_code_4002": "ClientSettingsURL are missing or incomplete(options parameter)",

@@ -4,15 +4,15 @@
 </div>
 
 <div class="mpinHeaderRow">
-	<%= hlp.text( "error_page_title") %>
+	<span class="mpinPurple">{{hlp "error_page_title"}}</span>
 </div>
 
 <div class="mpinMain">
-	<%= errorMsg %>
+	{{data.errorMsg}}
 	<br><br>
-	<%= hlp.text( "error_page_code") %>
+	{{hlp "error_page_code"}}
 	<span class="mpinPurple">
-		<%= errorCode %>
+		{{data.errorCode}}
 	</span>
 </div>
 <div class="mpinFooter">

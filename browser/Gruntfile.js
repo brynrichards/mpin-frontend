@@ -14,9 +14,9 @@ module.exports = function(grunt) {
 		},
 		bgShell: {
 			makeViews: {
-				cmd: 'python ../build/buildTemplates.py src/views ../build/out/tmp/templates.js',
+				cmd: 'handlebars ./src/views/*.handlebars -f ../build/out/tmp/templates.js',
 				options: {
-                	stdout: true,
+                			stdout: true,
 				}
 			},
 			buildMPinAll: {
@@ -25,8 +25,8 @@ module.exports = function(grunt) {
                 	stdout: true,
                 }
 			},
-			copyUnderscoreJS: {
-				cmd: 'cp -R ../libs/underscore-min.js ../build/out/tmp/',
+			copyHandlebarsRuntime: {
+				cmd: 'cp -R ../libs/handlebars.runtime.min.js ../build/out/tmp/',
 				options: {
 	            	stdout: true,
 				}
