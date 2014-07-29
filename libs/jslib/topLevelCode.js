@@ -5,6 +5,7 @@ function createXMLHttp()
   }
  else if (window.ActiveXObject) 
  {
+
   var aVersions = ["MSXML2.XMLHttp.5.0","MSXML2.XMLHttp.4.0","MSXML2.XMLHttp.3.0","MSXML2.XMLHttp","Microsoft.XMLHttp"];
   
   for (var i = 0; i < aVersions.length; i++) 
@@ -295,6 +296,8 @@ function requestSignature(userID, mobile, signatureURL, customHeaders, onSuccess
 
   var xmlhttpSecret = createXMLHttp();
 
+
+
   xmlhttpSecret.onreadystatechange=function(evtXHR)
     {
       if (xmlhttpSecret.readyState == 4)
@@ -479,19 +482,26 @@ function requestClientSecretShare(restURL, onSuccess, onFail)
   var xmlhttpClientSecret;
   var requestDataType = 'application/json';
 
-  var xmlhttpClientSecret = createXMLHttp()
+  var xmlhttpClientSecret = createXMLHttp();
+
   xmlhttpClientSecret.onreadystatechange=function(evtXHR)
     {
+
+
       if (xmlhttpClientSecret.readyState == 4)
         {
+
           if (xmlhttpClientSecret.status == 200)
             {
+
+
               var jsonText = xmlhttpClientSecret.responseText;
               var response = JSON.parse(jsonText);
               onSuccess(response.clientSecret)
     	    }
           else if (xmlhttpClientSecret.status == 401 || xmlhttpClientSecret.status == 403)
     	    {
+
               var jsonText = xmlhttpClientSecret.responseText;
               var response = JSON.parse(jsonText);
 
@@ -514,6 +524,7 @@ function requestClientSecret(certivoxURL, clientSecretShare, onSuccess, onFail)
   // Get Client Secret Share from Certivox TA
   // n.b. Not a mobile request
 //  var certivoxURL = certivoxURL+"&mobile=0"; 
+
   requestClientSecretShare(certivoxURL, function(certivoxShare){
       // Add secret shares to form Client Secret
       var clientSecretHex = mpinAuth.addShares(certivoxShare, clientSecretShare);

@@ -19,15 +19,24 @@
 
   <div class="identityMainText">
       <div class="congrats">
-        <%= hlp.text("logout_text1") %>
+        {{hlp 'success_header'}}
       </div>
- 
+
+      <div class="identityBodyText">
+          <p>
+              {{hlp 'success_text'}}
+                  <span class="mp_accountField">
+                      {{data.email}}
+                  </span>
+          </p>
+          <p>
+      </div>
   </div>
 
   <div id="buttonsContainer">
-      <div class="mpinBtn" id="mpin_action_logout">
+      <div class="mpinBtn" id="mp_action_logout">
           <span class="iconArrow"></span>
-          <span class="btnLabel"><%= hlp.text("logout_button") %></span>
+          <span class="btnLabel">{{hlp 'logout_btn'}}</span>
       </div>
   </div> 
 

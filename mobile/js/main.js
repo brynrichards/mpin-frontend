@@ -9,16 +9,15 @@ var mpin = mpin || {};
     mpin = function(domID, options) {
         var self = this;
  
-        loader("js/underscore-min.js", function() {
+        loader("js/handlebars.runtime.min.js", function() {
             loader("js/mpin-all.min.js", function() {
-                loader("js/templates.min.js", function() {
+                loader("js/templates.js", function() {
                     var _options = {};
                     if (!options.clientSettingsURL) {
                         return console.error("set client Settings");                    
                     }
  
                     //remove _ from global SCOPE
-                    mpin._ = _.noConflict();
                     _options.client = options;
  
                     self.ajax(options.clientSettingsURL, function(serverOptions) {
@@ -66,6 +65,12 @@ var mpin = mpin || {};
         this.elHelp = document.getElementById('helpContainer');
         this.elHelpOverlay = document.getElementsByTagName("help")[0];
         this.elHelpHub = document.getElementsByTagName("helpHub")[0];
+
+        // Register handlebars helper
+
+        Handlebars.registerHelper("hlp", function(optionalValue) {
+            return hlp.text(optionalValue);
+        });
 
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
@@ -164,22 +169,19 @@ var mpin = mpin || {};
     //return readyHtml
     mpin.prototype.readyHtml = function(tmplName, tmplData) {
         var data = tmplData, html;
-        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
-        html = mpin._.template(mpin.template[tmplName], data);
+        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
 
     mpin.prototype.readyHelp= function(tmplName, tmplData) {
         var data = tmplData, html;
-        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
-        html = mpin._.template(mpin.template[tmplName], data);
+        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
 
     mpin.prototype.readyHelpHub= function(tmplName, tmplData) {
         var data = tmplData, html;
-        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
-        html = mpin._.template(mpin.template[tmplName], data);
+        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
     
@@ -195,7 +197,8 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
                 }
                 else {
-                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    document.getElementById(k).addEventListener('click', callbacks[k], false);
 
                 }
  
@@ -387,8 +390,8 @@ var mpin = mpin || {};
         // Check browsers
  
         function isMobileSafari() {
-            // return navigator.userAgent.match(/(iPad|iPhone|iPod touch)/) && navigator.userAgent.match(/AppleWebKit/)
-            return /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+            return navigator.userAgent.match(/(iPad|iPhone|iPod touch)/)
+            // return /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
 
         }
 
@@ -401,10 +404,11 @@ var mpin = mpin || {};
  
             // Render IOS7 view
             if(isIos7()) {
- 
+                
                 this.render('ios7-startup', callbacks);
  
             } else {
+
                 // Render the IOS6 view - the difference is in the icons
                 this.render('ios6-startup', callbacks);
  
@@ -413,7 +417,7 @@ var mpin = mpin || {};
         } else {
  
             // Check if online
- 
+            
             if(!navigator.onLine) {
                 this.render('offline', callbacks);
             }
@@ -485,8 +489,8 @@ var mpin = mpin || {};
     mpin.prototype.suggestDeviceName = function() {
         var suggestName, platform, browser;
         platform = navigator.platform.toLowerCase();
-//      browser = navigator.appCodeName;
         browser = navigator.userAgent;
+
         if (platform.indexOf("mac") !== -1) {
             platform = "mac";
         } else if (platform.indexOf("linux") !== -1) {
@@ -495,6 +499,8 @@ var mpin = mpin || {};
             platform = "win";
         } else if (platform.indexOf("sun") !== -1) {
             platform = "sun";
+        } else if (platform.indexOf("iphone") !== -1) {
+            platform = "iOS";
         } else {
             platform = "__";
         }
@@ -507,6 +513,8 @@ var mpin = mpin || {};
             browser = "Firefox";
         } else if (browser.indexOf("Safari") !== -1) {
             browser = "Safari";
+        } else if (browser.indexOf("iPhone") !== -1) {
+            browser = "iPhone";
         } else {
             browser = "_";
         }
@@ -580,7 +588,7 @@ var mpin = mpin || {};
  
         this.enableNumberButtons(true);
         this.bindNumberButtons();
- 
+        
         //requestSignature
         this.requestSignature(email, clientSecretShare, clientSecretParams);
     };
@@ -932,7 +940,6 @@ var mpin = mpin || {};
 
         _reqData.URL = url;
         _reqData.method = "GET";
- 
         //get signature
         requestRPS(_reqData, function(rpsData) {
             if (rpsData.errorStatus) {
@@ -959,7 +966,7 @@ var mpin = mpin || {};
             menuBtn = document.getElementById('menuBtn');
 
             if (window.navigator.msPointerEnabled) {
-                menuBtn.style.top = '0';
+                menuBtn.style.bottom = '0';
             }
 
         menuBtn.onclick = function(evt) {
@@ -981,7 +988,6 @@ var mpin = mpin || {};
             mpBack.innerHTML = self.readyHtml("accounts-panel", {});
         }
  
-        // if(document.contains(mpBack) === false) {
 
         // Fix for IE compatibillity
         if(document.body.contains(mpBack) === false) {
@@ -1020,6 +1026,7 @@ var mpin = mpin || {};
         name = this.getDisplayName(iD);
         renderElem = document.getElementById("mp_back");
         renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
+
         document.getElementById("mp_deluser").onclick = function(evt) {
             self.renderDeletePanel.call(self, iD);
         };
@@ -1116,14 +1123,13 @@ var mpin = mpin || {};
             rowElem.addEventListener('MSPointerDown', mEventsHandler, false);
         }
         else {
-            rowElem.addEventListener('touchenter', mEventsHandler, false);
+            rowElem.addEventListener('touchstart', mEventsHandler, false);
 
         }
  
         // document.getElementById('mp_back').remove();
  
         function mEventsHandler(e) {
-          if (e.type == "touchstart" || e.type == "MSPointerDown") {
 
             var elem = document.getElementById("mp_back");
             elem.parentNode.removeChild(elem);
@@ -1141,7 +1147,6 @@ var mpin = mpin || {};
             document.getElementById('accountTopBar').style.height = "";
             menuBtn.className = 'up';
 
-          }
         }
  
         document.getElementById("mp_btIdSettings_" + iNumber).onclick = function(ev) {
@@ -1534,7 +1539,9 @@ var mpin = mpin || {};
          "mobile=" + encodeURIComponent(params.mobile), "signature=" + encodeURIComponent(params.signature)].join("&");
          self.identity = params.mpin_id;
          */
+
         requestClientSecret(self.certivoxClientSecretURL(clientSecretParams), clientSecretShare, function(clientSecret) {
+
             self.enableNumberButtons(true);
  
             self.clientSecret = clientSecret;
@@ -1622,8 +1629,11 @@ var mpin = mpin || {};
         var self = this, _pin = document.getElementById('pinpad-input').value;
         this.ds.addIdentity(this.identity, "");
         this.display("Verifying PIN...");
+
  
         extractPIN(_pin, this.clientSecret, this.identity, function(tokenHex) {
+
+
             self.ds.setIdentityToken(self.identity, tokenHex);
             self.clientSecret = "";
  
@@ -1640,9 +1650,11 @@ var mpin = mpin || {};
                 _reqData.URL = url;
                 _reqData.method = "POST";
                 _reqData.data = {};
- 
+
+
                 //get signature
                 requestRPS(_reqData, function(rpsData) {
+
                     if (rpsData.errorStatus) {
                         self.error("ooops");
                         return;

@@ -6,8 +6,7 @@ CACHE MANIFEST
 CACHE:
 css/main.css
 
-js/underscore-min.js
-js/underscore-min.map
+js/handlebars.runtime.min.js
 js/templates.min.js
 js/mpin-all.min.js
 js/main.js
