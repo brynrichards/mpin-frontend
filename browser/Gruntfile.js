@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 				}
 			},			
 			replaceURLBASE: {
-				cmd: "sed 's#%URL_BASE%#<%= settings.URLBase %>#' js/mpin.js >> ../build/out/tmp/mpin.js",
+				cmd: "sed 's#%URL_BASE%#<%= settings.URLBase %>#' js/mpin.js > ../build/out/tmp/mpin.js",
 				options: {
 	            	stdout: true,
 				}
