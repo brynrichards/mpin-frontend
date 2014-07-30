@@ -687,6 +687,7 @@ var mpin = mpin || {};
 //		removeClass("mpin_accounts_list", "mpHide");
 		addClass("mpinCurrentIden", "mpHide");
 		document.getElementById("mpin_help").style.bottom = "-15%";
+		document.getElementById("mpin_help").style.position = "absolute";
 
 
 		document.getElementById("mpin_arrow").onclick = function (evt) {
@@ -2190,7 +2191,7 @@ var mpin = mpin || {};
 		"setup_error_unathorized": "{0} has not been registered in the system.", // {0} will be replaced with the userID
 		"setup_error_server": "Cannot process the request. Please try again later.",
 		"setup_error_signupexpired": "Your signup request has been expired. Please try again.",
-		"setup_button_setup": "Setup M-Pin&trade;",
+		"setup_button_setup": "Setup M-Pin",
 		"setupPin_header": "Create your M-Pin with {0} digits", // {0} will be replaced with the pin length
 		"setupPin_initializing": "Initializing...",
 		"setupPin_pleasewait": "Please wait...",
