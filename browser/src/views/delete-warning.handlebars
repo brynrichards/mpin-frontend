@@ -4,31 +4,32 @@
 </div>
 
 <div class="mpinHeaderRow">
-	<%=hlp.text( "deactivated_header") %>
+	{{txt "deactivated_header"}}
 </div>
 
 <div class="mpinMain mpPaddTop10">
 	<div class="mpinCenter mpinCenter5">
 	
-		<p class="mpinIdentityText"> <%=  userId %></p>
+		<p class="mpinIdentityText">
+			{{ data.userId }}
+		</p>
 		
-		<%=hlp.text( "deactivated_text1") %>
+		{{txt "deactivated_text1"}}
 		<p>
-			<%=hlp.text( "deactivated_text2") %>
+			{{txt "deactivated_text2"}}
 		</p>
     </div>
 	
 	<div class="mpinBtnBox">
 		<div class="mpinButton" id="mp_action_go">
-			<%=hlp.text( "deactivated_button_register") %>
+			{{txt "deactivated_button_register"}}
 		</div>
 	</div>
 	
 	<info class="mpinHelpInfo mpAbsolute" id="mpin_help">
 		<i></i>
-		<%= hlp.text( "home_hlp_link") %>
+		{{txt "home_hlp_link"}}
 	</info>
-	
 </div>
 
 <div class="mpinFooter">

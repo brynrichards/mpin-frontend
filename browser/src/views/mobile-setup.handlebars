@@ -4,7 +4,7 @@
 </div>
 
 <div class="mpinHeaderRow">
-	<%=hlp.text( "mobileGet_header") %>
+	{{txt "mobileGet_header"}}
 </div>
 
 <div class="mpinMain">
@@ -15,10 +15,10 @@
 
 		<p class="mpinJustifyTxt">
 			<i class="mpinInfo"></i>
-			<%=hlp.text( "mobileGet_text1") %>
+			{{txt "mobileGet_text1"}}
 		</p>
 		<span class="mpinPurple mpWrapped">
-			<strong><%= mobileAppFullURL %></strong>
+			<strong>{{ data.mobileAppFullURL }}</strong>
 		</span>
 	</div>
 	
@@ -26,7 +26,7 @@
 
 			<div class="mpinButton mpGreen" id="mpinbtn_mobile">
 				<span class="mpbtnIconArrow"></span>
-				<%=hlp.text( "mobile_footer_btn")%>
+				{{txt "mobile_footer_btn"}}
 			</div>
 		</div>
 	

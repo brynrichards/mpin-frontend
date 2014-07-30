@@ -1,15 +1,15 @@
 <span id="mpinInfoCloseCorner"></span>
 
 <p class="mpinHelpText">
-	<%= helpText %>
+	{{data.helpText}}
 </p>
 
 <div id="mpinButtonsContainer">
     <div class="mpinBtn mpinBtm10 mpinPadd12" id="mpin_help_ok">
-        <span class="btnLabel"><%=hlp.text( "help_ok_btn") %></span>
+        <span class="btnLabel">{{txt "help_ok_btn"}}</span>
     </div>
-	<%= secondBtn %>
+	{{data.secondBtn}}
     <div class="mpinBtn mpinGrey mpinBtm10" id="mpin_help_more">
-        <span class="btnLabel"><%=hlp.text( "help_more_btn") %></span>
+        <span class="btnLabel">{{txt "help_more_btn"}}</span>
     </div>
 </div>

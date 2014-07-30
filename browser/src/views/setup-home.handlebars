@@ -5,40 +5,40 @@
 
 
 <div class="mpinHeaderRow">
-	<%=hlp.text( "setup_header") %>
+	{{txt "setup_header"}}
 </div> 
 
 
 <div class="mpinMain mpPaddTop10">
 	
 	
-	<div class="mpinCenter <%= (setDeviceName) ? "mpCenterTop": "" %>">
-		<%=hlp.text( "setup_text1") %>
-		<input type="email" id="emailInput" class="mpinInput" placeholder="<%=hlp.text( "setup_placeholder") %>" value="<%= userId %>">
+	<div class="mpinCenter {{#if data.setDeviceName }} mpCenterTop {{/if}}">
+		{{txt "setup_text1"}}
+		<input type="email" id="emailInput" class="mpinInput" placeholder="{{txt "setup_placeholder"}}" value="{{ data.userId }}">
 		
-		<% if (setDeviceName) { %>
-			<br><br><label for="deviceInput"><%=hlp.text( "setup_device_label") %></label>
-			<input type="text" id="deviceInput" class="mpinInput" placeholder="<%= deviceNameHolder %> <%=hlp.text( "setup_device_default") %>" value="<%= deviceName %>"><br><br>
-		<% } %>
+		{{#if data.setDeviceName }}
+			<br><br><label for="deviceInput">{{txt "setup_device_label"}}</label>
+			<input type="text" id="deviceInput" class="mpinInput" placeholder="{{ data.deviceNameHolder }} {{txt "setup_device_default"}}" value="{{ data.deviceName }}"><br><br>
+		{{/if}}
     </div>
 	
 	<div class="mpinBtnBox">
 		<div class="mpinButton" id="mpin_setup">
-			<%=hlp.text( "setup_button_setup") %>
+			{{txt "setup_button_setup"}}
 		</div>
 	</div>
 
 	
 	<info class="mpinHelpInfo" id="mpin_help">
 		<i></i>
-		<%= hlp.text( "home_hlp_link") %>
+		{{txt "home_hlp_link"}}
 	</info>
 	
 </div>
 
 <div class="mpinIdentityRow mpinFooterRow mpHide" id="mpin_accounts_list">
 	<div class="mpinArrowDown mpPointer close mpinAUp" id="mpin_arrow">
-		<img src="<%= hlp.img("arrow-down-black.svg") %>">
+		<img src="{{img "arrow-down-black.svg"}}">
 		
 	</div>
 </div>

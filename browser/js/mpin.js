@@ -12,10 +12,10 @@ var mpin = mpin || {};
 		loader(MPIN_URL_BASE + "/css/main.css", function () {
 			var opts = {};
 
-			Handlebars.registerHelper("hlp", function (optionalValue) {
+			Handlebars.registerHelper("txt", function (optionalValue) {
 				return hlp.text(optionalValue);
 			});
-			
+
 			Handlebars.registerHelper("img", function (optionalValue) {
 				return hlp.img(optionalValue);
 			});
@@ -1230,10 +1230,18 @@ var mpin = mpin || {};
 
 		var tmplData = {iNumber: iNumber, name: name};
 
-		mpin._.extend(tmplData, {hlp: hlp, cfg: this.cfg});
-		userRow.innerHTML = mpin._.template(mpin.template['user-row'], tmplData);
+//		html = Handlebars.templates[tmplName]({data: data, cfg: this.cfg});
+//		mpin._.extend(tmplData, {hlp: hlp, cfg: this.cfg});
+//		userRow.innerHTML = mpin._.template(mpin.template['user-row'], tmplData);
+		console.log("HTML ROW :::", Handlebars.templates['user-row'](tmplData));
+		userRow.innerHTML = Handlebars.templates['user-row']({data: tmplData});
+
 
 		cnt.appendChild(userRow);
+
+
+		console.log("after tmplData :::", tmplData);
+		console.log("after append :::", document.getElementById("mpin_settings_" + iNumber));
 
 		document.getElementById("mpin_settings_" + iNumber).onclick = function (ev) {
 
@@ -2248,6 +2256,8 @@ var mpin = mpin || {};
 		"mobile_header_donot": "DON'T",
 		"mobile_header_do": "DO",
 		"mobile_header_txt3": "trust this computer",
+		"mobile_header_txt4": "Sign in with Smartphone",
+		"mobile_header_access_number": "Your Access Number is",
 		"help_ok_btn": "Ok, Got it",
 		"help_more_btn": "I'm not sure, tell me more",
 		"help_hub_title": "M-Pin Help Hub",

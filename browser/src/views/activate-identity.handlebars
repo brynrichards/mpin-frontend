@@ -4,33 +4,34 @@
 </div>
 
 <div class="mpinHeaderRow">
-	<%=hlp.text( "activate_header") %>
+	{{txt "activate_header"}}
 </div>
 
 <div class="mpinMain mpPaddTop10">
 	<div class="mpinCenter mpinCenter5">
-		<%=hlp.text( "activate_text1") %>
+		{{txt "activate_text1"}}
 		
-		<p class="mpinIdentityText"><%= email %></p>
+		<p class="mpinIdentityText">
+			{{ data.email }}
+		</p>
 		
-		<%=hlp.text( "activate_text2") %>
+		{{txt "activate_text2"}}
 		
 		<p class="mpinInfoText">
-			<%=hlp.text( "activate_text3") %>
+			{{txt "activate_text3"}}
 		</p>
     </div>
 	
 	<div class="mpinBtnBox mpinBtnDown">
 		<div class="mpinButton" id="mpin_activate">
-			<%=hlp.text( "activate_btn1") %>
+			{{txt "activate_btn1"}}
 		</div>
 		<div class="mpinButton" id="mpin_resend">
-			<%=hlp.text( "activate_btn2") %>
+			{{txt "activate_btn2"}}
 		</div>
 	</div>
 		
 </div>
-
 
 <div class="mpinFooter">
 	<div class="mpinPowered"></div>
