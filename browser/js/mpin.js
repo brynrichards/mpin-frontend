@@ -484,7 +484,11 @@ var mpin = mpin || {};
 	mpin.prototype.renderHelp = function (tmplName, callbacks, tmplData) {
 		var k, self = this;
 		tmplData = tmplData || {};
+
 		this.elHelp.innerHTML = this.readyHtml(tmplName, tmplData);
+
+		//parse directly to element...//handlebars cannot parse html tags...
+		document.getElementById("mpin_help_text").innerHTML = tmplData.helpText;
 
 		for (k in callbacks) {
 			if (document.getElementById(k)) {
@@ -522,9 +526,8 @@ var mpin = mpin || {};
 		};
 
 		if (helpLabel === "login" || helpLabel === "setup" || helpLabel === "loginerr") {
-			secondBtn = '<div class="mpinBtn mpinBtm10 mpinPadd12" id="mpin_help_second">';
-			secondBtn += '<span class="btnLabel">' + hlp.text("help_text_" + helpLabel + "_button") + '</span>';
-			secondBtn += '</div>';
+			secondBtn = hlp.text("help_text_" + helpLabel + "_button");
+
 			if (helpLabel === "login" || helpLabel === "loginerr") {
 				callbacks.mpin_help_second = function () {
 					self.toggleHelp.call(self);
@@ -1086,7 +1089,7 @@ var mpin = mpin || {};
 		menuBtn.onclick = function () {
 
 			document.getElementById('mpinUser').style.height = "";
-			removeClass(menuBtn, 'close');
+			removeClass(menuBtn, 'mpinClose');
 			//setIdentity if empty
 
 			if (document.getElementById("mpinUser").innerHTML === "") {
@@ -1214,8 +1217,6 @@ var mpin = mpin || {};
 			self.renderSetupHome.call(self, userId);
 		};
 
-
-
 		this.render("delete-warning", callbacks, {userId: userId});
 	};
 
@@ -1231,24 +1232,13 @@ var mpin = mpin || {};
 
 		var tmplData = {iNumber: iNumber, name: name};
 
-//		html = Handlebars.templates[tmplName]({data: data, cfg: this.cfg});
-//		mpin._.extend(tmplData, {hlp: hlp, cfg: this.cfg});
-//		userRow.innerHTML = mpin._.template(mpin.template['user-row'], tmplData);
-		console.log("HTML ROW :::", Handlebars.templates['user-row'](tmplData));
 		userRow.innerHTML = Handlebars.templates['user-row']({data: tmplData});
-
 
 		cnt.appendChild(userRow);
 
-
-		console.log("after tmplData :::", tmplData);
-		console.log("after append :::", document.getElementById("mpin_settings_" + iNumber));
-
 		document.getElementById("mpin_settings_" + iNumber).onclick = function (ev) {
-
 			self.renderUserSettingsPanel.call(self, uId);
 			ev.stopPropagation();
-
 			return false;
 		};
 
@@ -1459,11 +1449,11 @@ var mpin = mpin || {};
 		//
 		if (menuBtn && !menuBtn.classList.contains("mpinAUp")) {
 			document.getElementById("mpinUser").style.height = "81.5%";
-			addClass(menuBtn, "close");
+			addClass(menuBtn, "mpinClose");
 			this.renderAccountsPanel();
 //			addClass(pinpadElem, "mpZero");
 //			removeClass(idenElem, "mpZero");
-			addClass(idenElem, "mpPaddTop10");
+//			addClass(idenElem, "mpPaddTop10");
 			removeClass("mpinUser", "mpinIdentityGradient");
 
 			// //lastView
@@ -1833,7 +1823,7 @@ var mpin = mpin || {};
 		_request.onreadystatechange = function () {
 			if (_request.readyState === 4 && _request.status === 200) {
 				cb(JSON.parse(_request.responseText));
-			} else {
+			} else if (_request.readyState === 4) {
 				cb({error: 4001});
 			}
 		};
@@ -2163,7 +2153,8 @@ var mpin = mpin || {};
 		"home_alt_mobileOptions": "Mobile Options",
 		"home_button_authenticateMobile": "Authenticate <br/>with your Smartphone",
 		"home_button_authenticateMobile_description": "Get your Mobile Access Number to use with your M-Pin Mobile App to securely authenticate yourself to this service.",
-		"home_button_getMobile": "Get <br/>M-Pin Mobile App",
+		"home_button_getMobile": "Get",
+		"home_button_getMobile1": "M-Pin Mobile App",
 		"home_button_getMobile_description": "Install the free M-Pin Mobile App on your Smartphone now!  This will enable you to securely authenticate yourself to this service.",
 		"home_button_authenticateBrowser": "Authenticate <br/>with this Browser",
 		"home_button_authenticateBrowser_description": "Enter your M-PIN to securely authenticate yourself to this service.",
@@ -2199,10 +2190,10 @@ var mpin = mpin || {};
 		"setupPin_button_done": "Setup<br />Pin",
 		"setupPin_errorSetupPin": "ERROR SETTING PIN: {0}", // {0} is the request status code
 		"setupDone_header": "Congratulations!",
-		"setupDone_text1": "Your M-Pin identity",
-		"setupDone_text2": "is setup, now you can login.",
+		"setupDone_text1": "Your M-Pin identity:",
+		"setupDone_text2": "is setup, you can now sign in.",
 		"setupDone_text3": "",
-		"setupDone_button_go": "Login now",
+		"setupDone_button_go": "Sign in now with your new M-Pin!",
 		"setupReady_header": "VERIFY YOUR IDENTITY",
 		"setupReady_text1": "Your M-Pin identity",
 		"setupReady_text2": "is ready to setup, now you must verify it.",
@@ -2277,8 +2268,12 @@ var mpin = mpin || {};
 		"help_hub_1_p2": "With smartphone authentication you use M-Pin Mobile app as a portable ID card you can use to log in to a desktop browser on any external machine.",
 		"help_hub_2_p1": "You can still use the browser log in, but if you are on a shared computer or feel the machine is not secure, we advise you remove the identity from the browser after you’ve completed your session.",
 		"help_hub_2_p2": "",
-		"help_hub_3_p1": "You will simply need to provide an <span class=mpinPurple>[email address]</span> in order to set up your identity. You will receive an activation email to complete the set up process.",
-		"help_hub_3_p2": "You will also need to create a PIN number, this will be a secret <span class=mpinPurple>[4 digit]</span> code known only to you which you will use to login to the service.",
+		"help_hub_3_p1": "You will simply need to provide an",
+		"help_hub_3_p11": "[email address]",
+		"help_hub_3_p12": "in order to set up your identity. You will receive an activation email to complete the set up process.",
+		"help_hub_3_p2": "You will also need to create a PIN number, this will be a secret",
+		"help_hub_3_p21": "[4 digit]",
+		"help_hub_3_p22": "code known only to you which you will use to login to the service.",
 		"help_hub_4_p1": "Your PIN can only be used from a machine and browser you’ve previously registered from. If you feel your PIN could be reused from the same machine, simply follow the instructions to reset it clicking the “Forgot my PIN button”.",
 		"help_hub_4_p2": "",
 		"help_hub_5_p1": "You can choose any PIN number, and reuse it across different devices, without compromising the security of your credentials. With M-Pin there is no need of complex rules to choose a password, just pick an easy to remember value.",

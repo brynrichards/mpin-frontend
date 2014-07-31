@@ -125,7 +125,8 @@ info.mpinHelpInfo {
 		position: initial;
 	}
 	&.mpinBorder0 {
-		border:0px
+		border: 0px;
+		min-height: 16%;
 	}
 
 }

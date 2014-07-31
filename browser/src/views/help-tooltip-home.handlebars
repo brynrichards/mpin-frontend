@@ -1,6 +1,6 @@
 <span id="mpinInfoCloseCorner"></span>
 
-<p class="mpinHelpText">
+<p class="mpinHelpText" id="mpin_help_text">
 	{{data.helpText}}
 </p>
 
@@ -8,7 +8,13 @@
     <div class="mpinBtn mpinBtm10 mpinPadd12" id="mpin_help_ok">
         <span class="btnLabel">{{txt "help_ok_btn"}}</span>
     </div>
-	{{data.secondBtn}}
+	
+	{{#if data.secondBtn}}
+		<div class="mpinBtn mpinBtm10 mpinPadd12" id="mpin_help_second">
+			<span class="btnLabel">{{data.secondBtn}}</span>
+		</div>
+	{{/if}}
+		
     <div class="mpinBtn mpinGrey mpinBtm10" id="mpin_help_more">
         <span class="btnLabel">{{txt "help_more_btn"}}</span>
     </div>
