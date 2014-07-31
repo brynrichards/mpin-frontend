@@ -8,6 +8,10 @@ brew install node
 
 sudo npm install -g grunt-cli
 
+# Install Handlebars
+
+sudo npm install handlebars -g
+
 # Install sass
 
 sudo gem install sass
