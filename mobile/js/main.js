@@ -9,16 +9,15 @@ var mpin = mpin || {};
     mpin = function(domID, options) {
         var self = this;
  
-        loader("js/underscore-min.js", function() {
+        loader("js/handlebars.runtime.min.js", function() {
             loader("js/mpin-all.min.js", function() {
-                loader("js/templates.min.js", function() {
+                loader("js/templates.js", function() {
                     var _options = {};
                     if (!options.clientSettingsURL) {
                         return console.error("set client Settings");                    
                     }
  
                     //remove _ from global SCOPE
-                    mpin._ = _.noConflict();
                     _options.client = options;
  
                     self.ajax(options.clientSettingsURL, function(serverOptions) {
@@ -45,7 +44,11 @@ var mpin = mpin || {};
         language: "en",
         pinpadDefaultMessage: "",
         pinSize: 4,
-        requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue"
+        requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue",
+        defaultOptions: {
+            identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            setDeviceName: false
+        }
     };
  
  
@@ -63,6 +66,12 @@ var mpin = mpin || {};
         this.elHelpOverlay = document.getElementsByTagName("help")[0];
         this.elHelpHub = document.getElementsByTagName("helpHub")[0];
 
+        // Register handlebars helper
+
+        Handlebars.registerHelper("hlp", function(optionalValue) {
+            return hlp.text(optionalValue);
+        });
+
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
 //          this.error(" Some options are required :" + this.cfg.requiredOptions);
@@ -76,7 +85,7 @@ var mpin = mpin || {};
         this.ds = this.dataSource();
  
         //set Options
-        this.setOptions(options.server).setOptions(options.client);
+        this.setDefaults().setOptions(options.server).setOptions(options.client);
 
 		
 		if (!this.opts.certivoxURL.mpin_endsWith("/")) {
@@ -126,13 +135,23 @@ var mpin = mpin || {};
         }
         return true;
     };
+
+    //set defaults OPTIONS
+    mpin.prototype.setDefaults = function() {
+        this.opts || (this.opts = {});
+        for (var i in this.cfg.defaultOptions) {
+            this.opts[i] = this.cfg.defaultOptions[i];
+        }
+        return this;
+    };
  
     mpin.prototype.setOptions = function(options) {
         var _i, _opts, _optionName, _options = "stage; allowAddUser; requestOTP; successSetupURL; onSuccessSetup; successLoginURL; onSuccessLogin; onLoaded; onGetPermit; ";
         _options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; mpinDTAServerURL; signatureURL; verifyTokenURL; certivoxURL; ";
         _options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; authenticateHeaders; authTokenFormatter; accessNumberRequestFormatter; ";
         _options += "registerRequestFormatter; onVerifySuccess; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; timePermitsStorageURL; authenticateURL; ";
-        _options += "language; customLanguageTexts; accessNumberDigits; mobileAuthenticateURL";
+        _options += "language; customLanguageTexts; accessNumberDigits; mobileAuthenticateURL; setDeviceName";
+
         _opts = _options.split("; ");
         this.opts || (this.opts = {});
  
@@ -150,22 +169,19 @@ var mpin = mpin || {};
     //return readyHtml
     mpin.prototype.readyHtml = function(tmplName, tmplData) {
         var data = tmplData, html;
-        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
-        html = mpin._.template(mpin.template[tmplName], data);
+        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
 
     mpin.prototype.readyHelp= function(tmplName, tmplData) {
         var data = tmplData, html;
-        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
-        html = mpin._.template(mpin.template[tmplName], data);
+        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
 
     mpin.prototype.readyHelpHub= function(tmplName, tmplData) {
         var data = tmplData, html;
-        mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
-        html = mpin._.template(mpin.template[tmplName], data);
+        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
     
@@ -176,9 +192,15 @@ var mpin = mpin || {};
  
         for (k in callbacks) {
             if (document.getElementById(k)) {
-                // document.getElementById(k).onclick = callbacks[k];
-                // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                document.getElementById(k).addEventListener('click', callbacks[k], false);
+
+                if (window.navigator.msPointerEnabled) {
+                    document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
+                }
+                else {
+                    // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    document.getElementById(k).addEventListener('click', callbacks[k], false);
+
+                }
  
             }
         }
@@ -197,8 +219,14 @@ var mpin = mpin || {};
 
         for (k in callbacks) {
             if (document.getElementById(k)) {
-                document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                document.getElementById(k).addEventListener('click', callbacks[k], false);
+
+                if (window.navigator.msPointerEnabled) {
+                    document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
+                }
+                else {
+                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+
+                }
     
             }
         }
@@ -253,8 +281,15 @@ var mpin = mpin || {};
 
         for (k in helphubBtns) {
             if (document.getElementById(k)) {
-                document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
-                document.getElementById(k).addEventListener('click', helphubBtns[k], false);
+
+                if (window.navigator.msPointerEnabled) {
+                    document.getElementById(k).addEventListener("MSPointerDown", helphubBtns[k], false);
+                }
+                else {
+                    document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
+
+                }
+
             }
         }
         if (typeof mpin.custom !== 'undefined') {
@@ -346,7 +381,7 @@ var mpin = mpin || {};
         };
 
         callbacks.mp_action_setup = function(evt) {
-            self.actionSetupHome.call(self, evt);
+            self.actionSetupHome.call(self);
         };
  
         identity = this.ds.getDefaultIdentity();
@@ -355,8 +390,8 @@ var mpin = mpin || {};
         // Check browsers
  
         function isMobileSafari() {
-            // return navigator.userAgent.match(/(iPad|iPhone|iPod touch)/) && navigator.userAgent.match(/AppleWebKit/)
-            return /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+            return navigator.userAgent.match(/(iPad|iPhone|iPod touch)/)
+            // return /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
 
         }
 
@@ -369,10 +404,11 @@ var mpin = mpin || {};
  
             // Render IOS7 view
             if(isIos7()) {
- 
+                
                 this.render('ios7-startup', callbacks);
  
             } else {
+
                 // Render the IOS6 view - the difference is in the icons
                 this.render('ios6-startup', callbacks);
  
@@ -381,7 +417,7 @@ var mpin = mpin || {};
         } else {
  
             // Check if online
- 
+            
             if(!navigator.onLine) {
                 this.render('offline', callbacks);
             }
@@ -401,8 +437,8 @@ var mpin = mpin || {};
                  }
 
             } else {
-                // Render the home mobile button, if no identity exists
-                this.render('setup-home', callbacks);
+                // Render renderSetupHome, if no identity exists
+                this.renderSetupHome();
             }
         }
  
@@ -410,7 +446,8 @@ var mpin = mpin || {};
  
     mpin.prototype.renderSetupHome = function(email, errorID) {
 
-        var callbacks = {}, self = this, descHtml;
+        var callbacks = {}, self = this, userId, descHtml, deviceName = "", deviceNameHolder = "";
+
 
         totalAccounts = this.ds.getAccounts();
         totalAccounts = Object.keys(totalAccounts).length;
@@ -425,10 +462,66 @@ var mpin = mpin || {};
             }
         };
         callbacks.mp_action_setup = function(evt) {
-            self.actionSetupHome.call(self, evt);
+            self.actionSetupHome.call(self);
         };
- 
-        this.render("setup-home", callbacks);
+
+        userId = (email) ? email : "";
+
+        if (this.opts.setDeviceName) {
+
+            //get from localStorage - already set
+            if (this.ds.getDeviceName()) {
+                deviceName = this.ds.getDeviceName();
+                deviceNameHolder = deviceName;
+            } else {
+                //set only placeholder value
+                deviceNameHolder = this.suggestDeviceName();
+                deviceName = "";
+            }
+        }
+
+        console.log("Opts of the device name", this.opts.setDeviceName);
+
+        this.render("setup-home", callbacks, {userId: userId, setDeviceName: this.opts.setDeviceName, deviceName: deviceName, deviceNameHolder: deviceNameHolder});
+
+    };
+
+    mpin.prototype.suggestDeviceName = function() {
+        var suggestName, platform, browser;
+        platform = navigator.platform.toLowerCase();
+        browser = navigator.userAgent;
+
+        if (platform.indexOf("mac") !== -1) {
+            platform = "mac";
+        } else if (platform.indexOf("linux") !== -1) {
+            platform = "lin";
+        } else if (platform.indexOf("win") !== -1) {
+            platform = "win";
+        } else if (platform.indexOf("sun") !== -1) {
+            platform = "sun";
+        } else if (platform.indexOf("iphone") !== -1) {
+            platform = "iOS";
+        } else {
+            platform = "__";
+        }
+
+        if (browser.indexOf("Chrome") !== -1) {
+            browser = "Chrome";
+        } else if (browser.indexOf("MSIE") !== -1 || browser.indexOf("Trident") !== -1) {
+            browser = "Explorer";
+        } else if (browser.indexOf("Firefox") !== -1) {
+            browser = "Firefox";
+        } else if (browser.indexOf("Safari") !== -1) {
+            browser = "Safari";
+        } else if (browser.indexOf("iPhone") !== -1) {
+            browser = "iPhone";
+        } else {
+            browser = "_";
+        }
+
+        suggestName = platform + browser;
+
+        return suggestName;
     };
  
  
@@ -495,7 +588,7 @@ var mpin = mpin || {};
  
         this.enableNumberButtons(true);
         this.bindNumberButtons();
- 
+        
         //requestSignature
         this.requestSignature(email, clientSecretShare, clientSecretParams);
     };
@@ -783,33 +876,74 @@ var mpin = mpin || {};
     mpin.prototype.renderActivateIdentity = function() {
         var callbacks = {}, self = this, email;
         email = this.getDisplayName(this.identity);
+
         callbacks.mp_action_home = function(evt) {
             self.renderHome.call(self, evt);
         };
         callbacks.mpin_action_setup = function(evt) {
-            self.beforeRenderSetup.call(self);
+            if (self.checkBtn(this))
+                self.beforeRenderSetup.call(self, this);
         };
         callbacks.mpin_action_resend = function(evt) {
-            self.actionResend.call(self, evt);
+            if (self.checkBtn(this))
+                self.actionResend.call(self, this);
         };
         this.render("activate-identity", callbacks, {email: email});
     };
+
+    //prevent mpin button multi clicks
+    mpin.prototype.checkBtn = function(btnElem) {
+        var btnClass = btnElem.className;
+        return (btnClass.indexOf("mpinBtnBusy") === -1 && btnClass.indexOf("mpinBtnError") === -1 && btnClass.indexOf("mpinBtnOk") === -1);
+    };
+
+
+    mpin.prototype.mpinButton = function(btnElem, busyText) {
+
+        var oldHtml = btnElem.innerHTML;
+        addClass(btnElem, "mpinBtnBusy");
+
+        btnElem.innerHTML = "<span class='btnLabel'>" + hlp.text(busyText) + "</span>";
+        return {
+            error: function(errorText) {
+                removeClass(btnElem, "mpinBtnBusy");
+                addClass(btnElem, "mpinBtnError");
+                btnElem.innerHTML = "<span class='btnLabel'>" + hlp.text(errorText) + "</span>";
+                setTimeout(function() {
+                    removeClass(btnElem, "mpinBtnError");
+                    btnElem.innerHTML = oldHtml;
+                }, 1500);
+
+            }, ok: function(okText) {
+                removeClass(btnElem, "mpinBtnBusy");
+                addClass(btnElem, "mpinBtnOk");
+                btnElem.innerHTML = "<span class='btnLabel'>" + hlp.text(okText) + "</span>";
+                setTimeout(function() {
+                    removeClass(btnElem, "mpinBtnOk");
+                    btnElem.innerHTML = oldHtml;
+                }, 1500);
+            }};
+    };
  
  
-    mpin.prototype.beforeRenderSetup = function() {
+    mpin.prototype.beforeRenderSetup = function(btnElem) {
 
         var _reqData = {}, regOTT, url, self = this;
         regOTT = this.ds.getIdentityData(this.identity, "regOTT");
         url = this.opts.signatureURL + "/" + this.identity + "?regOTT=" + regOTT;
 
+        console.log("I get the render btn el", btnElem);
+
+        var btn = this.mpinButton(btnElem, "setupNotReady_check_info1");
+
         this.isAccNumber = false;
 
         _reqData.URL = url;
         _reqData.method = "GET";
- 
         //get signature
         requestRPS(_reqData, function(rpsData) {
             if (rpsData.errorStatus) {
+                btn.error("setupNotReady_check_info2");
                 self.error("Activate identity");
                 return;
             }
@@ -831,6 +965,10 @@ var mpin = mpin || {};
             mpBack = document.getElementById('mp_back'),
             menuBtn = document.getElementById('menuBtn');
 
+            if (window.navigator.msPointerEnabled) {
+                menuBtn.style.bottom = '0';
+            }
+
         menuBtn.onclick = function(evt) {
             document.getElementById('accountTopBar').style.height = "";
             menuBtn.className = 'up';
@@ -850,7 +988,6 @@ var mpin = mpin || {};
             mpBack.innerHTML = self.readyHtml("accounts-panel", {});
         }
  
-        // if(document.contains(mpBack) === false) {
 
         // Fix for IE compatibillity
         if(document.body.contains(mpBack) === false) {
@@ -889,6 +1026,7 @@ var mpin = mpin || {};
         name = this.getDisplayName(iD);
         renderElem = document.getElementById("mp_back");
         renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
+
         document.getElementById("mp_deluser").onclick = function(evt) {
             self.renderDeletePanel.call(self, iD);
         };
@@ -980,13 +1118,18 @@ var mpin = mpin || {};
  
         cnt.appendChild(rowElem);
  
-        // rowElem.addEventListener('touchenter', mEventsHandler, false);
-        rowElem.addEventListener('click', mEventsHandler, false);
+        if (window.navigator.msPointerEnabled) {
+
+            rowElem.addEventListener('MSPointerDown', mEventsHandler, false);
+        }
+        else {
+            rowElem.addEventListener('touchstart', mEventsHandler, false);
+
+        }
  
         // document.getElementById('mp_back').remove();
  
         function mEventsHandler(e) {
-          if (e.type == "touchstart" || e.type == "click") {
 
             var elem = document.getElementById("mp_back");
             elem.parentNode.removeChild(elem);
@@ -1004,7 +1147,6 @@ var mpin = mpin || {};
             document.getElementById('accountTopBar').style.height = "";
             menuBtn.className = 'up';
 
-          }
         }
  
         document.getElementById("mp_btIdSettings_" + iNumber).onclick = function(ev) {
@@ -1030,20 +1172,13 @@ var mpin = mpin || {};
         };
         //Check again
         callbacks.mpin_action_setup = function() {
-            // var _reqData = {}, regOTT, url, btn;
-            self.beforeRenderSetup.call(self);
+            if (self.checkBtn(this))
+                self.beforeRenderSetup.call(self, this);
         };
         //email
-        callbacks.mp_action_resend = function() {
-
-            requestRegister(self.opts.registerURL, self.identity, self.opts.authenticateHeaders, self.opts.registerRequestFormatter,
-                    function() {
-      
-                    },
-                    function(message, status) {
-                        self.error(message, status);
-                        self.display(hlp.text("setupPin_errorSetupPin").mpin_format(status), true);
-                    });
+        callbacks.mpin_action_resend = function() {
+            if (self.checkBtn(this))
+                self.actionResend.call(self, this);
         };
         //identities list
         callbacks.mp_action_accounts = function() {
@@ -1060,11 +1195,16 @@ var mpin = mpin || {};
         for (var i = 0; i < btEls.length; i++) {
 
             // Mobile touch events
- 
-			btEls[i].addEventListener('click', mEventsHandler, false);
 
-            // btEls[i].addEventListener('touchstart', mEventsHandler, false);
+            if (window.navigator.msPointerEnabled) {
 
+                btEls[i].addEventListener('MSPointerDown', mEventsHandler, false);
+
+            }
+            else {
+                btEls[i].addEventListener('touchstart', mEventsHandler, false);
+
+            }
  
             function mEventsHandler(e) {
 
@@ -1328,21 +1468,47 @@ var mpin = mpin || {};
         return false;
     };
  
-    mpin.prototype.actionSetupHome = function() {
+    mpin.prototype.actionSetupHome = function(uId) {
 
-        var _email = document.getElementById("emailInput").value, self = this;
+        var _email, _deviceName, _deviceNameInput, _reqData = {}, self = this;
+
+        _email = (uId) ? uId : document.getElementById("emailInput").value;
+
         if (_email.length === 0 || !this.opts.emailCheckRegex.test(_email)) {
             document.getElementById("emailInput").focus();
             return;
         }
  
-        var _reqData = {};
         _reqData.URL = this.opts.registerURL;
         _reqData.method = "PUT";
         _reqData.data = {
             userId: _email,
             mobile: 0
         };
+
+        _deviceNameInput = (document.getElementById("deviceInput")) ? document.getElementById("deviceInput").value : "";
+        //DEVICE NAME
+        if (!this.ds.getDeviceName() && _deviceNameInput === "") {
+            console.log("case NONE");
+            _deviceName = this.suggestDeviceName();
+        } else if (!this.ds.getDeviceName() && _deviceNameInput !== "") {
+            console.log("case have INPUT");
+            _deviceName = _deviceNameInput;
+        } else if (_deviceNameInput !== this.ds.getDeviceName()) {
+            console.log("case change");
+            _deviceName = _deviceNameInput;
+        } else {
+            _deviceName = false;
+        }
+
+        if (_deviceName) {
+            console.log("case set DEVICE NAME", _deviceName);
+
+            _reqData.data.deviceName = _deviceName;
+            this.ds.setDeviceName(_deviceName);
+        }
+
+        console.log("############_reqData", _reqData);
  
         //register identity
         requestRPS(_reqData, function(rpsData) {
@@ -1373,7 +1539,9 @@ var mpin = mpin || {};
          "mobile=" + encodeURIComponent(params.mobile), "signature=" + encodeURIComponent(params.signature)].join("&");
          self.identity = params.mpin_id;
          */
+
         requestClientSecret(self.certivoxClientSecretURL(clientSecretParams), clientSecretShare, function(clientSecret) {
+
             self.enableNumberButtons(true);
  
             self.clientSecret = clientSecret;
@@ -1400,17 +1568,60 @@ var mpin = mpin || {};
         }
     };
  
-    mpin.prototype.actionResend = function() {
-        var self = this;
-        requestRegister(this.opts.registerURL, this.identity, this.opts.authenticateHeaders, this.opts.registerRequestFormatter,
-                function() {
-                    self.renderActivateIdentity();
-                },
-                function(message, status) {
-                    self.error(message, status);
-                    self.display(hlp.text("setupPin_errorSetupPin").mpin_format(status), true);
-                }
-        );
+    mpin.prototype.actionResend = function(btnElem) {
+        var self = this, _reqData = {}, regOTT, _email, btn;
+
+        console.log("this identity :::", this.identity);
+        regOTT = this.ds.getIdentityData(this.identity, "regOTT");
+        _email = this.getDisplayName(this.identity);
+
+        btn = this.mpinButton(btnElem, "setupNotReady_resend_info1");
+
+        _reqData.URL = this.opts.registerURL;
+        _reqData.URL += "/" + this.identity;
+        _reqData.method = "PUT";
+        _reqData.data = {
+            userId: _email,
+            mobile: 0,
+            regOTT: regOTT
+        };
+
+        if (this.opts.registerRequestFormatter) {
+            _reqData.postDataFormatter = this.opts.registerRequestFormatter;
+        }
+        if (this.opts.customHeaders) {
+            _reqData.customHeaders = this.opts.customHeaders;
+        }
+
+        // add identity into URL + regOTT
+        requestRPS(_reqData, function(rpsData) {
+            if (rpsData.error || rpsData.errorStatus) {
+                self.error("Resend problem");
+                return;
+            }
+
+            if (self.identity !== rpsData.mpinId) {
+                console.log("mpin CHANGED : ", rpsData.mpinId);
+
+                //delete OLD mpinID
+                self.ds.deleteIdentity(self.identity);
+
+                //asign new one, create & set as default
+                self.identity = rpsData.mpinId;
+                self.ds.addIdentity(self.identity, "");
+                self.ds.setDefaultIdentity(self.identity);
+            }
+
+            //should be already exist only update regOTT
+            self.ds.setIdentityData(self.identity, {regOTT: rpsData.regOTT});
+
+            // Check for existing userid and delete the old one
+            self.ds.deleteOldIdentity(rpsData.mpinId);
+
+
+
+            btn.ok("setupNotReady_resend_info2");
+        });
     };
  
     mpin.prototype.actionSetup = function() {
@@ -1418,8 +1629,11 @@ var mpin = mpin || {};
         var self = this, _pin = document.getElementById('pinpad-input').value;
         this.ds.addIdentity(this.identity, "");
         this.display("Verifying PIN...");
+
  
         extractPIN(_pin, this.clientSecret, this.identity, function(tokenHex) {
+
+
             self.ds.setIdentityToken(self.identity, tokenHex);
             self.clientSecret = "";
  
@@ -1436,9 +1650,11 @@ var mpin = mpin || {};
                 _reqData.URL = url;
                 _reqData.method = "POST";
                 _reqData.data = {};
- 
+
+
                 //get signature
                 requestRPS(_reqData, function(rpsData) {
+
                     if (rpsData.errorStatus) {
                         self.error("ooops");
                         return;
@@ -1790,6 +2006,22 @@ var mpin = mpin || {};
             }
             mpinDs.save();
         };
+
+        mpinDs.setDeviceName = function(devId) {
+            mpinDs.mpin.deviceName = devId;
+            console.log("data STORAGE set device ID::");
+            mpinDs.save();
+            };
+
+        mpinDs.getDeviceName = function() {
+            var deviceID;
+            deviceID = mpinDs.mpin.deviceName;
+            if (!deviceID) {
+                return false;
+            }
+
+            return deviceID;
+        };
  
         mpinDs.getIdentityData = function(uId, key) {
             return mpinDs.mpin.accounts[uId][key];
@@ -1850,10 +2082,11 @@ var mpin = mpin || {};
 
     mpin.prototype.certivoxPermitsStorageURL = function() {
         var that = this;
+
         return function(date, storageId) {
             console.log("timePermitsStorageURL Base: " + that.opts.timePermitsStorageURL)
             if ((date) && (that.opts.timePermitsStorageURL) && (storageId)) {
-                return that.opts.timePermitsStorageURL + "/" + mpin.appID + "/" + date + "/" + storageId;
+                return that.opts.timePermitsStorageURL + "/" + that.opts.appID + "/" + date + "/" + storageId;
             } else {
                 return null;
             }

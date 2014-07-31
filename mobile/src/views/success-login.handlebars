@@ -10,7 +10,6 @@
 <!-- User section -->
 
 <header id="header">
-  <div id="menuIcon"></div>
   <div id="mpinLogo"></div>
 </header>
 
@@ -20,14 +19,14 @@
 
   <div class="identityMainText">
       <div class="congrats">
-        <%= hlp.text("success_header") %>
+        {{hlp 'success_header'}}
       </div>
 
       <div class="identityBodyText">
           <p>
-              <%= hlp.text("success_text") %>
+              {{hlp 'success_text'}}
                   <span class="mp_accountField">
-                      <%=  email %>
+                      {{data.email}}
                   </span>
           </p>
           <p>
@@ -37,7 +36,7 @@
   <div id="buttonsContainer">
       <div class="mpinBtn" id="mp_action_logout">
           <span class="iconArrow"></span>
-          <span class="btnLabel"><%= hlp.text("logout_btn") %></span>
+          <span class="btnLabel">{{hlp 'logout_btn'}}</span>
       </div>
   </div> 
 
