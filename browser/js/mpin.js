@@ -1031,7 +1031,9 @@ var mpin = mpin || {};
 		regOTT = this.ds.getIdentityData(this.identity, "regOTT");
 		url = this.opts.signatureURL + "/" + this.identity + "?regOTT=" + regOTT;
 
-		var btn = this.mpinButton(btnElem, "setupNotReady_check_info1");
+		if (btnElem) {
+			var btn = this.mpinButton(btnElem, "setupNotReady_check_info1");
+		}
 
 		_reqData.URL = url;
 		_reqData.method = "GET";
@@ -1562,8 +1564,12 @@ var mpin = mpin || {};
 
 			// Check for existing userid and delete the old one
 			self.ds.deleteOldIdentity(rpsData.mpinId);
-
-			self.renderActivateIdentity();
+			//active = true pass activate IDNETITY Screen
+			if (rpsData.active) {
+				self.beforeRenderSetup();
+			} else {
+				self.renderActivateIdentity();
+			}
 		});
 	};
 
