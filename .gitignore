@@ -7,7 +7,6 @@ mobile/in/
 build/out
 mobile/in/
 settings.json
-settings.json_local
 dist/
 npm-debug.log
 .DS_Store
