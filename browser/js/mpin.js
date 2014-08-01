@@ -12,9 +12,14 @@ var mpin = mpin || {};
 		loader(MPIN_URL_BASE + "/css/main.css", function () {
 			var opts = {};
 
-			if (_) {
-				mpin._ = _.noConflict();
-			}
+			Handlebars.registerHelper("txt", function (optionalValue) {
+				return hlp.text(optionalValue);
+			});
+
+			Handlebars.registerHelper("img", function (optionalValue) {
+				return hlp.img(optionalValue);
+			});
+
 
 			if (options || options.targetElement) {
 				self.el = document.getElementById(options.targetElement);
@@ -23,6 +28,7 @@ var mpin = mpin || {};
 			} else {
 				return console.error("::: TargetElement are missing or wrong !");
 			}
+
 
 
 			if (!options.clientSettingsURL) {
@@ -119,7 +125,7 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.setupHtml = function () {
-		this.el.innerHTML = mpin._.template(mpin.template.mpin, {});
+		this.el.innerHTML = Handlebars.templates["mpin"]();
 		this.el = document.getElementById("mpinMiracle");
 	};
 
@@ -203,7 +209,10 @@ var mpin = mpin || {};
 
 	mpin.prototype.addHelp = function () {
 		var hlpHtml;
-		hlpHtml = mpin._.template(mpin.template["help-tooltip"], {});
+
+//		hlpHtml = mpin._.template(mpin.template["help-tooltip"], {});
+		hlpHtml = Handlebars.templates["help-tooltip"]();
+
 		this.el.insertAdjacentHTML("afterend", hlpHtml);
 
 		this.elHelpOverlay = document.getElementById("mpinHelpTag");
@@ -212,8 +221,12 @@ var mpin = mpin || {};
 
 	mpin.prototype.readyHtml = function (tmplName, tmplData) {
 		var data = tmplData, html;
-		mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
-		html = mpin._.template(mpin.template[tmplName], data);
+
+		/*
+		 mpin._.extend(data, {hlp: hlp, cfg: this.cfg});
+		 html = mpin._.template(mpin.template[tmplName], data);
+		 */
+		html = Handlebars.templates[tmplName]({data: data, cfg: this.cfg});
 		if (html[0] !== "<") {
 			html = html.substr(1);
 		}
@@ -471,7 +484,11 @@ var mpin = mpin || {};
 	mpin.prototype.renderHelp = function (tmplName, callbacks, tmplData) {
 		var k, self = this;
 		tmplData = tmplData || {};
+
 		this.elHelp.innerHTML = this.readyHtml(tmplName, tmplData);
+
+		//parse directly to element...//handlebars cannot parse html tags...
+		document.getElementById("mpin_help_text").innerHTML = tmplData.helpText;
 
 		for (k in callbacks) {
 			if (document.getElementById(k)) {
@@ -509,9 +526,8 @@ var mpin = mpin || {};
 		};
 
 		if (helpLabel === "login" || helpLabel === "setup" || helpLabel === "loginerr") {
-			secondBtn = '<div class="mpinBtn mpinBtm10 mpinPadd12" id="mpin_help_second">';
-			secondBtn += '<span class="btnLabel">' + hlp.text("help_text_" + helpLabel + "_button") + '</span>';
-			secondBtn += '</div>';
+			secondBtn = hlp.text("help_text_" + helpLabel + "_button");
+
 			if (helpLabel === "login" || helpLabel === "loginerr") {
 				callbacks.mpin_help_second = function () {
 					self.toggleHelp.call(self);
@@ -674,6 +690,7 @@ var mpin = mpin || {};
 //		removeClass("mpin_accounts_list", "mpHide");
 		addClass("mpinCurrentIden", "mpHide");
 		document.getElementById("mpin_help").style.bottom = "-15%";
+		document.getElementById("mpin_help").style.position = "absolute";
 
 
 		document.getElementById("mpin_arrow").onclick = function (evt) {
@@ -1014,7 +1031,9 @@ var mpin = mpin || {};
 		regOTT = this.ds.getIdentityData(this.identity, "regOTT");
 		url = this.opts.signatureURL + "/" + this.identity + "?regOTT=" + regOTT;
 
-		var btn = this.mpinButton(btnElem, "setupNotReady_check_info1");
+		if (btnElem) {
+			var btn = this.mpinButton(btnElem, "setupNotReady_check_info1");
+		}
 
 		_reqData.URL = url;
 		_reqData.method = "GET";
@@ -1072,7 +1091,7 @@ var mpin = mpin || {};
 		menuBtn.onclick = function () {
 
 			document.getElementById('mpinUser').style.height = "";
-			removeClass(menuBtn, 'close');
+			removeClass(menuBtn, 'mpinClose');
 			//setIdentity if empty
 
 			if (document.getElementById("mpinUser").innerHTML === "") {
@@ -1200,8 +1219,6 @@ var mpin = mpin || {};
 			self.renderSetupHome.call(self, userId);
 		};
 
-
-
 		this.render("delete-warning", callbacks, {userId: userId});
 	};
 
@@ -1217,16 +1234,13 @@ var mpin = mpin || {};
 
 		var tmplData = {iNumber: iNumber, name: name};
 
-		mpin._.extend(tmplData, {hlp: hlp, cfg: this.cfg});
-		userRow.innerHTML = mpin._.template(mpin.template['user-row'], tmplData);
+		userRow.innerHTML = Handlebars.templates['user-row']({data: tmplData});
 
 		cnt.appendChild(userRow);
 
 		document.getElementById("mpin_settings_" + iNumber).onclick = function (ev) {
-
 			self.renderUserSettingsPanel.call(self, uId);
 			ev.stopPropagation();
-
 			return false;
 		};
 
@@ -1437,11 +1451,11 @@ var mpin = mpin || {};
 		//
 		if (menuBtn && !menuBtn.classList.contains("mpinAUp")) {
 			document.getElementById("mpinUser").style.height = "81.5%";
-			addClass(menuBtn, "close");
+			addClass(menuBtn, "mpinClose");
 			this.renderAccountsPanel();
 //			addClass(pinpadElem, "mpZero");
 //			removeClass(idenElem, "mpZero");
-			addClass(idenElem, "mpPaddTop10");
+//			addClass(idenElem, "mpPaddTop10");
 			removeClass("mpinUser", "mpinIdentityGradient");
 
 			// //lastView
@@ -1550,8 +1564,12 @@ var mpin = mpin || {};
 
 			// Check for existing userid and delete the old one
 			self.ds.deleteOldIdentity(rpsData.mpinId);
-
-			self.renderActivateIdentity();
+			//active = true pass activate IDNETITY Screen
+			if (rpsData.active) {
+				self.beforeRenderSetup();
+			} else {
+				self.renderActivateIdentity();
+			}
 		});
 	};
 
@@ -1811,7 +1829,7 @@ var mpin = mpin || {};
 		_request.onreadystatechange = function () {
 			if (_request.readyState === 4 && _request.status === 200) {
 				cb(JSON.parse(_request.responseText));
-			} else {
+			} else if (_request.readyState === 4) {
 				cb({error: 4001});
 			}
 		};
@@ -2141,7 +2159,8 @@ var mpin = mpin || {};
 		"home_alt_mobileOptions": "Mobile Options",
 		"home_button_authenticateMobile": "Authenticate <br/>with your Smartphone",
 		"home_button_authenticateMobile_description": "Get your Mobile Access Number to use with your M-Pin Mobile App to securely authenticate yourself to this service.",
-		"home_button_getMobile": "Get <br/>M-Pin Mobile App",
+		"home_button_getMobile": "Get",
+		"home_button_getMobile1": "M-Pin Mobile App",
 		"home_button_getMobile_description": "Install the free M-Pin Mobile App on your Smartphone now!  This will enable you to securely authenticate yourself to this service.",
 		"home_button_authenticateBrowser": "Authenticate <br/>with this Browser",
 		"home_button_authenticateBrowser_description": "Enter your M-PIN to securely authenticate yourself to this service.",
@@ -2169,7 +2188,7 @@ var mpin = mpin || {};
 		"setup_error_unathorized": "{0} has not been registered in the system.", // {0} will be replaced with the userID
 		"setup_error_server": "Cannot process the request. Please try again later.",
 		"setup_error_signupexpired": "Your signup request has been expired. Please try again.",
-		"setup_button_setup": "Setup M-Pin&trade;",
+		"setup_button_setup": "Setup M-Pin",
 		"setupPin_header": "Create your M-Pin with {0} digits", // {0} will be replaced with the pin length
 		"setupPin_initializing": "Initializing...",
 		"setupPin_pleasewait": "Please wait...",
@@ -2177,10 +2196,10 @@ var mpin = mpin || {};
 		"setupPin_button_done": "Setup<br />Pin",
 		"setupPin_errorSetupPin": "ERROR SETTING PIN: {0}", // {0} is the request status code
 		"setupDone_header": "Congratulations!",
-		"setupDone_text1": "Your M-Pin identity",
-		"setupDone_text2": "is setup, now you can login.",
+		"setupDone_text1": "Your M-Pin identity:",
+		"setupDone_text2": "is setup, you can now sign in.",
 		"setupDone_text3": "",
-		"setupDone_button_go": "Login now",
+		"setupDone_button_go": "Sign in now with your new M-Pin!",
 		"setupReady_header": "VERIFY YOUR IDENTITY",
 		"setupReady_text1": "Your M-Pin identity",
 		"setupReady_text2": "is ready to setup, now you must verify it.",
@@ -2235,6 +2254,8 @@ var mpin = mpin || {};
 		"mobile_header_donot": "DON'T",
 		"mobile_header_do": "DO",
 		"mobile_header_txt3": "trust this computer",
+		"mobile_header_txt4": "Sign in with Smartphone",
+		"mobile_header_access_number": "Your Access Number is",
 		"help_ok_btn": "Ok, Got it",
 		"help_more_btn": "I'm not sure, tell me more",
 		"help_hub_title": "M-Pin Help Hub",
@@ -2253,8 +2274,12 @@ var mpin = mpin || {};
 		"help_hub_1_p2": "With smartphone authentication you use M-Pin Mobile app as a portable ID card you can use to log in to a desktop browser on any external machine.",
 		"help_hub_2_p1": "You can still use the browser log in, but if you are on a shared computer or feel the machine is not secure, we advise you remove the identity from the browser after you’ve completed your session.",
 		"help_hub_2_p2": "",
-		"help_hub_3_p1": "You will simply need to provide an <span class=mpinPurple>[email address]</span> in order to set up your identity. You will receive an activation email to complete the set up process.",
-		"help_hub_3_p2": "You will also need to create a PIN number, this will be a secret <span class=mpinPurple>[4 digit]</span> code known only to you which you will use to login to the service.",
+		"help_hub_3_p1": "You will simply need to provide an",
+		"help_hub_3_p11": "[email address]",
+		"help_hub_3_p12": "in order to set up your identity. You will receive an activation email to complete the set up process.",
+		"help_hub_3_p2": "You will also need to create a PIN number, this will be a secret",
+		"help_hub_3_p21": "[4 digit]",
+		"help_hub_3_p22": "code known only to you which you will use to login to the service.",
 		"help_hub_4_p1": "Your PIN can only be used from a machine and browser you’ve previously registered from. If you feel your PIN could be reused from the same machine, simply follow the instructions to reset it clicking the “Forgot my PIN button”.",
 		"help_hub_4_p2": "",
 		"help_hub_5_p1": "You can choose any PIN number, and reuse it across different devices, without compromising the security of your credentials. With M-Pin there is no need of complex rules to choose a password, just pick an easy to remember value.",
@@ -2296,7 +2321,7 @@ var mpin = mpin || {};
 		"help_text_loginerr": "You have entered your PIN incorrectly.<br><br>You have 3 attempts to enter your PIN, after 3 incorrect attempts your identity will be removed and you will need to re-register.",
 		"help_text_loginerr_button": "I've forgotton my PIN",
 		"help_text_home": "If you are signing into <span class=mpinPurple>[xxxx]</span> with your own personal device like your computer or tablet then you can ‘Sign in with Browser’, but if you are using someone else’s device or a public computer, then ‘Sign in with Smartphone’ is recommended for additional security.",
-		"error_page_title": "<span class=mpinPurple>Error page:</span>",
+		"error_page_title": "Error page:",
 		"error_page_code": "Error code:",
 		"error_code_4001": "Error fetching settings from server",
 		"error_code_4002": "ClientSettingsURL are missing or incomplete(options parameter)",

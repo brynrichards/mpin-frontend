@@ -1,0 +1,50 @@
+<div class="mpinHeader">
+    <div class="mpinLogo mpPointer"></div>
+	<div class="mpinHome mpPointer" id="mpin_home"></div>
+</div>
+
+
+<div class="mpinHeaderRow">
+	{{txt "setup_header"}}
+</div> 
+
+
+<div class="mpinMain mpPaddTop10">
+	
+	
+	<div class="mpinCenter {{#if data.setDeviceName }} mpCenterTop {{/if}}">
+		{{txt "setup_text1"}}
+		<input type="email" id="emailInput" class="mpinInput" placeholder="{{txt "setup_placeholder"}}" value="{{ data.userId }}">
+		
+		{{#if data.setDeviceName }}
+			<br><br><label for="deviceInput">{{txt "setup_device_label"}}</label>
+			<input type="text" id="deviceInput" class="mpinInput" placeholder="{{ data.deviceNameHolder }} {{txt "setup_device_default"}}" value="{{ data.deviceName }}"><br><br>
+		{{/if}}
+    </div>
+	
+	<div class="mpinBtnBox">
+		<div class="mpinButton" id="mpin_setup">
+			{{txt "setup_button_setup"}}&trade;
+		</div>
+	</div>
+
+	
+	<info class="mpinHelpInfo{{#unless data.setDeviceName }} mpAbsolute{{/unless}}" id="mpin_help">
+		<i></i>
+		{{txt "home_hlp_link"}}
+	</info>
+	
+</div>
+
+<div class="mpinIdentityRow mpinFooterRow mpHide" id="mpin_accounts_list">
+	<div class="mpinArrowDown mpPointer close mpinAUp" id="mpin_arrow">
+		<img src="{{img "arrow-down-black.svg"}}">
+		
+	</div>
+</div>
+
+
+<div class="mpinFooter">
+	<div class="mpinPowered"></div>
+	<div class="mpinHelpHub mpPointer" id="mpin_helphub"></div>
+</div>
