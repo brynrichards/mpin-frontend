@@ -185,7 +185,7 @@ var mpin = mpin || {};
 		_options += "onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; signatureURL; certivoxURL; ";
 		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; customHeaders; authenticateRequestFormatter; accessNumberRequestFormatter; ";
 		_options += "registerRequestFormatter; identityCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; timePermitsStorageURL; authenticateURL; ";
-		_options += "language; customLanguageTexts; setDeviceName";
+		_options += "language; customLanguageTexts; setDeviceName; getAccessNumberURL";
 		_opts = _options.split("; ");
 		this.opts || (this.opts = {});
 
@@ -892,7 +892,7 @@ var mpin = mpin || {};
 				}, 1000);
 			}
 		};
-		_request.open("GET", this.opts.accessNumberURL);
+		_request.open("POST", this.opts.getAccessNumberURL);
 //		_request.setRequestHeader('Content-Type', 'application/json');
 		_request.send();
 	};
