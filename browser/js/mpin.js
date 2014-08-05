@@ -29,8 +29,6 @@ var mpin = mpin || {};
 				return console.error("::: TargetElement are missing or wrong !");
 			}
 
-
-
 			if (!options.clientSettingsURL) {
 				return self.error(4002);
 			}
@@ -606,8 +604,8 @@ var mpin = mpin || {};
 		this.lastViewParams || (this.lastViewParams = []);
 		param1 = this.lastViewParams[0] || false;
 		param2 = this.lastViewParams[1] || false;
-		console.info("lastVIEW :::", this.lastView);
-		console.info("lastVIEW :::", this.lastViewParams);
+		console.info(">  lastVIEW :::", this.lastView);
+		console.info(">  lastViewParams :::", this.lastViewParams);
 		//call renderHome
 		this[this.lastView](param1, param2);
 	};
@@ -808,6 +806,8 @@ var mpin = mpin || {};
 			self.addToPin.call(self, "clear");
 		};
 		callbacks.mpin_arrow = function () {
+			console.log(": aRRoW :");
+			self.addToPin.call(self, "clear");
 			self.toggleButton.call(self);
 		};
 		callbacks.mpin_login = function () {
@@ -1448,18 +1448,14 @@ var mpin = mpin || {};
 			return;
 		}
 
-		//
+		//accounts
 		if (menuBtn && !menuBtn.classList.contains("mpinAUp")) {
 			document.getElementById("mpinUser").style.height = "81.5%";
 			addClass(menuBtn, "mpinClose");
 			this.renderAccountsPanel();
-//			addClass(pinpadElem, "mpZero");
-//			removeClass(idenElem, "mpZero");
-//			addClass(idenElem, "mpPaddTop10");
 			removeClass("mpinUser", "mpinIdentityGradient");
 
-			// //lastView
-			this.lastViewParams = [false];
+			this.lastViewParams = [true];
 		} else {
 			//if identity not Active render ACTIVATE
 			if (this.ds.getIdentityToken(this.identity) == "") {
@@ -1468,14 +1464,14 @@ var mpin = mpin || {};
 				return;
 			}
 
-
+			
 			document.getElementById("mpinUser").style.height = "28px";
 			removeClass(menuBtn, "mpinAUp");
 			//if come from add identity remove HIDDEN
 			removeClass("mpinCurrentIden", "mpHide");
 			addClass("mpinUser", "mpinIdentityGradient");
-			//lastView
-			this.lastViewParams = [true];
+
+			this.lastViewParams = [false];
 		}
 		return false;
 	};
