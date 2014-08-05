@@ -13,6 +13,12 @@ module.exports = function(grunt) {
 			}
 		},
 		bgShell: {
+                	makeDirs: {
+                                cmd: 'mkdir -p ../build/out/tmp/',
+                                options: {
+                                        stdout: true,
+                                }
+                        },
 			makeViews: {
 				cmd: 'handlebars ./src/views/*.handlebars -f ../build/out/tmp/templates.js',
 				options: {
