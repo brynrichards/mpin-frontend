@@ -7,9 +7,9 @@
 <div class="mpinTabMiddle clrGreen mpinBtm10">
 <!--
 	<div>
-		<%=hlp.text("mobile_header_txt1") %>
-		<span class="mpinColorRed"><%= hlp.text("mobile_header_donot") %></span>
-		<%=hlp.text("mobile_header_txt3") %>
+		{{txt "mobile_header_txt1"}}
+		<span class="mpinColorRed">{{txt "mobile_header_donot"}}</span>
+		{{txt "mobile_header_txt3"}}
 	</div>
 -->
 	<div>
@@ -21,10 +21,10 @@
 
 <div class="mpinMobileGrBtn mpinBtm10">
 	<div class="mpinGrTxt" id="mpinDownWhite">
-		Sign in with Smartphone
+		{{txt "mobile_header_txt4"}}
 	</div>
 	<div class="mpinGrTxt">
-		Your Access Number is:
+		{{txt "mobile_header_access_number"}}:
 		
 		<span id="mpinAccessNumber">
 		</span>
@@ -39,12 +39,13 @@
 <div class="mpinBtn mpinBtm10" id="mpin_action_setup">
     <span class="iconArrow"></span>
     <span class="btnLabel btnLabelArrow">
-		<%=hlp.text( "home_button_getMobile") %>
+		{{txt "home_button_getMobile"}}<br>
+		{{txt "home_button_getMobile1"}}
 	</span>
 </div>
 
 <div class="mpinMobileGrBtn mpinBtm10" id="mpin_login_desktop">
-    <%=hlp.text( "landing_button_newuser") %>
+    {{txt "landing_button_newuser"}}
 	<!--
 		I <span class="mpinColorRed">DO</span> trust this computer
 	-->
@@ -52,7 +53,7 @@
 
 	<info class="mpinHelpInfo" id="mpin_help">
 		<i></i>
-		<%= hlp.text( "home_hlp_link") %>
+		{{txt "home_hlp_link"}}
 	</info>
 
 

@@ -1,24 +1,30 @@
 .mpinBtnBox {
 	//instead of width: 90%
-	padding-left: 5%;
-	padding-right: 5%;
+	padding: 0% 5%;
 	background: #fff;
 	z-index: 99;
 	
+	&.mpinBtnDown {
+		position: absolute;
+		bottom: 11%;
+		width: 100%;
+	}
+
 	.mpinButton {
 		@include mpinButton();
 
 		&.mpBtnHome {
-			padding-left: 0px;
-			padding-right: 0px;
-			font-size: 90%;
+			padding: 10px 0px;
+			font-size: 95%;
+			line-height:130%;
+			margin:0px;
 		}
 		&.mpFontNormal {
 			font-weight: normal;
 			font-size: 16px;
 			margin-bottom: 5px;
 		}
-		
+
 		&.mpinBtnOk {
 			color: #00a800;
 		}
@@ -27,32 +33,37 @@
 		}
 
 		p {
-			font-size: 85%;
+			font-size: 87%;
 			color: #fff;
 		}
 		//MOBILE buttons
 		.mpBorderWhite {
 			border-bottom: 1px solid white;
+			font-size:0.93em;
+			padding-bottom:3px;
 		}
 		.mpbtnPadding {
-			padding: 7px;
-			
+			padding: 7px 0 3px;
+
 			#mpinAccessNumber {
 				font-size: 24px;
-				letter-spacing: .2em;
-				padding: 10px;
+				letter-spacing: .4em;
+				padding: 8px;
 			}
 		}
 		.mpbtnExpire {
 			@include mpin-button();
-			width: 100px;
+			width: 80px;
 			background: white;
 			box-shadow: none;
 			margin: auto;
 			text-align: center;
-			padding: 4px;
+			padding: 0px;
 			font-weight: bold;
 			margin-bottom: 5px;
+			font-size:0.75em;
+			border-radius: 0.6em;
+			min-height:1.6em
 		}
 
 		.mpbtnIconArrow {
@@ -73,6 +84,7 @@
 
 	.mpGreen {
 		background: #00a800;
+		font-size:0.93em;
 	}
 	.mpBtnOnlyGreen {
 		background: none;
@@ -83,5 +95,7 @@
 		background: none;
 		color: #007cc2;
 		border-color: #007cc2;
+		font-size: 0.87em;
+		padding: 14px 0;
 	}
 }

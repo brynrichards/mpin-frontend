@@ -1,13 +1,13 @@
 <div class="mpinHeaderRow">
-	<%=hlp.text( "settings_title") %>
+	{{txt "settings_title"}}
 </div>
 
 <div class="mpinMain">
 	<div class="mpinCenter mpinCenter5">
-		<%=hlp.text( "account_reactivate_question") %>
+		{{txt "account_reactivate_question"}}
 		
 		<p class="mpinIdentityText mpPaddTop10">
-			<%= name %>
+			{{ data.name }}
 		</p>	
 	</div>
 		
@@ -19,11 +19,11 @@
 
 		<div class="mpinBtnBox">
 			<div class="mpinButton" id="mpin_reactivate_btn">
-				<%=hlp.text( "account_reactivate_button")%>
+				{{txt "account_reactivate_button"}}
 			</div>
 
 			<div class="mpinButton mpBtnOnlyGreen" id="mpin_cancel_btn">
-				<%=hlp.text( "account_button_cancel")%>
+				{{txt "account_button_cancel"}}
 			</div>
 		</div>
 		

@@ -1,34 +1,35 @@
-
 <div class="mpinHeader">
     <div class="mpinLogo mpPointer"></div>
 	<div class="mpinHome mpPointer" id="mpin_home"></div>
 </div>
 
 <div class="mpinHeaderRow">
-	<%=hlp.text( "setupDone_header") %>
+	{{txt "deactivated_header"}}
 </div>
 
 <div class="mpinMain mpPaddTop10">
-	
 	<div class="mpinCenter mpinCenter5">
-		<%=hlp.text( "setupDone_text1") %>
-		
+	
 		<p class="mpinIdentityText">
-			<%= userId %>
+			{{ data.userId }}
 		</p>
 		
-			<%=hlp.text( "setupDone_text2") %>
+		{{txt "deactivated_text1"}}
 		<p>
-			<%=hlp.text( "setupDone_text3") %>
+			{{txt "deactivated_text2"}}
 		</p>
     </div>
-
+	
 	<div class="mpinBtnBox">
-		<div class="mpinButton" id="mpin_login_now">
-			<%=hlp.text( "setupDone_button_go") %>
+		<div class="mpinButton" id="mp_action_go">
+			{{txt "deactivated_button_register"}}
 		</div>
 	</div>
-
+	
+	<info class="mpinHelpInfo mpAbsolute" id="mpin_help">
+		<i></i>
+		{{txt "home_hlp_link"}}
+	</info>
 </div>
 
 <div class="mpinFooter">

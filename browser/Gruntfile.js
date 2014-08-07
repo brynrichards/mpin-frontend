@@ -13,10 +13,16 @@ module.exports = function(grunt) {
 			}
 		},
 		bgShell: {
+                	makeDirs: {
+                                cmd: 'mkdir -p ../build/out/tmp/',
+                                options: {
+                                        stdout: true,
+                                }
+                        },
 			makeViews: {
-				cmd: 'python ../build/buildTemplates.py src/views ../build/out/tmp/templates.js',
+				cmd: 'handlebars ./src/views/*.handlebars -f ../build/out/tmp/templates.js',
 				options: {
-                	stdout: true,
+                			stdout: true,
 				}
 			},
 			buildMPinAll: {
@@ -25,14 +31,14 @@ module.exports = function(grunt) {
                 	stdout: true,
                 }
 			},
-			copyUnderscoreJS: {
-				cmd: 'cp -R ../libs/underscore-min.js ../build/out/tmp/',
+			copyHandlebarsRuntime: {
+				cmd: 'cp -R ../libs/handlebars.runtime.min.js ../build/out/tmp/',
 				options: {
 	            	stdout: true,
 				}
 			},			
 			replaceURLBASE: {
-				cmd: "sed 's#%URL_BASE%#<%= settings.URLBase %>#' js/mpin.js >> ../build/out/tmp/mpin.js",
+				cmd: "sed 's#%URL_BASE%#<%= settings.URLBase %>#' js/mpin.js > ../build/out/tmp/mpin.js",
 				options: {
 	            	stdout: true,
 				}
