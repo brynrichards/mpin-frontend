@@ -169,19 +169,19 @@ var mpin = mpin || {};
     //return readyHtml
     mpin.prototype.readyHtml = function(tmplName, tmplData) {
         var data = tmplData, html;
-        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
+        html = mpin.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
 
     mpin.prototype.readyHelp= function(tmplName, tmplData) {
         var data = tmplData, html;
-        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
+        html = mpin.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
 
     mpin.prototype.readyHelpHub= function(tmplName, tmplData) {
         var data = tmplData, html;
-        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
+        html = mpin.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
     

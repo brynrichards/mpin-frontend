@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 		},
 		bgShell: {
 			makeViews: {
-				cmd: 'handlebars ./src/views/*.handlebars -f ../build/out/mobile/js/templates.js',
+				cmd: 'handlebars -n "mpin.templates" ./src/views/*.handlebars -f ../build/out/mobile/js/templates.js',
 				options: {
                 			stdout: true,
 				}
