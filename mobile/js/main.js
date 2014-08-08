@@ -551,20 +551,15 @@ var mpin = mpin || {};
         };
         callbacks.mpinLogin = function() {
 
+            console.log("Comming in login");
+
             var _pin = document.getElementById('pinpad-input').value;
 
-            if(_pin.length > 0) {
+            if(_pin.length === self.cfg.pinSize) {
 
-                // This is render setup
-
-                console.log("done");
                 self.actionSetup.call(self);
-            } else {
 
-                console.log("enter pin");
-                return;
-            }
-
+            } 
         };
  
         callbacks.menuBtn = function() {
