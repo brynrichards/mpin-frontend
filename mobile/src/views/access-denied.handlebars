@@ -20,12 +20,12 @@
 
   <div class="identityMainText">
       <div class="congrats">
-        <%= hlp.text("accessdenied_header") %>
+        {{hlp 'accessdenied_header' }}
       </div>
 
       <div class="identityBodyText">
           <p>
-              <%= hlp.text("accessdenied_text") %> <span style="color: red;"> <%=  email %> </span> <%= hlp.text("accessdenied_text_cont") %>
+              {{hlp 'accessdenied_text' }} <span style="color: red;"> <%=  email %> </span> {{hlp 'accessdenied_text_cont' }}
           </p>
           <p>
       </div>
@@ -34,7 +34,7 @@
   <div id="buttonsContainer">
       <div class="mpinBtn" id="mp_action_register">
           <span class="iconArrow"></span>
-          <span class="btnLabel"><%= hlp.text("accessdenied_btn") %></span>
+          <span class="btnLabel">{{hlp 'accessdenied_btn' }} </span>
       </div>
   </div> 
 

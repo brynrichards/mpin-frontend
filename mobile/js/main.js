@@ -72,6 +72,11 @@ var mpin = mpin || {};
             return hlp.text(optionalValue);
         });
 
+        Handlebars.registerHelper("img", function(imgSrc) {
+            return IMAGES_PATH + imgSrc;
+
+        });
+
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
 //          this.error(" Some options are required :" + this.cfg.requiredOptions);
@@ -150,7 +155,7 @@ var mpin = mpin || {};
         _options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; mpinDTAServerURL; signatureURL; verifyTokenURL; certivoxURL; ";
         _options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; authenticateHeaders; authTokenFormatter; accessNumberRequestFormatter; ";
         _options += "registerRequestFormatter; onVerifySuccess; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; timePermitsStorageURL; authenticateURL; ";
-        _options += "language; customLanguageTexts; accessNumberDigits; mobileAuthenticateURL; setDeviceName";
+        _options += "language; customLanguageTexts; accessNumberDigits; mobileAuthenticateURL; setDeviceName; getAccessNumberURL";
 
         _opts = _options.split("; ");
         this.opts || (this.opts = {});
@@ -169,19 +174,19 @@ var mpin = mpin || {};
     //return readyHtml
     mpin.prototype.readyHtml = function(tmplName, tmplData) {
         var data = tmplData, html;
-        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
+        html = mpin.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
 
     mpin.prototype.readyHelp= function(tmplName, tmplData) {
         var data = tmplData, html;
-        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
+        html = mpin.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
 
     mpin.prototype.readyHelpHub= function(tmplName, tmplData) {
         var data = tmplData, html;
-        html = Handlebars.templates[tmplName]({data:data, cfg: this.cfg});
+        html = mpin.templates[tmplName]({data:data, cfg: this.cfg});
         return html;
     };
     
@@ -224,7 +229,8 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
                 }
                 else {
-                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    document.getElementById(k).addEventListener('click', callbacks[k], false);
 
                 }
     
@@ -286,7 +292,8 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", helphubBtns[k], false);
                 }
                 else {
-                    document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
+                    // document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
+                    document.getElementById(k).addEventListener('click', helphubBtns[k], false);
 
                 }
 
@@ -527,7 +534,8 @@ var mpin = mpin || {};
  
     mpin.prototype.renderSetup = function(email, clientSecretShare, clientSecretParams) {
         
-        var callbacks = {}, self = this;
+        var callbacks = {}
+            , self = this;
 
         callbacks.mp_action_home = function(evt) {
             if (totalAccounts === 0) {
@@ -542,7 +550,21 @@ var mpin = mpin || {};
             self.addToPin.call(self, "clear");
         };
         callbacks.mpinLogin = function() {
-            self.actionSetup.call(self);
+
+            var _pin = document.getElementById('pinpad-input').value;
+
+            if(_pin.length > 0) {
+
+                // This is render setup
+
+                console.log("done");
+                self.actionSetup.call(self);
+            } else {
+
+                console.log("enter pin");
+                return;
+            }
+
         };
  
         callbacks.menuBtn = function() {
@@ -679,8 +701,11 @@ var mpin = mpin || {};
                 self.pinPadLength = pinpadDisplay.value;
 
                 if(self.pinPadLength.length < self.cfg.pinSize ) {
+
+                    console.log("(self.pinPadLength.length < self.cfg.pinSize ");
                     return;
                 }
+
                 self.actionLogin.call(self);
             }
         };
@@ -813,7 +838,7 @@ var mpin = mpin || {};
                 }, 1000);
             }
         };
-        _request.open("GET", this.opts.accessNumberURL);
+        _request.open("POST", this.opts.getAccessNumberURL);
 //      _request.setRequestHeader('Content-Type', 'application/json');
         _request.send();
     };
@@ -1113,8 +1138,7 @@ var mpin = mpin || {};
         rowElem.appendChild(starButton);
  
         var tmplData = {iNumber: iNumber, name: name};
-        mpin._.extend(tmplData, {hlp: hlp, cfg: this.cfg});
-        rowElem.innerHTML = mpin._.template(mpin.template['user-row'], tmplData);
+        rowElem.innerHTML = mpin.templates['user-row']({data:tmplData, cfg: this.cfg});
  
         cnt.appendChild(rowElem);
  
@@ -1123,7 +1147,9 @@ var mpin = mpin || {};
             rowElem.addEventListener('MSPointerDown', mEventsHandler, false);
         }
         else {
-            rowElem.addEventListener('touchstart', mEventsHandler, false);
+            // rowElem.addEventListener('touchstart', mEventsHandler, false);
+            rowElem.addEventListener('click', mEventsHandler, false);
+
 
         }
  
@@ -1202,7 +1228,9 @@ var mpin = mpin || {};
 
             }
             else {
-                btEls[i].addEventListener('touchstart', mEventsHandler, false);
+
+                // btEls[i].addEventListener('touchstart', mEventsHandler, false);
+                btEls[i].addEventListener('click', mEventsHandler, false);
 
             }
  
@@ -1847,7 +1875,7 @@ var mpin = mpin || {};
     mpin.prototype.ajaxPost = function(url, data, cb) {
         var _request = new XMLHttpRequest();
         _request.onreadystatechange = function() {
-            if (_request.status === 106)
+            if (_request.readyState === 4 && _request.status === 200)
             {
                 console.log("POST success ....");
  
@@ -2044,8 +2072,11 @@ var mpin = mpin || {};
         };
 
         callbacks.mp_action_logout = function(evt) {
+            
+            console.log("Is there authData", authData);
 
             if(authData.logoutURL) {
+
                 self.ajaxPost( authData.logoutURL, authData.logoutData, function(res) {
                     if (res) {
                         self.renderLogin();
@@ -2235,8 +2266,10 @@ var mpin = mpin || {};
         "setupReady_text1": "Your M-Pin identity",
         "setupReady_text2": "is ready to setup, now you must verify it.",
         "setupReady_text3": "We have just sent you an email, simply click the link to verify your identity.",
-        "setupReady_button_go": "Verified your identity? <br/>Setup your M-Pin now",
-        "setupReady_button_resend": "Not received the email? <br/>Send it again",
+        "setupReady_button_go": "Verified your identity?",
+        "setupReady_button_go_cont": "Setup your M-Pin now",
+        "setupReady_button_resend": "Not received the email?Send it again",
+        "setupReady_button_resend_cont": "Send it again",
         "setupNotReady_header": "YOU MUST VERIFY <br/>YOUR IDENTITY",
         "setupNotReady_text1": "Your identity",
         "setupNotReady_text2": "has not been verified.",
