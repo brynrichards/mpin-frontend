@@ -763,10 +763,15 @@ var mpin = mpin || {};
 			self.renderHome.call(self, evt);
 		};
 		callbacks.mpin_clear = function () {
-			self.addToPin.call(self, "clear");
+			self.addToPin.call(self, "clear_setup");
 		};
+
+		//fix login ...
 		callbacks.mpin_login = function () {
-			self.actionSetup.call(self);
+			var digitLen = self.pinpadInput.length;
+			if (digitLen === self.cfg.pinSize) {
+				self.actionSetup.call(self);
+			}
 		};
 		callbacks.mpin_helphub = function (evt) {
 			self.lastView = "renderSetup";
@@ -1359,6 +1364,11 @@ var mpin = mpin || {};
 			this.enableNumberButtons(true);
 			this.enableButton(false, "go");
 			this.enableButton(false, "clear");
+		} else if (digit === 'clear_setup') {
+			this.display(hlp.text("pinpad_setup_screen_text"), false);
+			this.enableNumberButtons(true);
+			this.enableButton(false, "go");
+			this.enableButton(false, "clear");
 		}
 	};
 
@@ -1384,18 +1394,19 @@ var mpin = mpin || {};
 	};
 	//showInPinPadDisplay
 	mpin.prototype.display = function (message, isErrorFlag) {
-		var removeCircles, self = this;
+		var removeCircles, self = this, textElem;
 
 		removeCircles = function () {
 			var pinSize = self.cfg.pinSize + 1, circles = [];
 			for (var i = 1; i < pinSize; i++) {
 				circles[i] = document.getElementById("mpin_circle_" + i);
-				if (circles[i].childNodes[3]) {
+				if (circles[i] && circles[i].childNodes[3]) {
 					circles[i].removeChild(circles[i].childNodes[3]);
 				}
 			}
 		};
 
+		textElem = document.getElementById("mpin_inner_text");
 		if (!message && !isErrorFlag) {
 
 			var newCircle = document.createElement('div');
@@ -1409,7 +1420,9 @@ var mpin = mpin || {};
 			removeClass("mpin_input_text", "mpHide");
 			addClass("mpin_input_circle", "mpHide");
 			this.setupInputType = "text";
-			document.getElementById("mpin_inner_text").innerHTML = message;
+			if (textElem) {
+				textElem.innerHTML = message;
+			}
 		} else {
 			//error MESSAGE 
 			removeCircles();
@@ -1418,8 +1431,9 @@ var mpin = mpin || {};
 			addClass("mpin_input_parent", "mpinInputError");
 			addClass("mpin_input_circle", "mpHide");
 			this.setupInputType = "text";
-
-			document.getElementById("mpin_inner_text").innerHTML = message;
+			if (textElem) {
+				textElem.innerHTML = message;
+			}
 		}
 	};
 
@@ -1464,7 +1478,9 @@ var mpin = mpin || {};
 				return;
 			}
 
-			
+			//clear padScreen on flip screens
+			this.addToPin("clear");
+
 			document.getElementById("mpinUser").style.height = "28px";
 			removeClass(menuBtn, "mpinAUp");
 			//if come from add identity remove HIDDEN
@@ -1724,26 +1740,35 @@ var mpin = mpin || {};
 						self.successLogin(authData);
 					} else if (errorCode === "INVALID") {
 						self.display(hlp.text("authPin_errorInvalidPin"), true);
-						self.enableNumberButtons(true);
-						self.enableButton(false, "go");
-						self.enableButton(false, "clear");
-						self.enableButton(true, "toggle");
+
+						document.getElementById("mpin_help_pinpad").onclick = function () {
+							self.lastView = "renderLogin";
+							self.toggleHelp.call(self);
+							self.renderHelpTooltip.call(self, "loginerr");
+						};
+
 					} else if (errorCode === "MAXATTEMPTS") {
 						var iD = self.identity;
 						self.deleteIdentity(iD, true);
 						if (self.opts.onAccountDisabled) {
 							self.opts.onAccountDisabled(iD);
 						}
+						return;
+					} else if (errorCode === "NOTAUTHORIZED") {
+						self.display(hlp.text("authPin_errorNotAuthorized"), true);
+					} else if (errorCode === "EXPIRED") {
+						self.display(hlp.text("authPin_errorExpired"), true);
+					} else {
+						//error INVOCATION
+						self.display(hlp.text("authPin_errorServer"), true);
 					}
+
+					self.enableNumberButtons(true);
+					self.enableButton(false, "go");
+					self.enableButton(false, "clear");
+					self.enableButton(true, "toggle");
 					/////// change onClick helpTooltip
 					// change previous state from login render 
-					document.getElementById("mpin_help_pinpad").onclick = function () {
-						self.lastView = "renderLogin";
-						self.toggleHelp.call(self);
-						self.renderHelpTooltip.call(self, "loginerr");
-					};
-
-
 				}, function () {
 			console.log(" Before HandleToken ::::");
 		});
@@ -1849,12 +1874,14 @@ var mpin = mpin || {};
 				self.ds.getIdentityPermitCache(this.identity), this.certivoxPermitsStorageURL(),
 				function (timePermitHex, timePermitCache) {
 					self.ds.setIdentityPermit(self.identity, timePermitHex);
-					self.ds.setIdentityPermitCache(mpin.identity, timePermitCache);
+					self.ds.setIdentityPermitCache(self.identity, timePermitCache);
 					self.ds.save();
 					self.gotPermit(timePermitHex);
+					console.log(">>> SUCCESS request PERMIT params ::: ", arguments);
 					onSuccess(timePermitHex);
 				},
 				function (message, statusCode) {
+					console.log(">>> ERROR params ::: ", message, statusCode);
 					onFail(message, statusCode)
 				});
 	};
