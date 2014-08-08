@@ -72,6 +72,11 @@ var mpin = mpin || {};
             return hlp.text(optionalValue);
         });
 
+        Handlebars.registerHelper("img", function(imgSrc) {
+            return IMAGES_PATH + imgSrc;
+
+        });
+
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
 //          this.error(" Some options are required :" + this.cfg.requiredOptions);
@@ -150,7 +155,7 @@ var mpin = mpin || {};
         _options += "onReactivate; onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; mpinDTAServerURL; signatureURL; verifyTokenURL; certivoxURL; ";
         _options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; authenticateHeaders; authTokenFormatter; accessNumberRequestFormatter; ";
         _options += "registerRequestFormatter; onVerifySuccess; mobileSupport; emailCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; timePermitsStorageURL; authenticateURL; ";
-        _options += "language; customLanguageTexts; accessNumberDigits; mobileAuthenticateURL; setDeviceName";
+        _options += "language; customLanguageTexts; accessNumberDigits; mobileAuthenticateURL; setDeviceName; getAccessNumberURL";
 
         _opts = _options.split("; ");
         this.opts || (this.opts = {});
@@ -224,7 +229,8 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
                 }
                 else {
-                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    document.getElementById(k).addEventListener('click', callbacks[k], false);
 
                 }
     
@@ -286,7 +292,8 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", helphubBtns[k], false);
                 }
                 else {
-                    document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
+                    // document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
+                    document.getElementById(k).addEventListener('click', helphubBtns[k], false);
 
                 }
 
@@ -813,7 +820,7 @@ var mpin = mpin || {};
                 }, 1000);
             }
         };
-        _request.open("GET", this.opts.accessNumberURL);
+        _request.open("POST", this.opts.getAccessNumberURL);
 //      _request.setRequestHeader('Content-Type', 'application/json');
         _request.send();
     };
@@ -1113,8 +1120,7 @@ var mpin = mpin || {};
         rowElem.appendChild(starButton);
  
         var tmplData = {iNumber: iNumber, name: name};
-        mpin._.extend(tmplData, {hlp: hlp, cfg: this.cfg});
-        rowElem.innerHTML = mpin._.template(mpin.template['user-row'], tmplData);
+        rowElem.innerHTML = mpin.templates['user-row']({data:tmplData, cfg: this.cfg});
  
         cnt.appendChild(rowElem);
  
@@ -1123,7 +1129,9 @@ var mpin = mpin || {};
             rowElem.addEventListener('MSPointerDown', mEventsHandler, false);
         }
         else {
-            rowElem.addEventListener('touchstart', mEventsHandler, false);
+            // rowElem.addEventListener('touchstart', mEventsHandler, false);
+            rowElem.addEventListener('click', mEventsHandler, false);
+
 
         }
  
@@ -1202,7 +1210,9 @@ var mpin = mpin || {};
 
             }
             else {
-                btEls[i].addEventListener('touchstart', mEventsHandler, false);
+
+                // btEls[i].addEventListener('touchstart', mEventsHandler, false);
+                btEls[i].addEventListener('click', mEventsHandler, false);
 
             }
  
@@ -1847,7 +1857,7 @@ var mpin = mpin || {};
     mpin.prototype.ajaxPost = function(url, data, cb) {
         var _request = new XMLHttpRequest();
         _request.onreadystatechange = function() {
-            if (_request.status === 106)
+            if (_request.readyState === 4 && _request.status === 200)
             {
                 console.log("POST success ....");
  
@@ -2044,8 +2054,11 @@ var mpin = mpin || {};
         };
 
         callbacks.mp_action_logout = function(evt) {
+            
+            console.log("Is there authData", authData);
 
             if(authData.logoutURL) {
+
                 self.ajaxPost( authData.logoutURL, authData.logoutData, function(res) {
                     if (res) {
                         self.renderLogin();
