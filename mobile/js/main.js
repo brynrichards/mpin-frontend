@@ -534,7 +534,8 @@ var mpin = mpin || {};
  
     mpin.prototype.renderSetup = function(email, clientSecretShare, clientSecretParams) {
         
-        var callbacks = {}, self = this;
+        var callbacks = {}
+            , self = this;
 
         callbacks.mp_action_home = function(evt) {
             if (totalAccounts === 0) {
@@ -549,7 +550,21 @@ var mpin = mpin || {};
             self.addToPin.call(self, "clear");
         };
         callbacks.mpinLogin = function() {
-            self.actionSetup.call(self);
+
+            var _pin = document.getElementById('pinpad-input').value;
+
+            if(_pin.length > 0) {
+
+                // This is render setup
+
+                console.log("done");
+                self.actionSetup.call(self);
+            } else {
+
+                console.log("enter pin");
+                return;
+            }
+
         };
  
         callbacks.menuBtn = function() {
@@ -686,8 +701,11 @@ var mpin = mpin || {};
                 self.pinPadLength = pinpadDisplay.value;
 
                 if(self.pinPadLength.length < self.cfg.pinSize ) {
+
+                    console.log("(self.pinPadLength.length < self.cfg.pinSize ");
                     return;
                 }
+
                 self.actionLogin.call(self);
             }
         };
