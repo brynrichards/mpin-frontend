@@ -124,6 +124,8 @@
 		@include box-flex-value(1.0);
 		@include display-box-flex();
 
+		height: 25%;
+
 		.row {
 					
 			width: 100%;
