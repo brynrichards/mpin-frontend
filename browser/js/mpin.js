@@ -322,7 +322,7 @@ var mpin = mpin || {};
 
 		callbacks.mpin_desktop = function () {
 			clearIntervals();
-			self.renderDesktop.call(self);
+			self.renderHome.call(self);
 		};
 
 		callbacks.mpin_access_help = function () {
@@ -752,7 +752,9 @@ var mpin = mpin || {};
 
 		// temporary params >>> use from helpHUB & helpHubTOOLtip when interrupt the flow
 		this.tmp || (this.tmp = {});
-		this.tmp.email = (email) ? email : this.tmp.email;
+		console.log("email :::", email);
+		console.log("email :::", (email != true));
+		this.tmp.email = (email && email != true) ? email : this.tmp.email;
 		this.tmp.clientSecretShare = (clientSecretShare) ? clientSecretShare : this.tmp.clientSecretShare;
 		this.tmp.clientSecretParams = (clientSecretParams) ? clientSecretParams : this.tmp.clientSecretParams;
 
@@ -1695,11 +1697,17 @@ var mpin = mpin || {};
 
 				//get signature
 				requestRPS(_reqData, function (rpsData) {
-					if (rpsData.errorStatus) {
-						self.error("ooops");
+					if (rpsData.errorStatus === 403) {
+						self.error(4009);
 						return;
+					} else if (rpsData.errorStatus) {
+						self.error(4010);
+						return;
+					} else {
+						//success
+						self.successSetup(rpsData);
 					}
-					self.successSetup(rpsData);
+
 				});
 			} else {
 				self.successSetup();
@@ -2267,10 +2275,10 @@ var mpin = mpin || {};
 		"noaccount_button_add": "Add a new identity",
 		"home_intro_text": "First let's establish truth to choose the best way for you to access this service:",
 		"signin_btn_desktop1": "Sign in with Browser",
-		"signin_btn_desktop2": "(This is a PERSONAL device which I DO trust)",
+		"signin_btn_desktop2": "(This is a PERSONAL device I DO trust)",
 		"signin_btn_mobile1": "Sign in with Smartphone",
 		"signin_mobile_btn_text": "Sign in with your Smartphone",
-		"signin_btn_mobile2": "(This is a PUBLIC device which I DO NOT trust)",
+		"signin_btn_mobile2": "(This is a PUBLIC device I DO NOT trust)",
 		"home_txt_between_btns": "or",
 		"home_hlp_link": "Not sure which option to choose?",
 		"mobile_header_txt1": "I",
@@ -2278,6 +2286,7 @@ var mpin = mpin || {};
 		"mobile_header_do": "DO",
 		"mobile_header_txt3": "trust this computer",
 		"mobile_header_txt4": "Sign in with Smartphone",
+		"mobile_button_signin": "Sign in with this device",
 		"mobile_header_access_number": "Your Access Number is",
 		"help_ok_btn": "Ok, Got it",
 		"help_more_btn": "I'm not sure, tell me more",
@@ -2354,6 +2363,8 @@ var mpin = mpin || {};
 		"error_code_4006": "mobileAppFullURL are missing or incomplete (options parameter).",
 		"error_code_4007": "accessNumberURL are missing or incomplete (options parameter).",
 		"error_code_4008": "Error occur while you are changing identity.",
+		"error_code_4009": "Problem with register your identity - 403", //403
+		"error_code_4010": "Problem with register your identity"  //
 	};
 	//	image should have config properties
 	hlp.img = function (imgSrc) {
