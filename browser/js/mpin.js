@@ -1564,8 +1564,11 @@ var mpin = mpin || {};
 		console.log("_reqData ::::", _reqData);
 		//register identity
 		requestRPS(_reqData, function (rpsData) {
-			if (rpsData.error) {
-				self.error("Activate First");
+			if (rpsData.errorStatus === 403) {
+				self.error(4009);
+				return;
+			} else if (rpsData.error || rpsData.errorStatus) {
+				self.error(4010);
 				return;
 			}
 			self.ds.addIdentity(rpsData.mpinId, "");
@@ -1697,11 +1700,8 @@ var mpin = mpin || {};
 
 				//get signature
 				requestRPS(_reqData, function (rpsData) {
-					if (rpsData.errorStatus === 403) {
-						self.error(4009);
-						return;
-					} else if (rpsData.errorStatus) {
-						self.error(4010);
+					if (rpsData.error || rpsData.errorStatus) {
+						self.error(4011);
 						return;
 					} else {
 						//success
@@ -1890,7 +1890,12 @@ var mpin = mpin || {};
 				},
 				function (message, statusCode) {
 					console.log(">>> ERROR params ::: ", message, statusCode);
-					onFail(message, statusCode)
+					if (statusCode === 410) {
+						self.error(4012);
+						return;
+					} else {
+						onFail(message, statusCode)
+					}
 				});
 	};
 
@@ -2363,8 +2368,10 @@ var mpin = mpin || {};
 		"error_code_4006": "mobileAppFullURL are missing or incomplete (options parameter).",
 		"error_code_4007": "accessNumberURL are missing or incomplete (options parameter).",
 		"error_code_4008": "Error occur while you are changing identity.",
-		"error_code_4009": "Problem with register your identity - 403", //403
-		"error_code_4010": "Problem with register your identity"  //
+		"error_code_4009": "Problem occur while registering your identity. Registration forbidden (403)", //403
+		"error_code_4010": "Problem with register your identity", //
+		"error_code_4011": "Registration done, but request after that failed.", //
+		"error_code_4012": "You're not authorized to complete the authentication, because your service provider has exceeded their licence limit.<br />For more info contact the provider of the service you're trying to access, or contact CertiVox directly at <a href='mailto:info@certivox.com'>info@certivox.com</a>"  //
 	};
 	//	image should have config properties
 	hlp.img = function (imgSrc) {
