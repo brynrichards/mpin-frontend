@@ -8,6 +8,7 @@ To build and use PIN Pad
 
 2.1 su
 2.2 npm install -g grunt-cli
+2.3 npm install –g handlebars
 
 As normal user:
 
@@ -20,7 +21,7 @@ As normal user:
 3.2 ln -s settings.json_kealan settings.json
 3.3 grunt build
 
-The output is in build/out/browser
+The output is in frontend/build/out/browser
 
 4. Link PIN Pad to demo
 
