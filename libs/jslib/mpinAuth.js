@@ -8,7 +8,9 @@
 
    _calculateMPinToken    Calculates the MPin Token 
 
-   randomX                Calculates a random 256 bit value
+   _local_entropy         Gets an entropy value from the client machine
+
+   randomX                Calculates a random 254 bit value
 
    addShares              Add two points on the curve that are originally in hex format
 
@@ -20,6 +22,8 @@
 
 mpinAuth = {};
 
+/* Default value for output of hash in RandomX */
+mpinAuth.hash_val = "";
 
 /* Calculates the MPin Token
    
@@ -71,26 +75,98 @@ mpinAuth._calculateMPinToken = function(PIN, clientSecret_hex, mpin_id)
   return mpin_token_hex;
 };
 
-/* Calculates a random 256 bit value
+/* Get local entropy
    
-   This function generates a random 256 bit value called x that is used in 
+   This function makes a call to /dev/urandom for a 256 bit value
+
+   Args:
+        
+     NA
+
+   Returns:
+
+     entropy_val: 256 bit random value or null
+
+*/
+mpinAuth._local_entropy = function()
+{
+  if( typeof(window) === 'undefined')
+    {
+      console.log("Test mode without browser")
+      return null;
+    }
+
+  crypto = (window.crypto || window.msCrypto);
+  if( typeof(crypto) !== 'undefined')
+    {
+      var array = new Uint32Array(8);
+      crypto.getRandomValues(array);
+  
+      var entropy_val = "";
+      for (var i = 0; i < array.length; i++) {
+         hex_val = array[i].toString(16)
+         if (hex_val.length == 6){
+           hex_val = "00" + hex_val;
+         }
+         if (hex_val.length == 7){
+           hex_val = "0" + hex_val;
+         }
+         entropy_val = entropy_val + hex_val
+      }
+      console.log("len(entropy_val): " + entropy_val.length + " entropy_val: " + entropy_val);
+      return entropy_val;
+    }
+  else
+    {
+      return null;
+    }
+}
+
+/* Calculates a random 254 bit value
+   
+   This function generates a random 254 bit value called x that is used in 
    the protocol
 
    Args:
         
-     seedValue_hex: A seed value for the random number generator
+     local_entropy_on: Turn on generation of local entropy
 
    Returns:
 
-     x: 256 bit random number
+     x: 254 bit random number
 
 */
-mpinAuth.randomX = function(seedValue_hex)
+mpinAuth.randomX = function()
 {
-  console.log("seedValue_hex: "+seedValue_hex);
-  var seedValue = util.bitsToBytes(util.hexToBitsNew(seedValue_hex));
-  cjct.random.addEntropy(seedValue);
-  var x=idak.getSecret();
+  var local_entropy_val = mpinAuth._local_entropy();
+  console.log("start: local_entropy_val: " + local_entropy_val);
+  console.log("start: mpinAuth.hash_val: " + mpinAuth.hash_val);
+  // Assign last used hash_val to input for new hash value.
+  // This will also be the rendered value from the server when
+  // the page is reloaded.
+  hash_input_hex = mpinAuth.hash_val + local_entropy_val;
+  console.log("hash_input_hex: " + hash_input_hex);
+  var hash_input = util.bitsToBytes(util.hexToBitsNew(hash_input_hex));
+  var hash_output = new sha256();
+  for (var i = 0; i < hash_input.length; i++) 
+    {
+      hash_output.update_byte(hash_input[i]);
+    }
+  hash_output_bytes = util.wordsToBytes(hash_output.finalize());
+  
+  // console.log(hash_output_bytes);
+  // Use output from hash to generate x 
+  var hash_output_hex = util.bitsToHexNew(util.bytesToBits(hash_output_bytes));
+  console.log("hash_output_hex " + hash_output_hex);
+  var hash_output_bn = new bn(hash_output_hex);
+  var x = hash_output_bn.mod(idak._curve.r);
+  var x_str = x.toHexString();
+  console.log("random x " + x_str);
+
+  // Update the mpinAuth.hash_val with the output
+  // from the hash function.
+  mpinAuth.hash_val = hash_output_hex;
+  console.log("end: mpinAuth.hash_val: " + mpinAuth.hash_val);
   return x;
 }
 

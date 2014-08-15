@@ -127,7 +127,7 @@ idak = {
 /*
 		_getServerKey : function(secret, serverIdentity) {
 			var point = this._hashToPoint2(util.unicodeToBytes(serverIdentity));
-			var sk= point.GSmul(secret).toString();   
+			var sk= point.mul(secret).toString();   
 			return sk;
 		},
 		
@@ -138,7 +138,7 @@ idak = {
 		getPrivateKey : function(masterKey, userIdentity) {
 			var point = this._hashToPoint1(util.unicodeToBytes(userIdentity));
 			// Compute private key as sA, where A = H(ID_A). 
-			return point.GLVmul(masterKey).toString(); 
+			return point.mul(masterKey).toString(); 
 		},
 
 		getServerDetails : function(serverID) {
@@ -148,7 +148,7 @@ idak = {
 		getTimePermit : function(masterKey, userIdentity) {
 			var point = this._hashToPoint1(util.wordToBytes(util.today()).concat(util.unicodeToBytes(userIdentity))).toAffine();
 			// Compute private key as sA, where A = H(ID_A). 
-			return point.GLVmul(masterKey).toString(); 
+			return point.mul(masterKey).toString(); 
 		},
 	
 		getMask : function() {
@@ -233,7 +233,7 @@ idak = {
 
 			Pa=Id.add(hashedTpID).toAffine();//this._hashToPoint1(util.wordToBytes(util.today()).concat(util.unicodeToBytes(userID)))).toAffine();
 			
-			Pa=Pa.GLVmul(z).toString(); /****/
+			Pa=Pa.mul(z).toString(); /****/
 	
 			return Pa;
 		},
@@ -241,7 +241,7 @@ idak = {
 /* Identity Multiplied by z */
 		computeMPin_1x : function(hashedID,z) {
 			var Id=hashedID.toAffine();
-			Id=Id.GLVmul(z).toString();
+			Id=Id.mul(z).toString();
 			return Id;
 		},
 
@@ -255,7 +255,7 @@ idak = {
 				var tp=new ecc.point.fromString(permit, this._curve);
 				Px = Px.add(tp).toAffine();
 			}
-			Px=Px.GLVmul(m).toString(); /****/
+			Px=Px.mul(m).toString(); /****/
 
 			return Px; 
 		},

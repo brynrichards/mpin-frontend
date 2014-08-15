@@ -34,13 +34,13 @@ function extractPIN(aPin, clientSecretHex, identity, onSuccess)
 
 
 // Request authToken for authServer and send to Customer web app.
-function getAuthToken(wsURL, IDcustomer, identity, timePermitHex, tokenHex, requestOTP, accessNumber, seedValueHex, aPin, verifyTokenURL, authTokenFormatter, customHeaders, handleToken, onVerifySuccess)
+function getAuthToken(wsURL, IDcustomer, identity, timePermitHex, tokenHex, requestOTP, accessNumber, aPin, verifyTokenURL, authTokenFormatter, customHeaders, handleToken, onVerifySuccess)
 {
 
   console.log("getAuthToken ");
 
   // Generate random x value
-  var x = mpinAuth.randomX(seedValueHex);
+  var x = mpinAuth.randomX();
 
   var IDcHex = identity;
 
@@ -117,7 +117,7 @@ function getAuthToken(wsURL, IDcustomer, identity, timePermitHex, tokenHex, requ
 };
 
 // Request authToken for authServer and send to Customer web app using websocketProxy.
-function getAuthTokenAjax(restURL, IDcustomer, identity, timePermitHex, tokenHex, requestOTP, accessNumber, seedValueHex, aPin, verifyTokenURL, authTokenFormatter, customHeaders, handleToken, onVerifySuccess)
+function getAuthTokenAjax(restURL, IDcustomer, identity, timePermitHex, tokenHex, requestOTP, accessNumber, aPin, verifyTokenURL, authTokenFormatter, customHeaders, handleToken, onVerifySuccess)
 {
   console.log("Using getAuthTokenAJAX");
   console.log("PASS1");
@@ -138,7 +138,7 @@ function getAuthTokenAjax(restURL, IDcustomer, identity, timePermitHex, tokenHex
   var xhrPass1 = createXMLHttp();
 
 // Generate random x value
-  var x = mpinAuth.randomX(seedValueHex);
+  var x = mpinAuth.randomX();
   var IDcHex = identity;
 
   // Form request body
