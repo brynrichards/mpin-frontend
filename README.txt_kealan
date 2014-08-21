@@ -7,8 +7,8 @@ To build and use PIN Pad
 2. Install grunt and the required modules
 
 2.1 su
-2.2 npm install -g grunt-cli
-2.3 npm install –g handlebars
+2.2 npm install -g grunt-cli 
+2.3 npm install handlebars -g
 
 As normal user:
 
