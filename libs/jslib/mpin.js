@@ -12,9 +12,6 @@ var cjct = {
 	/* Hash function. */
 	hash : sha256,
 	
-	/* Pseudo-random number generator. */
-	random : random,
-	
 	/* Unit tests/benchmarks. */
 	/*tester : tester, bencher : bencher,*/
 	
