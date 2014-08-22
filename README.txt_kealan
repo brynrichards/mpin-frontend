@@ -17,9 +17,11 @@ As normal user:
 
 3 Build app
 
-3.1 cd frontend/browser
-3.2 ln -s settings.json_kealan settings.json
-3.3 grunt build
+3.1 cd libs/jslib
+3.2 ln -s ../../../mpin/crypto/js crypto
+3.3 cd frontend/browser
+3.4 ln -s settings.json_kealan settings.json
+3.5 grunt build
 
 The output is in frontend/build/out/browser
 
