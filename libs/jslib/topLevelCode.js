@@ -71,7 +71,8 @@ function getAuthToken(wsURL, IDcustomer, identity, timePermitHex, tokenHex, requ
 
   authServerSocket.onopen = function () {
     console.log("websocket connection open");
-    var request = mpinAuth.pass1Request(x, IDcHex);
+    var epoch_days = util.today();
+    var request = mpinAuth.pass1Request(x, IDcHex, epoch_days);
     // PASS1 REQUEST
     authServerSocket.send(JSON.stringify(request));
     console.log("PASS1 REQUEST: " + request);
@@ -142,7 +143,8 @@ function getAuthTokenAjax(restURL, IDcustomer, identity, timePermitHex, tokenHex
   var IDcHex = identity;
 
   // Form request body
-  var request1 = mpinAuth.pass1Request(x, IDcHex);
+  var epoch_days = util.today();
+  var request1 = mpinAuth.pass1Request(x, IDcHex, epoch_days);
   var postData1 = JSON.stringify(request1);
   var requestDataType = 'application/json';
 
