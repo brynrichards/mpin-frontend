@@ -1,10 +1,10 @@
 qrcode.min.js
 json2.js
-./crypto/bn.js
-./crypto/ecc.js
-./crypto/idak.js
-./crypto/sha256.js
-./crypto/util.js
-./crypto/mpin.js
-./crypto/mpinAuth.js
+bn.js
+ecc.js
+idak.js
+sha256.js
+util.js
+mpin.js
+mpinAuth.js
 topLevelCode.js
