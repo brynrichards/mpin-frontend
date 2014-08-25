@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 				    style: 'compressed'
 				},
 				files: {
-					'../build/out/mobile/css/main.css' : '../build/out/mobile/sass/main.scss'
+					'../build/out/mobile/css/main.css' : '../build/tmp/mobile/sass/main.scss'
 				}
 			}
 		},
@@ -44,7 +44,7 @@ module.exports = function(grunt) {
 				}
 			},
 			copySASS: {
-				cmd: 'cp -R src/sass/ ../build/out/mobile/sass/',
+				cmd: 'cp -R src/sass/ ../build/tmp/mobile/sass/',
 				options: {
 	            			stdout: true,
 				},
@@ -93,8 +93,8 @@ module.exports = function(grunt) {
 		        files: [
 		          {expand: true, flatten: true, src: ['index.html'], dest: '../build/out/mobile/'},
 		          {expand: true, flatten: true, src: ['mpin.appcache'], dest: '../build/out/mobile/'},
-		          {expand: true, flatten: true, src: ['src/sass/main.scss'], dest: '../build/out/mobile/sass/'},
-		          {expand: true, flatten: true, src: ['src/sass/templates/*.scss'], dest: '../build/out/mobile/sass/templates/'},
+		          {expand: true, flatten: true, src: ['src/sass/main.scss'], dest: '../build/tmp/mobile/sass/'},
+		          {expand: true, flatten: true, src: ['src/sass/templates/*.scss'], dest: '../build/tmp/mobile/sass/templates/'},
 		          {expand: true, flatten: true, src: ['js/main.js'], dest: '../build/out/mobile/js/'},
 		        ]
 		      }
