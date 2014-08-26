@@ -619,7 +619,7 @@ var mpin = mpin || {};
  
     mpin.prototype.renderLogin = function(listAccounts) {
 
-        var callbacks = {}, self = this;
+        var callbacks = {}, self = this, elemForErrcode = document.getElementById('codes');
  
         this.isAccNumber = true;
 
@@ -631,8 +631,20 @@ var mpin = mpin || {};
         }
 
         if (!this.identity) {
-            console.log("Comming even here");
             self.setIdentity(self.ds.getDefaultIdentity(), true);
+
+        }
+
+        if(this.erroCodeAccNumber) {
+
+            elemForErrcode.style.display = "block";
+            elemForErrcode.className = "error";
+            elemForErrcode.innerHTML = lang.en.authPin_errorInvalidAccessNumber;
+
+            self.bindNumberButtons();
+            self.enableNumberButtons(true);
+            self.enableButton(false, "go");
+            self.enableButton(false, "clear");
 
         }
  
@@ -660,12 +672,23 @@ var mpin = mpin || {};
             var callbacks = {};
 
             var pinpadDisplay = document.getElementById("pinpad-input");
- 
+
             if (self.isAccNumber) {
                 self.accessNumber = pinpadDisplay.value;
 
+                // Validate the number of digits entered
+
                 if(self.accessNumber.length < self.opts.accessNumberDigits ) {
                     return;
+                }
+
+                if (!self.checkAccessNumberValidity(self.accessNumber, 1)) {
+
+                    // store the accessNumber into mpin for the next step.
+                    self.erroCodeAccNumber = true;
+
+                    self.actionLogin.call(self);
+
                 }
 
                 // Clear the error codes display
@@ -778,7 +801,6 @@ var mpin = mpin || {};
             this.toggleButton();
         } else {
 
-            console.log("This is the before identttyty!!!!##!##");
             this.setIdentity(this.ds.getDefaultIdentity(), true, function() {
                 self.display(hlp.text("pinpad_default_message"));
                }, function() {
@@ -964,6 +986,7 @@ var mpin = mpin || {};
         var btn = this.mpinButton(btnElem, "setupNotReady_check_info1");
 
         this.isAccNumber = false;
+        this.erroCodeAccNumber = false;
 
         _reqData.URL = url;
         _reqData.method = "GET";
@@ -1220,6 +1243,35 @@ var mpin = mpin || {};
         var self = this, btEls;
         btEls = document.getElementsByClassName("btn");
 
+
+        function mEventsHandler(e) {
+
+            var parent = document.getElementById("inputContainer");
+            var child = document.getElementById("codes");
+            
+            // if (e.type == "touchstart") {
+
+            if(self.isAccNumber && parent.contains(child)) {
+                child.style.display = 'none';
+            }
+
+            var circles = document.getElementsByClassName("circle");
+
+            for (var i = circles.length - 1; i >= 0; i--) {
+                circles[i].style.display = 'inline-block';
+            };
+
+
+            var circlesHolder = document.getElementById("circlesHolder");
+
+            circlesHolder.style.display = 'flex';
+
+            self.addToPin(e.target.getAttribute("data-value"));
+            // return false;
+        
+          // }
+        }
+
         for (var i = 0; i < btEls.length; i++) {
 
             // Mobile touch events
@@ -1235,34 +1287,7 @@ var mpin = mpin || {};
                 btEls[i].addEventListener('click', mEventsHandler, false);
 
             }
- 
-            function mEventsHandler(e) {
 
-                var parent = document.getElementById("inputContainer");
-                var child = document.getElementById("codes");
-                
-                // if (e.type == "touchstart") {
-
-                if(self.isAccNumber && parent.contains(child)) {
-                    child.style.display = 'none';
-                }
-
-                var circles = document.getElementsByClassName("circle");
-
-                for (var i = circles.length - 1; i >= 0; i--) {
-                    circles[i].style.display = 'inline-block';
-                };
-
-
-                var circlesHolder = document.getElementById("circlesHolder");
-
-                circlesHolder.style.display = 'flex';
-
-                self.addToPin(e.target.getAttribute("data-value"));
-                // return false;
- 
-              // }
-            }
         }
     };
     mpin.prototype.enableNumberButtons = function(enable) {
@@ -1440,7 +1465,7 @@ var mpin = mpin || {};
             self.addToPin("clear");
         } 
 
-        if(message === 'INVALID ACCESS NUMBER!') {
+        if(message === lang.en.authPin_errorInvalidAccessNumber) {
 
             elemForErrcode.style.display = "block";
             elemForErrcode.className = "error";
@@ -2130,6 +2155,21 @@ var mpin = mpin || {};
     mpin.prototype.gotPermit = function(timePermit) {
         if (this.opts.onGetPermit)
             this.opts.onGetPermit(timePermit);
+    };
+
+    mpin.prototype.checkAccessNumberValidity = function(sNum, csDigits){
+        if (!csDigits) {
+            csDigits = 1;
+        }
+
+        var n = parseInt(sNum.slice(0, sNum.length-csDigits), 10);
+        var cSum = parseInt(sNum.slice(sNum.length-csDigits, sNum.length), 10);
+
+        var p = 99991;
+        var g = 11;
+        var checkSum = ((n * g) % p) % Math.pow(10, csDigits);
+        
+        return (checkSum == cSum)
     };
  
  
