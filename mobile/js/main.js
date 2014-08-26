@@ -284,7 +284,7 @@ var mpin = mpin || {};
             // self.renderHelp("help-helphub", callbacks);
         };
 
-        helphubBtns.return = function(evt) {
+        helphubBtns.enter = function(evt) {
             self.renderHelpHub("helphub-index");
         }
 
