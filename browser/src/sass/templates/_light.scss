@@ -186,6 +186,7 @@ $BUTTON_BGCOLOR: #007cc2;
 	background-position: center;
 	background-size: auto 100%;
 	margin: 5px auto;
+	margin-bottom: 9px;
 
 	@include box-flex-value(1.0);
 }

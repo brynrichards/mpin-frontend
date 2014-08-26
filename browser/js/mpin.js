@@ -198,6 +198,8 @@ var mpin = mpin || {};
 				this.opts[_optionName] = options[_optionName];
 		}
 
+                mpinAuth.hash_val = this.opts.seedValue;
+
 		if (this.opts.mpinAuthServerURL.mpin_startsWith("http")) {
 			this.opts.useWebSockets = false;
 		}
@@ -322,7 +324,7 @@ var mpin = mpin || {};
 
 		callbacks.mpin_desktop = function () {
 			clearIntervals();
-			self.renderDesktop.call(self);
+			self.renderHome.call(self);
 		};
 
 		callbacks.mpin_access_help = function () {
@@ -752,7 +754,9 @@ var mpin = mpin || {};
 
 		// temporary params >>> use from helpHUB & helpHubTOOLtip when interrupt the flow
 		this.tmp || (this.tmp = {});
-		this.tmp.email = (email) ? email : this.tmp.email;
+		console.log("email :::", email);
+		console.log("email :::", (email != true));
+		this.tmp.email = (email && email != true) ? email : this.tmp.email;
 		this.tmp.clientSecretShare = (clientSecretShare) ? clientSecretShare : this.tmp.clientSecretShare;
 		this.tmp.clientSecretParams = (clientSecretParams) ? clientSecretParams : this.tmp.clientSecretParams;
 
@@ -763,10 +767,15 @@ var mpin = mpin || {};
 			self.renderHome.call(self, evt);
 		};
 		callbacks.mpin_clear = function () {
-			self.addToPin.call(self, "clear");
+			self.addToPin.call(self, "clear_setup");
 		};
+
+		//fix login ...
 		callbacks.mpin_login = function () {
-			self.actionSetup.call(self);
+			var digitLen = self.pinpadInput.length;
+			if (digitLen === self.cfg.pinSize) {
+				self.actionSetup.call(self);
+			}
 		};
 		callbacks.mpin_helphub = function (evt) {
 			self.lastView = "renderSetup";
@@ -1359,6 +1368,11 @@ var mpin = mpin || {};
 			this.enableNumberButtons(true);
 			this.enableButton(false, "go");
 			this.enableButton(false, "clear");
+		} else if (digit === 'clear_setup') {
+			this.display(hlp.text("pinpad_setup_screen_text"), false);
+			this.enableNumberButtons(true);
+			this.enableButton(false, "go");
+			this.enableButton(false, "clear");
 		}
 	};
 
@@ -1384,18 +1398,19 @@ var mpin = mpin || {};
 	};
 	//showInPinPadDisplay
 	mpin.prototype.display = function (message, isErrorFlag) {
-		var removeCircles, self = this;
+		var removeCircles, self = this, textElem;
 
 		removeCircles = function () {
 			var pinSize = self.cfg.pinSize + 1, circles = [];
 			for (var i = 1; i < pinSize; i++) {
 				circles[i] = document.getElementById("mpin_circle_" + i);
-				if (circles[i].childNodes[3]) {
+				if (circles[i] && circles[i].childNodes[3]) {
 					circles[i].removeChild(circles[i].childNodes[3]);
 				}
 			}
 		};
 
+		textElem = document.getElementById("mpin_inner_text");
 		if (!message && !isErrorFlag) {
 
 			var newCircle = document.createElement('div');
@@ -1409,7 +1424,9 @@ var mpin = mpin || {};
 			removeClass("mpin_input_text", "mpHide");
 			addClass("mpin_input_circle", "mpHide");
 			this.setupInputType = "text";
-			document.getElementById("mpin_inner_text").innerHTML = message;
+			if (textElem) {
+				textElem.innerHTML = message;
+			}
 		} else {
 			//error MESSAGE 
 			removeCircles();
@@ -1418,8 +1435,9 @@ var mpin = mpin || {};
 			addClass("mpin_input_parent", "mpinInputError");
 			addClass("mpin_input_circle", "mpHide");
 			this.setupInputType = "text";
-
-			document.getElementById("mpin_inner_text").innerHTML = message;
+			if (textElem) {
+				textElem.innerHTML = message;
+			}
 		}
 	};
 
@@ -1464,7 +1482,9 @@ var mpin = mpin || {};
 				return;
 			}
 
-			
+			//clear padScreen on flip screens
+			this.addToPin("clear");
+
 			document.getElementById("mpinUser").style.height = "28px";
 			removeClass(menuBtn, "mpinAUp");
 			//if come from add identity remove HIDDEN
@@ -1546,8 +1566,11 @@ var mpin = mpin || {};
 		console.log("_reqData ::::", _reqData);
 		//register identity
 		requestRPS(_reqData, function (rpsData) {
-			if (rpsData.error) {
-				self.error("Activate First");
+			if (rpsData.errorStatus === 403) {
+				self.error(4009);
+				return;
+			} else if (rpsData.error || rpsData.errorStatus) {
+				self.error(4010);
 				return;
 			}
 			self.ds.addIdentity(rpsData.mpinId, "");
@@ -1679,11 +1702,14 @@ var mpin = mpin || {};
 
 				//get signature
 				requestRPS(_reqData, function (rpsData) {
-					if (rpsData.errorStatus) {
-						self.error("ooops");
+					if (rpsData.error || rpsData.errorStatus) {
+						self.error(4011);
 						return;
+					} else {
+						//success
+						self.successSetup(rpsData);
 					}
-					self.successSetup(rpsData);
+
 				});
 			} else {
 				self.successSetup();
@@ -1717,33 +1743,42 @@ var mpin = mpin || {};
 
 		//authServer = this.opts.authenticateURL;
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-				this.opts.requestOTP, "0", this.opts.seedValue, pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
+				this.opts.requestOTP, "0",  pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
 				function (success, errorCode, errorMessage, authData) {
 					console.log("authenticate arguments :", arguments);
 					if (success) {
 						self.successLogin(authData);
 					} else if (errorCode === "INVALID") {
 						self.display(hlp.text("authPin_errorInvalidPin"), true);
-						self.enableNumberButtons(true);
-						self.enableButton(false, "go");
-						self.enableButton(false, "clear");
-						self.enableButton(true, "toggle");
+
+						document.getElementById("mpin_help_pinpad").onclick = function () {
+							self.lastView = "renderLogin";
+							self.toggleHelp.call(self);
+							self.renderHelpTooltip.call(self, "loginerr");
+						};
+
 					} else if (errorCode === "MAXATTEMPTS") {
 						var iD = self.identity;
 						self.deleteIdentity(iD, true);
 						if (self.opts.onAccountDisabled) {
 							self.opts.onAccountDisabled(iD);
 						}
+						return;
+					} else if (errorCode === "NOTAUTHORIZED") {
+						self.display(hlp.text("authPin_errorNotAuthorized"), true);
+					} else if (errorCode === "EXPIRED") {
+						self.display(hlp.text("authPin_errorExpired"), true);
+					} else {
+						//error INVOCATION
+						self.display(hlp.text("authPin_errorServer"), true);
 					}
+
+					self.enableNumberButtons(true);
+					self.enableButton(false, "go");
+					self.enableButton(false, "clear");
+					self.enableButton(true, "toggle");
 					/////// change onClick helpTooltip
 					// change previous state from login render 
-					document.getElementById("mpin_help_pinpad").onclick = function () {
-						self.lastView = "renderLogin";
-						self.toggleHelp.call(self);
-						self.renderHelpTooltip.call(self, "loginerr");
-					};
-
-
 				}, function () {
 			console.log(" Before HandleToken ::::");
 		});
@@ -1849,13 +1884,20 @@ var mpin = mpin || {};
 				self.ds.getIdentityPermitCache(this.identity), this.certivoxPermitsStorageURL(),
 				function (timePermitHex, timePermitCache) {
 					self.ds.setIdentityPermit(self.identity, timePermitHex);
-					self.ds.setIdentityPermitCache(mpin.identity, timePermitCache);
+					self.ds.setIdentityPermitCache(self.identity, timePermitCache);
 					self.ds.save();
 					self.gotPermit(timePermitHex);
+					console.log(">>> SUCCESS request PERMIT params ::: ", arguments);
 					onSuccess(timePermitHex);
 				},
 				function (message, statusCode) {
-					onFail(message, statusCode)
+					console.log(">>> ERROR params ::: ", message, statusCode);
+					if (statusCode === 410) {
+						self.error(4012);
+						return;
+					} else {
+						onFail(message, statusCode)
+					}
 				});
 	};
 
@@ -2240,10 +2282,10 @@ var mpin = mpin || {};
 		"noaccount_button_add": "Add a new identity",
 		"home_intro_text": "First let's establish truth to choose the best way for you to access this service:",
 		"signin_btn_desktop1": "Sign in with Browser",
-		"signin_btn_desktop2": "(This is a PERSONAL device which I DO trust)",
+		"signin_btn_desktop2": "(This is a PERSONAL device I DO trust)",
 		"signin_btn_mobile1": "Sign in with Smartphone",
 		"signin_mobile_btn_text": "Sign in with your Smartphone",
-		"signin_btn_mobile2": "(This is a PUBLIC device which I DO NOT trust)",
+		"signin_btn_mobile2": "(This is a PUBLIC device I DO NOT trust)",
 		"home_txt_between_btns": "or",
 		"home_hlp_link": "Not sure which option to choose?",
 		"mobile_header_txt1": "I",
@@ -2251,6 +2293,7 @@ var mpin = mpin || {};
 		"mobile_header_do": "DO",
 		"mobile_header_txt3": "trust this computer",
 		"mobile_header_txt4": "Sign in with Smartphone",
+		"mobile_button_signin": "Sign in with this device",
 		"mobile_header_access_number": "Your Access Number is",
 		"help_ok_btn": "Ok, Got it",
 		"help_more_btn": "I'm not sure, tell me more",
@@ -2327,6 +2370,10 @@ var mpin = mpin || {};
 		"error_code_4006": "mobileAppFullURL are missing or incomplete (options parameter).",
 		"error_code_4007": "accessNumberURL are missing or incomplete (options parameter).",
 		"error_code_4008": "Error occur while you are changing identity.",
+		"error_code_4009": "Problem occur while registering your identity. Registration forbidden (403)", //403
+		"error_code_4010": "Problem with register your identity", //
+		"error_code_4011": "Registration done, but request after that failed.", //
+		"error_code_4012": "You're not authorized to complete the authentication, because your service provider has exceeded their licence limit.<br />For more info contact the provider of the service you're trying to access, or contact CertiVox directly at <a href='mailto:info@certivox.com'>info@certivox.com</a>"  //
 	};
 	//	image should have config properties
 	hlp.img = function (imgSrc) {

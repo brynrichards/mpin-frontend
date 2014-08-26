@@ -1,3 +1,22 @@
+/* 
+Copyright 2014 CertiVox UK Ltd, All Rights Reserved.
+
+The CertiVox M-Pin Client and Server Libraries are free software: you can
+redistribute it and/or modify it under the terms of the BSD 3-Clause
+License - http://opensource.org/licenses/BSD-3-Clause
+
+For full details regarding our CertiVox terms of service please refer to
+the following links:
+
+  * Our Terms and Conditions -
+    http://www.certivox.com/about-certivox/terms-and-conditions/
+  
+  * Our Security and Privacy -
+    http://www.certivox.com/about-certivox/security-privacy/
+
+  * Our Statement of Position and Our Promise on Software Patents -
+    http://www.certivox.com/about-certivox/patents/
+*/
 /*
  * Authenticated key agreement.
  * 
@@ -127,7 +146,7 @@ idak = {
 /*
 		_getServerKey : function(secret, serverIdentity) {
 			var point = this._hashToPoint2(util.unicodeToBytes(serverIdentity));
-			var sk= point.GSmul(secret).toString();   
+			var sk= point.mul(secret).toString();   
 			return sk;
 		},
 		
@@ -138,7 +157,7 @@ idak = {
 		getPrivateKey : function(masterKey, userIdentity) {
 			var point = this._hashToPoint1(util.unicodeToBytes(userIdentity));
 			// Compute private key as sA, where A = H(ID_A). 
-			return point.GLVmul(masterKey).toString(); 
+			return point.mul(masterKey).toString(); 
 		},
 
 		getServerDetails : function(serverID) {
@@ -148,7 +167,7 @@ idak = {
 		getTimePermit : function(masterKey, userIdentity) {
 			var point = this._hashToPoint1(util.wordToBytes(util.today()).concat(util.unicodeToBytes(userIdentity))).toAffine();
 			// Compute private key as sA, where A = H(ID_A). 
-			return point.GLVmul(masterKey).toString(); 
+			return point.mul(masterKey).toString(); 
 		},
 	
 		getMask : function() {
@@ -233,7 +252,7 @@ idak = {
 
 			Pa=Id.add(hashedTpID).toAffine();//this._hashToPoint1(util.wordToBytes(util.today()).concat(util.unicodeToBytes(userID)))).toAffine();
 			
-			Pa=Pa.GLVmul(z).toString(); /****/
+			Pa=Pa.mul(z).toString(); /****/
 	
 			return Pa;
 		},
@@ -241,7 +260,7 @@ idak = {
 /* Identity Multiplied by z */
 		computeMPin_1x : function(hashedID,z) {
 			var Id=hashedID.toAffine();
-			Id=Id.GLVmul(z).toString();
+			Id=Id.mul(z).toString();
 			return Id;
 		},
 
@@ -255,7 +274,7 @@ idak = {
 				var tp=new ecc.point.fromString(permit, this._curve);
 				Px = Px.add(tp).toAffine();
 			}
-			Px=Px.GLVmul(m).toString(); /****/
+			Px=Px.mul(m).toString(); /****/
 
 			return Px; 
 		},

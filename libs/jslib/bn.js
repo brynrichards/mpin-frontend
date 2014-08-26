@@ -823,9 +823,10 @@ bn.densePrime = function(modulus, digit) {
 
 		var ll,mm,carry,mask=bn.prototype.radixMask;
 		var ipv=bn.prototype.ipv;
-		var maxMul=bn.prototype.maxMul-1;
+		var maxMul=bn.prototype.maxMul-2;
 		var ii=maxMul;
 
+                for (var i=t.length;i<2*sm;i++) t[i]=0;   // new line entered to initialise t[] array
 		for (var i = 0; i < sm; i++) {
 			var r = ((t[i]&mask) * this.digit) & mask;
 			for (var j = 0; j < sm; j++) {
