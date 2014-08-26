@@ -168,6 +168,13 @@ var mpin = mpin || {};
             if (typeof options[_optionName] !== "undefined")
                 this.opts[_optionName] = options[_optionName];
         }
+
+        mpinAuth.hash_val = this.opts.seedValue;
+
+        if (this.opts.mpinAuthServerURL.mpin_startsWith("http")) {
+            this.opts.useWebSockets = false;
+        }
+
         return this;
     };
  
@@ -277,7 +284,7 @@ var mpin = mpin || {};
             // self.renderHelp("help-helphub", callbacks);
         };
 
-        helphubBtns.return = function(evt) {
+        helphubBtns.enter = function(evt) {
             self.renderHelpHub("helphub-index");
         }
 
@@ -1718,7 +1725,7 @@ var mpin = mpin || {};
         accessNumber = this.accessNumber;
         //authServer = this.opts.authenticateURL;
         getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-                this.opts.requestOTP, accessNumber, this.opts.seedValue, pinValue, this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
+                this.opts.requestOTP, accessNumber, pinValue, this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
                 function(success, errorCode, errorMessage, authData) {
                     console.log("authenticate arguments :", errorCode);
                     if (success) {
@@ -2344,7 +2351,10 @@ var mpin = mpin || {};
         String.prototype.mpin_endsWith = function(substr) {
             return this.length >= substr.length && this.substr(this.length - substr.length) == substr;
         }
- 
+
+        String.prototype.mpin_startsWith = function (substr) {
+         return this.indexOf(substr) == 0;
+        }
  
         if (!String.prototype.mpin_format) {
             String.prototype.mpin_format = function() {
