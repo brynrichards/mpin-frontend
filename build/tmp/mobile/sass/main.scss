@@ -168,8 +168,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			display: -moz-box; /* Firefox */
 			display: -webkit-box; /* Safari and Chrome */
 			display: -ms-flexbox; /* Internet Explorer 10 */
-			
 			@include home-icon();
+			width: 100%;
 			position: relative;
 		}
 
@@ -179,6 +179,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			display: -webkit-box; /* Safari and Chrome */
 			display: -ms-flexbox; /* Internet Explorer 10 */
 			position: relative;
+			width: 100%;
 		}
 
 	}
@@ -248,6 +249,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			min-height: 1.8em;
 			padding: .3em .6em;
 			width: 10%;
+		    top: 4px;
 
 			@include mpin-menu();
 
@@ -536,11 +538,13 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 			@include powered-by();
 			background-repeat: no-repeat;
 			background-size: auto 100%;
+			width: 100%;
 		}
 
 		#mpinLogo {
 			@include mpin-logo();
 			display: block;
+			width: 100%;
 
 			#openHelpHub {
 				display: block;
