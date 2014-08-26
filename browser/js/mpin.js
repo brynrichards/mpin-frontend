@@ -930,6 +930,9 @@ var mpin = mpin || {};
 				self.intervalID = setInterval(function () {
 					expire(expiresOn);
 				}, 1000);
+			} else if (_request.readyState === 4) {
+				//get access Number is down or broken
+				self.error(4014);
 			}
 		};
 		_request.open("POST", this.opts.getAccessNumberURL);
@@ -1080,9 +1083,14 @@ var mpin = mpin || {};
 
 		//get signature
 		requestRPS(_reqData, function (rpsData) {
-			if (rpsData.errorStatus) {
-				btn.error("setupNotReady_check_info2");
+			if (rpsData.errorStatus === 401) {
+				if (btn) btn.error("setupNotReady_check_info2");
+				//NOT ACTIVATE identity :::
 				self.error("Activate identity");
+				return;
+			} else if (rpsData.errorStatus) {
+				//client dta is DOWN (error 500)
+				self.error(4013);
 				return;
 			}
 
@@ -1864,6 +1872,7 @@ var mpin = mpin || {};
 					onFail();
 				} else {
 					// Fatal server error!
+					// Error getting permit 500
 					self.display(hlp.text("pinpad_errorTimePermit") + " " + statusCode, true);
 					self.error("Error getting the time permit.", statusCode);
 					onFail();
@@ -2404,7 +2413,9 @@ var mpin = mpin || {};
 		"error_code_4009": "Problem occur while registering your identity. Registration forbidden (403)", //403
 		"error_code_4010": "Problem with register your identity", //
 		"error_code_4011": "Registration done, but request after that failed.", //
-		"error_code_4012": "You're not authorized to complete the authentication, because your service provider has exceeded their licence limit.<br />For more info contact the provider of the service you're trying to access, or contact CertiVox directly at <a href='mailto:info@certivox.com'>info@certivox.com</a>"  //
+		"error_code_4012": "You're not authorized to complete the authentication, because your service provider has exceeded their licence limit.<br />For more info contact the provider of the service you're trying to access, or contact CertiVox directly at <a href='mailto:info@certivox.com'>info@certivox.com</a>",  //
+		"error_code_4013": "Problem occur while getting secret.",  //
+		"error_code_4014": "Problem occur while getting Access Number."  //
 	};
 	//	image should have config properties
 	hlp.img = function (imgSrc) {
