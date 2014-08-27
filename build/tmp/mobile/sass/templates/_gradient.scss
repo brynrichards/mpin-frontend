@@ -176,7 +176,8 @@ $BORDERLESS : true;
 
 	background-size: auto 100%;
 	left: 0;
-	top: 0;
+	top: 5px;
+	right: 0;
 	align-self: flex-start;
 	float: left;
 	@include box-flex-value(1.0);		
