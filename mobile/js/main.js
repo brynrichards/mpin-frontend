@@ -241,8 +241,8 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
                 }
                 else {
-                    // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                    document.getElementById(k).addEventListener('click', callbacks[k], false);
+                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    // document.getElementById(k).addEventListener('click', callbacks[k], false);
 
                 }
  
@@ -268,8 +268,8 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
                 }
                 else {
-                    // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                    document.getElementById(k).addEventListener('click', callbacks[k], false);
+                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    // document.getElementById(k).addEventListener('click', callbacks[k], false);
 
                 }
     
@@ -331,8 +331,8 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", helphubBtns[k], false);
                 }
                 else {
-                    // document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
-                    document.getElementById(k).addEventListener('click', helphubBtns[k], false);
+                    document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
+                    // document.getElementById(k).addEventListener('click', helphubBtns[k], false);
 
                 }
 
@@ -1206,8 +1206,8 @@ var mpin = mpin || {};
             rowElem.addEventListener('MSPointerDown', mEventsHandler, false);
         }
         else {
-            // rowElem.addEventListener('touchstart', mEventsHandler, false);
-            rowElem.addEventListener('click', mEventsHandler, false);
+            rowElem.addEventListener('touchstart', mEventsHandler, false);
+            // rowElem.addEventListener('click', mEventsHandler, false);
 
 
         }
@@ -1317,8 +1317,8 @@ var mpin = mpin || {};
             }
             else {
 
-                // btEls[i].addEventListener('touchstart', mEventsHandler, false);
-                btEls[i].addEventListener('click', mEventsHandler, false);
+                btEls[i].addEventListener('touchstart', mEventsHandler, false);
+                // btEls[i].addEventListener('click', mEventsHandler, false);
 
             }
 
