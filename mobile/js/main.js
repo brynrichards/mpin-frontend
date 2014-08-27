@@ -689,6 +689,8 @@ var mpin = mpin || {};
 
                     self.actionLogin.call(self);
 
+                    return;
+
                 }
 
                 // Clear the error codes display
