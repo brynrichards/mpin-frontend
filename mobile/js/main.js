@@ -1,3 +1,35 @@
+/* 
+Copyright 2014 CertiVox UK Ltd, All Rights Reserved.
+
+The CertiVox M-Pin Client and Server Libraries are free software: you can
+redistribute it and/or modify it under the terms of the BSD 3-Clause
+License - http://opensource.org/licenses/BSD-3-Clause
+
+For full details regarding our CertiVox terms of service please refer to
+the following links:
+
+  * Our Terms and Conditions -
+    http://www.certivox.com/about-certivox/terms-and-conditions/
+  
+  * Our Security and Privacy -
+    http://www.certivox.com/about-certivox/security-privacy/
+
+  * Our Statement of Position and Our Promise on Software Patents -
+    http://www.certivox.com/about-certivox/patents/
+*/
+/*
+   Certivox JavaScript M-Pin Authentication Functions
+
+   Provides these functions:
+   calculateMPinToken     Calculates the MPin Token 
+   local_entropy          Gets an entropy value from the client machine
+   randomX                Calculates a random 254 bit value
+   addShares              Add two points on the curve that are originally in hex format
+   pass1Request           Form the JSON request for pass one of the M-Pin protocol
+   pass2Request           Form the JSON request for pass two of the M-Pin protocol
+*/
+
+
 var mpin = mpin || {};
  
 (function() {
@@ -209,8 +241,8 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
                 }
                 else {
-                    // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                    document.getElementById(k).addEventListener('click', callbacks[k], false);
+                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    // document.getElementById(k).addEventListener('click', callbacks[k], false);
 
                 }
  
@@ -236,8 +268,8 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
                 }
                 else {
-                    // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                    document.getElementById(k).addEventListener('click', callbacks[k], false);
+                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    // document.getElementById(k).addEventListener('click', callbacks[k], false);
 
                 }
     
@@ -299,8 +331,8 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", helphubBtns[k], false);
                 }
                 else {
-                    // document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
-                    document.getElementById(k).addEventListener('click', helphubBtns[k], false);
+                    document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
+                    // document.getElementById(k).addEventListener('click', helphubBtns[k], false);
 
                 }
 
@@ -1174,8 +1206,8 @@ var mpin = mpin || {};
             rowElem.addEventListener('MSPointerDown', mEventsHandler, false);
         }
         else {
-            // rowElem.addEventListener('touchstart', mEventsHandler, false);
-            rowElem.addEventListener('click', mEventsHandler, false);
+            rowElem.addEventListener('touchstart', mEventsHandler, false);
+            // rowElem.addEventListener('click', mEventsHandler, false);
 
 
         }
@@ -1285,8 +1317,8 @@ var mpin = mpin || {};
             }
             else {
 
-                // btEls[i].addEventListener('touchstart', mEventsHandler, false);
-                btEls[i].addEventListener('click', mEventsHandler, false);
+                btEls[i].addEventListener('touchstart', mEventsHandler, false);
+                // btEls[i].addEventListener('click', mEventsHandler, false);
 
             }
 
