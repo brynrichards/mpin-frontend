@@ -80,7 +80,8 @@ var mpin = mpin || {};
         defaultOptions: {
             identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             setDeviceName: false
-        }
+        },
+        touchevents: true
     };
  
  
@@ -241,9 +242,12 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
                 }
                 else {
-                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                    // document.getElementById(k).addEventListener('click', callbacks[k], false);
 
+                    if(this.cfg.touchevents) {
+                        document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    } else {
+                        document.getElementById(k).addEventListener('click', callbacks[k], false);
+                    }
                 }
  
             }
@@ -268,8 +272,12 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
                 }
                 else {
-                    document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                    // document.getElementById(k).addEventListener('click', callbacks[k], false);
+
+                    if(this.cfg.touchevents) {
+                        document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    } else {
+                        document.getElementById(k).addEventListener('click', callbacks[k], false);
+                    }
 
                 }
     
@@ -331,8 +339,13 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", helphubBtns[k], false);
                 }
                 else {
-                    document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
-                    // document.getElementById(k).addEventListener('click', helphubBtns[k], false);
+
+                    if(self.cfg.touchevents) {
+                        document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
+                    } else {
+
+                        document.getElementById(k).addEventListener('click', helphubBtns[k], false);
+                    }
 
                 }
 
@@ -590,9 +603,8 @@ var mpin = mpin || {};
         };
         callbacks.mpinLogin = function() {
 
-            console.log("Comming in login");
-
             var _pin = document.getElementById('pinpad-input').value;
+
 
             if(_pin.length === self.cfg.pinSize) {
 
@@ -617,6 +629,8 @@ var mpin = mpin || {};
 
         this.render("setup", callbacks, {email: email});
 
+        var _textLoginBtn = document.getElementById('mpinLogin');
+        _textLoginBtn.innerText = lang.en.setup_btn_text;
 
         var pinpadContainer = document.getElementById('circlesHolder');
 
@@ -1206,9 +1220,13 @@ var mpin = mpin || {};
             rowElem.addEventListener('MSPointerDown', mEventsHandler, false);
         }
         else {
-            rowElem.addEventListener('touchstart', mEventsHandler, false);
-            // rowElem.addEventListener('click', mEventsHandler, false);
 
+            if(self.cfg.touchevents) {
+                rowElem.addEventListener('touchstart', mEventsHandler, false);
+            } else {
+
+                rowElem.addEventListener('click', mEventsHandler, false);
+            }
 
         }
  
@@ -1317,8 +1335,12 @@ var mpin = mpin || {};
             }
             else {
 
-                btEls[i].addEventListener('touchstart', mEventsHandler, false);
-                // btEls[i].addEventListener('click', mEventsHandler, false);
+                if(self.cfg.touchevents) {
+                    btEls[i].addEventListener('touchstart', mEventsHandler, false);
+                } else {
+
+                    btEls[i].addEventListener('click', mEventsHandler, false);
+                }
 
             }
 
@@ -2122,6 +2144,8 @@ var mpin = mpin || {};
     mpin.prototype.successLogin = function(authData, iD) {
         var callbacks = {}, self = this;
 
+        console.log("Is tehre logout url", authData.logoutURL);
+
         callbacks.mp_action_home = function(evt) {
             if (totalAccounts === 0) {
              self.renderSetupHome();
@@ -2134,8 +2158,6 @@ var mpin = mpin || {};
 
         callbacks.mp_action_logout = function(evt) {
             
-            console.log("Is there authData", authData);
-
             if(authData.logoutURL) {
 
                 self.ajaxPost( authData.logoutURL, authData.logoutData, function(res) {
@@ -2144,12 +2166,18 @@ var mpin = mpin || {};
                     }
                 });
             } else {
+
                 self.renderLogin();
             }
 
         };
 
         this.render("success-login", callbacks, {email: self.getDisplayName(iD)});
+
+        if(authData.logoutURL === '') {
+            var _logoutBtnText = document.getElementById('btnLabelText');
+            _logoutBtnText.innerText = "Start over";
+        }
     };
 
     mpin.prototype.certivoxClientSecretURL = function(params) {
@@ -2399,7 +2427,8 @@ var mpin = mpin || {};
         "accessdenied_header": "Access Denied",
         "accessdenied_text": "Your M-Pin identity",
         "accessdenied_text_cont": "has been removed from this device.",
-        "accessdenied_btn": "Register again"
+        "accessdenied_btn": "Register again",
+        "setup_btn_text": "Setup"
     };
     //  image should have config properties
     hlp.img = function(imgSrc) {
