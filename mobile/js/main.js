@@ -1220,8 +1220,6 @@ var mpin = mpin || {};
             rowElem.addEventListener('MSPointerDown', mEventsHandler, false);
         }
         else {
-            // rowElem.addEventListener('touchstart', mEventsHandler, false);
-            rowElem.addEventListener('click', mEventsHandler, false);
 
             if(self.cfg.touchevents) {
                 rowElem.addEventListener('touchstart', mEventsHandler, false);
