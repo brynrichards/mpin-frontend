@@ -207,7 +207,6 @@ $BORDERLESS : true;
 
 	background-size: auto 100%;
 	left: 0;
-	top: 5px;
 	right: 0;
 	align-self: flex-start;
 	float: left;
@@ -225,7 +224,7 @@ $BORDERLESS : true;
 	background-size: auto 100%;
 	margin: 5px 10px 5px 0px;
 
-	@include box-flex-value(2.0);
+	@include box-flex-value(1.0);
 }
 
 @mixin logo() {
