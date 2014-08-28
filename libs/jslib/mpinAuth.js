@@ -91,8 +91,8 @@ mpinAuth.calculateMPinToken = function (PIN, client_secret_hex, mpin_id_hex) {
     var mpin_id, mpin_id_pt, mpin_token_str,  mpin_token_hex, client_secret_str, client_secret_pt;
     client_secret_str = util.hex2pointFormat(client_secret_hex);
     client_secret_pt = new ecc.point.fromString(client_secret_str, idak._curve);
-    mpin_id = util.bytesToUnicode(util.bitsToBytes(util.hexToBitsNew(mpin_id_hex)));
-    mpin_id_pt = idak._hashToPoint1(util.unicodeToBytes(mpin_id));
+    mpin_id = util.bitsToBytes(util.hexToBitsNew(mpin_id_hex));
+    mpin_id_pt = idak._hashToPoint1(mpin_id);
     mpin_token_str = client_secret_pt.sub(mpin_id_pt.smul(parseInt(PIN, 10))).toString();
     mpin_token_hex = util.pointFormat2hex(mpin_token_str);
     return mpin_token_hex;
@@ -119,19 +119,13 @@ mpinAuth.local_entropy = function () {
         return null;
     }
     crypto = (window.crypto || window.msCrypto);
-    if (crypto !== 'undefined') {
+    if (typeof (crypto) !== 'undefined') {
         array = new Uint32Array(8);
         crypto.getRandomValues(array);
 
         entropy_val = "";
         for (i = 0; i < array.length; i++) {
             hex_val = array[i].toString(16);
-            if (hex_val.length === 6) {
-                hex_val = "00" + hex_val;
-            }
-            if (hex_val.length === 7) {
-                hex_val = "0" + hex_val;
-            }
             entropy_val = entropy_val + hex_val;
         }
         if (mpinAuth.DEBUG) {console.log("len(entropy_val): " + entropy_val.length + " entropy_val: " + entropy_val); }
@@ -257,15 +251,14 @@ mpinAuth.pass1Request = function (x, mpin_id_hex, epoch_days) {
     "use strict";
     var mpin_id, mpin_id_pt, mpin_id_bytes, mpin_id_pt_hex, x_hex, hash_mpin_id, hash_mpin_id_hex, date_mpin_id_pt, date_mpin_id_hex, U, U_hex, UT, UT_hex, request, i;
 
-    // Get M-Pin ID in unicode
-    mpin_id = util.bytesToUnicode(util.bitsToBytes(util.hexToBitsNew(mpin_id_hex)));
-    if (mpinAuth.DEBUG) {console.log("mpin_id: " + mpin_id); }
+    // Get M-Pin ID in bytes
+    mpin_id_bytes = util.bitsToBytes(util.hexToBitsNew(mpin_id_hex));
+    if (mpinAuth.DEBUG) {console.log("mpin_id: " + util.bytesToUnicode(mpin_id_bytes)); }
 
     // Map M-Pin ID to Point on curve
-    mpin_id_pt = idak._hashToPoint1(util.unicodeToBytes(mpin_id));
+    mpin_id_pt = idak._hashToPoint1(mpin_id_bytes);
 
     // Calculate sha256 of M-Pin ID
-    mpin_id_bytes = util.unicodeToBytes(mpin_id);
     hash_mpin_id = new sha256();
     for (i = 0; i < mpin_id_bytes.length; i++) {
         hash_mpin_id.update_byte(mpin_id_bytes[i]);
@@ -286,11 +279,12 @@ mpinAuth.pass1Request = function (x, mpin_id_hex, epoch_days) {
     if (mpinAuth.DEBUG) {console.log("U: " + U); }
     if (mpinAuth.DEBUG) {console.log("U_hex: " + U_hex); }
 
-    // compute UT
     mpin_id_pt_hex = util.pointFormat2hex(mpin_id_pt.toString());
     x_hex = x.toHexString();
     if (mpinAuth.DEBUG) {console.log("mpinAuth.pass1Request mpin_id_pt: " + mpin_id_pt_hex); }
     if (mpinAuth.DEBUG) {console.log("mpinAuth.pass1Request x_hex: " + x_hex); }
+
+    // compute UT
     UT = idak.computeMPin_1c(mpin_id_pt, date_mpin_id_pt, x);
     UT_hex = util.pointFormat2hex(UT);
     if (mpinAuth.DEBUG) {console.log("UT: " + UT); }
@@ -346,29 +340,29 @@ mpinAuth.pass1Request = function (x, mpin_id_hex, epoch_days) {
 */
 mpinAuth.pass2Request = function (x, y_hex, mpin_id_hex, timePermit_hex, token_hex, requestOTP, accessNumber, PIN) {
     "use strict";
-    var mpin_id, mpin_id_pt, timePermit, token, y, r, m, V, V_hex, request;
+    var mpin_id_bytes, mpin_id_pt, timePermit_str, token_str, y, r, m, V, V_hex, request;
 
     if (mpinAuth.DEBUG) {console.log("mpin_id_hex: " + mpin_id_hex); }
     if (mpinAuth.DEBUG) {console.log("y_hex: " + y_hex); }
-    // Get M-PIN ID
-    mpin_id = util.bytesToUnicode(util.bitsToBytes(util.hexToBitsNew(mpin_id_hex)));
-    if (mpinAuth.DEBUG) {console.log("mpin_id: " + mpin_id); }
+    // Get M-PIN ID in bytes
+    mpin_id_bytes = util.bitsToBytes(util.hexToBitsNew(mpin_id_hex));
+    if (mpinAuth.DEBUG) {console.log("mpin_id: " + util.bytesToUnicode(mpin_id_bytes)); }
 
     // Hash ID to point on curve
-    mpin_id_pt = idak._hashToPoint1(util.unicodeToBytes(mpin_id));
+    mpin_id_pt = idak._hashToPoint1(mpin_id_bytes);
 
     if (mpinAuth.DEBUG) {console.log("timePermit_hex: " + timePermit_hex); }
-    timePermit = util.hex2pointFormat(timePermit_hex);
+    timePermit_str = util.hex2pointFormat(timePermit_hex);
 
     if (mpinAuth.DEBUG) {console.log("token_hex: " + token_hex); }
-    token = util.hex2pointFormat(token_hex);
+    token_str = util.hex2pointFormat(token_hex);
 
     // Compute V
     y = new bn(y_hex);
     r = idak._curve.r;
     m = y.add(x).mod(r);
     m = r.sub(m).normalize();
-    V = idak.computeMPin_1b(mpin_id_pt, m, PIN, token, timePermit);
+    V = idak.computeMPin_1b(mpin_id_pt, m, PIN, token_str, timePermit_str);
     V_hex = util.pointFormat2hex(V);
     if (mpinAuth.DEBUG) {console.log("V: " + V); }
     if (mpinAuth.DEBUG) {console.log("V_hex: " + V_hex); }
@@ -403,10 +397,9 @@ mpinAuth.sha256_hex = function (mpin_id_hex) {
     var mpin_id, mpin_id_bytes, hash_mpin_id, hash_mpin_id_hex, i;
 
     // Get M-Pin ID in unicode
-    mpin_id = util.bytesToUnicode(util.bitsToBytes(util.hexToBitsNew(mpin_id_hex)));
+    mpin_id_bytes = util.bitsToBytes(util.hexToBitsNew(mpin_id_hex));
 
     // Calulate sha256 value
-    mpin_id_bytes = util.unicodeToBytes(mpin_id);
     hash_mpin_id = new sha256();
     for (i = 0; i < mpin_id_bytes.length; i++) {
         hash_mpin_id.update_byte(mpin_id_bytes[i]);
