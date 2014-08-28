@@ -1,3 +1,35 @@
+/* 
+Copyright 2014 CertiVox UK Ltd, All Rights Reserved.
+
+The CertiVox M-Pin Client and Server Libraries are free software: you can
+redistribute it and/or modify it under the terms of the BSD 3-Clause
+License - http://opensource.org/licenses/BSD-3-Clause
+
+For full details regarding our CertiVox terms of service please refer to
+the following links:
+
+  * Our Terms and Conditions -
+    http://www.certivox.com/about-certivox/terms-and-conditions/
+  
+  * Our Security and Privacy -
+    http://www.certivox.com/about-certivox/security-privacy/
+
+  * Our Statement of Position and Our Promise on Software Patents -
+    http://www.certivox.com/about-certivox/patents/
+*/
+/*
+   Certivox JavaScript M-Pin Authentication Functions
+
+   Provides these functions:
+   calculateMPinToken     Calculates the MPin Token 
+   local_entropy          Gets an entropy value from the client machine
+   randomX                Calculates a random 254 bit value
+   addShares              Add two points on the curve that are originally in hex format
+   pass1Request           Form the JSON request for pass one of the M-Pin protocol
+   pass2Request           Form the JSON request for pass two of the M-Pin protocol
+*/
+
+
 var mpin = mpin || {};
  
 (function() {
@@ -48,7 +80,8 @@ var mpin = mpin || {};
         defaultOptions: {
             identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             setDeviceName: false
-        }
+        },
+        touchevents: true
     };
  
  
@@ -209,9 +242,12 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
                 }
                 else {
-                    // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                    document.getElementById(k).addEventListener('click', callbacks[k], false);
 
+                    if(this.cfg.touchevents) {
+                        document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    } else {
+                        document.getElementById(k).addEventListener('click', callbacks[k], false);
+                    }
                 }
  
             }
@@ -236,8 +272,12 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
                 }
                 else {
-                    // document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                    document.getElementById(k).addEventListener('click', callbacks[k], false);
+
+                    if(this.cfg.touchevents) {
+                        document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
+                    } else {
+                        document.getElementById(k).addEventListener('click', callbacks[k], false);
+                    }
 
                 }
     
@@ -299,8 +339,13 @@ var mpin = mpin || {};
                     document.getElementById(k).addEventListener("MSPointerDown", helphubBtns[k], false);
                 }
                 else {
-                    // document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
-                    document.getElementById(k).addEventListener('click', helphubBtns[k], false);
+
+                    if(self.cfg.touchevents) {
+                        document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
+                    } else {
+
+                        document.getElementById(k).addEventListener('click', helphubBtns[k], false);
+                    }
 
                 }
 
@@ -558,9 +603,8 @@ var mpin = mpin || {};
         };
         callbacks.mpinLogin = function() {
 
-            console.log("Comming in login");
-
             var _pin = document.getElementById('pinpad-input').value;
+
 
             if(_pin.length === self.cfg.pinSize) {
 
@@ -585,6 +629,8 @@ var mpin = mpin || {};
 
         this.render("setup", callbacks, {email: email});
 
+        var _textLoginBtn = document.getElementById('mpinLogin');
+        _textLoginBtn.innerText = lang.en.setup_btn_text;
 
         var pinpadContainer = document.getElementById('circlesHolder');
 
@@ -619,7 +665,7 @@ var mpin = mpin || {};
  
     mpin.prototype.renderLogin = function(listAccounts) {
 
-        var callbacks = {}, self = this;
+        var callbacks = {}, self = this, elemForErrcode = document.getElementById('codes');
  
         this.isAccNumber = true;
 
@@ -631,8 +677,20 @@ var mpin = mpin || {};
         }
 
         if (!this.identity) {
-            console.log("Comming even here");
             self.setIdentity(self.ds.getDefaultIdentity(), true);
+
+        }
+
+        if(this.erroCodeAccNumber) {
+
+            elemForErrcode.style.display = "block";
+            elemForErrcode.className = "error";
+            elemForErrcode.innerHTML = lang.en.authPin_errorInvalidAccessNumber;
+
+            self.bindNumberButtons();
+            self.enableNumberButtons(true);
+            self.enableButton(false, "go");
+            self.enableButton(false, "clear");
 
         }
  
@@ -660,12 +718,25 @@ var mpin = mpin || {};
             var callbacks = {};
 
             var pinpadDisplay = document.getElementById("pinpad-input");
- 
+
             if (self.isAccNumber) {
                 self.accessNumber = pinpadDisplay.value;
 
+                // Validate the number of digits entered
+
                 if(self.accessNumber.length < self.opts.accessNumberDigits ) {
                     return;
+                }
+
+                if (!self.checkAccessNumberValidity(self.accessNumber, 1)) {
+
+                    // store the accessNumber into mpin for the next step.
+                    self.erroCodeAccNumber = true;
+
+                    self.actionLogin.call(self);
+
+                    return;
+
                 }
 
                 // Clear the error codes display
@@ -778,7 +849,6 @@ var mpin = mpin || {};
             this.toggleButton();
         } else {
 
-            console.log("This is the before identttyty!!!!##!##");
             this.setIdentity(this.ds.getDefaultIdentity(), true, function() {
                 self.display(hlp.text("pinpad_default_message"));
                }, function() {
@@ -959,11 +1029,12 @@ var mpin = mpin || {};
         regOTT = this.ds.getIdentityData(this.identity, "regOTT");
         url = this.opts.signatureURL + "/" + this.identity + "?regOTT=" + regOTT;
 
-        console.log("I get the render btn el", btnElem);
-
-        var btn = this.mpinButton(btnElem, "setupNotReady_check_info1");
+        if (btnElem) {
+                var btn = this.mpinButton(btnElem, "setupNotReady_check_info1");
+        }
 
         this.isAccNumber = false;
+        this.erroCodeAccNumber = false;
 
         _reqData.URL = url;
         _reqData.method = "GET";
@@ -1149,9 +1220,13 @@ var mpin = mpin || {};
             rowElem.addEventListener('MSPointerDown', mEventsHandler, false);
         }
         else {
-            // rowElem.addEventListener('touchstart', mEventsHandler, false);
-            rowElem.addEventListener('click', mEventsHandler, false);
 
+            if(self.cfg.touchevents) {
+                rowElem.addEventListener('touchstart', mEventsHandler, false);
+            } else {
+
+                rowElem.addEventListener('click', mEventsHandler, false);
+            }
 
         }
  
@@ -1220,6 +1295,35 @@ var mpin = mpin || {};
         var self = this, btEls;
         btEls = document.getElementsByClassName("btn");
 
+
+        function mEventsHandler(e) {
+
+            var parent = document.getElementById("inputContainer");
+            var child = document.getElementById("codes");
+            
+            // if (e.type == "touchstart") {
+
+            if(self.isAccNumber && parent.contains(child)) {
+                child.style.display = 'none';
+            }
+
+            var circles = document.getElementsByClassName("circle");
+
+            for (var i = circles.length - 1; i >= 0; i--) {
+                circles[i].style.display = 'inline-block';
+            };
+
+
+            var circlesHolder = document.getElementById("circlesHolder");
+
+            circlesHolder.style.display = 'flex';
+
+            self.addToPin(e.target.getAttribute("data-value"));
+            // return false;
+        
+          // }
+        }
+
         for (var i = 0; i < btEls.length; i++) {
 
             // Mobile touch events
@@ -1231,38 +1335,15 @@ var mpin = mpin || {};
             }
             else {
 
-                // btEls[i].addEventListener('touchstart', mEventsHandler, false);
-                btEls[i].addEventListener('click', mEventsHandler, false);
+                if(self.cfg.touchevents) {
+                    btEls[i].addEventListener('touchstart', mEventsHandler, false);
+                } else {
 
-            }
- 
-            function mEventsHandler(e) {
-
-                var parent = document.getElementById("inputContainer");
-                var child = document.getElementById("codes");
-                
-                // if (e.type == "touchstart") {
-
-                if(self.isAccNumber && parent.contains(child)) {
-                    child.style.display = 'none';
+                    btEls[i].addEventListener('click', mEventsHandler, false);
                 }
 
-                var circles = document.getElementsByClassName("circle");
-
-                for (var i = circles.length - 1; i >= 0; i--) {
-                    circles[i].style.display = 'inline-block';
-                };
-
-
-                var circlesHolder = document.getElementById("circlesHolder");
-
-                circlesHolder.style.display = 'flex';
-
-                self.addToPin(e.target.getAttribute("data-value"));
-                // return false;
- 
-              // }
             }
+
         }
     };
     mpin.prototype.enableNumberButtons = function(enable) {
@@ -1440,7 +1521,7 @@ var mpin = mpin || {};
             self.addToPin("clear");
         } 
 
-        if(message === 'INVALID ACCESS NUMBER!') {
+        if(message === lang.en.authPin_errorInvalidAccessNumber) {
 
             elemForErrcode.style.display = "block";
             elemForErrcode.className = "error";
@@ -1556,7 +1637,12 @@ var mpin = mpin || {};
             // Check for existing userid and delete the old one
             self.ds.deleteOldIdentity(rpsData.mpinId);
  
-            self.renderActivateIdentity();
+            //active = true pass activate IDNETITY Screen
+             if (rpsData.active) {
+              self.beforeRenderSetup();
+             } else {
+              self.renderActivateIdentity();
+             }
         });
     };
  
@@ -2063,6 +2149,8 @@ var mpin = mpin || {};
     mpin.prototype.successLogin = function(authData, iD) {
         var callbacks = {}, self = this;
 
+        console.log("Is tehre logout url", authData.logoutURL);
+
         callbacks.mp_action_home = function(evt) {
             if (totalAccounts === 0) {
              self.renderSetupHome();
@@ -2075,8 +2163,6 @@ var mpin = mpin || {};
 
         callbacks.mp_action_logout = function(evt) {
             
-            console.log("Is there authData", authData);
-
             if(authData.logoutURL) {
 
                 self.ajaxPost( authData.logoutURL, authData.logoutData, function(res) {
@@ -2085,12 +2171,18 @@ var mpin = mpin || {};
                     }
                 });
             } else {
+
                 self.renderLogin();
             }
 
         };
 
         this.render("success-login", callbacks, {email: self.getDisplayName(iD)});
+
+        if(authData.logoutURL === '') {
+            var _logoutBtnText = document.getElementById('btnLabelText');
+            _logoutBtnText.innerText = "Start over";
+        }
     };
 
     mpin.prototype.certivoxClientSecretURL = function(params) {
@@ -2130,6 +2222,21 @@ var mpin = mpin || {};
     mpin.prototype.gotPermit = function(timePermit) {
         if (this.opts.onGetPermit)
             this.opts.onGetPermit(timePermit);
+    };
+
+    mpin.prototype.checkAccessNumberValidity = function(sNum, csDigits){
+        if (!csDigits) {
+            csDigits = 1;
+        }
+
+        var n = parseInt(sNum.slice(0, sNum.length-csDigits), 10);
+        var cSum = parseInt(sNum.slice(sNum.length-csDigits, sNum.length), 10);
+
+        var p = 99991;
+        var g = 11;
+        var checkSum = ((n * g) % p) % Math.pow(10, csDigits);
+        
+        return (checkSum == cSum)
     };
  
  
@@ -2325,7 +2432,8 @@ var mpin = mpin || {};
         "accessdenied_header": "Access Denied",
         "accessdenied_text": "Your M-Pin identity",
         "accessdenied_text_cont": "has been removed from this device.",
-        "accessdenied_btn": "Register again"
+        "accessdenied_btn": "Register again",
+        "setup_btn_text": "Setup"
     };
     //  image should have config properties
     hlp.img = function(imgSrc) {

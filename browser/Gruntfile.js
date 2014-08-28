@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 				    style: 'compressed'
 				},
 				files: {
-					'../build/out/browser/css/main.css' : 'src/sass/main.scss'
+					'../build/out/browser/css/main.css' : '../build/tmp/browser/sass/main.scss'
 				}
 			}
 		},
@@ -39,6 +39,30 @@ module.exports = function(grunt) {
 			},			
 			replaceURLBASE: {
 				cmd: "sed 's#%URL_BASE%#<%= settings.URLBase %>#' js/mpin.js > ../build/out/tmp/mpin.js",
+				options: {
+	            	stdout: true,
+				}
+			},			
+			mkdirTmpSass: {
+				cmd: "mkdir -p ../build/tmp/browser/sass",
+				options: {
+	            	stdout: true,
+				}
+			},			
+			copyTmpSass: {
+				cmd: "cp -r src/sass/* ../build/tmp/browser/sass/",
+				options: {
+	            	stdout: true,
+				}
+			},			
+			replaceTemplateMain: {
+				cmd: "sed 's/%templatename%/<%= settings.templateName %>/' src/sass/main.scss > ../build/tmp/browser/sass/main.scss",
+				options: {
+	            	stdout: true,
+				}
+			},			
+			replaceTemplateTemplate: {
+				cmd: "sed 's/%templatename%/<%= settings.templateName %>/' src/sass/templates/_<%= settings.templateName %>.scss > ../build/tmp/browser/sass/templates/_<%= settings.templateName %>.scss",
 				options: {
 	            	stdout: true,
 				}
