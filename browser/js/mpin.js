@@ -134,7 +134,7 @@ var mpin = mpin || {};
 		this.setLanguageText();
 
 		this.renderLanding();
-//		this.renderError();
+//		this.renderError(4005);
 
 //		this.renderMobile();
 //		this.renderDesktop();
@@ -2402,20 +2402,21 @@ var mpin = mpin || {};
 		"help_text_home": "If you are signing into <span class=mpinPurple>[xxxx]</span> with your own personal device like your computer or tablet then you can ‘Sign in with Browser’, but if you are using someone else’s device or a public computer, then ‘Sign in with Smartphone’ is recommended for additional security.",
 		"error_page_title": "Error page:",
 		"error_page_code": "Error code:",
-		"error_code_4001": "Error fetching settings from server",
-		"error_code_4002": "ClientSettingsURL are missing or incomplete(options parameter)",
-		"error_code_4003": "Some required parameters are missing or incomplete.",
-		"error_code_4004": "The browser is not supported.",
-		"error_code_4005": "The browser does not support localStorage.",
-		"error_code_4006": "mobileAppFullURL are missing or incomplete (options parameter).",
-		"error_code_4007": "accessNumberURL are missing or incomplete (options parameter).",
-		"error_code_4008": "Error occur while you are changing identity.",
-		"error_code_4009": "Problem occur while registering your identity. Registration forbidden (403)", //403
-		"error_code_4010": "Problem with register your identity", //
-		"error_code_4011": "Registration done, but request after that failed.", //
-		"error_code_4012": "You're not authorized to complete the authentication, because your service provider has exceeded their licence limit.<br />For more info contact the provider of the service you're trying to access, or contact CertiVox directly at <a href='mailto:info@certivox.com'>info@certivox.com</a>",  //
-		"error_code_4013": "Problem occur while getting secret.",  //
-		"error_code_4014": "Problem occur while getting Access Number."  //
+		"error_code_4001": "We are experiencing a technical problem. Please try again later or contact the service administrator.",
+		"error_code_4002": "We are experiencing a technical problem. Please try again later or contact the service administrator.",
+		"error_code_4003": "We are experiencing a technical problem. Please try again later or contact the service administrator.",
+		"error_code_4004": "We detected you are using a non-compatible browser. Please visit <a href='http://info.certivox.com/browser-compatibility'>our browser compatibility page</a> for more info.",
+		"error_code_4005": "We detected you are using a non-compatible browser. Please visit <a href='http://info.certivox.com/browser-compatibility'>our browser compatibility page</a> for more info.",
+		"error_code_4006": "We are experiencing a technical problem. Please try again later or contact the service administrator.",
+		"error_code_4007": "We are experiencing a technical problem. Please try again later or contact the service administrator.",
+		"error_code_4008": "We are experiencing a technical problem. Please try again later or contact the service administrator.",
+		"error_code_4009": "We could not complete your registration. Please contact the service administrator or try again later.", //403
+		"error_code_4010": "We could not complete your registration. Please contact the service administrator or try again later.", //
+		"error_code_4011": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
+		"error_code_4012": "We could not complete your authentication request. Please contact the service administrator.",  //
+		"error_code_4013": "We could not complete your registration. Please contact the service administrator or try again later.",  //
+		"error_code_4014": "We are experiencing a technical problem. Please try again later or contact the service administrator.",  //
+		"error_code_4015": "We are experiencing a technical problem. Please try again later or contact the service administrator."  //
 	};
 	//	image should have config properties
 	hlp.img = function (imgSrc) {
