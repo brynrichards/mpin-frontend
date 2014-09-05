@@ -4,6 +4,7 @@ browser/nbproject/private/
 browser/nbproject/
 mobile/.sass-cache/
 mobile/in/
+build/
 build/out
 mobile/in/
 settings.json
