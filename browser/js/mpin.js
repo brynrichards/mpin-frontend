@@ -426,9 +426,12 @@ var mpin = mpin || {};
 			this.renderSetupHome();
 		} else if (totalAccounts === 1) {
 			this.renderLogin();
-		} else if (totalAccounts > 1) {
+		} 
+		/*
+		else if (totalAccounts > 1) {
 			this.renderLogin(true);
 		}
+		*/
 
 		return;
 
@@ -2346,7 +2349,7 @@ var mpin = mpin || {};
 		"help_hub_li6": "Can I set the same PIN on all devices every time?",
 		"help_hub_li7": "How can a 4 digit PIN be more secure than a long complex password?",
 		"help_hub_li8": "Should I change my PIN often?",
-		"help_hub_li9": "Do [XXX] or CertiVox know my PIN?",
+		"help_hub_li9": "Does CertiVox know my PIN?",
 		"help_hub_li10": "Why do I have to register from each device and browser?",
 		"help_hub_button": "Exit Help Hub and return to previous page",
 		"help_hub_1_p1": "The browser authentication logs you in to your account on a desktop browser using M-Pin two-factor login.",
