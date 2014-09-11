@@ -489,10 +489,8 @@ var mpin = mpin || {};
 
                  if (totalAccounts === 0) {
                   this.renderSetupHome();
-                 } else if (totalAccounts === 1) {
+                 } else if (totalAccounts === 1 || totalAccounts > 1) {
                   this.renderLogin();
-                 } else if (totalAccounts > 1) {
-                  this.renderLogin(true);
                  }
 
             } else {
@@ -1055,17 +1053,24 @@ var mpin = mpin || {};
 //custom render 
     mpin.prototype.renderAccountsPanel = function(back) {
 
+        console.log("Comming here");
+
         var self = this, 
             callbacks = {},
             renderElem, 
             addEmptyItem, 
             c = 0,
             mpBack = document.getElementById('mp_back'),
-            menuBtn = document.getElementById('menuBtn');
+            menuBtn = document.getElementById('menuBtn'),
+            defaultIdentity;
 
-            if (window.navigator.msPointerEnabled) {
-                menuBtn.style.bottom = '0';
-            }
+        if (window.navigator.msPointerEnabled) {
+            menuBtn.style.bottom = '0';
+        }
+
+        // if (!this.identity) {
+        //     self.setIdentity(self.ds.getDefaultIdentity(), false);
+        // }
 
         menuBtn.onclick = function(evt) {
             document.getElementById('accountTopBar').style.height = "";
@@ -1113,6 +1118,72 @@ var mpin = mpin || {};
  
         }
  
+        //default IDENTITY
+
+
+    };
+
+    mpin.prototype.renderAccountsBeforeSetupPanel = function(back) {
+
+        console.log("Comming here");
+
+        var self = this, 
+            callbacks = {},
+            renderElem, 
+            addEmptyItem, 
+            c = 0,
+            mpBack = document.getElementById('mp_back_not_active'),
+            menuBtn = document.getElementById('menuBtn'),
+            defaultIdentity;
+
+        if (window.navigator.msPointerEnabled) {
+            menuBtn.style.bottom = '0';
+        }
+
+        // if (!this.identity) {
+        //     self.setIdentity(self.ds.getDefaultIdentity(), false);
+        // }
+
+        addEmptyItem = function(cnt) {
+            var p = document.createElement("div");
+            p.className = "mp_contentEmptyItem";
+            cnt.appendChild(p);
+        };
+    
+        addMpinBack = function () {
+            renderElem = document.getElementById('identityContainer').appendChild(document.createElement("div"));
+            renderElem.id = "mp_back_not_active";
+            mpBack = document.getElementById("mp_back_not_active");
+            mpBack.innerHTML = self.readyHtml("accounts-panel-not-active", {});
+        }
+    
+
+        // Fix for IE compatibillity
+        if(document.body.contains(mpBack) === false) {
+
+            addMpinBack();
+            mpBack.style.display = 'block';
+    
+    
+            document.getElementById("mp_acclist_adduser").onclick = function(evt) {
+                self.renderSetupHome.call(self, evt);
+            };
+
+            // Appending happens here
+
+            var cnt = document.getElementById("mp_accountContent");
+            this.addUserToList(cnt, this.ds.getDefaultIdentity(), true, 0);
+            
+            for (var i in this.ds.getAccounts()) {
+                c += 1;
+                if (i != this.ds.getDefaultIdentity())
+                    this.addUserToList(cnt, i, false, c);
+            }
+
+            addEmptyItem(cnt);
+    
+        }
+    
         //default IDENTITY
 
 
@@ -1267,7 +1338,7 @@ var mpin = mpin || {};
         callbacks.mp_action_home = function(evt) {
             self.renderHome.call(self, evt);
         };
-        
+
         //Check again
         callbacks.mpin_action_setup = function() {
             if (self.checkBtn(this))
@@ -1280,7 +1351,9 @@ var mpin = mpin || {};
         };
         //identities list
         callbacks.mpin_accounts = function() {
-            self.renderLogin.call(self, true, email);
+
+            self.renderAccountsBeforeSetup();
+
         };
 
         this.render("identity-not-active", callbacks, {email: email});
@@ -1565,11 +1638,50 @@ var mpin = mpin || {};
             accountTopBar.style.height = "100%"
             menuBtn.className = 'close';
 
-            this.renderAccountsPanel();
- 
             removeClass("mp_toggleButton", "mp_SelectedState");
             removeClass("mp_panel", "mp_flip");
+
+            this.renderAccountsPanel();
+ 
+
+        } else {
+
+            if (this.ds.getIdentityToken(this.identity) == "") {
+                        identity = this.getDisplayName(this.identity);
+                        this.renderIdentityNotActive(identity);
+                        return;
+                    }
+
         }
+
+        return false;
+    };
+
+
+    mpin.prototype.renderAccountsBeforeSetup = function() {
+        var self = this;
+        var accountTopBar = document.getElementById('identityContainer')
+
+        // console.log(self);
+
+        // if(menuBtn.classList.contains("close")) {
+        //     return;
+        // }
+
+        console.log("set IDENTITY ;::", typeof this.setIdentity);
+        
+        this.setIdentity(this.identity, true, function() {
+            self.display(self.cfg.pinpadDefaultMessage);
+        }, function() {
+            return false;
+        });
+
+        accountTopBar.style.height = "100%"
+
+        removeClass("mp_toggleButton", "mp_SelectedState");
+        removeClass("mp_panel", "mp_flip");
+
+        this.renderAccountsBeforeSetupPanel();
 
         return false;
     };
