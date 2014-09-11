@@ -81,7 +81,7 @@ var mpin = mpin || {};
             identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             setDeviceName: false
         },
-        touchevents: true
+        touchevents: false
     };
  
  
@@ -508,7 +508,7 @@ var mpin = mpin || {};
         var callbacks = {}, self = this, userId, descHtml, deviceName = "", deviceNameHolder = "";
 
 
-        totalAccounts = this.ds.getAccounts();
+        var totalAccounts = this.ds.getAccounts();
         totalAccounts = Object.keys(totalAccounts).length;
         
         callbacks.mp_action_home = function(evt) {
@@ -1265,14 +1265,9 @@ var mpin = mpin || {};
         var callbacks = {}, self = this;
  
         callbacks.mp_action_home = function(evt) {
-            if (totalAccounts === 0) {
-             self.renderSetupHome();
-            } else if (totalAccounts === 1) {
-             self.renderLogin();
-            } else if (totalAccounts > 1) {
-             self.renderLogin(true);
-            }
+            self.renderHome.call(self, evt);
         };
+        
         //Check again
         callbacks.mpin_action_setup = function() {
             if (self.checkBtn(this))
@@ -1284,7 +1279,7 @@ var mpin = mpin || {};
                 self.actionResend.call(self, this);
         };
         //identities list
-        callbacks.mp_action_accounts = function() {
+        callbacks.mpin_accounts = function() {
             self.renderLogin.call(self, true, email);
         };
 
