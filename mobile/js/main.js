@@ -1140,10 +1140,6 @@ var mpin = mpin || {};
             menuBtn.style.bottom = '0';
         }
 
-        // if (!this.identity) {
-        //     self.setIdentity(self.ds.getDefaultIdentity(), false);
-        // }
-
         addEmptyItem = function(cnt) {
             var p = document.createElement("div");
             p.className = "mp_contentEmptyItem";
@@ -1163,11 +1159,6 @@ var mpin = mpin || {};
 
             addMpinBack();
             mpBack.style.display = 'block';
-    
-    
-            document.getElementById("mp_acclist_adduser").onclick = function(evt) {
-                self.renderSetupHome.call(self, evt);
-            };
 
             // Appending happens here
 
@@ -1193,7 +1184,14 @@ var mpin = mpin || {};
 
         var renderElem, name, self = this;
         name = this.getDisplayName(iD);
-        renderElem = document.getElementById("mp_back");
+
+
+        if(document.getElementById("mp_back")) {
+            renderElem = document.getElementById("mp_back");
+        } else {
+            renderElem = document.getElementById("mp_back_not_active");
+        }
+
         renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
 
         document.getElementById("mp_deluser").onclick = function(evt) {
@@ -1212,7 +1210,13 @@ var mpin = mpin || {};
     mpin.prototype.renderReactivatePanel = function(iD) {
         var renderElem, name, self = this;
         name = this.getDisplayName(iD);
-        renderElem = document.getElementById("mp_back");
+
+        if(document.getElementById("mp_back")) {
+            renderElem = document.getElementById("mp_back");
+        } else {
+            renderElem = document.getElementById("mp_back_not_active");
+        }
+
         renderElem.innerHTML = this.readyHtml("reactivate-panel", {name: name});
  
         document.getElementById("mp_acclist_reactivateuser").onclick = function() {
@@ -1226,8 +1230,13 @@ var mpin = mpin || {};
     mpin.prototype.renderDeletePanel = function(iD) {
         var renderElem, name, self = this;
         name = this.getDisplayName(iD);
+
+        if(document.getElementById("mp_back")) {
+            renderElem = document.getElementById("mp_back");
+        } else {
+            renderElem = document.getElementById("mp_back_not_active");
+        }
  
-        renderElem = document.getElementById("mp_back");
         renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
  
         document.getElementById("mp_acclist_deluser").onclick = function(evt) {
@@ -1305,7 +1314,12 @@ var mpin = mpin || {};
  
         function mEventsHandler(e) {
 
-            var elem = document.getElementById("mp_back");
+            if(document.getElementById("mp_back")) {
+                var elem = document.getElementById("mp_back");
+            } else {
+                var elem = document.getElementById("mp_back_not_active");
+            }
+
             elem.parentNode.removeChild(elem);
  
             removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
@@ -1336,7 +1350,8 @@ var mpin = mpin || {};
         var callbacks = {}, self = this;
  
         callbacks.mp_action_home = function(evt) {
-            self.renderHome.call(self, evt);
+
+            self.renderAccountsBeforeSetup();
         };
 
         //Check again
@@ -1662,13 +1677,6 @@ var mpin = mpin || {};
         var self = this;
         var accountTopBar = document.getElementById('identityContainer')
 
-        // console.log(self);
-
-        // if(menuBtn.classList.contains("close")) {
-        //     return;
-        // }
-
-        console.log("set IDENTITY ;::", typeof this.setIdentity);
         
         this.setIdentity(this.identity, true, function() {
             self.display(self.cfg.pinpadDefaultMessage);
