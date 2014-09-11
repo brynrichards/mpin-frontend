@@ -698,7 +698,7 @@ var mpin = mpin || {};
 
 
 		if (this.accountsLinkFlag) {
-			document.getElementById("mpin_help").style.bottom = "18%";
+//			document.getElementById("mpin_help").style.bottom = "18%";
 			document.getElementById("mpin_accounts_list").style.bottom = "9%";
 			removeClass("mpin_accounts_list", "mpHide");
 			this.accountsLinkFlag = false;
@@ -743,7 +743,7 @@ var mpin = mpin || {};
 
 		document.getElementById("mpin_arrow").onclick = function (evt) {
 //			addClass("mpin_help", "mpHide");
-			document.getElementById("mpin_help").style.display = "none";
+//			document.getElementById("mpin_help").style.display = "none";
 			self.toggleButton();
 			renderElem.style.top = "40px";
 		};
