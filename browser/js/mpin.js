@@ -1,33 +1,33 @@
 /* 
-Copyright 2014 CertiVox UK Ltd, All Rights Reserved.
-
-The CertiVox M-Pin Client and Server Libraries are free software: you can
-redistribute it and/or modify it under the terms of the BSD 3-Clause
-License - http://opensource.org/licenses/BSD-3-Clause
-
-For full details regarding our CertiVox terms of service please refer to
-the following links:
-
-  * Our Terms and Conditions -
-    http://www.certivox.com/about-certivox/terms-and-conditions/
-  
-  * Our Security and Privacy -
-    http://www.certivox.com/about-certivox/security-privacy/
-
-  * Our Statement of Position and Our Promise on Software Patents -
-    http://www.certivox.com/about-certivox/patents/
-*/
+ Copyright 2014 CertiVox UK Ltd, All Rights Reserved.
+ 
+ The CertiVox M-Pin Client and Server Libraries are free software: you can
+ redistribute it and/or modify it under the terms of the BSD 3-Clause
+ License - http://opensource.org/licenses/BSD-3-Clause
+ 
+ For full details regarding our CertiVox terms of service please refer to
+ the following links:
+ 
+ * Our Terms and Conditions -
+ http://www.certivox.com/about-certivox/terms-and-conditions/
+ 
+ * Our Security and Privacy -
+ http://www.certivox.com/about-certivox/security-privacy/
+ 
+ * Our Statement of Position and Our Promise on Software Patents -
+ http://www.certivox.com/about-certivox/patents/
+ */
 /*
-   Certivox JavaScript M-Pin Authentication Functions
-
-   Provides these functions:
-   calculateMPinToken     Calculates the MPin Token 
-   local_entropy          Gets an entropy value from the client machine
-   randomX                Calculates a random 254 bit value
-   addShares              Add two points on the curve that are originally in hex format
-   pass1Request           Form the JSON request for pass one of the M-Pin protocol
-   pass2Request           Form the JSON request for pass two of the M-Pin protocol
-*/
+ Certivox JavaScript M-Pin Authentication Functions
+ 
+ Provides these functions:
+ calculateMPinToken     Calculates the MPin Token 
+ local_entropy          Gets an entropy value from the client machine
+ randomX                Calculates a random 254 bit value
+ addShares              Add two points on the curve that are originally in hex format
+ pass1Request           Form the JSON request for pass one of the M-Pin protocol
+ pass2Request           Form the JSON request for pass two of the M-Pin protocol
+ */
 
 var mpin = mpin || {};
 (function () {
@@ -229,7 +229,7 @@ var mpin = mpin || {};
 				this.opts[_optionName] = options[_optionName];
 		}
 
-                mpinAuth.hash_val = this.opts.seedValue;
+		mpinAuth.hash_val = this.opts.seedValue;
 
 		if (this.opts.mpinAuthServerURL.mpin_startsWith("http")) {
 			this.opts.useWebSockets = false;
@@ -426,12 +426,12 @@ var mpin = mpin || {};
 			this.renderSetupHome();
 		} else if (totalAccounts === 1) {
 			this.renderLogin();
-		} 
-		/*
-		else if (totalAccounts > 1) {
-			this.renderLogin(true);
 		}
-		*/
+		/*
+		 else if (totalAccounts > 1) {
+		 this.renderLogin(true);
+		 }
+		 */
 
 		return;
 
@@ -676,7 +676,6 @@ var mpin = mpin || {};
 		userId = (email) ? email : "";
 		//one for 
 		if (this.opts.setDeviceName) {
-
 			//get from localStorage - already set
 			if (this.ds.getDeviceName()) {
 				deviceName = this.ds.getDeviceName();
@@ -686,6 +685,13 @@ var mpin = mpin || {};
 				deviceNameHolder = this.suggestDeviceName();
 				deviceName = "";
 			}
+
+			//devicename callback
+			callbacks.mpin_help_device = function () {
+				self.lastView = "renderSetupHome";
+				self.toggleHelp.call(self);
+				self.renderHelpTooltip.call(self, "devicename");
+			};
 		}
 
 		this.render("setup-home", callbacks, {userId: userId, setDeviceName: this.opts.setDeviceName, deviceName: deviceName, deviceNameHolder: deviceNameHolder});
@@ -723,8 +729,16 @@ var mpin = mpin || {};
 		renderElem.style.top = "0px";
 //		removeClass("mpin_accounts_list", "mpHide");
 		addClass("mpinCurrentIden", "mpHide");
-		document.getElementById("mpin_help").style.bottom = "-15%";
-		document.getElementById("mpin_help").style.position = "absolute";
+
+//		document.getElementById("mpin_help").style.bottom = "-15%";
+//		document.getElementById("mpin_help").style.position = "absolute";
+
+		document.getElementById("mpin_help").onclick = function () {
+			self.lastView = "renderLogin";
+			self.lastViewParams = [true, "renderSetupHome2"];
+			self.toggleHelp.call(self);
+			self.renderHelpTooltip.call(self, "addidentity");
+		};
 
 
 		document.getElementById("mpin_arrow").onclick = function (evt) {
@@ -738,15 +752,14 @@ var mpin = mpin || {};
 			self.actionSetupHome.call(self);
 		};
 
-		document.getElementById("mpin_help").onclick = function () {
-
-			self.lastView = "renderLogin";
-			self.lastViewParams = [true, "renderSetupHome2"];
-			self.toggleHelp.call(self);
-			self.renderHelpTooltip.call(self, "addidentity");
-		};
-
-
+		if (this.opts.setDeviceName) {
+			document.getElementById("mpin_help_device").onclick = function () {
+				self.lastView = "renderLogin";
+				self.lastViewParams = [true, "renderSetupHome2"];
+				self.toggleHelp.call(self);
+				self.renderHelpTooltip.call(self, "devicename");
+			};
+		}
 	};
 
 	mpin.prototype.suggestDeviceName = function () {
@@ -1087,7 +1100,8 @@ var mpin = mpin || {};
 		//get signature
 		requestRPS(_reqData, function (rpsData) {
 			if (rpsData.errorStatus === 401) {
-				if (btn) btn.error("setupNotReady_check_info2");
+				if (btn)
+					btn.error("setupNotReady_check_info2");
 				//NOT ACTIVATE identity :::
 				self.error("Activate identity");
 				return;
@@ -1785,7 +1799,7 @@ var mpin = mpin || {};
 
 		//authServer = this.opts.authenticateURL;
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-				this.opts.requestOTP, "0",  pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
+				this.opts.requestOTP, "0", pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
 				function (success, errorCode, errorMessage, authData) {
 					console.log("authenticate arguments :", arguments);
 					if (success) {
@@ -2389,12 +2403,12 @@ var mpin = mpin || {};
 		"mobile_footer_btn": "Now, sign in with your Smartphone",
 		"pinpad_setup_screen_text": "CREATE YOUR M-PIN:<br> CHOOSE 4 DIGIT",
 		"pinpad_default_message": "ENTER YOUR PIN",
-		"setup_device_label": "Choose a device friendly name:",
+		"setup_device_label": "Choose your device name:",
 		"setup_device_default": "(default name)",
 		"help_text_1": "Simply choose a memorable <b>[4 digit]</b> PIN to assign to this identity by pressing the numbers in sequence followed by the 'Setup' button to setup your PIN for this identity",
 		//2A
 		"help_text_landing1": "This Access Number allows you to sign in with M-Pin from your smartphone.  Enter the Access Number into the M-Pin app installed on your Smartphone when prompted and follow the instructions to sign into a browser session. This number is valid for 99 seconds, once this expires a new Access number will be generated.",
-		"help_text_landing2": "If you have a smartphone and are signing into <span class=mpinPurple>[xxxx]</span> sing someone else’s device or a public computer, then please: <br>1. Download the ‘M-Pin Smartphone App’ <br> 2. Open the App and follow the steps to sign in, this will tell you when you need to enter the access code.",
+		"help_text_landing2": "If you have a smartphone and are signing into <span class=mpinPurple>[xxxx]</span> using someone else’s device or a public computer, then please: <br>1. Download the ‘M-Pin Smartphone App’ <br> 2. Open the App and follow the steps to sign in, this will tell you when you need to enter the access code.",
 		"help_text_login": "Simply enter your <span class=mpinPurple>[4 digit]</span> PIN that you assigned to this identity by pressing the numbers in sequence followed by the ‘Sign in’ button. If you have forgotten your PIN, then you can reset it by clicking the ‘Reset PIN’ button below.",
 		"help_text_login_button": "Reset my PIN",
 		"help_text_setup": "Simply choose a memorable <span class=mpinPurple>[4 digit]</span> PIN to assign to this identity by pressing the numbers in sequence followed by the ‘Setup’ button to setup your PIN for this identity.",
@@ -2402,6 +2416,7 @@ var mpin = mpin || {};
 		"help_text_addidentity": "Your <span class=mpinPurple>[email address]</span> will be used as your identity when M-Pin signs you into this service.<br>You will receive an activation email to the address you provide.",
 		"help_text_loginerr": "You have entered your PIN incorrectly.<br><br>You have 3 attempts to enter your PIN, after 3 incorrect attempts your identity will be removed and you will need to re-register.",
 		"help_text_loginerr_button": "I've forgotton my PIN",
+		"help_text_devicename": "This <span class=mpinPurple>[device name]</span> will be used to identify this device and the identities you create from here",
 		"help_text_home": "If you are signing into <span class=mpinPurple>[xxxx]</span> with your own personal device like your computer or tablet then you can ‘Sign in with Browser’, but if you are using someone else’s device or a public computer, then ‘Sign in with Smartphone’ is recommended for additional security.",
 		"error_page_title": "Error page:",
 		"error_page_code": "Error code:",
@@ -2416,9 +2431,9 @@ var mpin = mpin || {};
 		"error_code_4009": "We could not complete your registration. Please contact the service administrator or try again later.", //403
 		"error_code_4010": "We could not complete your registration. Please contact the service administrator or try again later.", //
 		"error_code_4011": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
-		"error_code_4012": "We could not complete your authentication request. Please contact the service administrator.",  //
-		"error_code_4013": "We could not complete your registration. Please contact the service administrator or try again later.",  //
-		"error_code_4014": "We are experiencing a technical problem. Please try again later or contact the service administrator.",  //
+		"error_code_4012": "We could not complete your authentication request. Please contact the service administrator.", //
+		"error_code_4013": "We could not complete your registration. Please contact the service administrator or try again later.", //
+		"error_code_4014": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
 		"error_code_4015": "We are experiencing a technical problem. Please try again later or contact the service administrator."  //
 	};
 	//	image should have config properties
