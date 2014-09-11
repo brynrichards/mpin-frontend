@@ -29,7 +29,6 @@ the following links:
    pass2Request           Form the JSON request for pass two of the M-Pin protocol
 */
 
-
 var mpin = mpin || {};
  
 (function() {
