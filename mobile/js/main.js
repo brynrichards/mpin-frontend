@@ -1347,12 +1347,15 @@ var mpin = mpin || {};
 
         // Append iNumber, don't use handlebars
         var innerRowElemName = "mp_btIdSettings_"
-            , innerRowImgName = ".mp_btIdSettingsImg"
+            , innerRowImgName = "mp_btIdSettingsImg_"
             , innerRowElem =  document.getElementById(innerRowElemName)
-            , innerRowImg = document.querySelector(innerRowImgName)
+            , innerRowImg = document.getElementById(innerRowImgName)
             , imgRowElem = hlp.img("cog-setting.svg");
 
+
+
         innerRowElem.setAttribute("id",innerRowElemName + iNumber);
+        innerRowImg.setAttribute("id",innerRowImgName + iNumber);
         innerRowImg.setAttribute("src",imgRowElem);
 
 
