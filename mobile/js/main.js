@@ -29,7 +29,6 @@ the following links:
    pass2Request           Form the JSON request for pass two of the M-Pin protocol
 */
 
-
 var mpin = mpin || {};
  
 (function() {
@@ -81,7 +80,7 @@ var mpin = mpin || {};
             identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             setDeviceName: false
         },
-        touchevents: true
+        touchevents: false
     };
  
  
@@ -489,10 +488,8 @@ var mpin = mpin || {};
 
                  if (totalAccounts === 0) {
                   this.renderSetupHome();
-                 } else if (totalAccounts === 1) {
+                 } else if (totalAccounts === 1 || totalAccounts > 1) {
                   this.renderLogin();
-                 } else if (totalAccounts > 1) {
-                  this.renderLogin(true);
                  }
 
             } else {
@@ -508,7 +505,7 @@ var mpin = mpin || {};
         var callbacks = {}, self = this, userId, descHtml, deviceName = "", deviceNameHolder = "";
 
 
-        totalAccounts = this.ds.getAccounts();
+        var totalAccounts = this.ds.getAccounts();
         totalAccounts = Object.keys(totalAccounts).length;
         
         callbacks.mp_action_home = function(evt) {
@@ -1055,17 +1052,24 @@ var mpin = mpin || {};
 //custom render 
     mpin.prototype.renderAccountsPanel = function(back) {
 
+        console.log("Comming here");
+
         var self = this, 
             callbacks = {},
             renderElem, 
             addEmptyItem, 
             c = 0,
             mpBack = document.getElementById('mp_back'),
-            menuBtn = document.getElementById('menuBtn');
+            menuBtn = document.getElementById('menuBtn'),
+            defaultIdentity;
 
-            if (window.navigator.msPointerEnabled) {
-                menuBtn.style.bottom = '0';
-            }
+        if (window.navigator.msPointerEnabled) {
+            menuBtn.style.bottom = '0';
+        }
+
+        // if (!this.identity) {
+        //     self.setIdentity(self.ds.getDefaultIdentity(), false);
+        // }
 
         menuBtn.onclick = function(evt) {
             document.getElementById('accountTopBar').style.height = "";
@@ -1118,11 +1122,75 @@ var mpin = mpin || {};
 
     };
 
+    mpin.prototype.renderAccountsBeforeSetupPanel = function(back) {
+
+        console.log("Comming here");
+
+        var self = this, 
+            callbacks = {},
+            renderElem, 
+            addEmptyItem, 
+            c = 0,
+            mpBack = document.getElementById('mp_back_not_active'),
+            menuBtn = document.getElementById('menuBtn'),
+            defaultIdentity;
+
+        if (window.navigator.msPointerEnabled) {
+            menuBtn.style.bottom = '0';
+        }
+
+        addEmptyItem = function(cnt) {
+            var p = document.createElement("div");
+            p.className = "mp_contentEmptyItem";
+            cnt.appendChild(p);
+        };
+    
+        addMpinBack = function () {
+            renderElem = document.getElementById('identityContainer').appendChild(document.createElement("div"));
+            renderElem.id = "mp_back_not_active";
+            mpBack = document.getElementById("mp_back_not_active");
+            mpBack.innerHTML = self.readyHtml("accounts-panel-not-active", {});
+        }
+    
+
+        // Fix for IE compatibillity
+        if(document.body.contains(mpBack) === false) {
+
+            addMpinBack();
+            mpBack.style.display = 'block';
+
+            // Appending happens here
+
+            var cnt = document.getElementById("mp_accountContent");
+            this.addUserToList(cnt, this.ds.getDefaultIdentity(), true, 0);
+            
+            for (var i in this.ds.getAccounts()) {
+                c += 1;
+                if (i != this.ds.getDefaultIdentity())
+                    this.addUserToList(cnt, i, false, c);
+            }
+
+            addEmptyItem(cnt);
+    
+        }
+    
+        //default IDENTITY
+
+
+    };
+
     mpin.prototype.renderUserSettingsPanel = function(iD) {
 
         var renderElem, name, self = this;
         name = this.getDisplayName(iD);
-        renderElem = document.getElementById("mp_back");
+
+
+        if(document.getElementById("mp_back")) {
+            renderElem = document.getElementById("mp_back");
+        } else {
+            renderElem = document.getElementById("mp_back_not_active");
+        }
+
         renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
 
         document.getElementById("mp_deluser").onclick = function(evt) {
@@ -1141,7 +1209,13 @@ var mpin = mpin || {};
     mpin.prototype.renderReactivatePanel = function(iD) {
         var renderElem, name, self = this;
         name = this.getDisplayName(iD);
-        renderElem = document.getElementById("mp_back");
+
+        if(document.getElementById("mp_back")) {
+            renderElem = document.getElementById("mp_back");
+        } else {
+            renderElem = document.getElementById("mp_back_not_active");
+        }
+
         renderElem.innerHTML = this.readyHtml("reactivate-panel", {name: name});
  
         document.getElementById("mp_acclist_reactivateuser").onclick = function() {
@@ -1155,8 +1229,13 @@ var mpin = mpin || {};
     mpin.prototype.renderDeletePanel = function(iD) {
         var renderElem, name, self = this;
         name = this.getDisplayName(iD);
+
+        if(document.getElementById("mp_back")) {
+            renderElem = document.getElementById("mp_back");
+        } else {
+            renderElem = document.getElementById("mp_back_not_active");
+        }
  
-        renderElem = document.getElementById("mp_back");
         renderElem.innerHTML = this.readyHtml("delete-panel", {name: name});
  
         document.getElementById("mp_acclist_deluser").onclick = function(evt) {
@@ -1234,7 +1313,12 @@ var mpin = mpin || {};
  
         function mEventsHandler(e) {
 
-            var elem = document.getElementById("mp_back");
+            if(document.getElementById("mp_back")) {
+                var elem = document.getElementById("mp_back");
+            } else {
+                var elem = document.getElementById("mp_back_not_active");
+            }
+
             elem.parentNode.removeChild(elem);
  
             removeClass(document.getElementsByClassName("mp_itemSelected")[0], "mp_itemSelected");
@@ -1265,14 +1349,10 @@ var mpin = mpin || {};
         var callbacks = {}, self = this;
  
         callbacks.mp_action_home = function(evt) {
-            if (totalAccounts === 0) {
-             self.renderSetupHome();
-            } else if (totalAccounts === 1) {
-             self.renderLogin();
-            } else if (totalAccounts > 1) {
-             self.renderLogin(true);
-            }
+
+            self.renderAccountsBeforeSetup();
         };
+
         //Check again
         callbacks.mpin_action_setup = function() {
             if (self.checkBtn(this))
@@ -1284,8 +1364,10 @@ var mpin = mpin || {};
                 self.actionResend.call(self, this);
         };
         //identities list
-        callbacks.mp_action_accounts = function() {
-            self.renderLogin.call(self, true, email);
+        callbacks.mpin_accounts = function() {
+
+            self.renderAccountsBeforeSetup();
+
         };
 
         this.render("identity-not-active", callbacks, {email: email});
@@ -1570,11 +1652,43 @@ var mpin = mpin || {};
             accountTopBar.style.height = "100%"
             menuBtn.className = 'close';
 
-            this.renderAccountsPanel();
- 
             removeClass("mp_toggleButton", "mp_SelectedState");
             removeClass("mp_panel", "mp_flip");
+
+            this.renderAccountsPanel();
+ 
+
+        } else {
+
+            if (this.ds.getIdentityToken(this.identity) == "") {
+                        identity = this.getDisplayName(this.identity);
+                        this.renderIdentityNotActive(identity);
+                        return;
+                    }
+
         }
+
+        return false;
+    };
+
+
+    mpin.prototype.renderAccountsBeforeSetup = function() {
+        var self = this;
+        var accountTopBar = document.getElementById('identityContainer')
+
+        
+        this.setIdentity(this.identity, true, function() {
+            self.display(self.cfg.pinpadDefaultMessage);
+        }, function() {
+            return false;
+        });
+
+        accountTopBar.style.height = "100%"
+
+        removeClass("mp_toggleButton", "mp_SelectedState");
+        removeClass("mp_panel", "mp_flip");
+
+        this.renderAccountsBeforeSetupPanel();
 
         return false;
     };
