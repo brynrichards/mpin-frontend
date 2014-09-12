@@ -536,9 +536,17 @@ var mpin = mpin || {};
             }
         }
 
-        console.log("Opts of the device name", this.opts.setDeviceName);
+        this.render("setup-home", callbacks, {userId: userId, setDeviceName: this.opts.setDeviceName});
 
-        this.render("setup-home", callbacks, {userId: userId, setDeviceName: this.opts.setDeviceName, deviceName: deviceName, deviceNameHolder: deviceNameHolder});
+        // Put placeholder attribute
+
+
+        var inputDeviceName = document.getElementById('deviceInput')
+            , inputEmail = document.getElementById('emailInput');
+
+        inputDeviceName.placeholder = deviceNameHolder;
+        inputDeviceName.value = deviceName;
+        inputEmail.placeholder = lang.en.setup_text3;
 
     };
 
@@ -626,10 +634,12 @@ var mpin = mpin || {};
 
         this.render("setup", callbacks, {email: email});
 
-        var _textLoginBtn = document.getElementById('mpinLogin');
-        _textLoginBtn.innerText = lang.en.setup_btn_text;
+        var _textLoginBtn = document.getElementById('mpinLogin')
+            ,pinpadContainer = document.getElementById('circlesHolder'),
+            pinpadInput = document.getElementById('pinpad-input');
 
-        var pinpadContainer = document.getElementById('circlesHolder');
+        _textLoginBtn.innerText = lang.en.setup_btn_text;
+        pinpadInput.placeholder = lang.en.pinpad_placeholder_text;
 
         // Create dummy input els
         if (!this.isAccNumber) {
@@ -1277,7 +1287,6 @@ var mpin = mpin || {};
             divClass = "mp_contentItem one-edge-shadow";
         }
  
- 
         starButton = document.createElement("div");
         var name = this.getDisplayName(uId);
         starButton.setAttribute("tabindex", "-1");
@@ -1289,9 +1298,9 @@ var mpin = mpin || {};
         rowElem.setAttribute("data-identity", uId);
         rowElem.appendChild(starButton);
  
-        var tmplData = {iNumber: iNumber, name: name};
+        var tmplData = {name: name};
         rowElem.innerHTML = mpin.templates['user-row']({data:tmplData, cfg: this.cfg});
- 
+
         cnt.appendChild(rowElem);
  
         if (window.navigator.msPointerEnabled) {
@@ -1335,8 +1344,19 @@ var mpin = mpin || {};
             menuBtn.className = 'up';
 
         }
- 
-        document.getElementById("mp_btIdSettings_" + iNumber).onclick = function(ev) {
+
+        // Append iNumber, don't use handlebars
+        var innerRowElemName = "mp_btIdSettings_"
+            , innerRowImgName = ".mp_btIdSettingsImg"
+            , innerRowElem =  document.getElementById(innerRowElemName)
+            , innerRowImg = document.querySelector(innerRowImgName)
+            , imgRowElem = hlp.img("cog-setting.svg");
+
+        innerRowElem.setAttribute("id",innerRowElemName + iNumber);
+        innerRowImg.setAttribute("src",imgRowElem);
+
+
+        document.getElementById(innerRowElemName + iNumber).onclick = function(ev) {
             console.log(uId);
             self.renderUserSettingsPanel(uId);
             ev.stopPropagation();
