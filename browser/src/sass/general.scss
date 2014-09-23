@@ -124,6 +124,11 @@ the following links:
 			position: relative;
 			margin-bottom: 5px;
 		}
+		
+		.mpinArrowImg {
+			@include arrow-up-icon();
+		}
+		
 	}
 
 	#mpinCurrentIden {

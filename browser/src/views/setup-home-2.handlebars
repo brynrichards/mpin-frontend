@@ -7,11 +7,11 @@
 	
 	<div class="mpinCenter {{#if data.setDeviceName }} mpCenterTop {{/if}}">
 		<i class="mpinInfo" id="mpin_help"></i>{{txt "setup_text1"}}
-		<input type="email" id="emailInput" class="mpinInput" placeholder="{{txt "setup_placeholder"}}" value="{{ data.userId }}">
+		<input type="email" id="emailInput" class="mpinInput" placeholder="" value="">
 		
 		{{#if data.setDeviceName }}
 			<br><br><i class="mpinInfo" id="mpin_help_device"></i><label for="deviceInput">{{txt "setup_device_label"}}</label>
-			<input type="text" id="deviceInput" class="mpinInput" placeholder="{{ data.deviceNameHolder }} {{txt "setup_device_default"}}" value="{{ data.deviceName }}"><br><br>
+			<input type="text" id="deviceInput" class="mpinInput" placeholder="" value=""><br><br>
 		{{/if}}
 		
 		
@@ -23,11 +23,4 @@
 		</div>
 	</div>
 
-	<!--
-	<info class="mpinHelpInfo" id="mpin_help">
-		<i></i>
-		{{txt "home_hlp_link"}}
-	</info>
-	-->
-	
 </div>

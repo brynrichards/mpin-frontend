@@ -134,23 +134,6 @@ var mpin = mpin || {};
 		this.setLanguageText();
 
 		this.renderLanding();
-//		this.renderError(4005);
-
-//		this.renderMobile();
-//		this.renderDesktop();
-//		this.renderLogin();
-//		this.renderHome();
-//		this.renderSetupHome();
-//		this.renderSetupDone();
-//		this.renderActivateIdentity();
-//		this.renderSetup("bobo");
-//		this.renderHelpHub();
-//		new VIEWs
-//		this.renderMobileLogin();
-//		this.renderDesktop();
-//		this.renderSetup("123da");
-//		this.renderDeleteWarning("dada");
-//		this.renderBlank();
 	};
 
 	mpin.prototype.setupHtml = function () {
@@ -385,9 +368,6 @@ var mpin = mpin || {};
 	mpin.prototype.renderHome = function () {
 		var callbacks = {}, self = this;
 
-		console.log("render HOME this :::", this);
-		console.log("render HOME this :::", this.opts);
-
 		if (this.opts.prerollid) {
 			this.renderSetup(this.opts.prerollid);
 		}
@@ -432,36 +412,7 @@ var mpin = mpin || {};
 		 this.renderLogin(true);
 		 }
 		 */
-
-		return;
-
-//		callbacks.mp_action_home = function(evt) {
-		callbacks.mpinLogo = function (evt) {
-			self.renderHome.call(self, evt);
-		};
-		callbacks.mpinClear = function () {
-			self.addToPin.call(self, "clear");
-		};
-		callbacks.mpinLogin = function () {
-			self.actionSetup.call(self);
-		};
-
-		callbacks.mpin_mobile = function () {
-			self.renderMobileLogin.call(self);
-		};
-
-		callbacks.mpin_desktop_hub = function (ev) {
-			self.lastView = "renderDesktop";
-			self.renderHelpHub.call(self);
-			ev.preventDefault();
-			return;
-		};
-
-
-		this.render("desktop", callbacks);
 	};
-
-
 
 	mpin.prototype.renderMobile = function () {
 		var callbacks = {}, self = this;
@@ -514,7 +465,6 @@ var mpin = mpin || {};
 		this.getAccessNumber();
 	};
 
-
 	mpin.prototype.renderHelp = function (tmplName, callbacks, tmplData) {
 		var k, self = this;
 		tmplData = tmplData || {};
@@ -535,17 +485,6 @@ var mpin = mpin || {};
 			self.toggleHelp.call(self);
 		};
 	};
-
-	mpin.prototype.renderBlank = function () {
-		var callbacks = {};
-
-		callbacks.show_identity = function () {
-			alert(" : show IDENTITY : ");
-		};
-
-		this.render('blank', callbacks);
-	};
-
 
 	mpin.prototype.renderHelpTooltip = function (helpLabel) {
 		var callbacks = {}, self = this, helpText, secondBtn = "";
@@ -666,13 +605,6 @@ var mpin = mpin || {};
 			self.actionSetupHome.call(self);
 		};
 
-
-		if (this.accountsLinkFlag) {
-			callbacks.mpin_arrow = function () {
-				self.renderLogin.call(self, true);
-			};
-		}
-
 		userId = (email) ? email : "";
 		//one for 
 		if (this.opts.setDeviceName) {
@@ -694,14 +626,16 @@ var mpin = mpin || {};
 			};
 		}
 
-		this.render("setup-home", callbacks, {userId: userId, setDeviceName: this.opts.setDeviceName, deviceName: deviceName, deviceNameHolder: deviceNameHolder});
+		this.render("setup-home", callbacks, {setDeviceName: this.opts.setDeviceName});
 
-
-		if (this.accountsLinkFlag) {
-//			document.getElementById("mpin_help").style.bottom = "18%";
-			document.getElementById("mpin_accounts_list").style.bottom = "9%";
-			removeClass("mpin_accounts_list", "mpHide");
-			this.accountsLinkFlag = false;
+		//security Fixes
+		var emailField = document.getElementById("emailInput");
+		emailField.placeholder = hlp.text("setup_placeholder");
+		emailField.value = userId;
+		if (this.opts.setDeviceName) {
+			var deviceNameField = document.getElementById("deviceInput");
+			deviceNameField.placeholder = deviceNameHolder + " " + hlp.text("setup_device_default");
+			deviceNameField.value = deviceName;
 		}
 
 		document.getElementById("emailInput").focus();
@@ -724,14 +658,19 @@ var mpin = mpin || {};
 			}
 		}
 
-		renderElem.innerHTML = this.readyHtml("setup-home-2", {userId: "", setDeviceName: this.opts.setDeviceName, deviceName: deviceName, deviceNameHolder: deviceNameHolder});
-
+		renderElem.innerHTML = this.readyHtml("setup-home-2", {setDeviceName: this.opts.setDeviceName});
 		renderElem.style.top = "0px";
 //		removeClass("mpin_accounts_list", "mpHide");
 		addClass("mpinCurrentIden", "mpHide");
 
-//		document.getElementById("mpin_help").style.bottom = "-15%";
-//		document.getElementById("mpin_help").style.position = "absolute";
+		//security Fixes
+		var emailField = document.getElementById("emailInput");
+		emailField.placeholder = hlp.text("setup_placeholder");
+		if (this.opts.setDeviceName) {
+			var deviceNameField = document.getElementById("deviceInput");
+			deviceNameField.placeholder = deviceNameHolder + " " + hlp.text("setup_device_default");
+			deviceNameField.value = deviceName;
+		}
 
 		document.getElementById("mpin_help").onclick = function () {
 			self.lastView = "renderLogin";
@@ -904,12 +843,6 @@ var mpin = mpin || {};
 			});
 		}
 	};
-
-	//access NUMBER page
-
-
-
-
 
 	mpin.prototype.getAccessNumber = function () {
 		var _request = new XMLHttpRequest(), self = this, expire;
@@ -1142,8 +1075,6 @@ var mpin = mpin || {};
 
 		// button
 		document.getElementById("mpin_add_identity").onclick = function () {
-			self.accountsLinkFlag = true;
-//			self.renderSetupHome.call(self);
 			self.renderSetupHome2.call(self);
 		};
 		// button
@@ -1297,12 +1228,14 @@ var mpin = mpin || {};
 		userRow.setAttribute("data-identity", uId);
 		userRow.className = rowClass;
 
-		var tmplData = {iNumber: iNumber, name: name};
-
-		userRow.innerHTML = Handlebars.templates['user-row']({data: tmplData});
+		userRow.innerHTML = Handlebars.templates['user-row']({data: {name: name}});
+		//security Fixes
+		userRow.children[0].id = "mpin_settings_" + iNumber;
+		userRow.children[1].title = name;
+		userRow.children[1].setAttribute("alt", name);
 
 		cnt.appendChild(userRow);
-
+		
 		document.getElementById("mpin_settings_" + iNumber).onclick = function (ev) {
 			self.renderUserSettingsPanel.call(self, uId);
 			ev.stopPropagation();
@@ -1323,7 +1256,6 @@ var mpin = mpin || {};
 		userRow.ondblclick = function () {
 			self.toggleButton.call(self);
 		};
-
 	};
 
 	//prevent mpin button multi clicks
