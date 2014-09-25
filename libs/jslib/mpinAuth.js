@@ -227,13 +227,14 @@ mpinAuth.addShares = function (share1_hex, share2_hex) {
 
 /* Form the JSON request for pass one of the M-Pin protocol
    
-   This function used the random value x and the mpin_id to calculate values to
-   send to the server.
+   This function used the random value x, the mpin_id and epoch_days to calculate 
+   values to send to the server.
 
    Args:
         
      x: Random value
      mpin_id_hex: Hex encoded M-Pin ID
+     epoch_days: The number of epoch days.
 
    Returns:
 
@@ -246,13 +247,13 @@ mpinAuth.addShares = function (share1_hex, share2_hex) {
 
     where; 
 
-    mpin_id: Hex encodes M-Pin ID
+    mpin_id: Hex encoded M-Pin ID
     UT: Hex encoded x( H1(IDc) + H1(DATE|hash(IDc)) )
-    UT: Hex encoded x( H1(IDc) )
+    U: Hex encoded x( H1(IDc) )
     pass: Protocol first pass
 
 */
-mpinAuth.pass1Request = function (x, mpin_id_hex) {
+mpinAuth.pass1Request = function (x, mpin_id_hex, epoch_days) {
     "use strict";
     var mpin_id, mpin_id_pt, mpin_id_bytes, mpin_id_pt_hex, x_hex, hash_mpin_id, hash_mpin_id_hex, date_mpin_id_pt, date_mpin_id_hex, U, U_hex, UT, UT_hex, request, i;
 
@@ -274,7 +275,8 @@ mpinAuth.pass1Request = function (x, mpin_id_hex) {
     if (mpinAuth.DEBUG) {console.log("mpinAuth.pass1Request hash_mpin_id_hex: " + hash_mpin_id_hex); }
 
     // Concatanate date with M-Pin ID and map to point on curve
-    date_mpin_id_pt = idak._hashToPoint1(util.wordToBytes(util.today()).concat(hash_mpin_id));
+    if (mpinAuth.DEBUG) {console.log("mpinAuth.pass1Request epoch_days: " + epoch_days); }
+    date_mpin_id_pt = idak._hashToPoint1(util.wordToBytes(epoch_days).concat(hash_mpin_id));
     date_mpin_id_hex = util.pointFormat2hex(date_mpin_id_pt.toString());
     if (mpinAuth.DEBUG) {console.log("mpinAuth.pass1Request date_mpin_id_hex: " + date_mpin_id_hex); }
 

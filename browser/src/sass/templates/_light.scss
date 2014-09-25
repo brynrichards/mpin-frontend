@@ -10,7 +10,7 @@ the following links:
 
   * Our Terms and Conditions -
     http://www.certivox.com/about-certivox/terms-and-conditions/
-  
+	
   * Our Security and Privacy -
     http://www.certivox.com/about-certivox/security-privacy/
 
@@ -31,7 +31,7 @@ the following links:
 
 // GLOBAL CONFIGS
 
-$IMAGES : "../images/";
+$IMAGES : "../images/%templatename%/";
 $BORDERLESS : true;
 
 $BUTTON_COLOR: #ffffff;
@@ -56,6 +56,7 @@ $BUTTON_BGCOLOR: #007cc2;
 	background-size: auto 100%;
 	background-position: left;
 }
+
 
 // Background color
 @mixin bg-color() {
@@ -337,6 +338,15 @@ $BUTTON_BGCOLOR: #007cc2;
 	text-align: center;
 }
 
+@mixin arrow-up-icon () {
+	background-image: url('#{$IMAGES}arrow-down-black.svg');
+	width: 22px !important;
+	height: 20px !important;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: auto 100%;
+	margin: 3px auto;
+}
 
 
 @mixin arrow-icon() {
@@ -363,7 +373,7 @@ $BUTTON_BGCOLOR: #007cc2;
 	background-size: auto 100%;
 	background-position: left;
 	position: relative;
-    top: -8px;
+	top: -8px;
 }
 
 @mixin footer-copyright() {
