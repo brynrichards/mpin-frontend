@@ -215,7 +215,7 @@ var mpin = mpin || {};
 		mpinAuth.hash_val = this.opts.seedValue;
 
 		if (this.opts.mpinAuthServerURL.mpin_startsWith("http")) {
-			this.opts.useWebSockets = false;
+			this.opts.useWebSocket = false;
 		}
 
 		return this;
