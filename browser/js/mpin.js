@@ -71,7 +71,16 @@ var mpin = mpin || {};
 					return self.error(serverOptions.error);
 				}
 				opts.server = serverOptions;
-				self.initialize.call(self, domID, opts);
+
+
+				// check if Dom ready if not wait until fire load event.
+				if (document.readyState === "complete") {
+					self.initialize.call(self, domID, opts);
+				} else {
+					window.addEventListener("load", function () {
+						self.initialize.call(self, domID, opts);
+					});
+				}
 			});
 		});
 	};
@@ -1235,7 +1244,7 @@ var mpin = mpin || {};
 		userRow.children[1].setAttribute("alt", name);
 
 		cnt.appendChild(userRow);
-		
+
 		document.getElementById("mpin_settings_" + iNumber).onclick = function (ev) {
 			self.renderUserSettingsPanel.call(self, uId);
 			ev.stopPropagation();
