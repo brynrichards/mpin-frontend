@@ -80,7 +80,7 @@ var mpin = mpin || {};
             identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             setDeviceName: false
         },
-        touchevents: true
+        touchevents: false
     };
  
  
@@ -1182,7 +1182,6 @@ var mpin = mpin || {};
             mpBack.style.display = 'block';
 
             document.getElementById("mp_go_back").onclick = function(evt) {
-                console.log("Clicked mp_go_back");
                 self.renderIdentityNotActive.call(self);
             };
 
@@ -1208,14 +1207,15 @@ var mpin = mpin || {};
 
     mpin.prototype.renderUserSettingsPanel = function(iD) {
 
-        var renderElem, name, self = this;
-        name = this.getDisplayName(iD);
+        var renderElem, name, self = this, name = this.getDisplayName(iD), renderElemVal;
 
 
         if(document.getElementById("mp_back")) {
             renderElem = document.getElementById("mp_back");
+            renderElemVal = 'mp_back';
         } else {
             renderElem = document.getElementById("mp_back_not_active");
+            renderElemVal = 'mp_back_not_active';
         }
 
         renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
@@ -1227,9 +1227,13 @@ var mpin = mpin || {};
             self.renderReactivatePanel.call(self, iD);
         };
         document.getElementById("mp_acclist_cancel").onclick = function(evt) {
-            mpBack = document.getElementById('mp_back');
-            mpBack.parentNode.removeChild(mpBack);
-            self.renderAccountsPanel();
+            renderElem.parentNode.removeChild(renderElem);
+
+            if(renderElemVal === "mp_back") {
+                self.renderAccountsPanel();
+            } else {
+                self.renderAccountsBeforeSetupPanel();
+            }
         };
     };
  
