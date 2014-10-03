@@ -413,7 +413,7 @@ var mpin = mpin || {};
 
 		if (totalAccounts === 0) {
 			this.renderSetupHome();
-		} else if (totalAccounts === 1) {
+		} else {
 			this.renderLogin();
 		}
 		/*
@@ -431,6 +431,8 @@ var mpin = mpin || {};
 			clearTimeout(self.intervalID2);
 		}
 		;
+
+
 		clearIntervals();
 		callbacks.mp_action_home = function (evt) {
 //			_request.abort();
@@ -653,6 +655,8 @@ var mpin = mpin || {};
 	//with embeded animation
 	mpin.prototype.renderSetupHome2 = function () {
 		var renderElem, self = this, deviceName = "", deviceNameHolder = "";
+
+		this.lastViewParams = [true, "renderSetupHome2"];
 
 //		renderElem = document.getElementById("mpinUser");
 		renderElem = document.getElementById("mpin_identities");
@@ -1208,6 +1212,11 @@ var mpin = mpin || {};
 		callbacks.mpin_login_now = function () {
 			self.renderLogin.call(self);
 		};
+		callbacks.mpin_helphub = function () {
+			self.lastView = "renderSetupDone";
+			self.renderHelpHub.call(self);
+		};
+
 
 		this.render("setup-done", callbacks, {userId: userId});
 	};
@@ -1222,6 +1231,12 @@ var mpin = mpin || {};
 		callbacks.mp_action_go = function () {
 //			self.renderLogin.call(self);
 			self.renderSetupHome.call(self, userId);
+		};
+
+		callbacks.mpin_helphub = function () {
+			self.lastView = "renderDeleteWarning";
+			self.lastViewParams = [userId];
+			self.renderHelpHub.call(self);
 		};
 
 		this.render("delete-warning", callbacks, {userId: userId});
