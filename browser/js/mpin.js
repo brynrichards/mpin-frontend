@@ -331,7 +331,16 @@ var mpin = mpin || {};
 			return;
 		}
 
-
+		//check for prerollid
+		if (this.opts.prerollid) {
+			var userId = self.getDisplayName(this.identity);
+			clearIntervals();
+			//check if this identity is not register already !!!
+			if (!this.identity && userId !== this.opts.prerollid) {
+				this.actionSetupHome(this.opts.prerollid);
+				return;
+			}
+		}
 
 
 
@@ -378,7 +387,12 @@ var mpin = mpin || {};
 		var callbacks = {}, self = this;
 
 		if (this.opts.prerollid) {
-			this.renderSetup(this.opts.prerollid);
+			var userId = self.getDisplayName(this.identity);
+			//check if this identity is not register already !!!
+			if (!this.identity && userId !== this.opts.prerollid) {
+				this.actionSetupHome(this.opts.prerollid);
+				return;
+			}
 		}
 
 		callbacks.mpin_desktop = function () {
@@ -791,6 +805,16 @@ var mpin = mpin || {};
 		this.render("setup", callbacks, {email: this.tmp.email});
 		this.enableNumberButtons(true);
 		this.bindNumberButtons();
+
+		//if none identity and prerollid is set remove HOME link
+		if (this.opts.prerollid) {
+			var userId = self.getDisplayName(this.identity);
+			//check if this identity is not register already !!!
+			if (userId === this.opts.prerollid) {
+				document.getElementById("mpin_home").onclick = function () {
+				};
+			}
+		}
 
 		//requestSignature
 		this.requestSignature(this.tmp.email, this.tmp.clientSecretShare, this.tmp.clientSecretParams);
