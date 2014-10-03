@@ -1229,7 +1229,7 @@ var mpin = mpin || {};
         renderElem.innerHTML = this.readyHtml("reactivate-panel", {name: name});
  
         document.getElementById("mp_acclist_reactivateuser").onclick = function() {
-            self.renderSetup(self.getDisplayName(iD));
+            self.actionSetupHome.call(self, self.getDisplayName(iD));
         };
         document.getElementById("mp_acclist_cancel").onclick = function() {
             self.renderUserSettingsPanel(iD);
