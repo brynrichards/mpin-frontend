@@ -1169,6 +1169,11 @@ var mpin = mpin || {};
             addMpinBack();
             mpBack.style.display = 'block';
 
+            document.getElementById("mp_go_back").onclick = function(evt) {
+                console.log("Clicked mp_go_back");
+                self.renderIdentityNotActive.call(self);
+            };
+
             // Appending happens here
 
             var cnt = document.getElementById("mp_accountContent");
