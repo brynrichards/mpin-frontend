@@ -80,7 +80,7 @@ var mpin = mpin || {};
             identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             setDeviceName: false
         },
-        touchevents: true
+        touchevents: false
     };
  
  
@@ -590,7 +590,7 @@ var mpin = mpin || {};
  
  
     mpin.prototype.renderSetup = function(email, clientSecretShare, clientSecretParams) {
-        
+
         var callbacks = {}
             , self = this;
 
@@ -639,6 +639,7 @@ var mpin = mpin || {};
             pinpadInput = document.getElementById('pinpad-input');
 
         _textLoginBtn.innerText = lang.en.setup_btn_text;
+
         pinpadInput.placeholder = lang.en.pinpad_placeholder_text;
 
         // Create dummy input els
@@ -724,7 +725,8 @@ var mpin = mpin || {};
 
             var callbacks = {};
 
-            var pinpadDisplay = document.getElementById("pinpad-input");
+            var pinpadDisplay = document.getElementById("pinpad-input")
+                _textLoginBtn = document.getElementById('mpinLogin');
 
             if (self.isAccNumber) {
                 self.accessNumber = pinpadDisplay.value;
@@ -745,6 +747,8 @@ var mpin = mpin || {};
                     return;
 
                 }
+
+                _textLoginBtn.innerText = lang.en.authPin_button_login;
 
                 // Clear the error codes display
 
@@ -794,7 +798,15 @@ var mpin = mpin || {};
         this.enableNumberButtons(true);
         this.bindNumberButtons();
  
-        var pinpadDisplay = document.getElementById("pinpad-input");
+        var pinpadDisplay = document.getElementById("pinpad-input")
+            , _textLoginBtn = document.getElementById('mpinLogin');
+
+        // Change AC number text here
+
+        if (self.isAccNumber) {
+            _textLoginBtn.innerText = lang.en.authPin_button_next;
+        } else {
+        }
 
         //set placeholder to access Number text
         pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
@@ -2535,6 +2547,7 @@ var mpin = mpin || {};
         "authPin_header": "Enter your M-Pin",
         "authPin_button_clear": "Clear",
         "authPin_button_login": "Login",
+        "authPin_button_next": "Next",
         "authPin_pleasewait": "Authenticating...",
         "authPin_success": "Success",
         "authPin_errorInvalidPin": "INCORRECT M-PIN!",
