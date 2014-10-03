@@ -75,8 +75,10 @@ var mpin = mpin || {};
 
 				// check if Dom ready if not wait until fire load event.
 				if (document.readyState === "complete") {
+					console.log("case 1 - ready STATE");
 					self.initialize.call(self, domID, opts);
 				} else {
+					console.log("case 2 - with ADD Event ");
 					window.addEventListener("load", function () {
 						self.initialize.call(self, domID, opts);
 					});
@@ -413,7 +415,7 @@ var mpin = mpin || {};
 
 		if (totalAccounts === 0) {
 			this.renderSetupHome();
-		} else if (totalAccounts === 1) {
+		} else {
 			this.renderLogin();
 		}
 		/*
@@ -431,6 +433,8 @@ var mpin = mpin || {};
 			clearTimeout(self.intervalID2);
 		}
 		;
+
+
 		clearIntervals();
 		callbacks.mp_action_home = function (evt) {
 //			_request.abort();
@@ -653,6 +657,8 @@ var mpin = mpin || {};
 	//with embeded animation
 	mpin.prototype.renderSetupHome2 = function () {
 		var renderElem, self = this, deviceName = "", deviceNameHolder = "";
+		
+		this.lastViewParams = [true, "renderSetupHome2"];
 
 //		renderElem = document.getElementById("mpinUser");
 		renderElem = document.getElementById("mpin_identities");
@@ -1208,6 +1214,11 @@ var mpin = mpin || {};
 		callbacks.mpin_login_now = function () {
 			self.renderLogin.call(self);
 		};
+		callbacks.mpin_helphub = function () {
+			self.lastView = "renderSetupDone";
+			self.renderHelpHub.call(self);
+		};
+
 
 		this.render("setup-done", callbacks, {userId: userId});
 	};
