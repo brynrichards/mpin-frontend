@@ -241,7 +241,11 @@ function sendAuthToken(restURL, mpinResponse, handleToken, authTokenFormatter, c
           var jsonText = xmlhttpAuthToken.responseText;
           var response;
           if (jsonText) {
-            response = JSON.parse(jsonText);
+			try {
+				response = JSON.parse(jsonText);
+			} catch (e) {
+				response = {};
+			}
           } else {
             response = {}
           }
