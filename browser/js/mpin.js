@@ -30,7 +30,11 @@
  */
 
 var mpin = mpin || {};
-(function () {
+
+(function() {
+	
+    console.log("dom ready");
+
 	"use strict";
 	var lang = {}, hlp = {}, loader, MPIN_URL_BASE, IMAGES_PATH;
 	MPIN_URL_BASE = "%URL_BASE%";
@@ -224,7 +228,7 @@ var mpin = mpin || {};
 		mpinAuth.hash_val = this.opts.seedValue;
 
 		if (this.opts.mpinAuthServerURL.mpin_startsWith("http")) {
-			this.opts.useWebSockets = false;
+			this.opts.useWebSocket = false;
 		}
 
 		return this;
@@ -2458,5 +2462,6 @@ var mpin = mpin || {};
 			};
 		}
 	};
-
 })();
+
+

@@ -80,7 +80,7 @@ var mpin = mpin || {};
             identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             setDeviceName: false
         },
-        touchevents: false
+        touchevents: true
     };
  
  
@@ -204,7 +204,7 @@ var mpin = mpin || {};
         mpinAuth.hash_val = this.opts.seedValue;
 
         if (this.opts.mpinAuthServerURL.mpin_startsWith("http")) {
-            this.opts.useWebSockets = false;
+            this.opts.useWebSocket = false;
         }
 
         return this;
@@ -590,7 +590,7 @@ var mpin = mpin || {};
  
  
     mpin.prototype.renderSetup = function(email, clientSecretShare, clientSecretParams) {
-        
+
         var callbacks = {}
             , self = this;
 
@@ -639,6 +639,7 @@ var mpin = mpin || {};
             pinpadInput = document.getElementById('pinpad-input');
 
         _textLoginBtn.innerText = lang.en.setup_btn_text;
+
         pinpadInput.placeholder = lang.en.pinpad_placeholder_text;
 
         // Create dummy input els
@@ -724,7 +725,8 @@ var mpin = mpin || {};
 
             var callbacks = {};
 
-            var pinpadDisplay = document.getElementById("pinpad-input");
+            var pinpadDisplay = document.getElementById("pinpad-input")
+                _textLoginBtn = document.getElementById('mpinLogin');
 
             if (self.isAccNumber) {
                 self.accessNumber = pinpadDisplay.value;
@@ -745,6 +747,8 @@ var mpin = mpin || {};
                     return;
 
                 }
+
+                _textLoginBtn.innerText = lang.en.authPin_button_login;
 
                 // Clear the error codes display
 
@@ -794,7 +798,15 @@ var mpin = mpin || {};
         this.enableNumberButtons(true);
         this.bindNumberButtons();
  
-        var pinpadDisplay = document.getElementById("pinpad-input");
+        var pinpadDisplay = document.getElementById("pinpad-input")
+            , _textLoginBtn = document.getElementById('mpinLogin');
+
+        // Change AC number text here
+
+        if (self.isAccNumber) {
+            _textLoginBtn.innerText = lang.en.authPin_button_next;
+        } else {
+        }
 
         //set placeholder to access Number text
         pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
@@ -1169,6 +1181,10 @@ var mpin = mpin || {};
             addMpinBack();
             mpBack.style.display = 'block';
 
+            document.getElementById("mp_go_back").onclick = function(evt) {
+                self.renderIdentityNotActive.call(self);
+            };
+
             // Appending happens here
 
             var cnt = document.getElementById("mp_accountContent");
@@ -1191,14 +1207,15 @@ var mpin = mpin || {};
 
     mpin.prototype.renderUserSettingsPanel = function(iD) {
 
-        var renderElem, name, self = this;
-        name = this.getDisplayName(iD);
+        var renderElem, name, self = this, name = this.getDisplayName(iD), renderElemVal;
 
 
         if(document.getElementById("mp_back")) {
             renderElem = document.getElementById("mp_back");
+            renderElemVal = 'mp_back';
         } else {
             renderElem = document.getElementById("mp_back_not_active");
+            renderElemVal = 'mp_back_not_active';
         }
 
         renderElem.innerHTML = this.readyHtml("user-settings", {name: name});
@@ -1210,9 +1227,13 @@ var mpin = mpin || {};
             self.renderReactivatePanel.call(self, iD);
         };
         document.getElementById("mp_acclist_cancel").onclick = function(evt) {
-            mpBack = document.getElementById('mp_back');
-            mpBack.parentNode.removeChild(mpBack);
-            self.renderAccountsPanel();
+            renderElem.parentNode.removeChild(renderElem);
+
+            if(renderElemVal === "mp_back") {
+                self.renderAccountsPanel();
+            } else {
+                self.renderAccountsBeforeSetupPanel();
+            }
         };
     };
  
@@ -1229,7 +1250,7 @@ var mpin = mpin || {};
         renderElem.innerHTML = this.readyHtml("reactivate-panel", {name: name});
  
         document.getElementById("mp_acclist_reactivateuser").onclick = function() {
-            self.renderSetup(self.getDisplayName(iD));
+            self.actionSetupHome.call(self, self.getDisplayName(iD));
         };
         document.getElementById("mp_acclist_cancel").onclick = function() {
             self.renderUserSettingsPanel(iD);
@@ -2530,6 +2551,7 @@ var mpin = mpin || {};
         "authPin_header": "Enter your M-Pin",
         "authPin_button_clear": "Clear",
         "authPin_button_login": "Login",
+        "authPin_button_next": "Next",
         "authPin_pleasewait": "Authenticating...",
         "authPin_success": "Success",
         "authPin_errorInvalidPin": "INCORRECT M-PIN!",

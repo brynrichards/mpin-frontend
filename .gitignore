@@ -3,6 +3,7 @@ browser/.sass-cache/
 browser/nbproject/private/
 browser/nbproject/
 mobile/.sass-cache/
+mobile/node_modules/
 mobile/in/
 build/
 build/out
