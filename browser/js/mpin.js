@@ -143,6 +143,7 @@ var mpin = mpin || {};
 		this.setLanguageText();
 
 		this.renderLanding();
+//		this.renderOtpExpire();
 	};
 
 	mpin.prototype.setupHtml = function () {
@@ -726,6 +727,46 @@ var mpin = mpin || {};
 				self.renderHelpTooltip.call(self, "devicename");
 			};
 		}
+	};
+
+	mpin.prototype.renderOtp = function (authData) {
+		var callbacks = {}, secondsField, self = this, leftSeconds;
+
+		function expire (expiresOn) {
+			leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date().getTime())) / 1000);
+			console.log("element leftSeconds:::", leftSeconds);
+			if (leftSeconds > 0) {
+				document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
+			} else {
+				//clear Interval and go to next render.
+				clearInterval(self.intervalExpire);
+				self.renderOtpExpire();
+			}
+		}
+		;
+
+		console.log("auth DATA :::", authData);
+
+		this.render("otp", callbacks);
+		document.getElementById("mpinOTPNumber").innerHTML = authData._mpinOTP;
+		secondsField = document.getElementById("mpin_seconds");
+
+		var expireSec = new Date().getTime() + 99000; //99000 - 99 sec
+		expire(expireSec);
+
+		this.intervalExpire = setInterval(function () {
+			expire();
+		}, 1000);
+	};
+
+	mpin.prototype.renderOtpExpire = function () {
+		var callbacks = {}, self = this;
+
+		callbacks.mpin_login_now = function () {
+			self.renderLogin.call(self);
+		};
+
+		this.render("otp-expire", callbacks);
 	};
 
 	mpin.prototype.suggestDeviceName = function () {
@@ -1557,7 +1598,7 @@ var mpin = mpin || {};
 
 		_email = (uId) ? uId : document.getElementById("emailInput").value;
 
-		if (_email.length === 0 || !this.opts.identityCheckRegex.test(_email)) {
+		if ((_email.length === 0 || !this.opts.identityCheckRegex.test(_email)) && !(this.opts.prerollid)) {
 			document.getElementById("emailInput").focus();
 			return;
 		}
@@ -1783,6 +1824,10 @@ var mpin = mpin || {};
 				function (success, errorCode, errorMessage, authData) {
 					console.log("authenticate arguments :", arguments);
 					if (success) {
+						if (self.opts.requestOTP) {
+							self.renderOtp(authData);
+							return;
+						}
 						self.successLogin(authData);
 					} else if (errorCode === "INVALID") {
 						self.display(hlp.text("authPin_errorInvalidPin"), true);
@@ -2396,6 +2441,11 @@ var mpin = mpin || {};
 		"help_text_addidentity": "Your <span class=mpinPurple>[email address]</span> will be used as your identity when M-Pin signs you into this service.<br>You will receive an activation email to the address you provide.",
 		"help_text_loginerr": "You have entered your PIN incorrectly.<br><br>You have 3 attempts to enter your PIN, after 3 incorrect attempts your identity will be removed and you will need to re-register.",
 		"help_text_loginerr_button": "I've forgotton my PIN",
+		"otp_header_btn_text": "Your One-time Password is:",
+		"otp_under_btn_text": "Note: The password is only valid for 100 seconds before it expries.",
+		"otp_remain_text": "Remaining:",
+		"otp_expire_header": "Your One-Time Password has expired.",
+		"otp_expire_btn": "Login again to get a new OTP.",
 		"help_text_devicename": "This <span class=mpinPurple>[device name]</span> will be used to identify this device and the identities you create from here",
 		"help_text_home": "If you are signing into <span class=mpinPurple>[xxxx]</span> with your own personal device like your computer or tablet then you can ‘Sign in with Browser’, but if you are using someone else’s device or a public computer, then ‘Sign in with Smartphone’ is recommended for additional security.",
 		"error_page_title": "Error page:",
