@@ -219,7 +219,6 @@ var mpin = mpin || {};
 		this.opts || (this.opts = {});
 
 		this.opts.useWebSocket = ('WebSocket' in window && window.WebSocket.CLOSING === 2);
-		this.opts.requestOTP = "0";
 
 		for (_i = 0; _i < _opts.length; _i++) {
 			_optionName = _opts[_i];
