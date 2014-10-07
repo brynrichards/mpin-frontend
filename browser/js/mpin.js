@@ -2440,7 +2440,7 @@ var mpin = mpin || {};
 		"help_text_loginerr": "You have entered your PIN incorrectly.<br><br>You have 3 attempts to enter your PIN, after 3 incorrect attempts your identity will be removed and you will need to re-register.",
 		"help_text_loginerr_button": "I've forgotton my PIN",
 		"otp_header_btn_text": "Your One-time Password is:",
-		"otp_under_btn_text": "Note: The password is only valid for 100 seconds before it expries.",
+		"otp_under_btn_text": "Note: The password is only valid for 99 seconds before it expries.",
 		"otp_remain_text": "Remaining:",
 		"otp_expire_header": "Your One-Time Password has expired.",
 		"otp_expire_btn": "Login again to get a new OTP.",
