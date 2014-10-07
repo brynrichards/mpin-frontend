@@ -80,7 +80,7 @@ var mpin = mpin || {};
             identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             setDeviceName: false
         },
-        touchevents: true
+        touchevents: false
     };
  
  
@@ -193,7 +193,6 @@ var mpin = mpin || {};
         this.opts || (this.opts = {});
  
         this.opts.useWebSocket = ('WebSocket' in window && window.WebSocket.CLOSING === 2);
-        this.opts.requestOTP = "0";
  
         for (var _i = 0, _l = _opts.length; _i < _l; _i++) {
             _optionName = _opts[_i];
@@ -548,6 +547,38 @@ var mpin = mpin || {};
         inputDeviceName.value = deviceName;
         inputEmail.placeholder = lang.en.setup_text3;
 
+    };
+
+    mpin.prototype.renderOtp = function (authData) {
+        var callbacks = {}, secondsField, self = this, leftSeconds;
+        function expire (expiresOn) {
+            leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date().getTime())) / 1000);
+            console.log("element leftSeconds:::", leftSeconds);
+            if (leftSeconds > 0) {
+                document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
+            } else {
+                //clear Interval and go to next render.
+                clearInterval(self.intervalExpire);
+                self.renderOtpExpire();
+            }
+        }
+        ;
+        console.log("auth DATA :::", authData);
+        this.render("otp", callbacks);
+        document.getElementById("mpinOTPNumber").innerHTML = authData._mpinOTP;
+        secondsField = document.getElementById("mpin_seconds");
+        var expireSec = new Date().getTime() + 99000; //99000 - 99 sec
+        expire(expireSec);
+        this.intervalExpire = setInterval(function () {
+            expire();
+        }, 1000);
+    };
+    mpin.prototype.renderOtpExpire = function () {
+        var callbacks = {}, self = this;
+        callbacks.mpin_login_now = function () {
+            self.renderLogin.call(self);
+        };
+        this.render("otp-expire", callbacks);
     };
 
     mpin.prototype.suggestDeviceName = function() {
@@ -1974,7 +2005,11 @@ var mpin = mpin || {};
                     console.log("authenticate arguments :", errorCode);
                     if (success) {
                         var iD = self.identity;
-                        self.successLogin(authData, iD);
+                            if (self.opts.requestOTP) {
+                                self.renderOtp(authData);
+                                return;
+                            }
+                            self.successLogin(authData, iD);
                     } else if (errorCode === "INVALID") {
 
                         self.display(hlp.text("authPin_errorInvalidPin"), false);
