@@ -94,7 +94,8 @@ var mpin = mpin || {};
 		defaultOptions: {
 			identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 			setDeviceName: false
-		}
+		},
+		expireOtpSeconds: 99
 	};
 
 	/**
@@ -730,28 +731,25 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.renderOtp = function (authData) {
-		var callbacks = {}, secondsField, self = this, leftSeconds;
+		var callbacks = {}, self = this, leftSeconds, epochMilisec;
 
 		function expire (expiresOn) {
 			leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date().getTime())) / 1000);
-			console.log("element leftSeconds:::", leftSeconds);
 			if (leftSeconds > 0) {
 				document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
 			} else {
-				//clear Interval and go to next render.
+				//clear Interval and go to OTP expire screen.
 				clearInterval(self.intervalExpire);
 				self.renderOtpExpire();
 			}
 		}
-		;
-
-		console.log("auth DATA :::", authData);
 
 		this.render("otp", callbacks);
-		document.getElementById("mpinOTPNumber").innerHTML = authData._mpinOTP;
-		secondsField = document.getElementById("mpin_seconds");
 
-		var expireSec = new Date().getTime() + 99000; //99000 - 99 sec
+		epochMilisec = new Date().getTime();
+		document.getElementById("mpinOTPNumber").innerHTML = authData._mpinOTP;
+
+		var expireSec = epochMilisec + (this.cfg.expireOtpSeconds * 1000);
 		expire(expireSec);
 
 		this.intervalExpire = setInterval(function () {
