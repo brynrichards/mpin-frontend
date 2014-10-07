@@ -2012,11 +2012,13 @@ var mpin = mpin || {};
             authServer = this.opts.mpinAuthServerURL;
         }
         accessNumber = this.accessNumber;
+
+        console.log("!!!!!!!!!!!!!!!!!!!!!!This is the pin value", pinValue);
+
         //authServer = this.opts.authenticateURL;
         getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-                this.opts.requestOTP, accessNumber, pinValue, this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
-                function(success, errorCode, errorMessage, authData) {
-                    console.log("##################authenticate arguments :", errorCode);
+                this.opts.requestOTP, accessNumber ? accessNumber : "0", pinValue, this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders, function(success, errorCode, errorMessage, authData) {
+
                     if (success) {
                         var iD = self.identity;
                             if (self.opts.requestOTP) {
