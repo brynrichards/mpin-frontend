@@ -705,8 +705,12 @@ var mpin = mpin || {};
     mpin.prototype.renderLogin = function(listAccounts) {
 
         var callbacks = {}, self = this, elemForErrcode = document.getElementById('codes');
- 
-        this.isAccNumber = true;
+        
+        if(self.opts.requestOTP) {
+            this.isAccNumber = false;
+        } else {
+             this.isAccNumber = true;
+        }
 
         var identity = this.ds.getDefaultIdentity();
         var email = this.getDisplayName(identity);
@@ -817,7 +821,6 @@ var mpin = mpin || {};
 
                 if(self.pinPadLength.length < self.cfg.pinSize ) {
 
-                    console.log("(self.pinPadLength.length < self.cfg.pinSize ");
                     return;
                 }
 
@@ -893,7 +896,18 @@ var mpin = mpin || {};
                 circleA.appendChild(circleB);
                 circlesHolder.appendChild(circleA);
             };
-        } 
+        } else {
+            for (var i = this.cfg.pinSize - 1; i >= 0; i--) {
+                var circleA = document.createElement("div");
+                var circleB = document.createElement("div");
+
+                circleA.className = "circle";
+                circleB.className = "outer-circle";
+
+                circleA.appendChild(circleB);
+                circlesHolder.appendChild(circleA);
+            };
+        }
 
         if (listAccounts) {
             this.toggleButton();
@@ -2002,7 +2016,7 @@ var mpin = mpin || {};
         getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
                 this.opts.requestOTP, accessNumber, pinValue, this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
                 function(success, errorCode, errorMessage, authData) {
-                    console.log("authenticate arguments :", errorCode);
+                    console.log("##################authenticate arguments :", errorCode);
                     if (success) {
                         var iD = self.identity;
                             if (self.opts.requestOTP) {
