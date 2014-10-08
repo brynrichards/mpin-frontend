@@ -135,12 +135,7 @@ var mpin = mpin || {};
         } else {
             this.language = this.cfg.language;
         }
-        this.setLanguageText();
- 
- 
-        console.log("language:: ", this.language);
-        console.log("language:: ", lang);
- 
+        this.setLanguageText(); 
          
         // Prevent user from scrolling on touch
  
@@ -776,7 +771,6 @@ var mpin = mpin || {};
 
                     // store the accessNumber into mpin for the next step.
                     self.erroCodeAccNumber = true;
-
                     self.actionLogin.call(self);
 
                     return;
@@ -788,9 +782,7 @@ var mpin = mpin || {};
                 // Clear the error codes display
 
                 self.display(false, true);
-
                 self.isAccNumber = false;
-
                 self.enableButton(false, "go");
                 self.enableButton(false, "clear");
 
@@ -809,7 +801,6 @@ var mpin = mpin || {};
 
                    circleA.className = "circle";
                    circleB.className = "outer-circle";
-
                    circleA.appendChild(circleB);
                    circlesHolder.appendChild(circleA);
                 };
@@ -849,8 +840,8 @@ var mpin = mpin || {};
         var pinPad = document.getElementById('pinsHolder');
         var circlesHolder = document.getElementById('circlesHolder');
         var pinpadContainer = document.getElementById('inputContainer');
-
         var renderElem = document.getElementById('codes');
+
         renderElem.style.display = 'block';
         renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text2");
 
@@ -912,7 +903,6 @@ var mpin = mpin || {};
         if (listAccounts) {
             this.toggleButton();
         } else {
-
             this.setIdentity(this.ds.getDefaultIdentity(), true, function() {
                 self.display(hlp.text("pinpad_default_message"));
                }, function() {
@@ -1993,7 +1983,11 @@ var mpin = mpin || {};
 
         var callbacks = {};
 
-        var authServer, getAuth, self = this, pinValue = document.getElementById('pinpad-input').value, accessNumber;
+        var authServer, getAuth 
+            , self = this
+            , pinValue = document.getElementById('pinpad-input').value
+            , accessNumber;
+
         //AlertMessage.clearDisplayWrap();
         this.enableNumberButtons(false);
         this.enableButton(false, "go");
@@ -2004,6 +1998,7 @@ var mpin = mpin || {};
  
         //getAuth = this.opts.useWebSocket ? getAuthToken : getAuthTokenAjax;
         //authServer = this.opts.mpinAuthServerURL;
+
         if (this.opts.useWebSocket) {
             getAuth = getAuthToken;
             authServer = this.opts.mpinAuthServerURL + "/authenticationToken";
@@ -2013,13 +2008,13 @@ var mpin = mpin || {};
         }
         accessNumber = this.accessNumber;
 
-        console.log("!!!!!!!!!!!!!!!!!!!!!!This is the pin value", pinValue);
-
         //authServer = this.opts.authenticateURL;
         getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-                this.opts.requestOTP, accessNumber ? accessNumber : "0", pinValue, this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders, function(success, errorCode, errorMessage, authData) {
+                this.opts.requestOTP, accessNumber ? accessNumber : "0", pinValue, this.opts.requestOTP ? this.opts.authenticateURL : this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders, function(success, errorCode, errorMessage, authData) {
 
                     if (success) {
+
+                        console.log("######################Comming in success", authData);
                         var iD = self.identity;
                             if (self.opts.requestOTP) {
                                 self.renderOtp(authData);
@@ -2061,7 +2056,7 @@ var mpin = mpin || {};
                     }
  
                 }, function() {
-            console.log(" Before HandleToken ::::");
+                    console.log(" Before HandleToken ::::");
         });
  
     };
@@ -2101,9 +2096,7 @@ var mpin = mpin || {};
             this.enableButton(false, "clear");
             this.enableButton(true, "toggle");
 //          mpin.enableToggleButton(true);
-            console.log("before call identity PERMIT :)");
             this.requestPermit(newIdentity, function(timePermitHex) {
-                console.log("call IDENTITY PERMIT :::");
                 self.enableNumberButtons(true);
             }, function(message, statusCode) {
                 if (statusCode === 404) {
@@ -2173,9 +2166,7 @@ var mpin = mpin || {};
         var _request = new XMLHttpRequest();
         _request.onreadystatechange = function() {
             if (_request.readyState === 4 && _request.status === 200)
-            {
-                console.log("POST success ....");
- 
+            { 
                 // Tempory fix
                 if (_request.responseText == '') {
                     cb(true);
@@ -2334,7 +2325,6 @@ var mpin = mpin || {};
 
         mpinDs.setDeviceName = function(devId) {
             mpinDs.mpin.deviceName = devId;
-            console.log("data STORAGE set device ID::");
             mpinDs.save();
             };
 
