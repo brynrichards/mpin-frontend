@@ -526,9 +526,7 @@ var mpin = mpin || {};
 			secondBtn = hlp.text("help_text_" + helpLabel + "_button");
 
 			if (helpLabel === "login" || helpLabel === "loginerr") {
-				
 				this.isLoginScreen = true;
-				
 				callbacks.mpin_help_second = function () {
 					self.toggleHelp.call(self);
 					self.renderLogin(true, "renderReactivatePanel");
@@ -870,8 +868,6 @@ var mpin = mpin || {};
 			return;
 		}
 
-		console.log("############Subview", subView)
-
 		callbacks.mpin_home = function (evt) {
 			self.renderHome.call(self, evt);
 		};
@@ -1205,9 +1201,7 @@ var mpin = mpin || {};
 
 		//lastView settings
 		this.lastViewParams = [true, "renderUserSettingsPanel"];
-
 		this.isLoginScreen = false;
-		console.log(" SET is LOGIN SCREEN FALSE");
 
 //		renderElem = document.getElementById("mpin_identities");
 		renderElem = document.getElementById("mpinUser");
@@ -1243,8 +1237,6 @@ var mpin = mpin || {};
 		};
 		document.getElementById("mpin_cancel_btn").onclick = function () {
 			//self.renderAccountsPanel();
-			console.log(">>> REACTIVATE PANEL >>>", self.isLoginScreen);
-			console.log(">>> REACTIVATE PANEL >>>", !self.isLoginScreen);
 			self.renderLogin.call(self, !self.isLoginScreen);
 		};
 	};
