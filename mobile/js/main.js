@@ -68,7 +68,7 @@ var mpin = mpin || {};
     };
  
     //CONFIGS
-    mpin.prototype.cfg = {
+    mpin.cfg = {
 //      apiVersion: "v0.3",
 //      apiUrl: "https://m-pinapi.certivox.net/",
 //      apiUrl: "http://dtatest.certivox.me/",
@@ -80,9 +80,9 @@ var mpin = mpin || {};
             identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             setDeviceName: false
         },
+        expireOtpSeconds: 99,
         touchevents: true
     };
- 
  
     /**
      * Mpin Constructor
@@ -111,8 +111,8 @@ var mpin = mpin || {};
 
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
-//          this.error(" Some options are required :" + this.cfg.requiredOptions);
-            return console.error("Some options are required: " + this.cfg.requiredOptions);
+//          this.error(" Some options are required :" + mpin.cfg.requiredOptions);
+            return console.error("Some options are required: " + mpin.cfg.requiredOptions);
         }
  
         //Extend string with extra methods
@@ -133,14 +133,9 @@ var mpin = mpin || {};
         if (this.opts.language && lang[this.opts.language]) {
             this.language = this.opts.language;
         } else {
-            this.language = this.cfg.language;
+            this.language = mpin.cfg.language;
         }
-        this.setLanguageText();
- 
- 
-        console.log("language:: ", this.language);
-        console.log("language:: ", lang);
- 
+        this.setLanguageText(); 
          
         // Prevent user from scrolling on touch
  
@@ -164,7 +159,7 @@ var mpin = mpin || {};
     //  which should be set up
     mpin.prototype.checkOptions = function(options) {
         var _opts;
-        _opts = this.cfg.requiredOptions.split("; ");
+        _opts = mpin.cfg.requiredOptions.split("; ");
         for (var k = 0, l = _opts.length; k < l; k++) {
             if (typeof options[_opts[k]] === "undefined") {
                 return false;
@@ -176,8 +171,8 @@ var mpin = mpin || {};
     //set defaults OPTIONS
     mpin.prototype.setDefaults = function() {
         this.opts || (this.opts = {});
-        for (var i in this.cfg.defaultOptions) {
-            this.opts[i] = this.cfg.defaultOptions[i];
+        for (var i in mpin.cfg.defaultOptions) {
+            this.opts[i] = mpin.cfg.defaultOptions[i];
         }
         return this;
     };
@@ -193,7 +188,6 @@ var mpin = mpin || {};
         this.opts || (this.opts = {});
  
         this.opts.useWebSocket = ('WebSocket' in window && window.WebSocket.CLOSING === 2);
-        this.opts.requestOTP = "0";
  
         for (var _i = 0, _l = _opts.length; _i < _l; _i++) {
             _optionName = _opts[_i];
@@ -213,19 +207,19 @@ var mpin = mpin || {};
     //return readyHtml
     mpin.prototype.readyHtml = function(tmplName, tmplData) {
         var data = tmplData, html;
-        html = mpin.templates[tmplName]({data:data, cfg: this.cfg});
+        html = mpin.templates[tmplName]({data:data, cfg: mpin.cfg});
         return html;
     };
 
     mpin.prototype.readyHelp= function(tmplName, tmplData) {
         var data = tmplData, html;
-        html = mpin.templates[tmplName]({data:data, cfg: this.cfg});
+        html = mpin.templates[tmplName]({data:data, cfg: mpin.cfg});
         return html;
     };
 
     mpin.prototype.readyHelpHub= function(tmplName, tmplData) {
         var data = tmplData, html;
-        html = mpin.templates[tmplName]({data:data, cfg: this.cfg});
+        html = mpin.templates[tmplName]({data:data, cfg: mpin.cfg});
         return html;
     };
     
@@ -242,7 +236,7 @@ var mpin = mpin || {};
                 }
                 else {
 
-                    if(this.cfg.touchevents) {
+                    if(mpin.cfg.touchevents) {
                         document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
                     } else {
                         document.getElementById(k).addEventListener('click', callbacks[k], false);
@@ -272,7 +266,7 @@ var mpin = mpin || {};
                 }
                 else {
 
-                    if(this.cfg.touchevents) {
+                    if(mpin.cfg.touchevents) {
                         document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
                     } else {
                         document.getElementById(k).addEventListener('click', callbacks[k], false);
@@ -339,7 +333,7 @@ var mpin = mpin || {};
                 }
                 else {
 
-                    if(self.cfg.touchevents) {
+                    if(mpin.cfg.touchevents) {
                         document.getElementById(k).addEventListener('touchstart', helphubBtns[k], false);
                     } else {
 
@@ -546,9 +540,47 @@ var mpin = mpin || {};
 
         inputDeviceName.placeholder = deviceNameHolder;
         inputDeviceName.value = deviceName;
-        inputEmail.placeholder = lang.en.setup_text3;
+        inputEmail.placeholder = hlp.text("setup_text3");
 
     };
+
+    mpin.prototype.renderOtp = function (authData) {
+        var callbacks = {}, self = this, leftSeconds, epochMilisec;
+
+        function expire (expiresOn) {
+            leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date().getTime())) / 1000);
+            if (leftSeconds > 0) {
+                document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
+            } else {
+                //clear Interval and go to OTP expire screen.
+                clearInterval(self.intervalExpire);
+                self.renderOtpExpire();
+            }
+        }
+
+        this.render("otp", callbacks);
+
+        epochMilisec = new Date().getTime();
+        document.getElementById("mpinOTPNumber").innerHTML = authData._mpinOTP;
+
+        var expireSec = epochMilisec + (mpin.cfg.expireOtpSeconds * 1000);
+        expire(expireSec);
+
+        this.intervalExpire = setInterval(function () {
+            expire();
+        }, 1000);
+    };
+
+    mpin.prototype.renderOtpExpire = function () {
+        var callbacks = {}, self = this;
+
+    callbacks.mpin_login_now = function () {
+        self.renderLogin.call(self);
+    };
+
+    this.render("otp-expire", callbacks);
+    };
+
 
     mpin.prototype.suggestDeviceName = function() {
         var suggestName, platform, browser;
@@ -611,7 +643,7 @@ var mpin = mpin || {};
             var _pin = document.getElementById('pinpad-input').value;
 
 
-            if(_pin.length === self.cfg.pinSize) {
+            if(_pin.length === mpin.cfg.pinSize) {
 
                 self.actionSetup.call(self);
 
@@ -638,9 +670,9 @@ var mpin = mpin || {};
             ,pinpadContainer = document.getElementById('circlesHolder'),
             pinpadInput = document.getElementById('pinpad-input');
 
-        _textLoginBtn.innerText = lang.en.setup_btn_text;
+        _textLoginBtn.innerText = hlp.text("setup_btn_text");
 
-        pinpadInput.placeholder = lang.en.pinpad_placeholder_text;
+        pinpadInput.placeholder = hlp.text("pinpad_placeholder_text");
 
         // Create dummy input els
         if (!this.isAccNumber) {
@@ -649,7 +681,7 @@ var mpin = mpin || {};
             renderElem.style.display = 'block';
             renderElem.innerHTML = "Enter your pin";
 
-            for (var i = this.cfg.pinSize - 1; i >= 0; i--) {
+            for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
                 var circleA = document.createElement("div");
                 var circleB = document.createElement("div");
 
@@ -674,8 +706,12 @@ var mpin = mpin || {};
     mpin.prototype.renderLogin = function(listAccounts) {
 
         var callbacks = {}, self = this, elemForErrcode = document.getElementById('codes');
- 
-        this.isAccNumber = true;
+        
+        if(self.opts.requestOTP) {
+            this.isAccNumber = false;
+        } else {
+             this.isAccNumber = true;
+        }
 
         var identity = this.ds.getDefaultIdentity();
         var email = this.getDisplayName(identity);
@@ -693,7 +729,7 @@ var mpin = mpin || {};
 
             elemForErrcode.style.display = "block";
             elemForErrcode.className = "error";
-            elemForErrcode.innerHTML = lang.en.authPin_errorInvalidAccessNumber;
+            elemForErrcode.innerHTML = hlp.text("authPin_errorInvalidAccessNumber");
 
             self.bindNumberButtons();
             self.enableNumberButtons(true);
@@ -741,21 +777,18 @@ var mpin = mpin || {};
 
                     // store the accessNumber into mpin for the next step.
                     self.erroCodeAccNumber = true;
-
                     self.actionLogin.call(self);
 
                     return;
 
                 }
 
-                _textLoginBtn.innerText = lang.en.authPin_button_login;
+                _textLoginBtn.innerText = hlp.text("authPin_button_login");
 
                 // Clear the error codes display
 
                 self.display(false, true);
-
                 self.isAccNumber = false;
-
                 self.enableButton(false, "go");
                 self.enableButton(false, "clear");
 
@@ -767,14 +800,13 @@ var mpin = mpin || {};
 
                 var circlesHolder = document.getElementById('circlesHolder');
 
-                for (var i = self.cfg.pinSize - 1; i >= 0; i--) {
+                for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
 
                    var circleA = document.createElement("div");
                    var circleB = document.createElement("div");
 
                    circleA.className = "circle";
                    circleB.className = "outer-circle";
-
                    circleA.appendChild(circleB);
                    circlesHolder.appendChild(circleA);
                 };
@@ -784,9 +816,8 @@ var mpin = mpin || {};
 
                 self.pinPadLength = pinpadDisplay.value;
 
-                if(self.pinPadLength.length < self.cfg.pinSize ) {
+                if(self.pinPadLength.length < mpin.cfg.pinSize ) {
 
-                    console.log("(self.pinPadLength.length < self.cfg.pinSize ");
                     return;
                 }
 
@@ -804,21 +835,24 @@ var mpin = mpin || {};
         // Change AC number text here
 
         if (self.isAccNumber) {
-            _textLoginBtn.innerText = lang.en.authPin_button_next;
-        } else {
+            _textLoginBtn.innerText = hlp.text("authPin_button_next");
+            //set placeholder to access Number text
+            pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
+            pinpadDisplay.type = "text";
         }
-
-        //set placeholder to access Number text
-        pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
-        pinpadDisplay.type = "text";
 
         var pinPad = document.getElementById('pinsHolder');
         var circlesHolder = document.getElementById('circlesHolder');
         var pinpadContainer = document.getElementById('inputContainer');
-
         var renderElem = document.getElementById('codes');
-        renderElem.style.display = 'block';
-        renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text2");
+
+        if (self.isAccNumber) {
+            renderElem.style.display = 'block';
+            renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text2");
+        } else {
+            renderElem.style.display = 'block';
+            renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text");
+        }
 
         // Help hub callbacks
 
@@ -862,12 +896,22 @@ var mpin = mpin || {};
                 circleA.appendChild(circleB);
                 circlesHolder.appendChild(circleA);
             };
-        } 
+        } else {
+            for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
+                var circleA = document.createElement("div");
+                var circleB = document.createElement("div");
+
+                circleA.className = "circle";
+                circleB.className = "outer-circle";
+
+                circleA.appendChild(circleB);
+                circlesHolder.appendChild(circleA);
+            };
+        }
 
         if (listAccounts) {
             this.toggleButton();
         } else {
-
             this.setIdentity(this.ds.getDefaultIdentity(), true, function() {
                 self.display(hlp.text("pinpad_default_message"));
                }, function() {
@@ -1320,7 +1364,7 @@ var mpin = mpin || {};
         rowElem.appendChild(starButton);
  
         var tmplData = {name: name};
-        rowElem.innerHTML = mpin.templates['user-row']({data:tmplData, cfg: this.cfg});
+        rowElem.innerHTML = mpin.templates['user-row']({data:tmplData, cfg: mpin.cfg});
 
         cnt.appendChild(rowElem);
  
@@ -1330,7 +1374,7 @@ var mpin = mpin || {};
         }
         else {
 
-            if(self.cfg.touchevents) {
+            if(mpin.cfg.touchevents) {
                 rowElem.addEventListener('touchstart', mEventsHandler, false);
             } else {
 
@@ -1461,7 +1505,7 @@ var mpin = mpin || {};
             }
             else {
 
-                if(self.cfg.touchevents) {
+                if(mpin.cfg.touchevents) {
                     btEls[i].addEventListener('touchstart', mEventsHandler, false);
                 } else {
 
@@ -1603,7 +1647,7 @@ var mpin = mpin || {};
             }
         }
  
-        else if (pinElement.value.length === this.cfg.pinSize) {
+        else if (pinElement.value.length === mpin.cfg.pinSize) {
 
             this.enableNumberButtons(false);
             this.enableButton(true, "go");
@@ -1647,7 +1691,7 @@ var mpin = mpin || {};
             self.addToPin("clear");
         } 
 
-        if(message === lang.en.authPin_errorInvalidAccessNumber) {
+        if(message === hlp.text("authPin_errorInvalidAccessNumber")) {
 
             elemForErrcode.style.display = "block";
             elemForErrcode.className = "error";
@@ -1688,7 +1732,7 @@ var mpin = mpin || {};
             console.log("set IDENTITY ;::", typeof this.setIdentity);
  
             this.setIdentity(this.identity, true, function() {
-                self.display(self.cfg.pinpadDefaultMessage);
+                self.display(mpin.cfg.pinpadDefaultMessage);
             }, function() {
                 return false;
             });
@@ -1722,7 +1766,7 @@ var mpin = mpin || {};
 
         
         this.setIdentity(this.identity, true, function() {
-            self.display(self.cfg.pinpadDefaultMessage);
+            self.display(mpin.cfg.pinpadDefaultMessage);
         }, function() {
             return false;
         });
@@ -1819,7 +1863,7 @@ var mpin = mpin || {};
             self.enableNumberButtons(true);
  
             self.clientSecret = clientSecret;
-            document.getElementById("pinpad-input").value = self.cfg.pinpadDefaultMessage;
+            document.getElementById("pinpad-input").value = mpin.cfg.pinpadDefaultMessage;
  
             if (self.opts.onGetSecret) {
                 self.opts.onGetSecret();
@@ -1948,7 +1992,11 @@ var mpin = mpin || {};
 
         var callbacks = {};
 
-        var authServer, getAuth, self = this, pinValue = document.getElementById('pinpad-input').value, accessNumber;
+        var authServer, getAuth 
+            , self = this
+            , pinValue = document.getElementById('pinpad-input').value
+            , accessNumber;
+
         //AlertMessage.clearDisplayWrap();
         this.enableNumberButtons(false);
         this.enableButton(false, "go");
@@ -1959,6 +2007,7 @@ var mpin = mpin || {};
  
         //getAuth = this.opts.useWebSocket ? getAuthToken : getAuthTokenAjax;
         //authServer = this.opts.mpinAuthServerURL;
+
         if (this.opts.useWebSocket) {
             getAuth = getAuthToken;
             authServer = this.opts.mpinAuthServerURL + "/authenticationToken";
@@ -1967,14 +2016,20 @@ var mpin = mpin || {};
             authServer = this.opts.mpinAuthServerURL;
         }
         accessNumber = this.accessNumber;
+
         //authServer = this.opts.authenticateURL;
         getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-                this.opts.requestOTP, accessNumber, pinValue, this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
-                function(success, errorCode, errorMessage, authData) {
-                    console.log("authenticate arguments :", errorCode);
+                this.opts.requestOTP, accessNumber ? accessNumber : "0", pinValue, this.opts.requestOTP ? this.opts.authenticateURL : this.opts.mobileAuthenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders, function(success, errorCode, errorMessage, authData) {
+
                     if (success) {
+
+                        console.log("######################Comming in success", authData);
                         var iD = self.identity;
-                        self.successLogin(authData, iD);
+                            if (self.opts.requestOTP) {
+                                self.renderOtp(authData);
+                                return;
+                            }
+                            self.successLogin(authData, iD);
                     } else if (errorCode === "INVALID") {
 
                         self.display(hlp.text("authPin_errorInvalidPin"), false);
@@ -2010,7 +2065,7 @@ var mpin = mpin || {};
                     }
  
                 }, function() {
-            console.log(" Before HandleToken ::::");
+                    console.log(" Before HandleToken ::::");
         });
  
     };
@@ -2050,9 +2105,7 @@ var mpin = mpin || {};
             this.enableButton(false, "clear");
             this.enableButton(true, "toggle");
 //          mpin.enableToggleButton(true);
-            console.log("before call identity PERMIT :)");
             this.requestPermit(newIdentity, function(timePermitHex) {
-                console.log("call IDENTITY PERMIT :::");
                 self.enableNumberButtons(true);
             }, function(message, statusCode) {
                 if (statusCode === 404) {
@@ -2122,9 +2175,7 @@ var mpin = mpin || {};
         var _request = new XMLHttpRequest();
         _request.onreadystatechange = function() {
             if (_request.readyState === 4 && _request.status === 200)
-            {
-                console.log("POST success ....");
- 
+            { 
                 // Tempory fix
                 if (_request.responseText == '') {
                     cb(true);
@@ -2173,7 +2224,7 @@ var mpin = mpin || {};
  
         if (newDefaultAccount) {
             this.setIdentity(newDefaultAccount, true, function() {
-                self.display(self.cfg.pinpadDefaultMessage);
+                self.display(mpin.cfg.pinpadDefaultMessage);
             }, function() {
                 return false;
             });
@@ -2283,7 +2334,6 @@ var mpin = mpin || {};
 
         mpinDs.setDeviceName = function(devId) {
             mpinDs.mpin.deviceName = devId;
-            console.log("data STORAGE set device ID::");
             mpinDs.save();
             };
 
@@ -2344,7 +2394,7 @@ var mpin = mpin || {};
     };
 
     mpin.prototype.certivoxClientSecretURL = function(params) {
-//      return this.cfg.apiUrl + this.cfg.apiVersion + "/clientSecret?" + params;
+//      return mpin.cfg.apiUrl + mpin.cfg.apiVersion + "/clientSecret?" + params;
         return this.opts.certivoxURL + "clientSecret?" + params;
     };
  
@@ -2480,8 +2530,8 @@ var mpin = mpin || {};
  
     //private variable
     //en
-    lang.en = {};
-    lang.en = {
+    mpin.lang = {};
+    mpin.lang.en = {
         "pinpad_initializing": "Initializing...",
         "pinpad_errorTimePermit": "ERROR GETTING PERMIT:",
         "home_alt_mobileOptions": "Mobile Options",
@@ -2506,8 +2556,8 @@ var mpin = mpin || {};
         "mobileAuth_text3": "with your M-Pin Mobile App.",
         "mobileAuth_text4": "Warning: Navigating away from this page will interrupt the authentication process and you will need to start again to authenticate successfully.",
         "otp_text1": "Your One-Time Password is:",
-        "otp_text2": "Note: The password is only valid for<br/>{0} seconds before it expires.", // {0} will be replaced with the max. seconds
-        "otp_seconds": "Remaining: {0} sec.", // {0} will be replaced with the remaining seconds
+        "otp_text2": "Note: The password is only valid for " + mpin.cfg.expireOtpSeconds + " seconds before it expires.", // {0} will be replaced with the max. seconds
+        "otp_seconds": "Remaining:", // {0} will be replaced with the remaining seconds
         "otp_expired_header": "Your One-Time Password has expired.",
         "otp_expired_button_home": "Login again to get a new OTP",
         "setup_header": "ADD AN IDENTITY TO THIS DEVICE",
@@ -2602,7 +2652,7 @@ var mpin = mpin || {};
     hlp.text = function(langKey) {
         //hlp.language set inside render
         //customLanguageTexts - language
-        return lang[hlp.language][langKey];
+        return mpin.lang[hlp.language][langKey];
     };
  
     var setStringOptions = function() {
