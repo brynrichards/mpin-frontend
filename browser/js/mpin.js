@@ -76,7 +76,6 @@ var mpin = mpin || {};
 				}
 				opts.server = serverOptions;
 
-
 				// check if Dom ready if not wait until fire load event.
 				if (document.readyState === "complete") {
 					self.initialize.call(self, domID, opts);
@@ -114,7 +113,6 @@ var mpin = mpin || {};
 
 //		this.setupHtml();
 		this.addHelp();
-
 
 		//options CHECK
 		if (!options || !this.checkOptions(options.server)) {
@@ -532,6 +530,7 @@ var mpin = mpin || {};
 			secondBtn = hlp.text("help_text_" + helpLabel + "_button");
 
 			if (helpLabel === "login" || helpLabel === "loginerr") {
+				this.isLoginScreen = true;
 				callbacks.mpin_help_second = function () {
 					self.toggleHelp.call(self);
 					self.renderLogin(true, "renderReactivatePanel");
@@ -880,7 +879,6 @@ var mpin = mpin || {};
 			self.addToPin.call(self, "clear");
 		};
 		callbacks.mpin_arrow = function () {
-			console.log(": aRRoW :");
 			self.addToPin.call(self, "clear");
 			self.toggleButton.call(self);
 		};
@@ -907,12 +905,12 @@ var mpin = mpin || {};
 			self.display(hlp.text("pinpad_default_message"));
 //			this.ds.getDefaultIdentity()
 			document.getElementById("mpinCurrentIden").innerHTML = this.getDisplayName(this.ds.getDefaultIdentity());
-
 			this.toggleButton();
+
+
 			if (subView) {
 				this[subView]();
 			}
-
 		} else {
 			addClass("mpinUser", "mpinIdentityGradient");
 			this.setIdentity(this.ds.getDefaultIdentity(), true, function () {
@@ -1207,6 +1205,7 @@ var mpin = mpin || {};
 
 		//lastView settings
 		this.lastViewParams = [true, "renderUserSettingsPanel"];
+		this.isLoginScreen = false;
 
 //		renderElem = document.getElementById("mpin_identities");
 		renderElem = document.getElementById("mpinUser");
@@ -1222,7 +1221,6 @@ var mpin = mpin || {};
 			self.renderReactivatePanel.call(self, iD);
 		};
 		document.getElementById("mpin_cancel_btn").onclick = function (evt) {
-//			self.renderAccountsPanel.call(self, evt);
 			self.renderLogin.call(self, true);
 		};
 	};
@@ -1243,7 +1241,7 @@ var mpin = mpin || {};
 		};
 		document.getElementById("mpin_cancel_btn").onclick = function () {
 			//self.renderAccountsPanel();
-			self.renderLogin.call(self, true);
+			self.renderLogin.call(self, !self.isLoginScreen);
 		};
 	};
 
@@ -1262,7 +1260,6 @@ var mpin = mpin || {};
 		};
 
 		document.getElementById("mpin_cancel_btn").onclick = function (evt) {
-//			self.renderAccountsPanel.call(self, evt);
 			self.renderLogin.call(self, true);
 		};
 	};
@@ -1825,6 +1822,7 @@ var mpin = mpin || {};
 				function (success, errorCode, errorMessage, authData) {
 					console.log("authenticate arguments :", arguments);
 					if (success) {
+						console.log(" >>> getAuth :::", authData);
 						if (self.opts.requestOTP) {
 							self.renderOtp(authData);
 							return;
