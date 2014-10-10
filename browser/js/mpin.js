@@ -229,6 +229,8 @@ var mpin = mpin || {};
 		if (this.opts.mpinAuthServerURL.mpin_startsWith("http")) {
 			this.opts.useWebSocket = false;
 		}
+		
+		this.opts.requestOTP = "1";
 
 		return this;
 	};
@@ -1818,7 +1820,7 @@ var mpin = mpin || {};
 
 		//authServer = this.opts.authenticateURL;
 		getAuth(authServer, this.opts.appID, this.identity, this.ds.getIdentityPermit(this.identity), this.ds.getIdentityToken(this.identity),
-				"0", "0", pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
+				this.opts.requestOTP, "0", pinValue, this.opts.authenticateURL, this.opts.authenticateRequestFormatter, this.opts.customHeaders,
 				function (success, errorCode, errorMessage, authData) {
 					console.log("authenticate arguments :", arguments);
 					if (success) {

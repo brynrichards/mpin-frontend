@@ -9,24 +9,17 @@
 
 <!-- User section -->
 
-<div class="identityMainText">
-  <div class="mp_container">
-      <div class="mp_headerFrame" id="otpNumber">
-          <div id="mpinOTPNumber" class="mp_alertTitle">
-          </div>
-          <div id="mpin_seconds" class="mp_accountField">
-          </div>
+<div id="identityContainer">
+  <div class="mp_headerFrame" id="otpContainer">
+      <h2>Your One-time Password is:</h2>
+      <div id="mpinOTPNumber" class="mp_alertTitle">
+      </div>
+      <p>Remaining:</p>
+      <div id="mpin_seconds" class="mp_accountField">
       </div>
   </div>
-</div>
 
-  <div id="bottomBtnHolder">
-      <button class="mpinBtn" id="mp_action_setup">
-          <span class="btnLabel">{{hlp 'setup_button_setup' }}</span>
-      </button>
-  </div>
-
-  <info id="info"><i></i>Not sure which option to choose?</info>
+  <p class="noteText">Note: The password is only valid for 99 seconds before it expries.</p>
 
 </div>
 
