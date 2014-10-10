@@ -787,6 +787,12 @@ var mpin = mpin || {};
 			self.renderHome.call(self);
 		};
 
+		callbacks.mpin_help = function () {
+			clearInterval(self.intervalExpire);
+			self.lastView = "renderOtp";
+			self.renderHelpHub.call(self);
+		};
+
 		this.render("otp", callbacks);
 
 		epochMilisec = new Date().getTime();
@@ -805,6 +811,11 @@ var mpin = mpin || {};
 
 		callbacks.mpin_login_now = function () {
 			self.renderLogin.call(self);
+		};
+
+		callbacks.mpin_help = function () {
+			self.lastView = "renderOtpExpire";
+			self.renderHelpHub.call(self);
 		};
 
 		this.render("otp-expire", callbacks);
