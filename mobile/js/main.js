@@ -81,7 +81,7 @@ var mpin = mpin || {};
             setDeviceName: false
         },
         expireOtpSeconds: 2,
-        touchevents: false
+        touchevents: true
     };
  
  
