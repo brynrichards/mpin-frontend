@@ -271,7 +271,7 @@ var mpin = mpin || {};
 
 		//mpin_home - can remove all mpin_home definition
 		homeElem = document.getElementById("mpin_home");
-		if (homeElem) {
+		if (homeElem && !callbacks.mpin_home) {
 			homeElem.onclick = function () {
 				self.renderHome.call(self);
 			};
@@ -522,6 +522,14 @@ var mpin = mpin || {};
 		};
 
 		callbacks.mpin_help_more = function () {
+			//clear intervals
+			if (self.intervalID) {
+				clearInterval(self.intervalID);
+			}
+			if (self.intervalID2) {
+				clearTimeout(self.intervalID2);
+			}
+
 			self.toggleHelp.call(self);
 			self.renderHelpHub.call(self);
 		};
@@ -617,38 +625,52 @@ var mpin = mpin || {};
 	mpin.prototype.renderSetupHome = function (email) {
 		var callbacks = {}, self = this, userId, deviceName = "", deviceNameHolder = "";
 
-		callbacks.mpin_home = function (evt) {
-			self.renderHome.call(self, evt);
+		//set Temporary params if enter email and then press tooltip without submit request...
+		function setTemp () {
+			self.tmp || (self.tmp = {});
+			self.tmp.setupEmail = document.getElementById("emailInput").value;
+			if (self.opts.setDeviceName) {
+				self.tmp.setupDeviceName = document.getElementById("deviceInput").value;
+			}
+		}
+
+		callbacks.mpin_home = function () {
+			delete self.tmp;
+			self.renderHome.call(self);
 		};
-		callbacks.mpin_help = function (evt) {
+		callbacks.mpin_help = function () {
+			setTemp();
 			self.lastView = "renderSetupHome";
 			self.toggleHelp.call(self);
 			self.renderHelpTooltip.call(self, "addidentity");
 		};
-		callbacks.mpin_helphub = function (evt) {
+		callbacks.mpin_helphub = function () {
+			setTemp();
 			self.lastView = "renderSetupHome";
 			self.renderHelpHub.call(self);
 		};
 
 		callbacks.mpin_setup = function () {
+			delete self.tmp;
 			self.actionSetupHome.call(self);
 		};
 
-		userId = (email) ? email : "";
+		userId = (email) ? email : ((this.tmp && this.tmp.setupEmail) ? this.tmp.setupEmail : "");
 		//one for 
 		if (this.opts.setDeviceName) {
 			//get from localStorage - already set
 			if (this.ds.getDeviceName()) {
-				deviceName = this.ds.getDeviceName();
+				deviceName = (this.tmp && this.tmp.setupDeviceName) ? this.tmp.setupDeviceName : this.ds.getDeviceName();
 				deviceNameHolder = deviceName;
 			} else {
 				//set only placeholder value
+				deviceName = (this.tmp && this.tmp.setupDeviceName) ? this.tmp.setupDeviceName : "";
 				deviceNameHolder = this.suggestDeviceName();
-				deviceName = "";
 			}
 
 			//devicename callback
 			callbacks.mpin_help_device = function () {
+				setTemp();
 				self.lastView = "renderSetupHome";
 				self.toggleHelp.call(self);
 				self.renderHelpTooltip.call(self, "devicename");
@@ -661,6 +683,7 @@ var mpin = mpin || {};
 		var emailField = document.getElementById("emailInput");
 		emailField.placeholder = hlp.text("setup_placeholder");
 		emailField.value = userId;
+
 		if (this.opts.setDeviceName) {
 			var deviceNameField = document.getElementById("deviceInput");
 			deviceNameField.placeholder = deviceNameHolder + " " + hlp.text("setup_device_default");
@@ -676,16 +699,25 @@ var mpin = mpin || {};
 
 		this.lastViewParams = [true, "renderSetupHome2"];
 
+		//set Temporary params if enter email and then press tooltip without submit request...
+		function setTemp () {
+			self.tmp || (self.tmp = {});
+			self.tmp.setup2Email = document.getElementById("emailInput").value;
+			if (self.opts.setDeviceName) {
+				self.tmp.setup2DeviceName = document.getElementById("deviceInput").value;
+			}
+		}
+
 //		renderElem = document.getElementById("mpinUser");
 		renderElem = document.getElementById("mpin_identities");
 
 		if (this.opts.setDeviceName) {
 			if (this.ds.getDeviceName()) {
-				deviceName = this.ds.getDeviceName();
+				deviceName = (this.tmp && this.tmp.setup2DeviceName) ? this.tmp.setup2DeviceName : this.ds.getDeviceName();
 				deviceNameHolder = deviceName;
 			} else {
+				deviceName = (this.tmp && this.tmp.setup2DeviceName) ? this.tmp.setup2DeviceName : "";
 				deviceNameHolder = this.suggestDeviceName();
-				deviceName = "";
 			}
 		}
 
@@ -695,8 +727,12 @@ var mpin = mpin || {};
 		addClass("mpinCurrentIden", "mpHide");
 
 		//security Fixes
-		var emailField = document.getElementById("emailInput");
+		var emailValue, emailField = document.getElementById("emailInput");
 		emailField.placeholder = hlp.text("setup_placeholder");
+
+		emailValue = (this.tmp && this.tmp.setup2Email) ? this.tmp.setup2Email : "";
+		emailField.value = emailValue;
+
 		if (this.opts.setDeviceName) {
 			var deviceNameField = document.getElementById("deviceInput");
 			deviceNameField.placeholder = deviceNameHolder + " " + hlp.text("setup_device_default");
@@ -704,6 +740,7 @@ var mpin = mpin || {};
 		}
 
 		document.getElementById("mpin_help").onclick = function () {
+			setTemp();
 			self.lastView = "renderLogin";
 			self.lastViewParams = [true, "renderSetupHome2"];
 			self.toggleHelp.call(self);
@@ -712,6 +749,7 @@ var mpin = mpin || {};
 
 
 		document.getElementById("mpin_arrow").onclick = function (evt) {
+			delete self.tmp;
 //			addClass("mpin_help", "mpHide");
 //			document.getElementById("mpin_help").style.display = "none";
 			self.toggleButton();
@@ -719,11 +757,13 @@ var mpin = mpin || {};
 		};
 
 		document.getElementById("mpin_setup").onclick = function () {
+			delete self.tmp;
 			self.actionSetupHome.call(self);
 		};
 
 		if (this.opts.setDeviceName) {
 			document.getElementById("mpin_help_device").onclick = function () {
+				setTemp();
 				self.lastView = "renderLogin";
 				self.lastViewParams = [true, "renderSetupHome2"];
 				self.toggleHelp.call(self);
@@ -746,6 +786,17 @@ var mpin = mpin || {};
 			}
 		}
 
+		callbacks.mpin_home = function () {
+			clearInterval(self.intervalExpire);
+			self.renderHome.call(self);
+		};
+
+		callbacks.mpin_help = function () {
+			clearInterval(self.intervalExpire);
+			self.lastView = "renderOtp";
+			self.renderHelpHub.call(self);
+		};
+
 		this.render("otp", callbacks);
 
 		epochMilisec = new Date().getTime();
@@ -764,6 +815,11 @@ var mpin = mpin || {};
 
 		callbacks.mpin_login_now = function () {
 			self.renderLogin.call(self);
+		};
+
+		callbacks.mpin_help = function () {
+			self.lastView = "renderOtpExpire";
+			self.renderHelpHub.call(self);
 		};
 
 		this.render("otp-expire", callbacks);
@@ -1624,8 +1680,6 @@ var mpin = mpin || {};
 		}
 
 		if (_deviceName) {
-			console.log("case set DEVICE NAME", _deviceName);
-
 			_reqData.data.deviceName = _deviceName;
 			this.ds.setDeviceName(_deviceName);
 		}
