@@ -229,8 +229,6 @@ var mpin = mpin || {};
 		if (this.opts.mpinAuthServerURL.mpin_startsWith("http")) {
 			this.opts.useWebSocket = false;
 		}
-		
-		this.opts.requestOTP = "1";
 
 		return this;
 	};
