@@ -80,6 +80,7 @@ var mpin = mpin || {};
             identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             setDeviceName: false
         },
+        expireOtpSeconds: 99,
         touchevents: false
     };
  
@@ -545,36 +546,42 @@ var mpin = mpin || {};
     };
 
     mpin.prototype.renderOtp = function (authData) {
-        var callbacks = {}, secondsField, self = this, leftSeconds;
+        var callbacks = {}, self = this, leftSeconds, epochMilisec;
+
         function expire (expiresOn) {
             leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date().getTime())) / 1000);
-            console.log("element leftSeconds:::", leftSeconds);
             if (leftSeconds > 0) {
                 document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
             } else {
-                //clear Interval and go to next render.
+                //clear Interval and go to OTP expire screen.
                 clearInterval(self.intervalExpire);
                 self.renderOtpExpire();
             }
         }
-        ;
-        console.log("auth DATA :::", authData);
+
         this.render("otp", callbacks);
+
+        epochMilisec = new Date().getTime();
         document.getElementById("mpinOTPNumber").innerHTML = authData._mpinOTP;
-        secondsField = document.getElementById("mpin_seconds");
-        var expireSec = new Date().getTime() + 99000; //99000 - 99 sec
+
+        var expireSec = epochMilisec + (this.cfg.expireOtpSeconds * 1000);
         expire(expireSec);
+
         this.intervalExpire = setInterval(function () {
             expire();
         }, 1000);
     };
+
     mpin.prototype.renderOtpExpire = function () {
         var callbacks = {}, self = this;
-        callbacks.mpin_login_now = function () {
-            self.renderLogin.call(self);
-        };
-        this.render("otp-expire", callbacks);
+
+    callbacks.mpin_login_now = function () {
+        self.renderLogin.call(self);
     };
+
+    this.render("otp-expire", callbacks);
+    };
+
 
     mpin.prototype.suggestDeviceName = function() {
         var suggestName, platform, browser;
@@ -830,20 +837,23 @@ var mpin = mpin || {};
 
         if (self.isAccNumber) {
             _textLoginBtn.innerText = lang.en.authPin_button_next;
-        } else {
+            //set placeholder to access Number text
+            pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
+            pinpadDisplay.type = "text";
         }
-
-        //set placeholder to access Number text
-        pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
-        pinpadDisplay.type = "text";
 
         var pinPad = document.getElementById('pinsHolder');
         var circlesHolder = document.getElementById('circlesHolder');
         var pinpadContainer = document.getElementById('inputContainer');
         var renderElem = document.getElementById('codes');
 
-        renderElem.style.display = 'block';
-        renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text2");
+        if (self.isAccNumber) {
+            renderElem.style.display = 'block';
+            renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text2");
+        } else {
+            renderElem.style.display = 'block';
+            renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text");
+        }
 
         // Help hub callbacks
 
