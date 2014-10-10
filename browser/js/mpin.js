@@ -518,6 +518,14 @@ var mpin = mpin || {};
 		};
 
 		callbacks.mpin_help_more = function () {
+			//clear intervals
+			if (self.intervalID) {
+				clearInterval(self.intervalID);
+			}
+			if (self.intervalID2) {
+				clearTimeout(self.intervalID2);
+			}
+
 			self.toggleHelp.call(self);
 			self.renderHelpHub.call(self);
 		};
@@ -717,7 +725,7 @@ var mpin = mpin || {};
 		//security Fixes
 		var emailValue, emailField = document.getElementById("emailInput");
 		emailField.placeholder = hlp.text("setup_placeholder");
-		
+
 		emailValue = (this.tmp && this.tmp.setup2Email) ? this.tmp.setup2Email : "";
 		emailField.value = emailValue;
 
