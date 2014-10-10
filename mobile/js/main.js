@@ -81,7 +81,7 @@ var mpin = mpin || {};
             setDeviceName: false
         },
         expireOtpSeconds: 99,
-        touchevents: true
+        touchevents: false
     };
  
  
@@ -2557,8 +2557,8 @@ var mpin = mpin || {};
         "mobileAuth_text3": "with your M-Pin Mobile App.",
         "mobileAuth_text4": "Warning: Navigating away from this page will interrupt the authentication process and you will need to start again to authenticate successfully.",
         "otp_text1": "Your One-Time Password is:",
-        "otp_text2": "Note: The password is only valid for<br/>{0} seconds before it expires.", // {0} will be replaced with the max. seconds
-        "otp_seconds": "Remaining: {0} sec.", // {0} will be replaced with the remaining seconds
+        "otp_text2": "Note: The password is only valid for 99 seconds before it expires.", // {0} will be replaced with the max. seconds
+        "otp_seconds": "Remaining:", // {0} will be replaced with the remaining seconds
         "otp_expired_header": "Your One-Time Password has expired.",
         "otp_expired_button_home": "Login again to get a new OTP",
         "setup_header": "ADD AN IDENTITY TO THIS DEVICE",
