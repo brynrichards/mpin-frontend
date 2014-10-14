@@ -158,7 +158,7 @@ function getAuthTokenAjax(restURL, IDcustomer, identity, timePermitHex, tokenHex
 
           // Compute PASS2 request
           var request2 = mpinAuth.pass2Request(x, response1.y, IDcHex, timePermitHex, tokenHex, requestOTP, accessNumber, aPin);
-          request2.IDc = IDcHex;
+          request2.mpin_id = IDcHex;
           var postData2 = JSON.stringify(request2);
 
           // PASS2 REQUEST

@@ -5,7 +5,8 @@ module.exports = function(grunt) {
 		sass: {
 			dist: {
 				options: {
-				    style: 'compressed'
+				    style: 'compressed',
+				    sourcemap: false
 				},
 				files: {
 					'../build/out/mobile/css/main.css' : '../build/tmp/mobile/sass/main.scss'
@@ -55,7 +56,7 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			resourceFiles: {
-				files: ['src/sass/*.scss','src/views/*.handlebars', 'js/*.js', 'settings.json'],
+				files: ['src/sass/*.scss','src/views/*.handlebars', 'js/*.js', 'settings.json', 'index.html'],
 				tasks: ['bgShell', 'sass']
 			}
 		},
