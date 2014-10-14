@@ -140,7 +140,7 @@ the following links:
 			width: 20px;
 			float: right;
 			margin: 3px;
-			background: url('#{$IMAGES}arrow-up-black.svg') no-repeat;
+			background: url('#{$IMAGES}/arrow-up-black.svg') no-repeat;
 			background-size: auto 100%;
 			background-position: right bottom;
 		}*/
@@ -226,7 +226,7 @@ the following links:
 	}
 
 	.mpinInfo {
-		background-image: url('#{$IMAGES}info.svg');
+		background-image: url('#{$IMAGES}/info.svg');
 		background-repeat: no-repeat;
 		background-position: bottom;
 		width: 25px;
@@ -246,7 +246,7 @@ the following links:
 }
 
 .mpinInfoCenter {
-	background-image: url('#{$IMAGES}info-white.svg');
+	background-image: url('#{$IMAGES}/info-white.svg');
 	background-repeat: no-repeat;
 	background-position: bottom;
 	width: 23px;
