@@ -30,7 +30,7 @@ the following links:
 */
 // GLOBAL CONFIGS
 
-$IMAGES : "../mpinImages/";
+$IMAGES : "../mpinImages";
 $BORDERLESS : false;
 
 $BUTTON_COLOR: #ffffff;
@@ -48,7 +48,7 @@ $BUTTON_BGCOLOR: #007cc2;
 	width: 85px;
 	height: 20px;
 	float: right; 
-	background: url('#{$IMAGES}logo-here-grey.svg') no-repeat;
+	background: url('#{$IMAGES}/logo-here-grey.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: right bottom;
 }
@@ -57,7 +57,7 @@ $BUTTON_BGCOLOR: #007cc2;
 	width: 30px;
 	height: 23px;
 	margin: 3px 0;
-	background: url('#{$IMAGES}home.svg') no-repeat;
+	background: url('#{$IMAGES}/home.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: left;
 }
@@ -387,7 +387,7 @@ $BUTTON_BGCOLOR: #007cc2;
 @mixin footer-helphub() {
 	width: 80px;
 	height: 30px;
-	background: url('#{$IMAGES}m-pin-header-logo.svg') no-repeat;
+	background: url('#{$IMAGES}/m-pin-header-logo.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: left;
 }

@@ -64,7 +64,7 @@ help#mpinHelpTag {
 		//, &:before
 		#mpinInfoCloseCorner {
 			content: '';
-			background-image: url('#{$IMAGES}info.svg');
+			background-image: url('#{$IMAGES}/info.svg');
 			width: 32px;
 			height: 31px;
 			display: block;
@@ -134,7 +134,7 @@ info.mpinHelpInfo {
 	}
 
 	i {
-		background-image: url('#{$IMAGES}info.svg');
+		background-image: url('#{$IMAGES}/info.svg');
 		display: block;
 		width: 21px;
 		height: 20px;
@@ -176,7 +176,7 @@ info.mpinHelpInfo {
 		margin: 0px;
 		cursor: pointer;
 		text-align:left;
-		background-image: url("#{$IMAGES}bullet.svg");
+		background-image: url("#{$IMAGES}/bullet.svg");
 		background-position: 10px 12px;
 		background-repeat: no-repeat;
 	}
