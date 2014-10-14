@@ -31,9 +31,9 @@
 
 var mpin = mpin || {};
 
-(function() {
-	
-    console.log("dom ready");
+(function () {
+
+	console.log("dom ready");
 
 	"use strict";
 	var lang = {}, hlp = {}, loader, MPIN_URL_BASE, IMAGES_PATH;
@@ -773,10 +773,16 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.renderOtp = function (authData) {
-		var callbacks = {}, self = this, leftSeconds, epochMilisec;
+		var callbacks = {}, self = this, leftSeconds;
+
+		//check if properties for seconds exist
+		if (!authData.expireTime && !authData.nowTime) {
+			self.error(4016);
+			return;
+		}
 
 		function expire (expiresOn) {
-			leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date().getTime())) / 1000);
+			leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date())) / 1000);
 			if (leftSeconds > 0) {
 				document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
 			} else {
@@ -799,11 +805,12 @@ var mpin = mpin || {};
 
 		this.render("otp", callbacks);
 
-		epochMilisec = new Date().getTime();
 		document.getElementById("mpinOTPNumber").innerHTML = authData._mpinOTP;
 
-		var expireSec = epochMilisec + (this.cfg.expireOtpSeconds * 1000);
-		expire(expireSec);
+		var timeOffset = new Date() - new Date(authData.nowTime)
+		var expireMSec = new Date(authData.expireTime + timeOffset);
+
+		expire(expireMSec);
 
 		this.intervalExpire = setInterval(function () {
 			expire();
@@ -2517,7 +2524,8 @@ var mpin = mpin || {};
 		"error_code_4012": "We could not complete your authentication request. Please contact the service administrator.", //
 		"error_code_4013": "We could not complete your registration. Please contact the service administrator or try again later.", //
 		"error_code_4014": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
-		"error_code_4015": "We are experiencing a technical problem. Please try again later or contact the service administrator."  //
+		"error_code_4015": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
+		"error_code_4016": "We are experiencing a technical problem. Please try again later or contact the service administrator."  //
 	};
 	//	image should have config properties
 	hlp.img = function (imgSrc) {
