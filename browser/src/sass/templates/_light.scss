@@ -31,7 +31,7 @@ the following links:
 
 // GLOBAL CONFIGS
 
-$IMAGES : "../images/%templatename%/";
+$IMAGES : "../images/%templatename%";
 $BORDERLESS : true;
 
 $BUTTON_COLOR: #ffffff;
@@ -43,7 +43,7 @@ $BUTTON_BGCOLOR: #007cc2;
 	width: 85px;
 	height: 20px;
 	float: right;
-	background: url('#{$IMAGES}logo-here-grey.svg') no-repeat;
+	background: url('#{$IMAGES}/logo-here-grey.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: right bottom;
 }
@@ -52,7 +52,7 @@ $BUTTON_BGCOLOR: #007cc2;
 	width: 30px;
 	height: 23px;
 	margin: 3px 0;
-	background: url('#{$IMAGES}home.svg') no-repeat;
+	background: url('#{$IMAGES}/home.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: left;
 }
@@ -212,7 +212,7 @@ $BUTTON_BGCOLOR: #007cc2;
 @mixin mobile-icon() {
 	width: 30px !important;
 	height: 42px !important;
-	background-image: url('#{$IMAGES}phone-green.svg');
+	background-image: url('#{$IMAGES}/phone-green.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
@@ -226,7 +226,7 @@ $BUTTON_BGCOLOR: #007cc2;
 @mixin desktop-icon() {
 	width: 50px !important;
 	height: 42px !important;
-	background-image: url('#{$IMAGES}computer-blue.svg');
+	background-image: url('#{$IMAGES}/computer-blue.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
@@ -339,7 +339,7 @@ $BUTTON_BGCOLOR: #007cc2;
 }
 
 @mixin arrow-up-icon () {
-	background-image: url('#{$IMAGES}arrow-down-black.svg');
+	background-image: url('#{$IMAGES}/arrow-down-black.svg');
 	width: 22px !important;
 	height: 20px !important;
 	background-repeat: no-repeat;
@@ -369,7 +369,7 @@ $BUTTON_BGCOLOR: #007cc2;
 @mixin footer-helphub() {
 	width: 120px;
 	height: 45px;
-	background: url('#{$IMAGES}m-pin-header-logo.svg') no-repeat;
+	background: url('#{$IMAGES}/m-pin-header-logo.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: left;
 	position: relative;
