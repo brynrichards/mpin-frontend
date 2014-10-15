@@ -1,3 +1,10 @@
+Version TAGS:
+===================================
+3.0.0 - final (date: 13 Oct 2014)
+  just before begin Denis design
+
+
+
 Deploy notes for Browser version mpin ver 0.3
 ====================================
 
