@@ -530,6 +530,7 @@ var mpin = mpin || {};
 				clearTimeout(self.intervalID2);
 			}
 
+			delete self.lastViewParams;
 			self.toggleHelp.call(self);
 			self.renderHelpHub.call(self);
 		};
@@ -896,11 +897,13 @@ var mpin = mpin || {};
 		};
 		callbacks.mpin_helphub = function (evt) {
 			self.lastView = "renderSetup";
+			delete self.lastViewParams;
 			self.renderHelpHub.call(self);
 		};
 
 		callbacks.mpin_help_pinpad = function () {
 			self.lastView = "renderSetup";
+			delete self.lastViewParams;
 			self.toggleHelp.call(self);
 			self.renderHelpTooltip.call(self, "setup");
 		};
@@ -1606,12 +1609,12 @@ var mpin = mpin || {};
 
 		//accounts
 		if (menuBtn && !menuBtn.classList.contains("mpinAUp")) {
+			this.lastViewParams = [true];
 			document.getElementById("mpinUser").style.height = "81.5%";
 			addClass(menuBtn, "mpinClose");
 			this.renderAccountsPanel();
 			removeClass("mpinUser", "mpinIdentityGradient");
 
-			this.lastViewParams = [true];
 		} else {
 			//if identity not Active render ACTIVATE
 			if (this.ds.getIdentityToken(this.identity) == "") {
@@ -1646,7 +1649,7 @@ var mpin = mpin || {};
 			if (!hlp.language) {
 				hlp.language = this.cfg.language;
 			}
-			errorCode = error;
+			errorCode = (error === 4009) ? hlp.text("error_not_auth") : error;
 			errorMsg = hlp.text("error_code_" + error);
 		} else {
 			errorMsg = error;
@@ -2525,7 +2528,8 @@ var mpin = mpin || {};
 		"error_code_4013": "We could not complete your registration. Please contact the service administrator or try again later.", //
 		"error_code_4014": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
 		"error_code_4015": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
-		"error_code_4016": "We are experiencing a technical problem. Please try again later or contact the service administrator."  //
+		"error_code_4016": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
+		"error_not_auth": "You are not authorized."  //
 	};
 	//	image should have config properties
 	hlp.img = function (imgSrc) {
