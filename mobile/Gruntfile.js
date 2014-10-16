@@ -33,19 +33,19 @@ module.exports = function(grunt) {
                 }
 			},
 			copyResources: {
-				cmd: 'cp -R resources/ ../build/out/mobile/resources/',
+				cmd: 'cp -Rv resources/ ../build/out/mobile/',
 				options: {
                 			stdout: true,
 				}
 			},
 			copyHandlebarsRuntime: {
-				cmd: 'cp -R ../libs/handlebars.runtime.min.js ../build/out/mobile/js/',
+				cmd: 'cp -Rv ../libs/handlebars.runtime.min.js ../build/out/mobile/js/',
 				options: {
 	            			stdout: true,
 				}
 			},
 			copySASS: {
-				cmd: 'cp -R src/sass/ ../build/tmp/mobile/sass/',
+				cmd: 'mkdir -p ../build/tmp/mobile/sass/ && cp -Rv src/sass/ ../build/tmp/mobile/',
 				options: {
 	            			stdout: true,
 				},
