@@ -1,0 +1,413 @@
+/* 
+Copyright 2014 CertiVox UK Ltd, All Rights Reserved.
+
+The CertiVox M-Pin Client and Server Libraries are free software: you can
+redistribute it and/or modify it under the terms of the BSD 3-Clause
+License - http://opensource.org/licenses/BSD-3-Clause
+
+For full details regarding our CertiVox terms of service please refer to
+the following links:
+
+  * Our Terms and Conditions -
+    http://www.certivox.com/about-certivox/terms-and-conditions/
+  
+  * Our Security and Privacy -
+    http://www.certivox.com/about-certivox/security-privacy/
+
+  * Our Statement of Position and Our Promise on Software Patents -
+    http://www.certivox.com/about-certivox/patents/
+*/
+/*
+   Certivox JavaScript M-Pin Authentication Functions
+
+   Provides these functions:
+   calculateMPinToken     Calculates the MPin Token 
+   local_entropy          Gets an entropy value from the client machine
+   randomX                Calculates a random 254 bit value
+   addShares              Add two points on the curve that are originally in hex format
+   pass1Request           Form the JSON request for pass one of the M-Pin protocol
+   pass2Request           Form the JSON request for pass two of the M-Pin protocol
+*/
+
+// GLOBAL CONFIGS
+
+$IMAGES : "../resources/templates/@@templatename/img";
+$BORDERLESS : true;
+
+// Background color
+@mixin bg-color() {
+
+	background: #fff;
+
+	// Box shadow
+
+	-moz-box-shadow: inset 0 0 15px rgba(255,255,255, 0.6);
+	box-shadow: inset 0 0 15px rgba(255,255,255, 0.6);
+	-webkit-box-shadow: inset 0 0 15px rgba(255,255,255, 0.6);
+}
+
+// Font family
+
+@mixin font-family() {
+	font-family: Helvetica, sans-serif;
+}
+
+//  Pin Button style
+
+@mixin pin-btn-style() {
+
+	// Remove the default button el properties
+
+	border: 0;
+	background: none;
+
+	// Text color
+
+	color: #fff;
+
+	// Text shadow
+	text-shadow: 3px 3px 3px #000000;
+
+	﻿filter: glow(color=#133353, strength=4);
+
+	// Font size
+	font-size: 2em;
+
+	padding: 0;
+	line-height: 100%;
+
+	// Active color on press
+
+	&:active {
+		background: whitesmoke;
+	}
+}
+
+@mixin pinpad() {
+	background: #3777ba; /* Old browsers */
+	background: -moz-linear-gradient(top,  #3777ba 0%, #2989d8 10%, #56bce0 47%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3777ba), color-stop(10%,#2989d8), color-stop(47%,#56bce0)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #3777ba 0%,#2989d8 10%,#56bce0 47%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #3777ba 0%,#2989d8 10%,#56bce0 47%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #3777ba 0%,#2989d8 10%,#56bce0 47%); /* IE10+ */
+	background: linear-gradient(to bottom,  #3777ba 0%,#2989d8 10%,#56bce0 47%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3777ba', endColorstr='#56bce0',GradientType=0 ); /* IE6-9 */
+}
+
+@mixin pinpad-accessnumber() {
+	background: #45a900; /* Old browsers */
+	background: -moz-linear-gradient(top,  #45a900 0%, #45a900 53%, #45a900 53%, #72cf41 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#45a900), color-stop(53%,#45a900), color-stop(53%,#45a900), color-stop(100%,#72cf41)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #45a900 0%,#45a900 53%,#45a900 53%,#72cf41 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #45a900 0%,#45a900 53%,#45a900 53%,#72cf41 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #45a900 0%,#45a900 53%,#45a900 53%,#72cf41 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #45a900 0%,#45a900 53%,#45a900 53%,#72cf41 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45a900', endColorstr='#72cf41',GradientType=0 ); /* IE6-9 */
+}
+
+
+@mixin account-top-bar() {
+	color: black;
+
+	background: #ffffff; /* Old browsers */
+	background: -moz-linear-gradient(top,  #ffffff 0%, #e8e8e8 47%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#e8e8e8)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ffffff 0%,#e8e8e8 47%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ffffff 0%,#e8e8e8 47%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ffffff 0%,#e8e8e8 47%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ffffff 0%,#e8e8e8 47%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e8e8e8',GradientType=0 ); /* IE6-9 */
+
+}
+
+// Top bar
+
+@mixin top-bar(){
+	border-bottom: 1px solid #828284;
+
+	// -webkit-box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+@mixin header-bar(){
+	border-bottom: 1px solid #828284;
+}
+
+// Input pin field
+
+@mixin pin-screen() {
+
+	color: black;
+	border: 0;
+	-webkit-text-fill-color: black;
+	-webkit-border-radius: 0.1em;
+	-moz-border-radius: 0.1em;
+	-ms-border-radius: 0.1em;
+	-o-border-radius: 0.1em;
+	border-radius: 0.1em;
+
+	font-size: 114%;
+
+	min-height: 2.5em;
+}
+
+// User
+
+@mixin mpin-user() {
+	color: black;
+	font-size: 114%;
+	display: inline-block;
+	width: 90%;
+}
+
+
+@mixin mpin-menu() {
+	background: url('#{$IMAGES}/arrow-down-black.svg') top left no-repeat;
+	background-repeat: no-repeat;
+	background-size: auto 100%;
+	width: 30px;
+	height: 30px;
+}
+
+@mixin powered-by() {
+	background-image: url('#{$IMAGES}/powered-by-certivox-colour.svg');
+	color: white;
+	height: 36px;
+
+	background-repeat: no-repeat;
+	background-position: right;
+	background-size: auto 100%;
+	@include box-flex-value(1.0);		
+}
+
+@mixin mpin-logo() {
+	height: 46px;
+
+	background-image: url('#{$IMAGES}/m-pin-black.svg');
+
+	background-repeat: no-repeat;
+	background-position: left;
+	background-size: auto 100%;
+	@include box-flex-value(1.0);
+
+	margin: 5px 10px 5px 0px;
+
+}
+
+// Mixin home icon
+
+@mixin home-icon() {
+	background-image: url('#{$IMAGES}/home.svg');
+
+	height: 24px;
+
+	background-repeat: no-repeat;
+	background-position: left;
+
+	margin:0;
+
+	background-size: auto 100%;
+	left: 0;
+	right: 0;
+	align-self: flex-start;
+	float: left;
+	@include box-flex-value(1.0);		
+}
+
+@mixin custom-logo() {
+	width: 106px;
+	height: 32px;
+
+	background-image: url('#{$IMAGES}/logo-here-grey.svg');
+
+	background-repeat: no-repeat;
+	background-position: right;
+	background-size: auto 100%;
+	margin: 5px 10px 5px 0px;
+
+	@include box-flex-value(1.0);
+}
+
+@mixin logo() {
+	width: 183px;
+	height: 69px;
+	background-image: url('#{$IMAGES}/m-pin-header-logo.svg');
+
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: auto 100%;
+	margin: 5px 10px 5px 0px;
+	
+	display: block;
+	@include box-flex-value(1.0);
+	width: 100%;
+}
+
+@mixin menu-icon() {
+	width: 28px;
+	height: 28px;
+	background-image: url('#{$IMAGES}/mpin_menu.svg');
+
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: auto 100%;
+	
+	@include box-flex-value(1.0);
+}
+
+
+@mixin mobile-icon() {
+	width: 50px !important;
+	height: 42px !important;
+	background-image: url('#{$IMAGES}/phone.svg');
+
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: auto 100%;
+	// margin: 5px 10px 5px 0px;
+
+	margin: 0 auto;
+
+	@include box-flex-value(1.0);
+}
+
+@mixin mpin-button() {
+	-moz-transition: all 0.5s ease 0s;
+	border: 1px solid transparent !important;
+	border-radius: 0.3em 0.3em 0.3em 0.3em;
+	background: #3A7CC2;
+	cursor: pointer;
+	color: #FFFFFF;
+	font-family: 'Helvetica', serif;
+	font-weight: bold;
+	height: auto;
+	min-height: 1.8em;
+	margin-top: 10px;
+
+	padding: 13px 10px 10px;
+
+	&.green {
+		background: #44A800;
+	}
+
+	&.grey {
+		background: #7E7E7E;
+	}
+
+	&.white {
+		background: none;
+		border: 2px solid #56C05A !important;
+		color: #56C05A;
+	} 
+}
+
+@mixin identity-container() {
+	border-bottom: 1px solid rgb(86, 86, 86);
+	color: black;
+}
+
+@mixin bottom-holder() {
+
+	background-position: initial initial;
+	background-repeat: initial initial;
+
+	padding-top: 5px;
+	padding-bottom: 5px;
+
+}
+
+
+@mixin central-text() {
+	color: black;
+	font-size: 4vh;
+	width: 100%;
+	text-align: center;
+}
+
+@mixin input-heading(){
+
+	padding: 0px 0px 5px 0px;
+	font-size: 4vh;
+	width: 100% !important;
+	text-shadow: rgba(255,255,255,0.25) 0 0.08em 0;
+	text-align: center;
+
+		span {
+			text-align: center;
+			color: black;
+			background: transparent;
+			padding: 0px 0px 5px 0px;
+			text-shadow: rgba(255,255,255,0.25) 0 0.08em 0;
+			text-shadow: #fff 0 1px 1px;
+			font-size: .8em;
+			font-weight: normal;
+			-webkit-tap-highlight-color: rgba(0,0,0,0);
+		}
+	
+}
+
+@mixin email-input() {
+	color: black;
+	font-size: 18px;
+	font-weight: normal;
+	background: #fff;
+	width: 100%;
+	background: #fff;
+	width: 100%;
+	padding: .4em;
+	min-height: 2.5em;
+	border: 1px solid #A3A3A3;
+	font-style: italic;
+}
+
+@mixin device-input() {
+	color: black;
+	font-size: 18px;
+	font-weight: normal;
+	background: #fff;
+	width: 100%;
+	background: #fff;
+	width: 100%;
+	padding: .4em;
+	min-height: 2.5em;
+	border: 1px solid #A3A3A3;
+	font-style: italic;
+}
+
+@mixin top-heading() {
+	color: black;
+	padding: 3vh;
+	font-size: 5vh;
+}
+
+@mixin central-heading() {
+	color: white;
+	font-size: 4vh;
+	width: 100%;
+	text-align: center;
+}
+
+@mixin body-text() {
+	padding: 2vh !important;
+	color: black;
+	text-align: center;
+	font-size: 3vh;
+}
+
+@mixin mpin-copyright() {
+	width: 97px;
+	height: 13px;
+	margin: 10px 0px 10px 10px;
+}
+
+@mixin arrow-icon() {
+	background-image: url('#{$IMAGES}/arrow.svg');
+	width: 1.5em;
+	height: 1.5em;
+	padding: 20px;
+}
+
+@mixin btn-text-label() {
+	margin-right: .6em;
+	font-weight: bold;
+	line-height: 1.2em;
+}
