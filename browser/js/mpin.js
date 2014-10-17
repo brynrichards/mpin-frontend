@@ -145,8 +145,8 @@ var mpin = mpin || {};
 		}
 		this.setLanguageText();
 
-		this.renderLanding();
-//		this.renderOtpExpire();
+//		this.renderLanding();
+		this.renderBlank();
 	};
 
 	mpin.prototype.setupHtml = function () {
@@ -1656,6 +1656,13 @@ var mpin = mpin || {};
 		}
 		this.render("error", callbacks, {errorMsg: errorMsg, errorCode: errorCode});
 	};
+	
+	mpin.prototype.renderBlank = function () {
+		var callbacks = {};
+		
+		this.render("blank", callbacks);
+		
+	}
 
 	mpin.prototype.actionSetupHome = function (uId) {
 		var _email, _deviceName, _deviceNameInput, _reqData = {}, self = this;

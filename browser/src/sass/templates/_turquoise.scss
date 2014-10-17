@@ -56,20 +56,26 @@ $BUTTON_BGCOLOR: #007cc2;
 @mixin header-logo() {
 	margin: 5px 0;
 	width: 85px;
-	height: 20px;
 	float: right;
-	background: url('#{$IMAGES}home.svg') no-repeat;
+	background: url('#{$IMAGES}m-pin.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: right bottom;
+	height: 24px;
+	margin: 3px 6px;
 }
 
 @mixin header-home () {
-	width: 30px;
-	height: 23px;
-	margin: 3px 0;
-	background: url('#{$IMAGES}home.svg') no-repeat;
+	width: 20px;
+	height: 16px;
+	background: url('#{$IMAGES}home-white.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: left;
+	margin: 7px 6px;
+}
+
+@mixin identity-row {
+	background: #eee;
+	height: 40px
 }
 
 

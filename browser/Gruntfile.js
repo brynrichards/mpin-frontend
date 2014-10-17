@@ -21,7 +21,7 @@ module.exports = function(grunt) {
                                 }
                         },
 			makeViews: {
-				cmd: 'handlebars ./src/views/*.handlebars -f ../build/out/tmp/templates.js',
+				cmd: 'handlebars ./src/views/<%= settings.templateName %>/*.handlebars -f ../build/out/tmp/templates.js',
 				options: {
                 			stdout: true,
 				}
