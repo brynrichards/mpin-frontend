@@ -973,7 +973,6 @@ var mpin = mpin || {};
 			document.getElementById("mpinCurrentIden").innerHTML = this.getDisplayName(this.ds.getDefaultIdentity());
 			this.toggleButton();
 
-
 			if (subView) {
 				this[subView]();
 			}

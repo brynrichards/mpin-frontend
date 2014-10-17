@@ -141,14 +141,15 @@ $green : #06B405;
 			flex-direction: column !important;
 
 			#mpinUser {
+				
+				
 				position: absolute;
-				height: 28px;
 				width: 100%;
 				transition: all 0.5s ease-in-out;
-				background-color: white;
 				overflow: hidden;
 				z-index: 999999;
 				margin: 0px;
+				@include user-row();
 
 				#mpin_arrow {
 					position: absolute;
@@ -173,12 +174,7 @@ $green : #06B405;
 			}
 
 			#pinpadEls {
-				@include gradient(#3777ba, #56bce0);
-				height: 100%;
-				width: 100%;
-				position: relative;
-				top: 28px;
-				z-index: 8000;
+				@include pin-pad-elements();
 			}
 
 

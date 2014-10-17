@@ -3,134 +3,100 @@
 	<div class="mpinHome mpPointer"></div>
 </div>
 
-<div class="mpinIdentityRow">
-	<div class="mpinArrowDown mpPointer mpHide" id="show_identity"></div>
-	<div class="mpinIdentity mpLeft20">alice@your-domain.com</div>
-</div>
+<div class="mpinMain mpinPinpad mpinAnimateIn" id="mpin_pinpad">
+    <div class="mpinIdentityRow">
+        <div class="mpinIdentity mpLeft20 mpinIdentityGradient" id="mpinUser">
+            <!-- Place the identities inside -->
+            <p id="mpinCurrentIden"></p>
+            <div class="mpinArrowDown mpPointer" id="mpin_arrow">
+				<div class="mpinArrowImg"></div>
+			</div>
+            <div id="mpin_identities" class="mpinMain mpinAnimateIn mpZero">
+            </div>
+        </div>
 
-<!--
-<div class="mpinMain mpPaddTop10">
-	<div class="mpinLists">
-		<ul>
-			<li class="mpinRow">
-				<div class="mpinSettings"></div>
-				ONE ONE
-			</li>
-			<li class="mpinRow">
-				<div class="mpinSettings"></div>
-				Two Two
-			</li>
-			<li class="mpinRow">
-				<div class="mpinSettings"></div>
-				ONE ONE
-			</li>
-			<li class="mpinRow">
-				<div class="mpinSettings"></div>
-				ONE ONE
-			</li>
-			<li class="mpinRow">
-				<div class="mpinSettings"></div>
-				ONE ONE
-			</li>
-		</ul>
-	</div>
+    </div>
+
+    <div id="pinpadEls">
 	
-	<div class="mpinBtnBox">
-		<div class="mpinButton">
-			Add a new identity
-		</div>
-		
-		<div class="mpinButton mpGreen">
-			Sign in with your Smartphone
-		</div>
-	</div>
-	
-</div>
-
-
-<div class="mpinIdentityRow mpinFooterRow">
-	<div class="mpinArrowUp mpPointer"></div>
-</div>
--->
-
-<div class="mpinMain mpinPinpad">
-
-	<div class="mpinInput">
-		<div class="mpinInputIn">
-			<div class="mpinCircle">
-				<div class="mpinCircleOut"></div>
-				<div class="mpinCircleIn"></div>
+		<div class="mpinInput" id="mpin_input_parent">
+			<div class="mpinInputIn mpHide" id="mpin_input_circle">
+				<div class="mpinCircle" id="mpin_circle_1">
+					<div class="mpinCircleOut"></div>
+				</div>
+				
+				<div class="mpinCircle" id="mpin_circle_2">
+					<div class="mpinCircleOut"></div>
+				</div>
+				<div class="mpinCircle" id="mpin_circle_3">
+					<div class="mpinCircleOut"></div>
+				</div>
+				<div class="mpinCircle" id="mpin_circle_4">
+					<div class="mpinCircleOut"></div>
+				</div>
 			</div>
 			
-			<div class="mpinCircle">
-				<div class="mpinCircleOut"></div>
-				<div class="mpinCircleIn"></div>
+			<div class="mpinInputIn mpin70width" id="mpin_input_text">
+				<i id="mpin_help_pinpad"></i>
+				<span class="mpinInputText mpinInputTop" id="mpin_inner_text">      
+					Initializing...
+				</span>
 			</div>
-			<div class="mpinCircle">
-				<div class="mpinCircleOut"></div>
-				<div class="mpinCircleIn"></div>
+		</div>
+		
+		<div class="mpin-pre-row">
+			<div class="mpin-row">
+				<button class="mpinPadBtn" data-value="1">
+					1
+				</button>
+				<button class="mpinPadBtn" data-value="2">
+					2
+				</button>
+				<button class="mpinPadBtn" data-value="3">
+					3
+				</button>
 			</div>
-			<div class="mpinCircle">
-				<div class="mpinCircleOut"></div>
-				<div class="mpinCircleIn"></div>
+		</div>
+		<div class="mpin-pre-row">
+			<div class="mpin-row">
+				<button class="mpinPadBtn" data-value="4">
+					4
+				</button>
+				<button class="mpinPadBtn" data-value="5">
+					5
+				</button>
+				<button class="mpinPadBtn" data-value="6">
+					6
+				</button>
+			</div>
+		</div>
+		<div class="mpin-pre-row">
+			<div class="mpin-row">
+				<button class="mpinPadBtn" data-value="7">
+					7
+				</button>
+				<button class="mpinPadBtn" data-value="8">
+					8
+				</button>
+				<button class="mpinPadBtn" data-value="9">
+					9
+				</button>
+			</div>
+		</div>
+		<div class="mpin-pre-row">
+			<div class="mpin-row mpin-bottom">
+				<button class="mpinPadBtn2 mpinBtnDisabled" data-value="clear" id="mpin_clear">
+					clear
+				</button>
+				<button class="mpinPadBtn" data-value="0">
+					0
+				</button>
+				<button class="mpinPadBtn2 mpinBtnDisabled" data-value="go" id="mpin_login">
+					login
+				</button>
 			</div>
 		</div>
     </div>
-	
-	
-	<div class="mpin-pre-row">
-        <div class="mpin-row">
-            <button class="mpinPadBtn" data-value="1">
-                1
-            </button>
-            <button class="mpinPadBtn" data-value="2">
-                2
-            </button>
-            <button class="mpinPadBtn" data-value="3">
-                3
-            </button>
-        </div>
-    </div>
-    <div class="mpin-pre-row">
-        <div class="mpin-row">
-            <button class="mpinPadBtn" data-value="4">
-                4
-            </button>
-            <button class="mpinPadBtn" data-value="5">
-                5
-            </button>
-            <button class="mpinPadBtn" data-value="6">
-                6
-            </button>
-        </div>
-    </div>
-    <div class="mpin-pre-row">
-        <div class="mpin-row">
-            <button class="mpinPadBtn" data-value="7">
-                7
-            </button>
-            <button class="mpinPadBtn" data-value="8">
-                8
-            </button>
-            <button class="mpinPadBtn" data-value="9">
-                9
-            </button>
-        </div>
-    </div>
-    <div class="mpin-pre-row">
-        <div class="mpin-row mpin-bottom">
-            <button class="mpinPadBtn mpinPadBtnClear" data-value="clear" id="mpinClear">
-                clear
-            </button>
-            <button class="mpinPadBtn" data-value="0">
-                0
-            </button>
-            <button class="mpinPadBtn mpinPadBtnLogin" data-value="go" id="mpinLogin">
-                login
-            </button>
-        </div>
-    </div>
-
 </div>
 
 

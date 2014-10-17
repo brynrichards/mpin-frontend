@@ -29,21 +29,6 @@ the following links:
    pass2Request           Form the JSON request for pass two of the M-Pin protocol
 */
 
-@mixin gradient($color1, $color2) {
-	background-image: -moz-linear-gradient(center top , $color1 0%, $color2);
-	background: -webkit-linear-gradient($color1, $color2); /* For Safari 5.1 to 6.0 */
-	background: -o-linear-gradient($color1, $color2); /* For Opera 11.1 to 12.0 */
-	background: -moz-linear-gradient($color1, $color2); /* For Firefox 3.6 to 15 */
-	background: linear-gradient($color1, $color2);
-}
-
-@mixin border-radius($radius) {
-	-webkit-border-radius: $radius;
-	-moz-border-radius: $radius;
-	border-radius: $radius;
-}
-
-
 
 .mpinHeader {
 	border-bottom: 1px solid #828284;
@@ -147,7 +132,8 @@ the following links:
 }
 
 .mpinPinpad {
-	@include gradient(#3777ba, #56bce0);
+	@include pin-pad-wrapper();
+
 	@import 'pinpads';
 }
 
@@ -335,14 +321,8 @@ the following links:
 }
 
 .mpinFooter {
-	position: absolute;
-	border-top: 1px solid #828284;
-	bottom: 0px;
-	padding: 5px !important;
-	width: 100%;
-	-webkit-box-align: center;
-	height: 10%;
-	background: white;
+	@include footer();
+
 
 	.mpinHelpHub {
 		@include footer-helphub();

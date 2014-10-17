@@ -37,7 +37,19 @@ $BORDERLESS : true;
 $BUTTON_COLOR: #ffffff;
 $BUTTON_BGCOLOR: #007cc2;
 
+@mixin gradient($color1, $color2) {
+	background-image: -moz-linear-gradient(center top , $color1 0%, $color2);
+	background: -webkit-linear-gradient($color1, $color2); /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient($color1, $color2); /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient($color1, $color2); /* For Firefox 3.6 to 15 */
+	background: linear-gradient($color1, $color2);
+}
 
+@mixin border-radius($radius) {
+	-webkit-border-radius: $radius;
+	-moz-border-radius: $radius;
+	border-radius: $radius;
+}
 
 // IMPORTANT NOTE:
 // This template USE Open SANS font from GOOGLE
@@ -78,6 +90,11 @@ $BUTTON_BGCOLOR: #007cc2;
 	height: 40px
 }
 
+@mixin user-row {
+	height: 40px;
+	background-color: #eee;
+}
+
 
 // Background color
 @mixin bg-color() {
@@ -88,6 +105,36 @@ $BUTTON_BGCOLOR: #007cc2;
 
 @mixin font-family() {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+//
+@mixin pin-pad-wrapper () {
+	/*@include gradient(#3777ba, #56bce0);*/
+	background: white;
+}
+
+@mixin pin-pad-elements () {
+	/*@include gradient(#3777ba, #56bce0);*/
+	height: 100%;
+	width: 100%;
+	/*position: relative;*/
+	top: 28px;
+	z-index: 8000;
+}
+
+@mixin pin-pad-button () {
+	border: 0;
+	background: none;
+	color: #0277bd;
+	display: block;
+	text-align: center;
+	width: 90%;
+	font-size: 1.75em;
+	font-weight:normal;
+}
+
+@mixin pin-pad-button-active() {
+	background: #3777ba;
 }
 
 //  Pin Button style
@@ -360,13 +407,14 @@ $BUTTON_BGCOLOR: #007cc2;
 }
 
 @mixin arrow-up-icon () {
-	background-image: url('#{$IMAGES}arrow-down-black.svg');
+	background-image: url('#{$IMAGES}settings-icon.svg');
 	width: 22px !important;
 	height: 20px !important;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
-	margin: 3px auto;
+	margin: 10px auto;
+	margin-right: 10px;
 }
 
 
@@ -387,23 +435,36 @@ $BUTTON_BGCOLOR: #007cc2;
 }
 
 /// FOOTER
+@mixin footer () {
+	position: absolute;
+	border-top: 1px solid #828284;
+	bottom: 0px;
+	padding: 5px !important;
+	width: 100%;
+	-webkit-box-align: center;
+	height: 10%;
+	background: white;
+	border-bottom: 10px solid #6e8778;
+}
+
 @mixin footer-helphub() {
-	width: 120px;
-	height: 45px;
-	background: url('#{$IMAGES}m-pin-header-logo.svg') no-repeat;
+	width: 55px;
+	height: 16px;
+	background: url('#{$IMAGES}m-pin-grey.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: left;
 	position: relative;
-	top: -8px;
+	top: 9px;
 }
 
 @mixin footer-copyright() {
-	width: 80px;
-	height: 30px;
+	width: 70px;
+	height: 13px;
 	float: right;
-	background: url('#{$IMAGES}/powered-by-certivox-colour.svg') no-repeat;
+	background: url('#{$IMAGES}/powered-by-certivox.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: right bottom;
+	margin-top: 10px;
 }
 
 
