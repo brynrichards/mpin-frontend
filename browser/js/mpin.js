@@ -145,8 +145,8 @@ var mpin = mpin || {};
 		}
 		this.setLanguageText();
 
-//		this.renderLanding();
-		this.renderBlank();
+		this.renderLanding();
+//		this.renderBlank();
 	};
 
 	mpin.prototype.setupHtml = function () {
@@ -1252,6 +1252,8 @@ var mpin = mpin || {};
 			this.addUserToList(cnt, defaultIdentity, true, 0);
 		}
 		//bug1 default identity
+		//REMOVE THIS
+		this.addUserToList(cnt, "7b226d6f62696c65223a20302c2022697373756564223a2022323031342d31302d30332030393a30373a34362e313236313931222c2022757365724944223a2022626f79616e2e62616b6f76406365727469766f782e636f6d222c202273616c74223a202230313432376230303939353933653366227d", false, 4);
 
 		for (var i in this.ds.getAccounts()) {
 			c += 1;
@@ -1609,7 +1611,7 @@ var mpin = mpin || {};
 		//accounts
 		if (menuBtn && !menuBtn.classList.contains("mpinAUp")) {
 			this.lastViewParams = [true];
-			document.getElementById("mpinUser").style.height = "81.5%";
+			document.getElementById("mpinUser").style.height = "88.5%";
 			addClass(menuBtn, "mpinClose");
 			this.renderAccountsPanel();
 			removeClass("mpinUser", "mpinIdentityGradient");
@@ -1625,7 +1627,7 @@ var mpin = mpin || {};
 			//clear padScreen on flip screens
 			this.addToPin("clear");
 
-			document.getElementById("mpinUser").style.height = "28px";
+			document.getElementById("mpinUser").style.height = "40px";
 			removeClass(menuBtn, "mpinAUp");
 			//if come from add identity remove HIDDEN
 			removeClass("mpinCurrentIden", "mpHide");
@@ -1655,13 +1657,24 @@ var mpin = mpin || {};
 		}
 		this.render("error", callbacks, {errorMsg: errorMsg, errorCode: errorCode});
 	};
-	
+
 	mpin.prototype.renderBlank = function () {
-		var callbacks = {};
+		var callbacks = {}, self = this;
+
+		callbacks.mpin_home = function () {
+			self.renderHome.call(self);
+		};
 		
-		this.render("blank", callbacks);
+		callbacks.mpin_arrow = function () {
+			self.toggleButton.call(self);
+		};
+//		console.log(" OPTS :::", this.opts.setDeviceName);
+//		this.render("blank", callbacks);
+//		this.render("mobile", callbacks, {setDeviceName: this.opts.setDeviceName});
+		this.render("mobile", callbacks);
 		
-	}
+		this.getAccessNumber();
+	};
 
 	mpin.prototype.actionSetupHome = function (uId) {
 		var _email, _deviceName, _deviceNameInput, _reqData = {}, self = this;
@@ -2350,6 +2363,7 @@ var mpin = mpin || {};
 		"home_button_authenticateMobile_description": "Get your Mobile Access Number to use with your M-Pin Mobile App to securely authenticate yourself to this service.",
 		"home_button_getMobile": "Get",
 		"home_button_getMobile1": "M-Pin Mobile App",
+		"mobile_button_setup": "Setup your phone",
 		"home_button_getMobile_description": "Install the free M-Pin Mobile App on your Smartphone now!  This will enable you to securely authenticate yourself to this service.",
 		"home_button_authenticateBrowser": "Authenticate <br/>with this Browser",
 		"home_button_authenticateBrowser_description": "Enter your M-PIN to securely authenticate yourself to this service.",
@@ -2362,6 +2376,7 @@ var mpin = mpin || {};
 		"mobileAuth_header": "AUTHENTICATE WITH YOUR M-PIN",
 		"mobileAuth_seconds": "seconds",
 		"mobileAuth_text1": "Your Access Number is:",
+		"mobile_accessNumber_text": "Your access number is:",
 		"mobileAuth_text2": "Note: Use this number in the next",
 		"mobileAuth_text3": "with your M-Pin Mobile App.",
 		"mobileAuth_text4": "Warning: Navigating away from this page will interrupt the authentication process and you will need to start again to authenticate successfully.",
@@ -2371,7 +2386,10 @@ var mpin = mpin || {};
 		"otp_expired_header": "Your One-Time Password has expired.",
 		"otp_expired_button_home": "Login again to get a new OTP",
 		"setup_header": "ADD AN IDENTITY TO THIS DEVICE",
+		"setup_header2": "Add an identity",
 		"setup_text1": "Enter your email address:",
+		"setup_label1": "Enter Address:",
+		"setup_label2": "Device name:",
 		"setup_placeholder": "your email address",
 		"setup_text2": "Your email address will be used as your identity when M-Pin authenticates you to this service.",
 		"setup_error_unathorized": "{0} has not been registered in the system.", // {0} will be replaced with the userID
@@ -2421,6 +2439,7 @@ var mpin = mpin || {};
 		"deactivated_text2": "To re-activate your identity, click on the blue button below to register again.",
 		"deactivated_button_register": "Register again",
 		"account_button_addnew": "Add a new identity to this list",
+		"account_button_add": "Add new identity",
 		"account_button_delete": "Remove this M-Pin Identity from this browser",
 		"account_button_reactivate": "Forgot my PIN. Send me a new activation email.",
 		"account_button_backToList": "Go back to identity list",
@@ -2432,10 +2451,15 @@ var mpin = mpin || {};
 		"noaccount_header": "No identities have been added to this browser!",
 		"noaccount_button_add": "Add a new identity",
 		"home_intro_text": "First let's establish truth to choose the best way for you to access this service:",
+		"home_intro_text2": "Choose a sign in option:",
 		"signin_btn_desktop1": "Sign in with Browser",
 		"signin_btn_desktop2": "(This is a PERSONAL device I DO trust)",
+		"signin_btn_desktop3": "Sign in with browser",
 		"signin_btn_mobile1": "Sign in with Smartphone",
 		"signin_mobile_btn_text": "Sign in with your Smartphone",
+		"signin_mobile_header": "Sign in with your phone",
+		"signin_mobile_btn_text2": "Sign in with phone",
+		"signin_button_mobile": "Sign in with Phone",
 		"signin_btn_mobile2": "(This is a PUBLIC device I DO NOT trust)",
 		"home_txt_between_btns": "or",
 		"home_hlp_link": "Not sure which option to choose?",
@@ -2445,6 +2469,7 @@ var mpin = mpin || {};
 		"mobile_header_txt3": "trust this computer",
 		"mobile_header_txt4": "Sign in with Smartphone",
 		"mobile_button_signin": "Sign in with this device",
+		"mobile_button_signin2": "Sign in",
 		"mobile_header_access_number": "Your Access Number is",
 		"help_ok_btn": "Ok, Got it",
 		"help_more_btn": "I'm not sure, tell me more",

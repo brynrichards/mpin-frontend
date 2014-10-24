@@ -10,7 +10,7 @@ the following links:
 
   * Our Terms and Conditions -
     http://www.certivox.com/about-certivox/terms-and-conditions/
-  
+	
   * Our Security and Privacy -
     http://www.certivox.com/about-certivox/security-privacy/
 
@@ -141,8 +141,8 @@ $green : #06B405;
 			flex-direction: column !important;
 
 			#mpinUser {
-				
-				
+
+
 				position: absolute;
 				width: 100%;
 				transition: all 0.5s ease-in-out;
@@ -161,12 +161,12 @@ $green : #06B405;
 
 			#mpin_identities {
 				position: absolute;
-				background-color: white;
 				z-index: 9999;
 				top: 40px;
 				left: 0;
 				right: 0;
 				height: 80%;
+				/*@include identity-list();*/
 			}
 
 			#mpin_pinpad {
@@ -434,7 +434,6 @@ $green : #06B405;
 			background-color: #fff;
 			cursor: pointer;
 			color: #3c3c3c;
-			font-family: 'Helvetica',serif;
 			font-size: 12px;
 			font-weight: bold;
 			padding: 13px 10px 10px;
@@ -583,7 +582,6 @@ $green : #06B405;
 			.mp_center {
 				padding-top: 30px;
 				font: inherit;
-				font-family: Arial,Helvetica,sans-serif;
 			}
 
 			.mp_after_center {
@@ -656,7 +654,7 @@ $green : #06B405;
 			background-position: center;
 			display: block;
 			position: relative;
-   			top: -8px;
+			top: -8px;
 		}
 	}
 

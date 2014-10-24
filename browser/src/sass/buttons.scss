@@ -10,7 +10,7 @@ the following links:
 
   * Our Terms and Conditions -
     http://www.certivox.com/about-certivox/terms-and-conditions/
-  
+	
   * Our Security and Privacy -
     http://www.certivox.com/about-certivox/security-privacy/
 
@@ -32,9 +32,8 @@ the following links:
 .mpinBtnBox {
 	//instead of width: 90%
 	padding: 0% 5%;
-	background: #fff;
 	z-index: 99;
-	
+
 	&.mpinBtnDown {
 		position: absolute;
 		bottom: 11%;
@@ -105,9 +104,29 @@ the following links:
 			background-repeat: no-repeat;
 			background-position: center;
 		}
-
-
+		
+		.mpinBtnIcon {
+			height: 20px;
+			width: 20px;
+			position: absolute;
+			
+			&.mpMobile {
+				@include button-icon-mobile();
+			}
+			
+			&.mpDesktop {
+				@include button-icon-desktop();
+			}
+		}
+		
+		&.mpMobileAccessNumber {
+			background: none;
+			border: 1px solid $BGCOLOR4;
+		}
+		
 	}
+	//.mpinButton
+
 	&.mpNoPadding {
 		padding-top:0;
 		padding-bottom:0;
@@ -117,6 +136,22 @@ the following links:
 		background: #00a800;
 		font-size:0.93em;
 	}
+
+	.mpinMobileBtn {
+		@include mpin-mobile-button();
+	}
+
+	.mpinButtonDark {
+		@include mpin-dark-button();
+	}
+
+	.mpinBtnBig {
+		height: 60px;
+		padding-top: 15px;
+		margin-bottom: 30px;
+	}
+
+
 	.mpBtnOnlyGreen {
 		background: none;
 		color: #00a800;

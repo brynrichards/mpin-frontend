@@ -29,6 +29,7 @@ the following links:
    pass2Request           Form the JSON request for pass two of the M-Pin protocol
 */
 
+@import "http://fonts.googleapis.com/css?family=Open+Sans:400,700,300";
 
 .mpinHeader {
 	border-bottom: 1px solid #828284;
@@ -46,11 +47,18 @@ the following links:
 	}
 }
 
+.mpMobileColor {
+	@include mobile-color();
+}
+
+
+
 .mpinHeaderBig {
 	width: 90%;
 	margin: auto;
 	text-align:left;
 	line-height: 1.3em;
+	font-size: 18px; //??
 
 	#mpinLogo {
 		@include logo();
@@ -60,12 +68,9 @@ the following links:
 }
 
 .mpinHeaderRow {
-	padding: 5%;
-	/*padding-top: 1%;*/
-	font-size: 13px;
-	text-transform: uppercase;
-	text-align: center;
-	font-weight: bold;
+
+
+	@include mpin-header-row();
 
 	&.mpHeaderPadd {
 		padding: 0px;
@@ -115,6 +120,17 @@ the following links:
 	#mpinCurrentIden {
 		padding: 0px;
 		margin: 0px;
+		text-align: left;
+		padding-left: 10px;
+		.mpinIdentityLabel {
+			font-size: 12px;
+			color: #444;
+		}
+		.mpinIdentityTitle {
+			font-size:14px; 
+			color: #0277db
+
+		}
 	}
 	/*	.mpinArrowUp {
 			height: 20px;
@@ -140,7 +156,7 @@ the following links:
 @import 'help';
 
 .mpinMain {
-	height: 75%;
+	@include mpin-main();
 
 	@import 'identity';
 
@@ -171,10 +187,13 @@ the following links:
 			/*color: grey;*/
 			padding: .88em .4em;
 			/*font-style: italic;*/
-			border: 1px solid #A3A3A3;
 			width: 100%;
-			margin-top: 6%;
+			/*margin-top: 6%;*/
 			font-size: 0.88em;
+			display: table-cell;
+			height: 40px;
+
+			@include mpin-input-field();
 		}
 
 		.mpinInput::-webkit-input-placeholder {
@@ -190,14 +209,53 @@ the following links:
 			font-style: italic;
 		}
 
+		.mpinLabel {
+			height: 40px;
+			padding-top:10px;
+			display: block;
+			text-align: left;
+		}
+
+		.mpinInputGroup {
+			width: 100%;
+			display: inline-table;
+			vertical-align: middle;
+			position: relative;
+			border-collapse: separate;
+			display: table;
+			box-sizing: border-box;
+
+			.mpinInputAdd {
+				width: auto;
+
+				white-space: nowrap;
+				vertical-align: middle;
+
+				display: table-cell;
+
+				background-color: #d3dbd6;
+				border: 1px solid #6e8778;
+				border-radius: 4px;
+				border-top-right-radius: 0;
+				border-bottom-right-radius: 0;
+				border-right: 0;
+
+				@include email-input-before();
+			}
+			.mpinScr {
+				@include device-input-before();
+			}
+		}
 
 		.mpinIdentityText {
 			color: red;
 		}
+
 		.mpinInfoText {
 			color: #353535;
 			padding: 10px;
 		}
+
 		&.mpHomeTxt {
 			font-size: 150%;
 			padding-bottom: 4%;
@@ -336,4 +394,10 @@ the following links:
 		height:11%;
 		/*bottom: 2vh;*/
 	}
+
+	&.mpMobileFooter {
+		@include mobile-footer();
+	}
+
+
 }
