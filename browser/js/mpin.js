@@ -54,6 +54,10 @@ var mpin = mpin || {};
 			Handlebars.registerHelper("img", function (optionalValue) {
 				return hlp.img(optionalValue);
 			});
+			
+			Handlebars.registerHelper("forloop", function (optionalValue) {
+				return hlp.img(optionalValue);
+			});
 
 
 			if (options || options.targetElement) {
@@ -987,9 +991,31 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.getAccessNumber = function () {
-		var _request = new XMLHttpRequest(), self = this, expire;
+		var _request = new XMLHttpRequest(), self = this, expire, drawTimer, timerEl, timer2d, totalSec;
 
 		this.intervalID || (this.intervalID = {});
+
+		//// TIMER CODE
+		timerEl = document.getElementById("mpTimer");
+		timer2d = timerEl.getContext("2d");
+		
+		//draw canvas Clock
+		drawTimer = function (expireOn) {
+			var start, diff;
+			diff = totalSec - expireOn;
+			start = -0.5 + ((diff / totalSec) * 2);
+			start = Math.round(start * 100) / 100;
+
+			timer2d.clearRect(0, 0, timerEl.width, timerEl.height);
+
+			timer2d.beginPath();
+			timer2d.strokeStyle = "#8588ac";
+			timer2d.arc(20, 20, 18, start * Math.PI, 1.5 * Math.PI);
+			timer2d.lineWidth = 5;
+			timer2d.stroke();
+		};
+
+		////////////////// TIMER
 
 		expire = function (expiresOn) {
 			var expireAfter = Math.floor((expiresOn - (new Date())) / 1000);
@@ -999,7 +1025,12 @@ var mpin = mpin || {};
 				}
 				self.getAccessNumber();
 			} else {
-				document.getElementById("mpin_seconds").innerHTML = expireAfter + " " + hlp.text("mobileAuth_seconds");
+				document.getElementById("mpin_seconds").innerHTML = expireAfter;
+				//////////////////////////////////////////Clockwise
+				///// Check if Timer Element exist some template did not have timer
+				if (document.getElementById("mpTimer")) {
+					drawTimer(expireAfter);
+				}
 			}
 		};
 
@@ -1016,6 +1047,7 @@ var mpin = mpin || {};
 					self.getAccess();
 				}
 				expiresOn = new Date();
+				totalSec = jsonResponse.ttlSeconds;
 				expiresOn.setSeconds(expiresOn.getSeconds() + jsonResponse.ttlSeconds);
 				expire(expiresOn);
 				self.intervalID = setInterval(function () {
@@ -1664,7 +1696,7 @@ var mpin = mpin || {};
 		callbacks.mpin_home = function () {
 			self.renderHome.call(self);
 		};
-		
+
 		callbacks.mpin_arrow = function () {
 			self.toggleButton.call(self);
 		};
@@ -1672,7 +1704,7 @@ var mpin = mpin || {};
 //		this.render("blank", callbacks);
 //		this.render("mobile", callbacks, {setDeviceName: this.opts.setDeviceName});
 		this.render("mobile", callbacks);
-		
+
 		this.getAccessNumber();
 	};
 
@@ -2520,6 +2552,7 @@ var mpin = mpin || {};
 		"landing_button_newuser": "I'm new to M-Pin, get me started",
 		"mobile_header": "GET THE M-PIN SMARTPHONE APP",
 		"mobile_footer_btn": "Now, sign in with your Smartphone",
+		"mobile_footer_btn2": "Sign in with Phone",
 		"pinpad_setup_screen_text": "CREATE YOUR M-PIN:<br> CHOOSE 4 DIGIT",
 		"pinpad_default_message": "ENTER YOUR PIN",
 		"setup_device_label": "Choose your device name:",

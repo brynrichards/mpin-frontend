@@ -205,6 +205,6 @@ info.mpinHelpInfo {
 }
 
 .mpinPurple, .mpinPurple strong {
-	color: #F44373;
 	font-weight: bold;
+	@include identity-text();
 }

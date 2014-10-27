@@ -116,6 +116,10 @@ $BGCOLOR4: #8588ac;
 	background: $BGCOLOR3;
 }
 
+@mixin identity-text() {
+	color: $BGCOLOR4;
+}
+
 //identity ROW
 @mixin users-row() {
 	color: $BGCOLOR;

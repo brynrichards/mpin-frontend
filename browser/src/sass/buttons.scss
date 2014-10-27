@@ -79,6 +79,7 @@ the following links:
 				font-size: 24px;
 				letter-spacing: .4em;
 				padding: 8px;
+				@include identity-text();
 			}
 		}
 		.mpbtnExpire {
@@ -104,26 +105,26 @@ the following links:
 			background-repeat: no-repeat;
 			background-position: center;
 		}
-		
+
 		.mpinBtnIcon {
 			height: 20px;
 			width: 20px;
 			position: absolute;
-			
+
 			&.mpMobile {
 				@include button-icon-mobile();
 			}
-			
+
 			&.mpDesktop {
 				@include button-icon-desktop();
 			}
 		}
-		
+
 		&.mpMobileAccessNumber {
 			background: none;
 			border: 1px solid $BGCOLOR4;
 		}
-		
+
 	}
 	//.mpinButton
 
@@ -165,3 +166,5 @@ the following links:
 		padding: 14px 0;
 	}
 }
+
+

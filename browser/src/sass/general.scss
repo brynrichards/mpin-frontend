@@ -29,7 +29,13 @@ the following links:
    pass2Request           Form the JSON request for pass two of the M-Pin protocol
 */
 
-@import "http://fonts.googleapis.com/css?family=Open+Sans:400,700,300";
+/*@import "http://fonts.googleapis.com/css?family=Open+Sans:400,700,300";*/
+//http://bourbon.io/docs/#font-face
+
+/*@import url(http://fonts.googleapis.com/css?family=Roboto+Slab|Open+Sans:400italic,700italic,400,700);*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,300);
+
+
 
 .mpinHeader {
 	border-bottom: 1px solid #828284;
@@ -248,7 +254,8 @@ the following links:
 		}
 
 		.mpinIdentityText {
-			color: red;
+
+			@include identity-text();
 		}
 
 		.mpinInfoText {
@@ -370,6 +377,24 @@ the following links:
 	/*margin: 15px 0;*/
 }
 
+/////////////////////////////////////////////////
+//timer Feature
+.mpinTimerBox {
+	position: relative;
+
+	/*	#mpTimer {
+			border: 1px solid green;
+		}*/
+	
+	.mpLeftTime {
+		position: absolute;
+		margin-left: -28px;
+		margin-top: 8px;
+	}
+}
+
+
+
 .mpinFooterRow {
 	bottom: 0%;
 	min-height: 6%;
@@ -398,6 +423,4 @@ the following links:
 	&.mpMobileFooter {
 		@include mobile-footer();
 	}
-
-
 }
