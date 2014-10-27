@@ -55,6 +55,13 @@ var mpin = mpin || {};
 				return hlp.img(optionalValue);
 			});
 
+			Handlebars.registerHelper("loop", function (n, block) {
+				var accum = '';
+				for (var i = 0; i < n; ++i)
+					accum += block.fn(i);
+				return accum;
+			});
+
 
 			if (options || options.targetElement) {
 				self.el = document.getElementById(options.targetElement);
@@ -91,7 +98,7 @@ var mpin = mpin || {};
 	//CONFIGS
 	mpin.prototype.cfg = {
 		language: "en",
-		pinSize: 4,
+		pinSize: 6,
 		requiredOptions: "appID; seedValue; signatureURL; mpinAuthServerURL; timePermitsURL; authenticateURL; registerURL",
 		restrictedOptions: "signatureURL; mpinAuthServerURL; timePermitsURL",
 		defaultOptions: {
@@ -923,7 +930,7 @@ var mpin = mpin || {};
 		};
 
 
-		this.render("setup", callbacks, {email: this.tmp.email});
+		this.render("setup", callbacks, {email: this.tmp.email, pinSize: this.cfg.pinSize});
 		this.enableNumberButtons(true);
 		this.bindNumberButtons();
 
@@ -976,7 +983,9 @@ var mpin = mpin || {};
 			self.renderHelpTooltip.call(self, "login");
 		};
 
-		this.render("login", callbacks);
+		console.log("this.cfg.pinSize ::: ", this.cfg.pinSize);
+
+		this.render("login", callbacks, {pinSize: this.cfg.pinSize});
 		this.enableNumberButtons(true);
 		this.bindNumberButtons();
 
@@ -1570,7 +1579,8 @@ var mpin = mpin || {};
 
 			var newCircle = document.createElement('div');
 			newCircle.className = "mpinCircleIn";
-			var circleID = "mpin_circle_" + this.pinpadInput.length;
+			var circleID = "mpin_circle_" + (this.pinpadInput.length - 1);
+			console.log("this.pinpadInput.length:::", this.pinpadInput.length);
 			document.getElementById(circleID).appendChild(newCircle);
 		} else if (!isErrorFlag) {
 			removeCircles();

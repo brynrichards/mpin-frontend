@@ -27,6 +27,13 @@
 	
 		<div class="mpinInput" id="mpin_input_parent">
 			<div class="mpinInputIn mpHide" id="mpin_input_circle">
+				
+				{{#loop data.pinSize}}
+					<div class="mpinCircle" id="mpin_circle_{{this}}">
+						<div class="mpinCircleOut"></div>
+					</div>
+				{{/loop}}
+				<!--
 				<div class="mpinCircle" id="mpin_circle_1">
 					<div class="mpinCircleOut"></div>
 				</div>
@@ -40,6 +47,7 @@
 				<div class="mpinCircle" id="mpin_circle_4">
 					<div class="mpinCircleOut"></div>
 				</div>
+				-->
 			</div>
 			
 			<div class="mpinInputIn mpin70width" id="mpin_input_text">
