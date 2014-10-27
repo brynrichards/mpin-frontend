@@ -2565,8 +2565,8 @@ var mpin = mpin || {};
         "otp_seconds": "Remaining:", // {0} will be replaced with the remaining seconds
         "otp_expired_header": "Your One-Time Password has expired.",
         "otp_expired_button_home": "Login again to get a new OTP",
-        "setup_header": "ADD AN IDENTITY TO THIS DEVICE",
-        "setup_text1": "Enter your email address:",
+        "setup_header": "Add an identity",
+        "setup_text1": "Email Address:",
         "setup_text2": "Your email address will be used as your identity when M-Pin authenticates you to this service.",
         "setup_text3": "your email address",
         "setup_error_unathorized": "{0} has not been registered in the system.", // {0} will be replaced with the userID

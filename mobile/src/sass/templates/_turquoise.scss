@@ -63,15 +63,11 @@ $BORDERLESS : true;
 
 	// Text color
 
-	color: #fff;
-
-	// Text shadow
-	text-shadow: 3px 3px 3px #000000;
-
+	color: #868aac;
 	﻿filter: glow(color=#133353, strength=4);
 
 	// Font size
-	font-size: 2em;
+	font-size: 34pt;
 
 	padding: 0;
 	line-height: 100%;
@@ -113,7 +109,7 @@ $BORDERLESS : true;
 }
 
 @mixin header-bar(){
-	background-color: #6e8778;
+	background-color: #868aac;
 	border-bottom: 1px solid #828284;
 }
 
@@ -257,16 +253,17 @@ $BORDERLESS : true;
 
 @mixin mpin-button() {
 	-moz-transition: all 0.5s ease 0s;
-	border: 1px solid transparent !important;
 	border-radius: 0.3em 0.3em 0.3em 0.3em;
-	background: #3A7CC2;
+	background: #868aac;
 	cursor: pointer;
 	color: #FFFFFF;
 	font-family: 'Helvetica', serif;
-	font-weight: bold;
+	font-weight: normal;
 	height: auto;
 	min-height: 1.8em;
 	margin-top: 10px;
+	border: none;
+	border-bottom: 3px solid #5d6078;
 
 	padding: 13px 10px 10px;
 
@@ -314,7 +311,6 @@ $BORDERLESS : true;
 	font-size: 4vh;
 	width: 100% !important;
 	text-shadow: rgba(255,255,255,0.25) 0 0.08em 0;
-	text-align: center;
 
 		span {
 			text-align: center;
@@ -359,7 +355,7 @@ $BORDERLESS : true;
 }
 
 @mixin top-heading() {
-	color: black;
+	color: #5d6078;
 	padding: 3vh;
 	font-size: 5vh;
 }
