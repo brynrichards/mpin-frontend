@@ -44,7 +44,7 @@ the following links:
 
 	.mpinInputIn {
 		margin: 0 auto;
-		width: 67%;
+		width: 100%;
 		padding: 7% 1%;
 
 		& i {
@@ -63,8 +63,8 @@ the following links:
 	.mpinCircle {
 		width: 35px;
 		height: 35px;
-		float: left;
-		margin: 1%;
+		/*float: left;*/
+		display: inline-block;
 
 		.mpinCircleIn {
 			margin: 7px;
