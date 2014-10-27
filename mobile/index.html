@@ -88,7 +88,11 @@ the following links:
 				clientSettingsURL: "@@clientsetting",
 				// useWebSocket: true,
 				emailCheckRegex: @@emailregex,
-				setDeviceName: true
+				onSuccessLogin: function() {
+					alert(" :: on SUCCESS LOGIN ::");
+				},
+				setDeviceName: true,
+				// requestOTP: "1"
 			});
 		})();
 

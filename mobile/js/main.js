@@ -105,8 +105,7 @@ var mpin = mpin || {};
         });
 
         Handlebars.registerHelper("img", function(imgSrc) {
-            return IMAGES_PATH + imgSrc;
-
+            return hlp.img(imgSrc);
         });
 
         //options CHECK
@@ -243,7 +242,8 @@ var mpin = mpin || {};
         this.el.innerHTML = this.readyHtml(tmplName, data);
  
         for (k in callbacks) {
-            if (document.getElementById(k)) {
+
+            if (document.getElementById(k) && k !== 'menuBtn') {
 
                 if (window.navigator.msPointerEnabled) {
                     document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
@@ -257,6 +257,8 @@ var mpin = mpin || {};
                     }
                 }
  
+            } else if(document.getElementById(k) && k === 'menuBtn') {
+                document.getElementById('menuBtn').addEventListener('click', callbacks[k], false);
             }
         }
         if (typeof mpin.custom !== 'undefined') {
@@ -1132,8 +1134,6 @@ var mpin = mpin || {};
 //custom render 
     mpin.prototype.renderAccountsPanel = function(back) {
 
-        console.log("Comming here");
-
         var self = this, 
             callbacks = {},
             renderElem, 
@@ -1381,25 +1381,14 @@ var mpin = mpin || {};
         rowElem.innerHTML = mpin.templates['user-row']({data:tmplData, cfg: mpin.cfg});
 
         cnt.appendChild(rowElem);
- 
-        if (window.navigator.msPointerEnabled) {
-
-            rowElem.addEventListener('MSPointerDown', mEventsHandler, false);
-        }
-        else {
-
-            if(mpin.cfg.touchevents) {
-                rowElem.addEventListener('touchstart', mEventsHandler, false);
-            } else {
-
-                rowElem.addEventListener('click', mEventsHandler, false);
-            }
-
-        }
+        rowElem.addEventListener('click', mEventsHandler, false);
  
         // document.getElementById('mp_back').remove();
  
         function mEventsHandler(e) {
+
+            e.stopPropagation();
+            e.preventDefault();
 
             if(document.getElementById("mp_back")) {
                 var elem = document.getElementById("mp_back");
@@ -1444,7 +1433,6 @@ var mpin = mpin || {};
             ev.stopPropagation();
             return false;
         };
- 
     };
  
     mpin.prototype.renderIdentityNotActive = function(email) {
@@ -1481,6 +1469,9 @@ var mpin = mpin || {};
 
 
         function mEventsHandler(e) {
+
+            e.stopPropagation();
+            e.preventDefault();
 
             var parent = document.getElementById("inputContainer");
             var child = document.getElementById("codes");
@@ -2644,8 +2635,7 @@ var mpin = mpin || {};
         "logout_button": "Logout",
         "home_button_setupMobile": "Add an identity to this browser",
         "mobile_splash_text": "INSTALL THE M-PIN MOBILE APP",
-        "mobile_add_home_ios6": "Tap the <img src='resources/templates/@@templatename/img/ios6-share.png'/> icon to 'Add to homescreen'",
-        "mobile_add_home_ios7": "Tap the <img src='resources/templates/@@templatename/img/ios7-share.png'/> icon to 'Add to homescreen'",
+        "mobile_add_home_ios": "Tap the icon to 'Add to homescreen'",
         "help_text_1": "Simply choose a memorable <b>[4 digit]</b> PIN to assign to this identity by pressing the numbers in sequence followed by the 'Setup' button to setup your PIN for this identity",
         "help_ok_btn": "Ok, Got it",
         "help_more_btn": "I'm not sure, tell me more",
