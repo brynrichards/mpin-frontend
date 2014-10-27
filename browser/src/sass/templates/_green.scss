@@ -10,7 +10,7 @@ the following links:
 
   * Our Terms and Conditions -
     http://www.certivox.com/about-certivox/terms-and-conditions/
-  
+	
   * Our Security and Privacy -
     http://www.certivox.com/about-certivox/security-privacy/
 
@@ -28,21 +28,37 @@ the following links:
    pass1Request           Form the JSON request for pass one of the M-Pin protocol
    pass2Request           Form the JSON request for pass two of the M-Pin protocol
 */
+
 // GLOBAL CONFIGS
 
-$IMAGES : "../mpinImages";
+$IMAGES : "../images/%templatename%/";
 $BORDERLESS : true;
 
 $BUTTON_COLOR: #ffffff;
 $BUTTON_BGCOLOR: #007cc2;
 
+
+
+// IMPORTANT NOTE:
+// This template USE Open SANS font from GOOGLE
+// Insert directly into index html
+
+
+
 //HEADER
+
+@mixin mpin-header () {
+	padding: 5px !important;
+	height: 40px;
+	background: #6e8778;
+}
+
 @mixin header-logo() {
 	margin: 5px 0;
 	width: 85px;
 	height: 20px;
-	float: right; 
-	background: url('#{$IMAGES}/logo-here-grey.svg') no-repeat;
+	float: right;
+	background: url('#{$IMAGES}home.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: right bottom;
 }
@@ -51,32 +67,21 @@ $BUTTON_BGCOLOR: #007cc2;
 	width: 30px;
 	height: 23px;
 	margin: 3px 0;
-	background: url('#{$IMAGES}/home.svg') no-repeat;
+	background: url('#{$IMAGES}home.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: left;
 }
+
+
 // Background color
 @mixin bg-color() {
-	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-	background: -moz-linear-gradient(top, #363636 0%, #2b2b2b 14%, #0e0e0e 38%, #010101 52%, #000000 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#363636), color-stop(14%,#2b2b2b), color-stop(38%,#0e0e0e), color-stop(52%,#010101), color-stop(100%,#000000));
-	background: -webkit-linear-gradient(top, #363636 0%,#2b2b2b 14%,#0e0e0e 38%,#010101 52%,#000000 100%);
-	background: -o-linear-gradient(top, #363636 0%,#2b2b2b 14%,#0e0e0e 38%,#010101 52%,#000000 100%);
-	background: -ms-linear-gradient(top, #363636 0%,#2b2b2b 14%,#0e0e0e 38%,#010101 52%,#000000 100%);
-	background: linear-gradient(top, #363636 0%,#2b2b2b 14%,#0e0e0e 38%,#010101 52%,#000000 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#363636', endColorstr='#000000',GradientType=0 );
-	background: #000;
-	// Box shadow
-
-	-moz-box-shadow: inset 0 0 15px rgba(255,255,255, 0.6);
-	box-shadow: inset 0 0 15px rgba(255,255,255, 0.6);
-	-webkit-box-shadow: inset 0 0 15px rgba(255,255,255, 0.6);
+	background: #fff;
 }
 
 // Font family
 
 @mixin font-family() {
-	font-family: Arial,Helvetica,sans-serif;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 //  Pin Button style
@@ -123,6 +128,14 @@ $BUTTON_BGCOLOR: #007cc2;
 
 	&:active {
 		background: #ccc;
+	}
+
+	&.green {
+		background: #44A800;
+	}
+
+	&.grey {
+		background: #7E7E7E;
 	}
 }
 
@@ -179,36 +192,19 @@ $BUTTON_BGCOLOR: #007cc2;
 // Mixin home icon
 
 @mixin home-icon() {
-	background-image: url('#{$IMAGES}/home.svg');
-	color: white;
-	height: 24px;
-
-	@include box-flex-value(1.0);
 }
 
 @mixin mpin-logo() {
-	width: 106px;
-	height: 32px;
-
-	background-image: url('#{$IMAGES}/mpin_logo.svg');
-
-	background-repeat: no-repeat;
-	background-position: right;
-	background-size: auto 100%;
-	margin: 5px 10px 5px 0px;
-
-	@include box-flex-value(1.0);
 }
 
 @mixin logo() {
 	width: 183px;
 	height: 69px;
-	background-image: url('#{$IMAGES}/mpin_logo.svg');
-
+	background-image: url('#{$IMAGES}/mpin_header_logo.png');
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
-	margin: 5px 10px 5px 0px;
+	/*margin: 5px 10px 5px 0px;*/
 
 	display: block;
 	@include box-flex-value(1.0);
@@ -229,14 +225,15 @@ $BUTTON_BGCOLOR: #007cc2;
 
 
 @mixin mobile-icon() {
-	width: 50px !important;
+	width: 30px !important;
 	height: 42px !important;
-	background-image: url('#{$IMAGES}/phone.svg');
+	background-image: url('#{$IMAGES}phone-green.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
 	margin: 5px auto;
+	margin-bottom: 9px;
 
 	@include box-flex-value(1.0);
 }
@@ -244,7 +241,7 @@ $BUTTON_BGCOLOR: #007cc2;
 @mixin desktop-icon() {
 	width: 50px !important;
 	height: 42px !important;
-	background-image: url('#{$IMAGES}/mac-icon.svg');
+	background-image: url('#{$IMAGES}computer-blue.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
@@ -254,11 +251,12 @@ $BUTTON_BGCOLOR: #007cc2;
 	@include box-flex-value(1.0);
 }
 
+//almost deprecate
 @mixin mpin-button() {
 	-moz-transition: all 0.5s ease 0s;
 	border: 1px solid transparent !important;
 	border-radius: 0.3em 0.3em 0.3em 0.3em;
-	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 25px 30px -12px rgba(255, 255, 255, 0.4) inset, 0 1px 2px rgba(0, 0, 0, 0.6);
+	/*box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 25px 30px -12px rgba(255, 255, 255, 0.4) inset, 0 1px 2px rgba(0, 0, 0, 0.6);*/
 	outline: medium none;
 	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 	background: #0073AA;
@@ -271,19 +269,20 @@ $BUTTON_BGCOLOR: #007cc2;
 	font-size: 14px;
 }
 
+//except mobile buttons
 @mixin mpinButton {
 	border: 1px solid transparent;
 	border-radius: 0.3em;
 	background: $BUTTON_BGCOLOR;
 	cursor: pointer;
-	color: #FFFFFF;
+	color: $BUTTON_COLOR;
 	font-weight: bold;
 	min-height: 1.8em;
 	margin-top: 10px;
 	padding: 5px 10px;
 	align-items: center;
 	text-align: center;
-	margin-bottom: 3%;
+	margin-bottom: 10px;
 	line-height: 120%;
 }
 
@@ -307,16 +306,16 @@ $BUTTON_BGCOLOR: #007cc2;
 	width: 100% !important;
 	text-align: center;
 
-		span {
-			text-align: center;
-			color: white;
-			background: transparent;
-			font-size: 14px;
-			/*padding: 0px 0px 5px 0px;*/
-			font-weight: bold;
-			padding: 20px 10px;
-			display: inherit;
-		}
+	span {
+		text-align: center;
+		color: white;
+		background: transparent;
+		font-size: 14px;
+		/*padding: 0px 0px 5px 0px;*/
+		font-weight: bold;
+		padding: 20px 10px;
+		display: inherit;
+	}
 
 }
 
@@ -354,38 +353,51 @@ $BUTTON_BGCOLOR: #007cc2;
 	text-align: center;
 }
 
-@mixin mpin-copyright() {
-	width: 97px;
-	height: 13px;
-	background-image: url('#{$IMAGES}/byCertivox.svg');
-	margin: 10px 0px 10px 10px;
+@mixin arrow-up-icon () {
+	background-image: url('#{$IMAGES}arrow-down-black.svg');
+	width: 22px !important;
+	height: 20px !important;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: auto 100%;
+	margin: 3px auto;
 }
+
 
 @mixin arrow-icon() {
 	background-image: url('#{$IMAGES}/arrow.svg');
 	width: 1.5em;
 	height: 1.5em;
 	padding: 20px;
+	padding-top: 15px;
 }
 
 @mixin btn-text-label() {
 	line-height: 1.2em;
 }
 
+@mixin mpin-copyright {
+
+}
+
 /// FOOTER
 @mixin footer-helphub() {
-	width: 80px;
-	height: 30px;
-	background: url('#{$IMAGES}/m-pin-header-logo.svg') no-repeat;
+	width: 120px;
+	height: 45px;
+	background: url('#{$IMAGES}m-pin-header-logo.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: left;
+	position: relative;
+	top: -8px;
 }
 
 @mixin footer-copyright() {
 	width: 80px;
 	height: 30px;
-	float: right; 
+	float: right;
 	background: url('#{$IMAGES}/powered-by-certivox-colour.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: right bottom;
 }
+
+
