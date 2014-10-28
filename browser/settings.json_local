@@ -1,3 +1,4 @@
-{"URLBase": "https://builds.certivox.com/mpin_"$VERSION"_qa",
+{
+ "URLBase": "/public/mpin",
  "templateName": "light"
 }
