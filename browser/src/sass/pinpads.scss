@@ -67,29 +67,14 @@ the following links:
 		margin: 1%;
 
 		.mpinCircleIn {
-			margin: 7px;
-			background: #3A7FB9;
-			width: 18px;
-			height: 18px;
-			-webkit-border-radius: 48px;
-			-moz-border-radius: 48px;
-			border-radius: 48px;
-			position: absolute;
-			z-index: 1000;
-			border: 2px solid white;
+
+			@include pinpad-circlein();
 
 			@include border-radius(48px);
 		}
 		.mpinCircleOut {
-			background: #E4E4E4;
-			width: 32px;
-			height: 32px;
-			-webkit-border-radius: 61px;
-			-moz-border-radius: 61px;
-			border-radius: 61px;
-			border: 2px solid #585858;
-			position: absolute;
-			z-index: 800;
+
+			@include pinpad-circleout();
 		}
 	}
 

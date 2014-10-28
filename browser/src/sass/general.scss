@@ -33,8 +33,11 @@ the following links:
 //http://bourbon.io/docs/#font-face
 
 /*@import url(http://fonts.googleapis.com/css?family=Roboto+Slab|Open+Sans:400italic,700italic,400,700);*/
+/*
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,300);
-
+@import url(http://fonts.googleapis.com/css?family=Shadows+Into+Light);
+*/
+/*@import url(http://fonts.googleapis.com/css?family=Open+Sans);*/
 
 
 .mpinHeader {
@@ -54,7 +57,7 @@ the following links:
 }
 
 .mpMobileColor {
-	@include mobile-color();
+	@include mobile-bgcolor();
 }
 
 
@@ -62,15 +65,18 @@ the following links:
 .mpinHeaderBig {
 	width: 90%;
 	margin: auto;
-	text-align:left;
+	text-align:center;
 	line-height: 1.3em;
-	font-size: 18px; //??
+	font-size: 18px;
+	
 
 	#mpinLogo {
 		@include logo();
 	}
-
-
+	
+	&.mpMobColor {
+		@include mobile-color();
+	}
 }
 
 .mpinHeaderRow {
@@ -189,16 +195,6 @@ the following links:
 		}
 
 		.mpinInput {
-			text-align: center;
-			/*color: grey;*/
-			padding: .88em .4em;
-			/*font-style: italic;*/
-			width: 100%;
-			/*margin-top: 6%;*/
-			font-size: 0.88em;
-			display: table-cell;
-			height: 40px;
-
 			@include mpin-input-field();
 		}
 
@@ -326,16 +322,17 @@ the following links:
 	color: #FC0409;
 	font-style: italic;
 }
+
 .mpPointer {
 	cursor:pointer;
 }
 
 .mpPaddTop10 {
-	padding-top: 10px;
+	padding-top: 20px;
 }
 
 .mpPaddBot10 {
-	padding-bottom: 10px;
+	padding-bottom: 20px;
 }
 
 .mpinBold { font-weight:bold;}
@@ -385,11 +382,11 @@ the following links:
 	/*	#mpTimer {
 			border: 1px solid green;
 		}*/
-	
+
 	.mpLeftTime {
 		position: absolute;
-		margin-left: -28px;
-		margin-top: 8px;
+		margin-left: -30px;
+		margin-top: 10px;
 	}
 }
 

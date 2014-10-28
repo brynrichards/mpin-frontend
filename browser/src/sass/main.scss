@@ -29,10 +29,11 @@ the following links:
    pass2Request           Form the JSON request for pass two of the M-Pin protocol
 */
 
-// Import CSS3 reset
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400);
 
 $MOBILE : false;
 $green : #06B405;
+
 
 // Import template
 
@@ -581,7 +582,6 @@ $green : #06B405;
 
 			.mp_center {
 				padding-top: 30px;
-				font: inherit;
 			}
 
 			.mp_after_center {

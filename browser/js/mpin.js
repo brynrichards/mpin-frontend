@@ -54,7 +54,7 @@ var mpin = mpin || {};
 			Handlebars.registerHelper("img", function (optionalValue) {
 				return hlp.img(optionalValue);
 			});
-			
+
 			Handlebars.registerHelper("forloop", function (optionalValue) {
 				return hlp.img(optionalValue);
 			});
@@ -149,8 +149,9 @@ var mpin = mpin || {};
 		}
 		this.setLanguageText();
 
-		this.renderLanding();
+//		this.renderLanding();
 //		this.renderBlank();
+		this.error(4004);
 	};
 
 	mpin.prototype.setupHtml = function () {
@@ -998,7 +999,7 @@ var mpin = mpin || {};
 		//// TIMER CODE
 		timerEl = document.getElementById("mpTimer");
 		timer2d = timerEl.getContext("2d");
-		
+
 		//draw canvas Clock
 		drawTimer = function (expireOn) {
 			var start, diff;
@@ -1285,7 +1286,7 @@ var mpin = mpin || {};
 		}
 		//bug1 default identity
 		//REMOVE THIS
-		this.addUserToList(cnt, "7b226d6f62696c65223a20302c2022697373756564223a2022323031342d31302d30332030393a30373a34362e313236313931222c2022757365724944223a2022626f79616e2e62616b6f76406365727469766f782e636f6d222c202273616c74223a202230313432376230303939353933653366227d", false, 4);
+//		this.addUserToList(cnt, "7b226d6f62696c65223a20302c2022697373756564223a2022323031342d31302d30332030393a30373a34362e313236313931222c2022757365724944223a2022626f79616e2e62616b6f76406365727469766f782e636f6d222c202273616c74223a202230313432376230303939353933653366227d", false, 4);
 
 		for (var i in this.ds.getAccounts()) {
 			c += 1;
@@ -1687,6 +1688,8 @@ var mpin = mpin || {};
 		} else {
 			errorMsg = error;
 		}
+		console.log("errorCode :::", errorCode);
+		console.log("errorMsg :::", errorMsg);
 		this.render("error", callbacks, {errorMsg: errorMsg, errorCode: errorCode});
 	};
 
@@ -2473,13 +2476,19 @@ var mpin = mpin || {};
 		"account_button_addnew": "Add a new identity to this list",
 		"account_button_add": "Add new identity",
 		"account_button_delete": "Remove this M-Pin Identity from this browser",
+		"account_button_delete2": "Remove Identity",
 		"account_button_reactivate": "Forgot my PIN. Send me a new activation email.",
+		"account_button_reactivate2": "Forget PIN",
 		"account_button_backToList": "Go back to identity list",
+		"account_button_backToList2": "Back to identity list",
 		"account_button_cancel": "Cancel and go back",
+		"account_button_cancel2": "Cancel",
 		"account_delete_question": "Are you sure you wish to remove this M-Pin Identity from this browser?",
 		"account_delete_button": "Yes, remove this M-Pin Identity",
+		"account_delete_button2": "Yes, Remove it",
 		"account_reactivate_question": "Are you sure you wish to reactivate this M-Pin Identity?",
 		"account_reactivate_button": "Yes, reactivate this M-Pin Identity",
+		"account_reactivate_button2": "Yes, Reactivate it",
 		"noaccount_header": "No identities have been added to this browser!",
 		"noaccount_button_add": "Add a new identity",
 		"home_intro_text": "First let's establish truth to choose the best way for you to access this service:",
@@ -2517,6 +2526,7 @@ var mpin = mpin || {};
 		"help_hub_li9": "Does CertiVox know my PIN?",
 		"help_hub_li10": "Why do I have to register from each device and browser?",
 		"help_hub_button": "Exit Help Hub and return to previous page",
+		"help_hub_button2": "Exit Help Hub",
 		"help_hub_1_p1": "The browser authentication logs you in to your account on a desktop browser using M-Pin two-factor login.",
 		"help_hub_1_p2": "With smartphone authentication you use M-Pin Mobile app as a portable ID card you can use to log in to a desktop browser on any external machine.",
 		"help_hub_2_p1": "You can still use the browser log in, but if you are on a shared computer or feel the machine is not secure, we advise you remove the identity from the browser after you’ve completed your session.",

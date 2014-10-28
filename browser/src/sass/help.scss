@@ -191,10 +191,8 @@ info.mpinHelpInfo {
 }
 
 .mpinHelpAnswerBlock {
-	border-bottom: 1px solid #EAEAEA;
-	height: 70%;
-	min-height: 70%;
-	overflow-y: auto;}
+	@include help-box();
+}
 
 .mpinHelpHubFooter {
 	/*width: 90%;*/
