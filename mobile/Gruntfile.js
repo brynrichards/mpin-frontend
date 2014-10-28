@@ -33,7 +33,7 @@ module.exports = function(grunt) {
                 }
 			},
 			copyResources: {
-				cmd: 'cp -Rv resources/ ../build/out/mobile/',
+				cmd: 'cp -Rv resources/ ../build/out/mobile/resources/',
 				options: {
                 			stdout: true,
 				}
@@ -45,7 +45,7 @@ module.exports = function(grunt) {
 				}
 			},
 			copySASS: {
-				cmd: 'mkdir -p ../build/tmp/mobile/sass/ && cp -Rv src/sass/ ../build/tmp/mobile/',
+				cmd: 'mkdir -p ../build/tmp/mobile/sass/ && cp -Rv src/sass/ ../build/tmp/mobile/sass/',
 				options: {
 	            			stdout: true,
 				},

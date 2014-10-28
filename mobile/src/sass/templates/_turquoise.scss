@@ -113,6 +113,10 @@ $BORDERLESS : true;
 	border-bottom: 1px solid #828284;
 }
 
+@mixin footer(){
+	border-bottom: 10px solid #868aac;
+}
+
 // Input pin field
 
 @mixin pin-screen() {
@@ -283,7 +287,6 @@ $BORDERLESS : true;
 }
 
 @mixin identity-container() {
-	border-bottom: 1px solid rgb(86, 86, 86);
 	color: black;
 }
 
