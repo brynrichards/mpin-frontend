@@ -126,17 +126,13 @@ the following links:
 		height: 100%;
 
 		.mpinPadBtn, .mpinPadBtn2 {
-			border: 0;
-			background: none;
-			color: #fff;
-			text-shadow: 2px 2px 2px #000000;
-			display: block;
-			text-align: center;
-			width: 90%;
-			font-size: 1.75em;
-			font-weight:normal;
+			
+			@include pin-pad-button();
+			
+
 			&:active {
-				background: #3777ba;
+				@include pin-pad-button-active();
+
 			}
 		}
 		.mpinBtnDisabled {
