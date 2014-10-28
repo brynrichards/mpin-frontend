@@ -98,7 +98,7 @@ var mpin = mpin || {};
 	//CONFIGS
 	mpin.prototype.cfg = {
 		language: "en",
-		pinSize: 6,
+		pinSize: 4,
 		requiredOptions: "appID; seedValue; signatureURL; mpinAuthServerURL; timePermitsURL; authenticateURL; registerURL",
 		restrictedOptions: "signatureURL; mpinAuthServerURL; timePermitsURL",
 		defaultOptions: {
