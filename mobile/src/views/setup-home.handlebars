@@ -19,17 +19,19 @@
   <div class="inputContainer">
     
     <div class="identityElHolder">
-      <div class="identityText">
-          <span>{{hlp 'setup_text1' }}</span>
-      </div>
-
       <div class="identityInput">
         <div>
-          <input type="email" id="emailInput" value="">
-        
+          <label class="identityText" for="email">{{hlp 'setup_text1' }}</label>
+          <div class="inputGroup">
+            <div class="userLabel"></div>
+            <input type="email" id="emailInput"placeholder="" name="email" value="">
+          </div>
           {{#if data.setDeviceName}}
-            <br><br><label for="deviceInput">{{hlp 'setup_device_label' }}</label>
-            <input type="text" id="deviceInput" class="mpinInput">
+            <label class="identityText" for="deviceInput">{{hlp 'setup_device_label' }}</label>
+            <div class="inputGroup">
+              <div class="deviceLabel"></div>
+              <input type="text" id="deviceInput" placeholder="" value="" name="deviceInput">
+            </div>
           {{/if}}
         </div>
       </div>

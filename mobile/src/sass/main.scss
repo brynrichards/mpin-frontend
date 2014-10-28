@@ -224,7 +224,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		position: relative;
 		width: 100%;
 		z-index: 10000;
-		height: 35px;
+		height: 39px;
 		position: absolute;
 
 		-webkit-box-orient: horizontal !important;
@@ -449,33 +449,63 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 				.identityInput {
 
-					width: 100%;
-					position: relative;
-					min-width: 3.7em;
+					.inputGroup {
 
-					#emailInput {
+						width: 100%;
+						position: relative;
+						min-width: 3.7em;
 
-						@include email-input();
+						width: 100%;
+						display: inline-table;
+						vertical-align: middle;
+						position: relative;
+						border-collapse: separate;
+						display: table;
+						box-sizing: border-box;
 
-						-webkit-user-select: text; 
-						-webkit-appearance: none;
-						-webkit-appearance: none;
-						text-align: center;
+						.userLabel, .deviceLabel {
+							width: auto;
 
-						&:focus, &:hover {
+							white-space: nowrap;
+							vertical-align: middle;
+
+							display: table-cell;
+
+							background-color: rgba(134,138,172,0.3);
+							border: 1px solid #868aac;
+							border-radius: 4px;
+							border-top-right-radius: 0;
+							border-bottom-right-radius: 0;
+							border-right: 0;
+
+							@include userLabel();
+						}
+
+						#emailInput {
+
+							@include email-input();
+
+							-webkit-user-select: text; 
+							-webkit-appearance: none;
+							-webkit-appearance: none;
+							text-align: center;
+
+							&:focus, &:hover {
+
+							}
 
 						}
 
-					}
+						#deviceInput {
 
-					#deviceInput {
+							@include device-input();
 
-						@include device-input();
+							-webkit-user-select: text; 
+							-webkit-appearance: none;
+							-webkit-appearance: none;
+							text-align: center;
 
-						-webkit-user-select: text; 
-						-webkit-appearance: none;
-						-webkit-appearance: none;
-						text-align: center;
+						}
 
 					}
 				}

@@ -479,7 +479,6 @@ var mpin = mpin || {};
 
                 // Render the IOS6 view - the difference is in the icons
                 this.render('ios6-startup', callbacks);
- 
             }
  
         } else {
@@ -864,10 +863,12 @@ var mpin = mpin || {};
 
         if (self.isAccNumber) {
             renderElem.style.display = 'block';
-            renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text2");
+            renderElem.innerHTML = hlp.text("pinpad_placeholder_text2");
+            // renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text2");
         } else {
             renderElem.style.display = 'block';
-            renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text");
+            renderElem.innerHTML = hlp.text("pinpad_placeholder_text");
+            // renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text");
         }
 
         // Help hub callbacks
@@ -882,11 +883,13 @@ var mpin = mpin || {};
             self.renderHelpHub("helphub-index");
         };
 
-        document.getElementById('acInfo').onclick = function(evt) {
-            console.log("Click here?");
-            // Show the help item
-            self.renderHelp("help-setup-home", callbacks);
-        };
+        // Purple template
+
+        // document.getElementById('acInfo').onclick = function(evt) {
+        //     console.log("Click here?");
+        //     // Show the help item
+        //     self.renderHelp("help-setup-home", callbacks);
+        // };
 
         // Helphub calbacks
 
@@ -1549,36 +1552,30 @@ var mpin = mpin || {};
 
         if(ifDigit.test(parseInt(digit))) {
 
-            // Hide codes
-
-            elemForErrcode.style.display = 'none';
-            circlesHolder.style.display = 'block';
-
-            var circles = document.getElementsByClassName("circle");
-
             // Add circles
 
-            element = document.createElement("div");
-
             if(this.isAccNumber) {
-                element.className = 'inner-circle-ac';
-                element.innerHTML = digit;
+                circlesHolder.innerHTML += digit;
             } else {
+                // Use setTimeout to trigger the animation
+
+                elemForErrcode.style.display = 'none';
+                circlesHolder.style.display = 'block';
+
+                var circles = document.getElementsByClassName("circle");
+                element = document.createElement("div");
+
+
+                element.style.width = "18px";
+                element.style.height = "18px";
+                element.style.margin = "7px";
                 element.className = 'inner-circle';
+                var addToDivNum =  pinElement.value.length -1;
+                // Append the circle element here
+                circles[addToDivNum].appendChild(element);
             }
 
-            // Use setTimeout to trigger the animation
-
-            element.style.width = "18px";
-            element.style.height = "18px";
-            element.style.margin = "7px";
-
             pinElement.value += digit;
-
-            var addToDivNum =  pinElement.value.length -1;
-
-            // Append the circle element here
-            circles[addToDivNum].appendChild(element);
         }
 
         if (digit === 'clear') {
@@ -2568,7 +2565,7 @@ var mpin = mpin || {};
         "setup_header": "Add an identity",
         "setup_text1": "Email Address:",
         "setup_text2": "Your email address will be used as your identity when M-Pin authenticates you to this service.",
-        "setup_text3": "your email address",
+        "setup_text3": "enter your email",
         "setup_error_unathorized": "{0} has not been registered in the system.", // {0} will be replaced with the userID
         "setup_error_server": "Cannot process the request. Please try again later.",
         "setup_error_signupexpired": "Your signup request has been expired. Please try again.",
@@ -2630,7 +2627,7 @@ var mpin = mpin || {};
         "noaccount_header": "No identities have been added to this browser!",
         "noaccount_button_add": "Add a new identity",
         "pinpad_placeholder_text": "Enter your pin",
-        "pinpad_placeholder_text2": "Enter your access Number",
+        "pinpad_placeholder_text2": "Enter access number",
         "logout_text1": "YOU ARE NOW LOGGED IN",
         "logout_button": "Logout",
         "home_button_setupMobile": "Add an identity to this browser",
@@ -2646,7 +2643,8 @@ var mpin = mpin || {};
         "accessdenied_text": "Your M-Pin identity",
         "accessdenied_text_cont": "has been removed from this device.",
         "accessdenied_btn": "Register again",
-        "setup_btn_text": "Setup"
+        "setup_btn_text": "Setup",
+        "setup_device_label": "Device name:"
     };
     //  image should have config properties
     hlp.img = function(imgSrc) {
