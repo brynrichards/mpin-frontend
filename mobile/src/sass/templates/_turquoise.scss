@@ -97,10 +97,20 @@ $BORDERLESS : true;
 	letter-spacing: 10pt;
 }
 
+@mixin circles-holder() {
+	position: absolute;
+	width: 260px;
+	top: 30px;
+	left: 0;
+	right: 0;
+	text-align: center;
+	margin:0 auto;
+}
+
 @mixin outer-circle() {
 	background: white;
-	width: 32px;
-	height: 32px;
+	width: 20px;
+	height: 20px;
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
 	border-radius: 50%;
@@ -111,8 +121,8 @@ $BORDERLESS : true;
 
 @mixin inner-circle() {
 	background: #363c74;
-	width: 32px;
-	height: 32px;
+	width: 20px;
+	height: 20px;
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
 	border-radius: 50%;
@@ -182,26 +192,23 @@ $BORDERLESS : true;
 @mixin powered-by() {
 	background-image: url('#{$IMAGES}/powered-by-certivox-colour.svg');
 	color: white;
-	height: 36px;
-
+	height: 20px;
 	background-repeat: no-repeat;
 	background-position: right;
 	background-size: auto 100%;
+
 	@include box-flex-value(1.0);		
 }
 
 @mixin mpin-logo() {
-	height: 46px;
-
 	background-image: url('#{$IMAGES}/m-pin-black.svg');
-
+	height: 20px;
 	background-repeat: no-repeat;
 	background-position: left;
 	background-size: auto 100%;
-	@include box-flex-value(1.0);
-
 	margin: 5px 10px 5px 0px;
 
+	@include box-flex-value(1.0);
 }
 
 // Mixin home icon
@@ -219,6 +226,7 @@ $BORDERLESS : true;
 	background-size: auto 100%;
 	left: 0;
 	right: 0;
+	top: 10px;
 	align-self: flex-start;
 	float: left;
 	@include box-flex-value(1.0);		

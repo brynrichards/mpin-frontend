@@ -96,14 +96,9 @@ the following links:
 }
 
 #circlesHolder {
-	position: absolute;
-	width: 260px;
-	top: 10px;
-	left: 0;
-	right: 0;
-	text-align: center;
-	margin:0 auto;
 	display: flex;
+
+	@include circles-holder();
 
 	-webkit-box-align: stretch;
 	-ms-flex-align: stretch;
