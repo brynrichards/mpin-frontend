@@ -905,16 +905,6 @@ var mpin = mpin || {};
 
             pinPad.className = 'access-number';
 
-            for (var i = this.opts.accessNumberDigits - 1; i >= 0; i--) {
-                var circleA = document.createElement("div");
-                var circleB = document.createElement("div");
-
-                circleA.className = "circle";
-                circleB.className = "outer-circle";
-
-                circleA.appendChild(circleB);
-                circlesHolder.appendChild(circleA);
-            };
         } else {
             for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
                 var circleA = document.createElement("div");
