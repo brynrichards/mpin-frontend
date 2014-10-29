@@ -13,26 +13,17 @@
 	<div class="mpinInput" id="mpin_input_parent">
 	
 		<div class="mpinInputIn mpHide" id="mpin_input_circle">
-			<div class="mpinCircle" id="mpin_circle_1">
-				<div class="mpinCircleOut"></div>
-			</div>
-			
-			<div class="mpinCircle" id="mpin_circle_2">
-				<div class="mpinCircleOut"></div>
-			</div>
-			<div class="mpinCircle" id="mpin_circle_3">
-				<div class="mpinCircleOut"></div>
-			</div>
-			<div class="mpinCircle" id="mpin_circle_4">
-				<div class="mpinCircleOut"></div>
-			</div>
+			{{#loop data.pinSize}}
+				<div class="mpinCircle" id="mpin_circle_{{this}}">
+					<div class="mpinCircleOut"></div>
+				</div>
+			{{/loop}}
 		</div>
 		
 		<div class="mpinInputIn mpin80width" id="mpin_input_text">
-			<i id="mpin_help_pinpad"></i>
-				<span class="mpinInputText" id="mpin_inner_text">		
-					Initializing...
-				</span>
+			<span class="mpinInputText" id="mpin_inner_text">		
+				Initializing...
+			</span>
 		</div>
 		
     </div>
@@ -80,13 +71,13 @@
     <div class="mpin-pre-row">
         <div class="mpin-row mpin-bottom">
             <button class="mpinPadBtn2 mpinBtnDisabled" data-value="clear" id="mpin_clear">
-                clear
+				{{txt "pinpad_btn_clear"}}
             </button>
             <button class="mpinPadBtn" data-value="0">
                 0
             </button>
             <button class="mpinPadBtn2 mpinBtnDisabled" data-value="go" id="mpin_login">
-                setup
+                {{txt "pinpad_btn_setup"}}
             </button>
         </div>
     </div>

@@ -31,9 +31,9 @@ the following links:
 
 .mpinBtnBox {
 	//instead of width: 90%
-	padding: 0% 5%;
-	z-index: 99;
 
+	@include buttons-box();
+		
 	&.mpinBtnDown {
 		position: absolute;
 		bottom: 11%;
@@ -61,6 +61,11 @@ the following links:
 		&.mpinBtnError {
 			color: red;
 		}
+		
+		&.mpinBtnBack {
+			background: #ededed;
+			border-bottom-color: #bcbcbc;
+		}
 
 		p {
 			font-size: 87%;
@@ -76,9 +81,7 @@ the following links:
 			padding: 7px 0 3px;
 
 			#mpinAccessNumber, #mpinOTPNumber {
-				font-size: 24px;
-				letter-spacing: .4em;
-				padding: 8px;
+
 				@include identity-text();
 			}
 		}
@@ -141,6 +144,10 @@ the following links:
 	.mpinMobileBtn {
 		@include mpin-mobile-button();
 	}
+	
+	.mpinWarnBtn {
+		@include mpin-warning-button();
+	}
 
 	.mpinButtonDark {
 		@include mpin-dark-button();
@@ -148,7 +155,7 @@ the following links:
 
 	.mpinBtnBig {
 		height: 60px;
-		padding-top: 15px;
+		padding-top: 18px;
 		margin-bottom: 30px;
 	}
 
