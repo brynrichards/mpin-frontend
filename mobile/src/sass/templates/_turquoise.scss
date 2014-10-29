@@ -97,6 +97,30 @@ $BORDERLESS : true;
 	letter-spacing: 10pt;
 }
 
+@mixin outer-circle() {
+	background: white;
+	width: 32px;
+	height: 32px;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	border: 2px solid #363c74;
+	position: absolute;
+	z-index: 800;
+}
+
+@mixin inner-circle() {
+	background: #363c74;
+	width: 32px;
+	height: 32px;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	border: 2px solid #363c74;
+	position: relative;
+	z-index: 801;
+}
+
 @mixin account-top-bar() {
 	color: black;
 	background: #eeeeee; /* Old browsers */

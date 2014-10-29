@@ -771,37 +771,11 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	display: inline-block;
 
 	.outer-circle {
-		background: #E4E4E4;
-		width: 32px;
-		height: 32px;
-		-webkit-border-radius: 61px;
-		-moz-border-radius: 61px;
-		border-radius: 61px;
-		border: 2px solid #666666;
-		position: absolute;
-		z-index: 800;
+		@include outer-circle();
 	}
 
 	.inner-circle {
-		margin: 7px;
-		background: #3A7FB9;
-		width: 18px;
-		height: 18px;
-		font-size: 11px;
-		color: #FFF;
-		line-height: 18px;
-		text-align: center;
-		font-family: Arial;
-		-webkit-border-radius: 48px;
-		-moz-border-radius: 48px;
-		border-radius: 48px;
-		-webkit-box-shadow: inset 0px 1px 1px 0px #575757;
-		-moz-box-shadow: inset 0px 1px 1px 0px #575757;
-		box-shadow: inset 0px 1px 1px 0px #575757;
-		border: 2px solid #d1f7ff;
-		position: absolute;
-		z-index: 1000;
-
+		@include inner-circle();
 	}
 
 	.inner-circle-ac {

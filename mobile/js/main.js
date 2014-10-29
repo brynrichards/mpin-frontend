@@ -1561,9 +1561,9 @@ var mpin = mpin || {};
 
                 var circles = document.getElementsByClassName("circle");
                 element = document.createElement("div");
-                element.style.width = "18px";
-                element.style.height = "18px";
-                element.style.margin = "7px";
+                // element.style.width = "18px";
+                // element.style.height = "18px";
+                // element.style.margin = "7px";
                 element.className = 'inner-circle';
                 var addToDivNum =  pinElement.value.length -1;
 
