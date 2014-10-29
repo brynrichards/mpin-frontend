@@ -55,8 +55,11 @@ var mpin = mpin || {};
 				return hlp.img(optionalValue);
 			});
 
-			Handlebars.registerHelper("forloop", function (optionalValue) {
-				return hlp.img(optionalValue);
+			Handlebars.registerHelper("loop", function (n, block) {
+				var accum = '';
+				for (var i = 0; i < n; ++i)
+					accum += block.fn(i);
+				return accum;
 			});
 
 
@@ -149,9 +152,9 @@ var mpin = mpin || {};
 		}
 		this.setLanguageText();
 
-//		this.renderLanding();
+		this.renderLanding();
 //		this.renderBlank();
-		this.error(4004);
+//		this.error(4004);
 	};
 
 	mpin.prototype.setupHtml = function () {
@@ -745,13 +748,15 @@ var mpin = mpin || {};
 			deviceNameField.value = deviceName;
 		}
 
-		document.getElementById("mpin_help").onclick = function () {
-			setTemp();
-			self.lastView = "renderLogin";
-			self.lastViewParams = [true, "renderSetupHome2"];
-			self.toggleHelp.call(self);
-			self.renderHelpTooltip.call(self, "addidentity");
-		};
+		if (document.getElementById("mpin_help")) {
+			document.getElementById("mpin_help").onclick = function () {
+				setTemp();
+				self.lastView = "renderLogin";
+				self.lastViewParams = [true, "renderSetupHome2"];
+				self.toggleHelp.call(self);
+				self.renderHelpTooltip.call(self, "addidentity");
+			};
+		}
 
 
 		document.getElementById("mpin_arrow").onclick = function (evt) {
@@ -767,7 +772,7 @@ var mpin = mpin || {};
 			self.actionSetupHome.call(self);
 		};
 
-		if (this.opts.setDeviceName) {
+		if (this.opts.setDeviceName && document.getElementById("mpin_help_device")) {
 			document.getElementById("mpin_help_device").onclick = function () {
 				setTemp();
 				self.lastView = "renderLogin";
@@ -914,7 +919,7 @@ var mpin = mpin || {};
 		};
 
 
-		this.render("setup", callbacks, {email: this.tmp.email});
+		this.render("setup", callbacks, {email: this.tmp.email, pinSize: this.cfg.pinSize});
 		this.enableNumberButtons(true);
 		this.bindNumberButtons();
 
@@ -967,7 +972,7 @@ var mpin = mpin || {};
 			self.renderHelpTooltip.call(self, "login");
 		};
 
-		this.render("login", callbacks);
+		this.render("login", callbacks, {pinSize: this.cfg.pinSize});
 		this.enableNumberButtons(true);
 		this.bindNumberButtons();
 
@@ -997,9 +1002,10 @@ var mpin = mpin || {};
 		this.intervalID || (this.intervalID = {});
 
 		//// TIMER CODE
-		timerEl = document.getElementById("mpTimer");
-		timer2d = timerEl.getContext("2d");
-
+		if (document.getElementById("mpTimer")) {
+			timerEl = document.getElementById("mpTimer");
+			timer2d = timerEl.getContext("2d");
+		}
 		//draw canvas Clock
 		drawTimer = function (expireOn) {
 			var start, diff;
@@ -1560,8 +1566,8 @@ var mpin = mpin || {};
 	 */
 	mpin.prototype.enableButton = function (enable, buttonName) {
 		var buttonValue = {}, _element;
-		buttonValue.go = {id: "mpin_login", trueClass: "mpinPadBtn", falseClass: "mpinPadBtn mpinBtnDisabled"};
-		buttonValue.clear = {id: "mpin_clear", trueClass: "mpinPadBtn", falseClass: "mpinPadBtn mpinBtnDisabled"};
+		buttonValue.go = {id: "mpin_login", trueClass: "mpinPadBtn2", falseClass: "mpinPadBtn2 mpinBtnDisabled"};
+		buttonValue.clear = {id: "mpin_clear", trueClass: "mpinPadBtn2", falseClass: "mpinPadBtn2 mpinBtnDisabled"};
 		buttonValue.toggle = {id: "mp_toggleButton", trueClass: "mp_DisabledState", falseClass: ""};
 		_element = document.getElementById(buttonValue[buttonName].id);
 		if (!buttonValue[buttonName] || !_element) {
@@ -1590,7 +1596,7 @@ var mpin = mpin || {};
 
 			var newCircle = document.createElement('div');
 			newCircle.className = "mpinCircleIn";
-			var circleID = "mpin_circle_" + this.pinpadInput.length;
+			var circleID = "mpin_circle_" + (this.pinpadInput.length - 1);
 			document.getElementById(circleID).appendChild(newCircle);
 		} else if (!isErrorFlag) {
 			removeCircles();
@@ -1629,22 +1635,23 @@ var mpin = mpin || {};
 
 
 	mpin.prototype.toggleButton = function () {
-		var self = this, pinpadElem, idenElem, identity;
+		var pinpadElem, idenElem, menuBtn, userArea, identity;
 
 		pinpadElem = document.getElementById("mpin_pinpad");
 		idenElem = document.getElementById("mpin_identities");
-
-		var menuBtn = document.getElementById("mpin_arrow");
+		menuBtn = document.getElementById("mpin_arrow");
+		userArea = document.getElementById("mpinUser");
 
 		if (!pinpadElem) {
 			console.log("missing ELement.");
 			return;
 		}
 
-		//accounts
+		//list identities
 		if (menuBtn && !menuBtn.classList.contains("mpinAUp")) {
 			this.lastViewParams = [true];
-			document.getElementById("mpinUser").style.height = "88.5%";
+//			document.getElementById("mpinUser").style.height = "88.5%";
+			addClass(userArea, "mpUserFat");
 			addClass(menuBtn, "mpinClose");
 			this.renderAccountsPanel();
 			removeClass("mpinUser", "mpinIdentityGradient");
@@ -1659,8 +1666,9 @@ var mpin = mpin || {};
 
 			//clear padScreen on flip screens
 			this.addToPin("clear");
-
-			document.getElementById("mpinUser").style.height = "40px";
+			removeClass(userArea, "mpUserFat");
+			addClass(userArea, "mpUserSlim");
+//			document.getElementById("mpinUser").style.height = "40px";
 			removeClass(menuBtn, "mpinAUp");
 			//if come from add identity remove HIDDEN
 			removeClass("mpinCurrentIden", "mpHide");
@@ -2442,6 +2450,7 @@ var mpin = mpin || {};
 		"setupDone_text2": "is setup, you can now sign in.",
 		"setupDone_text3": "",
 		"setupDone_button_go": "Sign in now with your new M-Pin!",
+		"setupDone_button_go2": "Sign in now",
 		"setupReady_header": "VERIFY YOUR IDENTITY",
 		"setupReady_text1": "Your M-Pin identity",
 		"setupReady_text2": "is ready to setup, now you must verify it.",
@@ -2564,7 +2573,7 @@ var mpin = mpin || {};
 		"mobile_footer_btn": "Now, sign in with your Smartphone",
 		"mobile_footer_btn2": "Sign in with Phone",
 		"pinpad_setup_screen_text": "CREATE YOUR M-PIN:<br> CHOOSE 4 DIGIT",
-		"pinpad_default_message": "ENTER YOUR PIN",
+		"pinpad_default_message": "Enter your pin",
 		"setup_device_label": "Choose your device name:",
 		"setup_device_default": "(default name)",
 		"help_text_1": "Simply choose a memorable <b>[4 digit]</b> PIN to assign to this identity by pressing the numbers in sequence followed by the 'Setup' button to setup your PIN for this identity",
@@ -2587,6 +2596,8 @@ var mpin = mpin || {};
 		"help_text_home": "If you are signing into <span class=mpinPurple>[xxxx]</span> with your own personal device like your computer or tablet then you can ‘Sign in with Browser’, but if you are using someone else’s device or a public computer, then ‘Sign in with Smartphone’ is recommended for additional security.",
 		"error_page_title": "Error page:",
 		"error_page_code": "Error code:",
+		"error_page_button": "Back",
+		"error_page_error": "Error:",
 		"error_code_4001": "We are experiencing a technical problem. Please try again later or contact the service administrator.",
 		"error_code_4002": "We are experiencing a technical problem. Please try again later or contact the service administrator.",
 		"error_code_4003": "We are experiencing a technical problem. Please try again later or contact the service administrator.",
@@ -2603,7 +2614,10 @@ var mpin = mpin || {};
 		"error_code_4014": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
 		"error_code_4015": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
 		"error_code_4016": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
-		"error_not_auth": "You are not authorized."  //
+		"error_not_auth": "You are not authorized.",  //
+		"pinpad_btn_login": "Login",  //
+		"pinpad_btn_clear": "Clear",  //
+		"pinpad_btn_setup": "Setup"  //
 	};
 	//	image should have config properties
 	hlp.img = function (imgSrc) {

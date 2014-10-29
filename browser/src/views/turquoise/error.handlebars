@@ -3,12 +3,24 @@
 	<div class="mpinHome mpPointer" id="mpin_home"></div>
 </div>
 
-<div class="mpinHeaderRow">
-	<b>{{data.errorCode}}</b>
-</div>
-
 <div class="mpinMain">
-	{{{data.errorMsg}}}
+	<div class="mpErrorIcon">
+	</div>
+	<div class="mpinCenter mpinCenter5">
+		<p class="mpinJustifyTxt">
+			{{{data.errorMsg}}}
+		</p>
+		
+		<div class="mpErrorNumber">
+			{{txt "error_page_error"}} <b>{{data.errorCode}}</b>
+		</div>
+	</div>
+	
+	<div class="mpinBtnBox mpNoPadding">
+		<div class="mpinButton mpinBtnClick mpinBtnBack" id="mpin_cancel">
+			{{txt "error_page_button"}}
+		</div>
+	</div>
 </div>
 <div class="mpinFooter">
 	<div class="mpinPowered"></div>

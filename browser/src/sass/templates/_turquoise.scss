@@ -42,6 +42,10 @@ $BGCOLOR2: #eee;
 $BGCOLOR3: #fff;
 
 $BGCOLOR4: #8588ac;
+/*e74a00*/
+$BGCOLOR5: #363c74;
+//warning color
+$BGCOLOR6: #e74a00;
 
 @mixin gradient($color1, $color2) {
 	background-image: -moz-linear-gradient(center top , $color1 0%, $color2);
@@ -118,9 +122,16 @@ $BGCOLOR4: #8588ac;
 
 @mixin identity-list() {
 	background: $BGCOLOR3;
+	@include border-radius(3px);
 }
 
 @mixin identity-text() {
+	color: $BGCOLOR4;
+	font-size: 24px;
+	letter-spacing: .2em;
+}
+
+@mixin mobile-text() {
 	color: $BGCOLOR4;
 }
 
@@ -129,33 +140,30 @@ $BGCOLOR4: #8588ac;
 	color: $BGCOLOR;
 	background: #fff;
 	border-bottom: 1px solid #eee;
+	min-height: 40px;
 
 	&.mpinRowActive {
 		background: $BGCOLOR;
 		color: #fff;
-		border-left: 5px solid #4e6156;
+		/*border-left: 5px solid #4e6156;*/
+		box-shadow: inset 5px 0 0 #4e6156;
 
 		.mpinSettingsRow {
 			color: #fff;
+			padding-left: 10px;
+			font-size: 14px;
 		}
 		.mpinSettings {
 			@include setting-icon("white");
 		}
 	}
-
-	/*	&.mpinRowActive:hover {
-			background: #007cc2;
-			color: #fff;
-			.mpinSettingsRow {
-				color: #fff;
-			}
-		}*/
 }
 //#mpinRow:hover
 @mixin users-row-hover () {
 	background: $BGCOLOR;
 	color: #fff;
-	border-left: 5px solid #4e6156;
+	/*border-left: 5px solid #4e6156;*/
+	box-shadow: inset 5px 0 0 #4e6156;
 	cursor: pointer;
 	.mpinSettingsRow {
 		color: #fff;
@@ -170,7 +178,12 @@ $BGCOLOR4: #8588ac;
 	}
 }
 
-
+@mixin user-area-slim () {
+	height: 40px;
+}
+@mixin user-area-fat () {
+	height: 88.5%;
+}
 
 @mixin user-row {
 	height: 40px;
@@ -187,7 +200,8 @@ $BGCOLOR4: #8588ac;
 	background-size: auto 100%;
 	width: 16px;
 	height: 16px;
-	margin-top: 10px;
+	margin-top: 6px;
+	margin-right: 6px;
 }
 
 
@@ -224,12 +238,33 @@ $BGCOLOR4: #8588ac;
 @mixin pin-pad-button () {
 	border: 0;
 	background: none;
-	color: $BGCOLOR4;
+	color: $BGCOLOR5;
 	display: block;
 	text-align: center;
 	width: 90%;
-	font-size: 1.75em;
+	font-size: 34px;
 	font-weight:normal;
+}
+
+@mixin pin-pad-button-text () {
+	border: 0;
+	background: none;
+	color: $BGCOLOR5;
+	display: block;
+	text-align: center;
+	width: 90%;
+	font-size: 26px;
+	font-weight:normal;
+}
+
+@mixin pin-pad-input-text () {
+	font-size: 26px;
+	color: #363c74;
+	opacity: 0.6;
+}
+@mixin pin-pad-input-text-error () {
+		border: 1px solid red;
+		color: red;
 }
 
 @mixin pin-pad-button-active() {
@@ -258,26 +293,22 @@ $BGCOLOR4: #8588ac;
 
 
 @mixin pinpad-circleout() {
-	width: 32px;
-	height: 32px;
-	-webkit-border-radius: 61px;
-	-moz-border-radius: 61px;
-	border-radius: 61px;
-	border: 2px solid $BGCOLOR4;
+	width: 20px;
+	height: 20px;
+	border: 2px solid $BGCOLOR5;
 	position: absolute;
 	z-index: 800;
+	@include border-radius(61px);
 }
 
 @mixin pinpad-circlein() {
-	background: $BGCOLOR4;
-	width: 32px;
-	height: 32px;
-	-webkit-border-radius: 48px;
-	-moz-border-radius: 48px;
-	border-radius: 48px;
+	background: $BGCOLOR5;
+	width: 20px;
+	height: 20px;
 	position: absolute;
 	z-index: 1000;
-	border: 2px solid $BGCOLOR4;
+	border: 2px solid $BGCOLOR5;
+	@include border-radius(48px);
 }
 
 //  Pin Button style
@@ -511,8 +542,8 @@ $BGCOLOR4: #8588ac;
 
 @mixin help-box() {
 	border-bottom: 1px solid #EAEAEA;
-	height: 60%;
-	min-height: 70%;
+	height: 65%;
+	min-height: 65%;
 	overflow-y: auto;
 }
 
@@ -625,8 +656,8 @@ $BGCOLOR4: #8588ac;
 
 @mixin arrow-up-icon () {
 	background-image: url('#{$IMAGES}settings-icon.svg');
-	width: 22px !important;
-	height: 20px !important;
+	width: 16px !important;
+	height: 16px !important;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
@@ -634,13 +665,32 @@ $BGCOLOR4: #8588ac;
 	margin-right: 10px;
 }
 
+@mixin mpin-error-icon() {
+	background-image: url('#{$IMAGES}mark.svg');
+	width: 65px;
+	height: 65px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: auto 100%;
+	margin: 30px auto;
+	opacity: 0.3;
+}
+
 
 @mixin arrow-icon() {
-	background-image: url('#{$IMAGES}/arrow.svg');
+	background-image: url('#{$IMAGES}arrow.svg');
 	width: 1.5em;
 	height: 1.5em;
 	padding: 20px;
 	padding-top: 15px;
+}
+
+@mixin arrow-icon-open() {
+	background-image: url('#{$IMAGES}arrow-icon.svg');
+	width: 1.5em;
+	height: 1.5em;
+	padding-top: 15px;
+	top: 0;
 }
 
 @mixin btn-text-label() {
@@ -654,7 +704,6 @@ $BGCOLOR4: #8588ac;
 /// FOOTER
 @mixin footer () {
 	position: absolute;
-	border-top: 1px solid #828284;
 	bottom: 0px;
 	padding: 5px !important;
 	width: 100%;
@@ -665,23 +714,25 @@ $BGCOLOR4: #8588ac;
 }
 
 @mixin footer-helphub() {
-	width: 55px;
-	height: 16px;
-	background: url('#{$IMAGES}m-pin-grey.svg') no-repeat;
+	width: 75px;
+	height: 22px;
+	/*background: url('#{$IMAGES}m-pin-grey.svg') no-repeat;*/
+	background: url('#{$IMAGES}m-pin-color.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: left;
 	position: relative;
-	top: 9px;
+	top: 4px;
 }
 
 @mixin footer-copyright() {
-	width: 70px;
-	height: 13px;
+	width: 72px;
+	height: 14px;
 	float: right;
-	background: url('#{$IMAGES}/powered-by-certivox.svg') no-repeat;
+	/*background: url('#{$IMAGES}powered-by-certivox.svg') no-repeat;*/
+	background: url('#{$IMAGES}certivox-color.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: right bottom;
-	margin-top: 10px;
+	margin-top: 8px;
 }
 
 

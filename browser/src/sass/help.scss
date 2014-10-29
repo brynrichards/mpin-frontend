@@ -204,5 +204,5 @@ info.mpinHelpInfo {
 
 .mpinPurple, .mpinPurple strong {
 	font-weight: bold;
-	@include identity-text();
+	@include mobile-text();
 }

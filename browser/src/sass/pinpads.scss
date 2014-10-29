@@ -10,7 +10,7 @@ the following links:
 
   * Our Terms and Conditions -
     http://www.certivox.com/about-certivox/terms-and-conditions/
-  
+	
   * Our Security and Privacy -
     http://www.certivox.com/about-certivox/security-privacy/
 
@@ -40,12 +40,14 @@ the following links:
 	&.mpinInputError {
 		border: 1px solid red;
 		color: red;
+		@include pin-pad-input-text-error();
 	}
 
 	.mpinInputIn {
 		margin: 0 auto;
-		width: 67%;
+		width: 90%;
 		padding: 7% 1%;
+		text-align: center;
 
 		& i {
 			background-image: url('#{$IMAGES}/info.svg');
@@ -61,19 +63,15 @@ the following links:
 	}
 
 	.mpinCircle {
-		width: 35px;
-		height: 35px;
-		float: left;
+		width: 25px;
+		height: 25px;
+		display: inline-block;
 		margin: 1%;
 
 		.mpinCircleIn {
-
 			@include pinpad-circlein();
-
-			@include border-radius(48px);
 		}
 		.mpinCircleOut {
-
 			@include pinpad-circleout();
 		}
 	}
@@ -82,7 +80,9 @@ the following links:
 	.mpinInputText {
 		text-align: center;
 		line-height: 20px;
-		font-weight: bold;
+		
+		@include pin-pad-input-text();
+		
 		&.mpinInputTop {
 			display: block;
 			margin-top: 9px;
@@ -110,16 +110,23 @@ the following links:
 
 		height: 100%;
 
-		.mpinPadBtn, .mpinPadBtn2 {
-			
+		.mpinPadBtn {
 			@include pin-pad-button();
-			
 
 			&:active {
 				@include pin-pad-button-active();
+			}
 
+		}
+
+		.mpinPadBtn2 {
+			@include pin-pad-button-text();
+
+			&:active {
+				@include pin-pad-button-active();
 			}
 		}
+
 		.mpinBtnDisabled {
 			opacity: 0.5;
 		}

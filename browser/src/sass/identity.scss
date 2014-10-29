@@ -37,7 +37,6 @@ the following links:
 	overflow: auto;
 	@include identity-list();
 
-	@include border-radius(7px);
 
 	ul {
 		padding: 0px;
@@ -48,8 +47,6 @@ the following links:
 		padding: 5px;
 		width: 100%;
 		/*line-height: 35px;*/
-		min-height: 45px;
-
 		@include users-row();
 	}
 

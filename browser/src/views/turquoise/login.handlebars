@@ -11,8 +11,7 @@
 
             <p id="mpinCurrentIden"> </p>
 
-            <div class="mpinArrowDown mpPointer" id="mpin_arrow">
-				<div class="mpinArrowImg"></div>
+            <div class="mpinArrowDown mpPointer mpinADown" id="mpin_arrow">
 			</div>
 
             <div id="mpin_identities" class="mpinMain mpinAnimateIn mpZero">
@@ -27,22 +26,14 @@
 	
 		<div class="mpinInput" id="mpin_input_parent">
 			<div class="mpinInputIn mpHide" id="mpin_input_circle">
-				<div class="mpinCircle" id="mpin_circle_1">
-					<div class="mpinCircleOut"></div>
-				</div>
-				
-				<div class="mpinCircle" id="mpin_circle_2">
-					<div class="mpinCircleOut"></div>
-				</div>
-				<div class="mpinCircle" id="mpin_circle_3">
-					<div class="mpinCircleOut"></div>
-				</div>
-				<div class="mpinCircle" id="mpin_circle_4">
-					<div class="mpinCircleOut"></div>
-				</div>
+				{{#loop data.pinSize}}
+					<div class="mpinCircle" id="mpin_circle_{{this}}">
+						<div class="mpinCircleOut"></div>
+					</div>
+				{{/loop}}
 			</div>
 			
-			<div class="mpinInputIn mpin70width" id="mpin_input_text">
+			<div class="mpinInputIn mpin80width" id="mpin_input_text">
 				<span class="mpinInputText mpinInputTop" id="mpin_inner_text">      
 					Initializing...
 				</span>
@@ -91,13 +82,13 @@
 		<div class="mpin-pre-row">
 			<div class="mpin-row mpin-bottom">
 				<button class="mpinPadBtn2 mpinBtnDisabled" data-value="clear" id="mpin_clear">
-					clear
+					{{txt "pinpad_btn_clear"}}
 				</button>
 				<button class="mpinPadBtn" data-value="0">
 					0
 				</button>
 				<button class="mpinPadBtn2 mpinBtnDisabled" data-value="go" id="mpin_login">
-					login
+					{{txt "pinpad_btn_login"}}
 				</button>
 			</div>
 		</div>

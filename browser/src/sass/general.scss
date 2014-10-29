@@ -41,10 +41,7 @@ the following links:
 
 
 .mpinHeader {
-	border-bottom: 1px solid #828284;
-	padding: 5px !important;
-	/*width: 100%;*/
-	height: 40px;
+
 	@include mpin-header();
 
 	.mpinHome {
@@ -60,28 +57,24 @@ the following links:
 	@include mobile-bgcolor();
 }
 
-
-
 .mpinHeaderBig {
 	width: 90%;
 	margin: auto;
 	text-align:center;
 	line-height: 1.3em;
 	font-size: 18px;
-	
+
 
 	#mpinLogo {
 		@include logo();
 	}
-	
+
 	&.mpMobColor {
 		@include mobile-color();
 	}
 }
 
 .mpinHeaderRow {
-
-
 	@include mpin-header-row();
 
 	&.mpHeaderPadd {
@@ -108,10 +101,12 @@ the following links:
 	z-index: 99;
 	/*width: 100%;*/
 	.mpinArrowDown {
+		&.mpinADown {
+			@include arrow-up-icon();
+		}
+
 		&.mpinAUp {
-			-webkit-transform: rotate(180deg);
-			transform:rotate(180deg);
-			-ms-transform:rotate(180deg); /* IE 9 */
+			@include arrow-icon-open();
 		}
 
 		img {
@@ -249,8 +244,9 @@ the following links:
 			}
 		}
 
-		.mpinIdentityText {
 
+
+		.mpinIdentityText {
 			@include identity-text();
 		}
 
@@ -283,6 +279,14 @@ the following links:
 	&.mpinAnimateOut {
 		transition: all 0.5s ease-out;
 	}
+
+	.mpErrorIcon {
+		@include mpin-error-icon();
+	}
+	.mpErrorNumber {
+		margin: 20px auto;
+	}
+
 }
 
 .mpinInfoCenter {
@@ -378,6 +382,7 @@ the following links:
 //timer Feature
 .mpinTimerBox {
 	position: relative;
+	margin: 15px;
 
 	/*	#mpTimer {
 			border: 1px solid green;

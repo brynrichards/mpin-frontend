@@ -142,22 +142,31 @@ $green : #06B405;
 			flex-direction: column !important;
 
 			#mpinUser {
-
-
 				position: absolute;
 				width: 100%;
 				transition: all 0.5s ease-in-out;
 				overflow: hidden;
 				z-index: 999999;
 				margin: 0px;
+				
 				@include user-row();
 
 				#mpin_arrow {
 					position: absolute;
 					z-index: 10;
 					right: 0;
-					bottom: 0;
+					/*bottom: 0;*/
+					top: 0;
 				}
+				
+				&.mpUserSlim {
+					@include user-area-slim();
+				}
+				
+				&.mpUserFat {
+					@include user-area-fat();
+				}
+				
 			}
 
 			#mpin_identities {
