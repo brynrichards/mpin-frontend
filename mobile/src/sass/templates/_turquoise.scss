@@ -87,6 +87,16 @@ $BORDERLESS : true;
 	background: white; /* Old browsers */
 }
 
+@mixin access-number() {
+	text-align: center;
+	position: relative;
+	width: 100%;
+	font-size: 34pt;
+	color: rgb(68, 68, 68);
+	padding-top: 10px;
+	letter-spacing: 10pt;
+}
+
 @mixin account-top-bar() {
 	color: black;
 	background: #eeeeee; /* Old browsers */

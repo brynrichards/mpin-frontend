@@ -116,6 +116,11 @@ the following links:
 	flex-direction: row !important;
 }
 
+#accNumHolder {
+
+	@include access-number();
+}
+
 #pinsHolder {
 	
 	width: auto;

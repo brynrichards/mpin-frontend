@@ -694,7 +694,7 @@ var mpin = mpin || {};
 
             var renderElem = document.getElementById('codes');
             renderElem.style.display = 'block';
-            renderElem.innerHTML = "Enter your pin";
+            renderElem.innerHTML = hlp.text("pinpad_placeholder_text");
 
             for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
                 var circleA = document.createElement("div");
@@ -811,6 +811,7 @@ var mpin = mpin || {};
                 pinPad.className = '';
 
                 // Empty the div
+                document.getElementById('accNumHolder').innerHTML = "";
                 document.getElementById('circlesHolder').innerHTML = "";
 
                 var circlesHolder = document.getElementById('circlesHolder');
@@ -1538,15 +1539,21 @@ var mpin = mpin || {};
             , element
             , elemForErrcode = document.getElementById('codes')
             , circlesHolder = document.getElementById('circlesHolder')
-            , ifDigit = new RegExp('[0-9]');
+            , accNumHolder = document.getElementById('accNumHolder')
+            , ifDigit = new RegExp('[0-9]')
+            , pinpadDisplay = document.getElementById("codes");
 
         if(ifDigit.test(parseInt(digit))) {
 
             // Add circles
 
+            pinElement.value += digit;
+
             if(this.isAccNumber) {
-                circlesHolder.innerHTML += digit;
+                accNumHolder.style.display = 'block';
+                accNumHolder.innerHTML += digit;
             } else {
+
                 // Use setTimeout to trigger the animation
 
                 elemForErrcode.style.display = 'none';
@@ -1554,22 +1561,20 @@ var mpin = mpin || {};
 
                 var circles = document.getElementsByClassName("circle");
                 element = document.createElement("div");
-
-
                 element.style.width = "18px";
                 element.style.height = "18px";
                 element.style.margin = "7px";
                 element.className = 'inner-circle';
                 var addToDivNum =  pinElement.value.length -1;
+
                 // Append the circle element here
                 circles[addToDivNum].appendChild(element);
             }
 
-            pinElement.value += digit;
         }
 
         if (digit === 'clear') {
-
+            
            var circlesClear = document.getElementsByClassName("circle")
              , element = {};
 
@@ -1585,13 +1590,25 @@ var mpin = mpin || {};
 
                 var nodes = circlesClear[i].querySelector('.' + element.className);
 
+
                 if (circlesClear[i].querySelector('.' + element.className)) {
 
                     circlesClear[i].removeChild(nodes);
-
                     pinElement.value = "";
                     this.enableNumberButtons(true);
                 }
+
+            }
+
+            // Clear the ac num
+
+            if (this.isAccNumber) {
+                accNumHolder.innerHTML = "";
+                pinElement.value = "";
+                this.enableNumberButtons(true);
+                //set placeholder to access Number text
+                pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
+                pinpadDisplay.style.display = 'block';
 
             }
 
