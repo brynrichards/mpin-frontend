@@ -327,7 +327,14 @@ $BORDERLESS : true;
 		border: none;
 		border-bottom: 3px solid #cccccc;
 		color: #868aac;
-	} 
+	}
+
+	&.danger {
+		background: #e64a19;
+		border: none;
+		border-bottom: 3px solid #bf360c;
+		color: white;
+	}
 }
 
 @mixin identity-container() {
@@ -346,7 +353,7 @@ $BORDERLESS : true;
 
 
 @mixin central-text() {
-	color: black;
+	color: #444;
 	font-size: 4vh;
 	width: 100%;
 	text-align: center;
@@ -382,9 +389,10 @@ $BORDERLESS : true;
 	background: #fff;
 	width: 100%;
 	padding: .4em;
-	min-height: 2.5em;
+	height: 20px;
 	border: 1px solid #868aac;
 	font-style: italic;
+	border-radius: 0;
 	-webkit-border-top-right-radius: 4px;
 	-webkit-border-bottom-right-radius: 4px;
 	-moz-border-radius-topright: 4px;
@@ -402,9 +410,10 @@ $BORDERLESS : true;
 	background: #fff;
 	width: 100%;
 	padding: .4em;
-	min-height: 2.5em;
+	height: 20px;
 	border: 1px solid #868aac;
 	font-style: italic;
+	border-radius: 0;
 	-webkit-border-top-right-radius: 4px;
 	-webkit-border-bottom-right-radius: 4px;
 	-moz-border-radius-topright: 4px;
