@@ -184,17 +184,17 @@ $BORDERLESS : true;
 @mixin mpin-menu() {
 	background: url('#{$IMAGES}/settings-icon-purple.svg') top left no-repeat;
 	background-repeat: no-repeat;
-	background-size: auto 100%;
-	width: 30px;
-	height: 30px;
+	width: 16px;
+	height: 16px;
+	margin-right: 10px;
 }
 
 @mixin mpin-menu-close() {
 	background: url('#{$IMAGES}/arrow-icon-purple.svg') top left no-repeat;
 	background-repeat: no-repeat;
-	background-size: auto 100%;
-	width: 30px;
-	height: 30px;
+	// background-size: auto 100%;
+	width: 16px;
+	height: 16px;
 }
 
 @mixin powered-by() {
@@ -223,8 +223,9 @@ $BORDERLESS : true;
 
 @mixin home-icon() {
 	background-image: url('#{$IMAGES}/home.svg');
-
-	height: 24px;
+	
+	width: 16px;
+	height: 16px;
 
 	background-repeat: no-repeat;
 	background-position: left;
@@ -470,4 +471,14 @@ $BORDERLESS : true;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 40%;
+}
+
+// Settings image in identity
+
+@mixin settings-img() {
+	background-image: url('#{$IMAGES}/settings.svg');
+	width: 14px;
+	height: 14px;
+	background-repeat: no-repeat;
+	display: block;
 }

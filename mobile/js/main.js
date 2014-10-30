@@ -1409,17 +1409,10 @@ var mpin = mpin || {};
 
         // Append iNumber, don't use handlebars
         var innerRowElemName = "mp_btIdSettings_"
-            , innerRowImgName = "mp_btIdSettingsImg_"
             , innerRowElem =  document.getElementById(innerRowElemName)
-            , innerRowImg = document.getElementById(innerRowImgName)
             , imgRowElem = hlp.img("settings.svg");
 
-
-
         innerRowElem.setAttribute("id",innerRowElemName + iNumber);
-        innerRowImg.setAttribute("id",innerRowImgName + iNumber);
-        innerRowImg.setAttribute("src",imgRowElem);
-
 
         document.getElementById(innerRowElemName + iNumber).onclick = function(ev) {
             console.log(uId);
