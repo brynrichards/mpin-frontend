@@ -111,6 +111,7 @@ $BGCOLOR6: #e74a00;
 	padding: 5%;
 	font-size: 18px;
 	text-align: center;
+	font-weight: bold;
 	color: #6e8778;
 }
 
@@ -157,10 +158,6 @@ $BGCOLOR6: #e74a00;
 		}
 	}
 }
-@mixin mpin-logo-pointer () {
-	cursor: pointer;
-}
-
 //#mpinRow:hover
 @mixin users-row-hover () {
 	background: $BGCOLOR;
@@ -193,22 +190,6 @@ $BGCOLOR6: #e74a00;
 	background-color: #eee;
 }
 
-@mixin help-popup-corner-icon () {
-	content: '';
-	background-image: url('#{$IMAGES}mark.svg');
-	width: 32px;
-	height: 31px;
-	display: block;
-	position: absolute;
-	top: -16px;
-	left: -16px;
-	background-color: white;
-	background-repeat: no-repeat;
-	background-position: left;
-	background-size: auto 100%;
-	cursor: pointer;
-}
-
 @mixin setting-icon($type:white) {
 	/*border: 1px solid grey;*/
 	@if $type == "white" {
@@ -232,16 +213,11 @@ $BGCOLOR6: #e74a00;
 @mixin mpin-main () {
 	height: 81%;
 }
-@mixin mpin-expire-second () {
-	color: #444;
-	text-shadow:none;
-}
 
 // Font family
 
 @mixin font-family() {
 	font-family: "Open Sans", Arial, sans-serif;
-	font-size: 14px;
 }
 
 //
@@ -286,17 +262,9 @@ $BGCOLOR6: #e74a00;
 	color: #363c74;
 	opacity: 0.6;
 }
-@mixin pin-pad-input-error () {
-	color: $BGCOLOR6;
-}
 @mixin pin-pad-input-text-error () {
-	color: $BGCOLOR6;
-	opacity: 1;
-}
-@mixin button-area-down () {
-	position: absolute;
-	bottom: 5%;
-	width: 100%;
+		border: 1px solid red;
+		color: red;
 }
 
 @mixin pin-pad-button-active() {

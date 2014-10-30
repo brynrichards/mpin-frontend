@@ -134,6 +134,7 @@ $BORDERLESS : true;
 @mixin account-top-bar() {
 	color: black;
 	background: #eeeeee; /* Old browsers */
+	transition: all .5s ease-in-out;
 }
 
 // Top bar
@@ -389,7 +390,7 @@ $BORDERLESS : true;
 	background: #fff;
 	width: 100%;
 	padding: .4em;
-	height: 20px;
+	min-height: 2.5em;
 	border: 1px solid #868aac;
 	font-style: italic;
 	border-radius: 0;
@@ -410,10 +411,11 @@ $BORDERLESS : true;
 	background: #fff;
 	width: 100%;
 	padding: .4em;
-	height: 20px;
+	min-height: 2.5em;
 	border: 1px solid #868aac;
 	font-style: italic;
 	border-radius: 0;
+
 	-webkit-border-top-right-radius: 4px;
 	-webkit-border-bottom-right-radius: 4px;
 	-moz-border-radius-topright: 4px;

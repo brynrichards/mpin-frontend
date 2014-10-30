@@ -142,6 +142,13 @@ var mpin = mpin || {};
  
         this.renderHomeMobile();
 
+        // var authData = {};
+        //    authData._mpinOTP = 99;
+        //    authData.expireTime = 1414593174295000;
+        //    authData.nowTime = 1414593174195000;
+           
+        //    this.renderOtp(authData);
+
         // Caching - monitor if new version of the cache exists
  
         // setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
@@ -560,12 +567,43 @@ var mpin = mpin || {};
     };
 
     mpin.prototype.renderOtp = function (authData) {
-        var callbacks = {}, self = this, leftSeconds, epochMilisec;
+        var callbacks = {}, self = this, leftSeconds, timerEl, timer2d, totalSec;
+
+        //check if properties for seconds exist
+        // if (!authData.expireTime && !authData.nowTime) {
+        //     self.error(4016);
+        //     return;
+        // }
+
+        //// TIMER CODE
+
+        //draw canvas Clock
+        drawTimer = function (expireOn) {
+            var start, diff;
+            diff = totalSec - expireOn;
+            start = -0.5 + ((diff / totalSec) * 2);
+            start = Math.round(start * 100) / 100;
+
+            console.log(">>>", expireOn, "---", totalSec);
+            timer2d.clearRect(0, 0, timerEl.width, timerEl.height);
+
+            timer2d.beginPath();
+            timer2d.strokeStyle = "#8588ac";
+            timer2d.arc(20, 20, 18, start * Math.PI, 1.5 * Math.PI);
+            timer2d.lineWidth = 5;
+            timer2d.stroke();
+        };
 
         function expire (expiresOn) {
-            leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date().getTime())) / 1000);
+            leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date())) / 1000);
             if (leftSeconds > 0) {
-                document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
+//              document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
+                document.getElementById("mpin_seconds").innerHTML = leftSeconds;
+
+                if (document.getElementById("mpTimer")) {
+                    drawTimer(leftSeconds);
+                }
+
             } else {
                 //clear Interval and go to OTP expire screen.
                 clearInterval(self.intervalExpire);
@@ -573,27 +611,48 @@ var mpin = mpin || {};
             }
         }
 
+        callbacks.mpin_home = function () {
+            clearInterval(self.intervalExpire);
+            self.renderHome.call(self);
+        };
+
+        callbacks.mpin_help = function () {
+            clearInterval(self.intervalExpire);
+            self.lastView = "renderOtp";
+            self.renderHelpHub.call(self);
+        };
+
         this.render("otp", callbacks);
 
-        epochMilisec = new Date().getTime();
         document.getElementById("mpinOTPNumber").innerHTML = authData._mpinOTP;
 
-        var expireSec = epochMilisec + (mpin.cfg.expireOtpSeconds * 1000);
-        expire(expireSec);
+        var timeOffset = new Date() - new Date(authData.nowTime);
+        var expireMSec = new Date(authData.expireTime + timeOffset);
+
+        totalSec = Math.floor((expireMSec - (new Date())) / 1000);
+
+        if (document.getElementById("mpTimer")) {
+            timerEl = document.getElementById("mpTimer");
+            timer2d = timerEl.getContext("2d");
+            console.log("inside case mpTimer ...");
+        }
+
+        expire(expireMSec);
 
         this.intervalExpire = setInterval(function () {
             expire();
         }, 1000);
     };
 
+
     mpin.prototype.renderOtpExpire = function () {
         var callbacks = {}, self = this;
 
-    callbacks.mpin_login_now = function () {
-        self.renderLogin.call(self);
-    };
+        callbacks.mpin_login_now = function () {
+            self.renderLogin.call(self);
+        };
 
-    this.render("otp-expire", callbacks);
+        this.render("otp-expire", callbacks);
     };
 
 
@@ -951,11 +1010,36 @@ var mpin = mpin || {};
     };
  
     mpin.prototype.getAccessNumber = function() {
-        var _request = new XMLHttpRequest(), self = this, expire;
+        var _request = new XMLHttpRequest(), self = this, expire, drawTimer, timerEl, timer2d, totalSec;
  
         this.intervalID || (this.intervalID = {});
- 
-        expire = function(expiresOn) {
+
+        //// TIMER CODE
+        if (document.getElementById("mpTimer")) {
+            timerEl = document.getElementById("mpTimer");
+            timer2d = timerEl.getContext("2d");
+            }
+        //draw canvas Clock
+        drawTimer = function (expireOn) {
+
+            console.log("##################### drawTimer");
+            var start, diff;
+            diff = totalSec - expireOn;
+            start = -0.5 + ((diff / totalSec) * 2);
+            start = Math.round(start * 100) / 100;
+
+            timer2d.clearRect(0, 0, timerEl.width, timerEl.height);
+
+            timer2d.beginPath();
+            timer2d.strokeStyle = "#8588ac";
+            timer2d.arc(20, 20, 18, start * Math.PI, 1.5 * Math.PI);
+            timer2d.lineWidth = 5;
+            timer2d.stroke();
+        };
+
+        ////////////////// TIMER
+
+        expire = function (expiresOn) {
             var expireAfter = Math.floor((expiresOn - (new Date())) / 1000);
             if (expireAfter <= 0) {
                 if (self.intervalID) {
@@ -963,7 +1047,12 @@ var mpin = mpin || {};
                 }
                 self.getAccessNumber();
             } else {
-                document.getElementById("mp_seconds").innerHTML = expireAfter + " " + hlp.text("mobileAuth_seconds");
+                document.getElementById("mpin_seconds").innerHTML = expireAfter;
+                //////////////////////////////////////////Clockwise
+                ///// Check if Timer Element exist some template did not have timer
+                if (document.getElementById("mpTimer")) {
+                    drawTimer(expireAfter);
+                }
             }
         };
  
@@ -976,6 +1065,7 @@ var mpin = mpin || {};
                     self.webOTP = jsonResponse.webOTP;
                 }
                 expiresOn = new Date();
+                totalSec = 99;
                 expiresOn.setSeconds(expiresOn.getSeconds() + jsonResponse.ttlSeconds);
                 expire(expiresOn);
                 self.intervalID = setInterval(function() {

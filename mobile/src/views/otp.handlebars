@@ -14,9 +14,11 @@
       <h2>{{hlp 'otp_text1' }}</h2>
       <div id="mpinOTPNumber" class="mp_alertTitle">
       </div>
-      <p>{{hlp 'otp_seconds' }}</p>
-      <div id="mpin_seconds" class="mp_accountField">
-      </div>
+  </div>
+
+  <div class='mpinTimerBox'>
+    <canvas id="mpTimer" width="41" height="41"></canvas>
+    <span class="mpLeftTime" id="mpin_seconds">35</span>
   </div>
 
   <p class="noteText">{{hlp 'otp_text2'}}</p>

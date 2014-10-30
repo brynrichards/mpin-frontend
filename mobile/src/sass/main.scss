@@ -29,6 +29,8 @@ the following links:
    pass2Request           Form the JSON request for pass two of the M-Pin protocol
 */
 
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:400italic,400");
+
 // Import CSS3 reset
 
 @import 'reset';
@@ -79,6 +81,10 @@ html, body {
 	// background-color:
 	 whitesmoke: !important;
 	margin: 0;
+}
+
+:focus {
+	outline: 0;
 }
 
 body {
@@ -805,18 +811,17 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 #otpContainer {
 
-	color: #007cc2;
-	border-color: #007cc2;
 	font-size: 0.87em;
 	padding: 14px 0;
 	border-radius: 0.3em;
-	border: 1px solid #007cc2;
+	border: 1px solid #5d6078;
 	text-align: center;
 	width: 80%;
 	margin: 0 auto;
 	position: relative;
 
 	h2 {
+		color: #444;
 		font-size: 18px;
 		line-height: 32px;
 	}
@@ -827,6 +832,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		font-weight: bold;
 		line-height: 32px;
 		margin-bottom: 10px;
+		color: #5d6078;
 	}
 
 	#mpin_seconds {
@@ -842,6 +848,19 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 	}
 
+}
+
+.mpinTimerBox {
+	text-align: center;
+	margin: 0 auto;
+	position: relative;
+	margin-top: 15px;
+
+	#mpin_seconds {
+		position: absolute;
+		top: 11px;
+		left: 11px;
+	}
 }
 
 // Import mediaqueries
