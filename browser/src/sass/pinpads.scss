@@ -38,9 +38,7 @@ the following links:
 
 
 	&.mpinInputError {
-		border: 1px solid red;
-		color: red;
-		@include pin-pad-input-text-error();
+		@include pin-pad-input-error();
 	}
 
 	.mpinInputIn {
@@ -60,6 +58,11 @@ the following links:
 			margin-right: 5px;
 			cursor: pointer;
 		}
+		
+		.mpinInputErrorText {
+			@include pin-pad-input-text-error();
+		}
+		
 	}
 
 	.mpinCircle {

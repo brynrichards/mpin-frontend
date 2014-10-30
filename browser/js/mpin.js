@@ -129,6 +129,7 @@ var mpin = mpin || {};
 		//Extend string with extra methods
 		setStringOptions();
 
+		
 		//set Options
 		this.setDefaults().setOptions(options.server).setOptions(options.client);
 
@@ -153,8 +154,19 @@ var mpin = mpin || {};
 		this.setLanguageText();
 
 		this.renderLanding();
+
 //		this.renderBlank();
 //		this.error(4004);
+//		this.beforeRenderSetup();
+
+		/*
+		 var authData = {};
+		 authData._mpinOTP = 99;
+		 authData.expireTime = 1414593174295000;
+		 authData.nowTime = 1414593174195000;
+		 
+		 this.renderOtp(authData);
+		 */
 	};
 
 	mpin.prototype.setupHtml = function () {
@@ -798,7 +810,7 @@ var mpin = mpin || {};
 	};
 
 	mpin.prototype.renderOtp = function (authData) {
-		var callbacks = {}, self = this, leftSeconds;
+		var callbacks = {}, self = this, leftSeconds, timerEl, timer2d, totalSec;
 
 		//check if properties for seconds exist
 		if (!authData.expireTime && !authData.nowTime) {
@@ -806,10 +818,37 @@ var mpin = mpin || {};
 			return;
 		}
 
+		//// TIMER CODE
+
+		//draw canvas Clock
+		drawTimer = function (expireOn) {
+			var start, diff;
+			diff = totalSec - expireOn;
+			start = -0.5 + ((diff / totalSec) * 2);
+			start = Math.round(start * 100) / 100;
+
+			console.log(">>>", expireOn, "---", totalSec);
+			timer2d.clearRect(0, 0, timerEl.width, timerEl.height);
+
+			timer2d.beginPath();
+			timer2d.strokeStyle = "#8588ac";
+			timer2d.arc(20, 20, 18, start * Math.PI, 1.5 * Math.PI);
+			timer2d.lineWidth = 5;
+			timer2d.stroke();
+		};
+
+
+
 		function expire (expiresOn) {
 			leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date())) / 1000);
 			if (leftSeconds > 0) {
-				document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
+//				document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
+				document.getElementById("mpin_seconds").innerHTML = leftSeconds;
+
+				if (document.getElementById("mpTimer")) {
+					drawTimer(leftSeconds);
+				}
+
 			} else {
 				//clear Interval and go to OTP expire screen.
 				clearInterval(self.intervalExpire);
@@ -832,8 +871,16 @@ var mpin = mpin || {};
 
 		document.getElementById("mpinOTPNumber").innerHTML = authData._mpinOTP;
 
-		var timeOffset = new Date() - new Date(authData.nowTime)
+		var timeOffset = new Date() - new Date(authData.nowTime);
 		var expireMSec = new Date(authData.expireTime + timeOffset);
+
+		totalSec = Math.floor((expireMSec - (new Date())) / 1000);
+
+		if (document.getElementById("mpTimer")) {
+			timerEl = document.getElementById("mpTimer");
+			timer2d = timerEl.getContext("2d");
+			console.log("inside case mpTimer ...");
+		}
 
 		expire(expireMSec);
 
@@ -1270,6 +1317,9 @@ var mpin = mpin || {};
 
 		// button
 		document.getElementById("mpin_add_identity").onclick = function () {
+			if (document.getElementById("mpinCurrentIdentityTitle")) {
+				addClass("mpinCurrentIdentityTitle", "mpHide");
+			}
 			self.renderSetupHome2.call(self);
 		};
 		// button
@@ -1563,8 +1613,9 @@ var mpin = mpin || {};
 			this.enableNumberButtons(true);
 			this.enableButton(false, "go");
 			this.enableButton(false, "clear");
+			removeClass("mpin_inner_text", "mpinInputErrorText");
 		} else if (digit === 'clear_setup') {
-			this.display(hlp.text("pinpad_setup_screen_text"), false);
+			this.display(hlp.text("pinpad_setup_screen_text2"), false);
 			this.enableNumberButtons(true);
 			this.enableButton(false, "go");
 			this.enableButton(false, "clear");
@@ -1628,6 +1679,7 @@ var mpin = mpin || {};
 			this.pinpadInput = "";
 			removeClass("mpin_input_text", "mpHide");
 			addClass("mpin_input_parent", "mpinInputError");
+			addClass("mpin_inner_text", "mpinInputErrorText");
 			addClass("mpin_input_circle", "mpHide");
 			this.setupInputType = "text";
 			if (textElem) {
@@ -1670,6 +1722,14 @@ var mpin = mpin || {};
 			this.renderAccountsPanel();
 			removeClass("mpinUser", "mpinIdentityGradient");
 
+			//only for new design 
+			var titleElem = document.getElementById("mpinCurrentIdentityTitle");
+			if (titleElem) {
+				titleElem.innerHTML = hlp.text("identity_current_title");
+				titleElem.style.fontSize = "16px";
+				addClass("mpinCurrentIden", "mpHide");
+			}
+
 		} else {
 			//if identity not Active render ACTIVATE
 			if (this.ds.getIdentityToken(this.identity) == "") {
@@ -1689,6 +1749,15 @@ var mpin = mpin || {};
 			addClass("mpinUser", "mpinIdentityGradient");
 
 			this.lastViewParams = [false];
+
+			//only for new design 
+			var titleElem = document.getElementById("mpinCurrentIdentityTitle");
+			if (titleElem) {
+				titleElem.innerHTML = hlp.text("login_current_label");
+				titleElem.style.fontSize = "12px";
+				removeClass("mpinCurrentIden", "mpHide");
+				removeClass(titleElem, "mpHide");
+			}
 		}
 		return false;
 	};
@@ -1699,7 +1768,7 @@ var mpin = mpin || {};
 
 	//error PAGE 
 	mpin.prototype.renderError = function (error) {
-		var callbacks = {}, errorMsg, errorCode = "";
+		var callbacks = {}, errorMsg, self = this, errorCode = "";
 
 		if (error === parseInt(error)) {
 			if (!hlp.language) {
@@ -1710,8 +1779,11 @@ var mpin = mpin || {};
 		} else {
 			errorMsg = error;
 		}
-		console.log("errorCode :::", errorCode);
-		console.log("errorMsg :::", errorMsg);
+
+		callbacks.mpin_cancel = function () {
+			self.renderHome.call(self);
+		};
+
 		this.render("error", callbacks, {errorMsg: errorMsg, errorCode: errorCode});
 	};
 
@@ -1728,7 +1800,7 @@ var mpin = mpin || {};
 //		console.log(" OPTS :::", this.opts.setDeviceName);
 //		this.render("blank", callbacks);
 //		this.render("mobile", callbacks, {setDeviceName: this.opts.setDeviceName});
-		this.render("mobile", callbacks);
+		this.render("blank", callbacks);
 
 		this.getAccessNumber();
 	};
@@ -1814,7 +1886,7 @@ var mpin = mpin || {};
 			self.enableNumberButtons(true);
 
 			self.clientSecret = clientSecret;
-			self.display(hlp.text("pinpad_setup_screen_text"), false);
+			self.display(hlp.text("pinpad_setup_screen_text2"), false);
 
 			if (self.opts.onGetSecret) {
 				self.opts.onGetSecret();
@@ -1970,12 +2042,13 @@ var mpin = mpin || {};
 						self.successLogin(authData);
 					} else if (errorCode === "INVALID") {
 						self.display(hlp.text("authPin_errorInvalidPin"), true);
-
-						document.getElementById("mpin_help_pinpad").onclick = function () {
-							self.lastView = "renderLogin";
-							self.toggleHelp.call(self);
-							self.renderHelpTooltip.call(self, "loginerr");
-						};
+						if (document.getElementById("mpin_help_pinpad")) {
+							document.getElementById("mpin_help_pinpad").onclick = function () {
+								self.lastView = "renderLogin";
+								self.toggleHelp.call(self);
+								self.renderHelpTooltip.call(self, "loginerr");
+							};
+						}
 
 					} else if (errorCode === "MAXATTEMPTS") {
 						var iD = self.identity;
@@ -2442,6 +2515,7 @@ var mpin = mpin || {};
 		"otp_seconds": "Remaining: {0} sec.", // {0} will be replaced with the remaining seconds
 		"otp_expired_header": "Your One-Time Password has expired.",
 		"otp_expired_button_home": "Login again to get a new OTP",
+		"login_current_label": "Login as:",
 		"setup_header": "ADD AN IDENTITY TO THIS DEVICE",
 		"setup_header2": "Add an identity",
 		"setup_text1": "Enter your email address:",
@@ -2454,6 +2528,7 @@ var mpin = mpin || {};
 		"setup_error_signupexpired": "Your signup request has been expired. Please try again.",
 		"setup_button_setup": "Setup M-Pin",
 		"setupPin_header": "Create your M-Pin with {0} digits", // {0} will be replaced with the pin length
+		"setupPin_header2": "Setup your pin", // {0} will be replaced with the pin length
 		"setupPin_initializing": "Initializing...",
 		"setupPin_pleasewait": "Please wait...",
 		"setupPin_button_clear": "Clear",
@@ -2466,6 +2541,7 @@ var mpin = mpin || {};
 		"setupDone_button_go": "Sign in now with your new M-Pin!",
 		"setupDone_button_go2": "Sign in now",
 		"setupReady_header": "VERIFY YOUR IDENTITY",
+		"setup_new_identity_title": "Setup new identity...",
 		"setupReady_text1": "Your M-Pin identity",
 		"setupReady_text2": "is ready to setup, now you must verify it.",
 		"setupReady_text3": "We have just sent you an email, simply click the link to verify your identity.",
@@ -2481,14 +2557,16 @@ var mpin = mpin || {};
 		"setupNotReady_resend_info2": "Email sent!",
 		"setupNotReady_resend_error": "Sending email failed!",
 		"setupNotReady_button_check": "I've activated, check again",
+		"setupNotReady_button_check2": "I confirmed my email",
 		"setupNotReady_button_resend": "Send me the email again",
+		"setupNotReady_button_resend2": "Resend confirmation email",
 		"setupNotReady_button_back": "Go to the identities list",
 		"authPin_header": "Enter your M-Pin",
 		"authPin_button_clear": "Clear",
 		"authPin_button_login": "Login",
 		"authPin_pleasewait": "Authenticating...",
 		"authPin_success": "Success",
-		"authPin_errorInvalidPin": "INCORRECT PIN!",
+		"authPin_errorInvalidPin": "Incorrect pin!",
 		"authPin_errorNotAuthorized": "You are not authorized!",
 		"authPin_errorExpired": "The auth request expired!",
 		"authPin_errorServer": "Server error!",
@@ -2535,6 +2613,7 @@ var mpin = mpin || {};
 		"mobile_button_signin": "Sign in with this device",
 		"mobile_button_signin2": "Sign in",
 		"mobile_header_access_number": "Your Access Number is",
+		"identity_current_title": "change identity:",
 		"help_ok_btn": "Ok, Got it",
 		"help_more_btn": "I'm not sure, tell me more",
 		"help_hub_title": "M-Pin Help Hub",
@@ -2587,6 +2666,7 @@ var mpin = mpin || {};
 		"mobile_footer_btn": "Now, sign in with your Smartphone",
 		"mobile_footer_btn2": "Sign in with Phone",
 		"pinpad_setup_screen_text": "CREATE YOUR M-PIN:<br> CHOOSE 4 DIGIT",
+		"pinpad_setup_screen_text2": "Setup your pin",
 		"pinpad_default_message": "Enter your pin",
 		"setup_device_label": "Choose your device name:",
 		"setup_device_default": "(default name)",
@@ -2628,9 +2708,9 @@ var mpin = mpin || {};
 		"error_code_4014": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
 		"error_code_4015": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
 		"error_code_4016": "We are experiencing a technical problem. Please try again later or contact the service administrator.", //
-		"error_not_auth": "You are not authorized.",  //
-		"pinpad_btn_login": "Login",  //
-		"pinpad_btn_clear": "Clear",  //
+		"error_not_auth": "You are not authorized.", //
+		"pinpad_btn_login": "Login", //
+		"pinpad_btn_clear": "Clear", //
 		"pinpad_btn_setup": "Setup"  //
 	};
 	//	image should have config properties
