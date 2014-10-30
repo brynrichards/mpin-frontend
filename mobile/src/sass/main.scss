@@ -477,8 +477,14 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 							border-top-right-radius: 0;
 							border-bottom-right-radius: 0;
 							border-right: 0;
+						}
 
-							@include userLabel();
+						.userLabel {
+							@include user-label();
+						}
+
+						.deviceLabel {
+							@include device-label();							
 						}
 
 						#emailInput {
@@ -682,17 +688,18 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 	// Style rounded
 
-	border: 1px solid black;
-	color: white;
+	color: #868aac;
 	margin-left: 30px;
 	margin-right: 30px;
-	border-radius: 9px;
+	border-radius: 4px;
 	overflow-x: hidden;
 	overflow-y: auto;
+	background-color: white;
 
 	.default {
 		color: white;
-		background: #3c9dcb;
+		background: #868aac;
+		box-shadow: inset 5px 0 0 #5d6078;	
 	}
 
 	.mp_buttonItem {
@@ -702,7 +709,6 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	.mp_titleItem {
 		position: relative;
 		top: 17px;
-		color: black;
 		text-align: left;
 		width: 90%;
 		padding-left: 10px;
@@ -729,7 +735,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 .mp_contentItem {
 	position: relative;
 	min-height: 58px;
-	border-bottom: 2px solid #666666;
+	border-bottom: 1px solid #eeeeee;
 }
 
 #mp_back {

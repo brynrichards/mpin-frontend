@@ -314,9 +314,10 @@ $BORDERLESS : true;
 	}
 
 	&.white {
-		background: none;
-		border: 2px solid #56C05A !important;
-		color: #56C05A;
+		background: white;
+		border: none;
+		border-bottom: 3px solid #cccccc;
+		color: #868aac;
 	} 
 }
 
@@ -443,7 +444,7 @@ $BORDERLESS : true;
 }
 
 
-@mixin userLabel () {
+@mixin user-label () {
 	width: 40px !important;
 	height: 20px !important;
 	background-image: url('#{$IMAGES}/user-purple.svg');
@@ -453,10 +454,10 @@ $BORDERLESS : true;
 	background-size: 40%;
 }
 
-@mixin deviceLabel () {
+@mixin device-label () {
 	width: 40px !important;
 	height: 20px !important;
-	background-image: url('#{$IMAGES}/screen-purple.svg');
+	background-image: url('#{$IMAGES}/device-purple.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
