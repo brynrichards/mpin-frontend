@@ -148,7 +148,7 @@ $green : #06B405;
 				overflow: hidden;
 				z-index: 999999;
 				margin: 0px;
-				
+
 				@include user-row();
 
 				#mpin_arrow {
@@ -157,16 +157,17 @@ $green : #06B405;
 					right: 0;
 					/*bottom: 0;*/
 					top: 0;
+					z-index: 10000;
 				}
-				
+
 				&.mpUserSlim {
 					@include user-area-slim();
 				}
-				
+
 				&.mpUserFat {
 					@include user-area-fat();
 				}
-				
+
 			}
 
 			#mpin_identities {

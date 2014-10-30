@@ -103,9 +103,39 @@ $BGCOLOR4:#fff;
 }
 @mixin pin-pad-input-text () {
 }
+@mixin mpin-expire-second () {
+	color: #f00;
+	text-shadow:none;
+}
+@mixin help-popup-corner-icon () {
+	content: '';
+	background-image: url('#{$IMAGES}info.svg');
+	width: 32px;
+	height: 31px;
+	display: block;
+	position: absolute;
+	top: -16px;
+	left: -16px;
+	background-color: white;
+	background-repeat: no-repeat;
+	background-position: left;
+	background-size: auto 100%;
+	cursor: pointer;
+}
+@mixin mpin-logo-pointer () {
+	cursor: pointer;
+}
+@mixin pin-pad-input-error () {
+	border: 1px solid red;
+	color: red;
+}
 @mixin pin-pad-input-text-error () {
-		border: 1px solid red;
-		color: red;
+}
+
+@mixin button-area-down () {
+	position: absolute;
+	bottom: 11%;
+	width: 100%;
 }
 
 @mixin user-area-slim () {

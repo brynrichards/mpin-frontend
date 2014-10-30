@@ -33,12 +33,11 @@ the following links:
 	//instead of width: 90%
 
 	@include buttons-box();
-		
+
 	&.mpinBtnDown {
-		position: absolute;
-		bottom: 11%;
-		width: 100%;
+		@include button-area-down();
 	}
+
 
 	.mpinButton {
 		@include mpinButton();
@@ -61,7 +60,7 @@ the following links:
 		&.mpinBtnError {
 			color: red;
 		}
-		
+
 		&.mpinBtnBack {
 			background: #ededed;
 			border-bottom-color: #bcbcbc;
@@ -144,7 +143,7 @@ the following links:
 	.mpinMobileBtn {
 		@include mpin-mobile-button();
 	}
-	
+
 	.mpinWarnBtn {
 		@include mpin-warning-button();
 	}

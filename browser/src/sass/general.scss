@@ -124,7 +124,7 @@ the following links:
 		}
 	}
 
-	#mpinCurrentIden {
+	#mpinCurrentIden, .mpinCurrentIdentity {
 		padding: 0px;
 		margin: 0px;
 		text-align: left;
@@ -136,8 +136,12 @@ the following links:
 		.mpinIdentityTitle {
 			font-size:14px; 
 			color: #0277db
-
 		}
+	}
+
+	.mpinIdentityRowInner {
+		line-height: 30px;
+		font-size: 14px;
 	}
 	/*	.mpinArrowUp {
 			height: 20px;
@@ -249,6 +253,10 @@ the following links:
 		.mpinIdentityText {
 			@include identity-text();
 		}
+		.mpinIdentityText {
+			@include identity-text();
+			font-size: 18px;
+		}
 
 		.mpinInfoText {
 			color: #353535;
@@ -328,7 +336,7 @@ the following links:
 }
 
 .mpPointer {
-	cursor:pointer;
+	@include mpin-logo-pointer();
 }
 
 .mpPaddTop10 {
@@ -373,8 +381,7 @@ the following links:
 	margin: 0 auto 10px;
 }
 #mpin_seconds {
-	color: #f00;
-	text-shadow:none;
+	@include  mpin-expire-second();
 	/*margin: 15px 0;*/
 }
 

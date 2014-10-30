@@ -1,5 +1,5 @@
 ﻿<div class="mpinHeader">
-    <div class="mpinLogo mpPointer"></div>
+    <div class="mpinLogo"></div>
 	<div class="mpinHome mpPointer" id="mpin_home"></div>
 </div>
 
@@ -8,14 +8,23 @@
 
 <div class="mpinMain mpNoHeight">
 	<div class="mpinBtnBox mpNoPadding">
-		<div class="mpinButton mpBtnOnlyBlue mpFontNormal">
+	
+		<div class="mpinButton mpMobileAccessNumber mpFontNormal">
 			<div class="mpbtnPadding">
 				{{txt "otp_header_btn_text"}}
 				<div id="mpinOTPNumber"></div>
 			</div>
-			<div class="mpinNoteTxt">{{txt "otp_remain_text"}}</div>
-			<div class="mpbtnExpire" id="mpin_seconds"></div>
 		</div>
+		
+		<div class='mpinTimerBox'>
+			<canvas id="mpTimer" width="41" height="41"></canvas>
+			<span class="mpLeftTime" id="mpin_seconds"></span>
+		</div>
+			
+			
+
+		
+		
 		<br><br>
 		{{txt "otp_under_btn_text"}}
 		
