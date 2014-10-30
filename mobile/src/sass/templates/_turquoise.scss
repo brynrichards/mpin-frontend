@@ -189,6 +189,14 @@ $BORDERLESS : true;
 	height: 30px;
 }
 
+@mixin mpin-menu-close() {
+	background: url('#{$IMAGES}/arrow-icon-purple.svg') top left no-repeat;
+	background-repeat: no-repeat;
+	background-size: auto 100%;
+	width: 30px;
+	height: 30px;
+}
+
 @mixin powered-by() {
 	background-image: url('#{$IMAGES}/powered-by-certivox-colour.svg');
 	color: white;

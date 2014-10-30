@@ -284,28 +284,14 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 			@include mpin-menu();
 
-
-			-moz-transition: all 0.5s ease;
-			-webkit-transition: all 0.5s ease;
-			-o-transition: all 0.5s ease;
-			transition: all 0.5s ease;
-
 			&.close {
 				bottom: 0;
-				-webkit-transition-timing-function: ease-in-out;
-				-moz-transform:rotate(180deg);
-				-webkit-transform: rotate(180deg);
-				-o-transform:rotate(180deg);
-				transform:rotate(180deg);
+				@include mpin-menu-close();
+
 			}
 
 			&.up {
 				bottom: 0;
-				-moz-transform:rotate(0deg);
-				-webkit-transform: rotate(0deg);
-				-o-transform:rotate(0deg);
-				transform:rotate(0deg);
-
 			}
 		}
 

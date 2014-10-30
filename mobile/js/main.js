@@ -1412,7 +1412,7 @@ var mpin = mpin || {};
             , innerRowImgName = "mp_btIdSettingsImg_"
             , innerRowElem =  document.getElementById(innerRowElemName)
             , innerRowImg = document.getElementById(innerRowImgName)
-            , imgRowElem = hlp.img("cog-setting.svg");
+            , imgRowElem = hlp.img("settings.svg");
 
 
 
