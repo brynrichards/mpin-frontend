@@ -129,7 +129,7 @@ var mpin = mpin || {};
 		//Extend string with extra methods
 		setStringOptions();
 
-		
+
 		//set Options
 		this.setDefaults().setOptions(options.server).setOptions(options.client);
 
@@ -159,14 +159,12 @@ var mpin = mpin || {};
 //		this.error(4004);
 //		this.beforeRenderSetup();
 
-		/*
-		 var authData = {};
-		 authData._mpinOTP = 99;
-		 authData.expireTime = 1414593174295000;
-		 authData.nowTime = 1414593174195000;
-		 
-		 this.renderOtp(authData);
-		 */
+//		 var authData = {};
+//		 authData._mpinOTP = 99;
+//		 authData.expireTime = 1414593174295000;
+//		 authData.nowTime = 1414593174195000;
+//		 
+//		 this.renderOtp(authData);
 	};
 
 	mpin.prototype.setupHtml = function () {
@@ -249,6 +247,20 @@ var mpin = mpin || {};
 		if (this.opts.mpinAuthServerURL.mpin_startsWith("http")) {
 			this.opts.useWebSocket = false;
 		}
+
+		if (this.opts.mpinAuthServerURL.mpin_startsWith("/")) {
+			var loc = window.location;
+			var newAuthServerURL;
+			if ((loc.protocol === "https:") && (this.opts.useWebSocket)) {
+				newAuthServerURL = "wss://";
+			} else {
+				newAuthServerURL = "ws://";
+			}
+			newAuthServerURL += loc.host + this.opts.mpinAuthServerURL;
+			this.opts.mpinAuthServerURL = newAuthServerURL;
+		}
+
+		this.opts.mpinAuthServerURL = (this.opts.mpinAuthServerURL.mpin_endsWith("/")) ? this.opts.mpinAuthServerURL.slice(0, this.opts.mpinAuthServerURL.length - 1) : this.opts.mpinAuthServerURL;
 
 		return this;
 	};
@@ -804,8 +816,6 @@ var mpin = mpin || {};
 			return;
 		}
 
-		//// TIMER CODE
-
 		//draw canvas Clock
 		drawTimer = function (expireOn) {
 			var start, diff;
@@ -822,8 +832,6 @@ var mpin = mpin || {};
 			timer2d.lineWidth = 5;
 			timer2d.stroke();
 		};
-
-
 
 		function expire (expiresOn) {
 			leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date())) / 1000);
@@ -843,6 +851,11 @@ var mpin = mpin || {};
 		}
 
 		callbacks.mpin_home = function () {
+			clearInterval(self.intervalExpire);
+			self.renderHome.call(self);
+		};
+
+		callbacks.mpin_cancel = function () {
 			clearInterval(self.intervalExpire);
 			self.renderHome.call(self);
 		};
@@ -2497,24 +2510,26 @@ var mpin = mpin || {};
 		"mobileAuth_text3": "with your M-Pin Mobile App.",
 		"mobileAuth_text4": "Warning: Navigating away from this page will interrupt the authentication process and you will need to start again to authenticate successfully.",
 		"otp_text1": "Your One-Time Password is:",
+		"otp_signin_header": "Sign in with One-Time Password",
 		"otp_text2": "Note: The password is only valid for<br/>{0} seconds before it expires.", // {0} will be replaced with the max. seconds
 		"otp_seconds": "Remaining: {0} sec.", // {0} will be replaced with the remaining seconds
 		"otp_expired_header": "Your One-Time Password has expired.",
 		"otp_expired_button_home": "Login again to get a new OTP",
-		"login_current_label": "Login as:",
+		"login_current_label": "Sign in as:",
 		"setup_header": "ADD AN IDENTITY TO THIS DEVICE",
 		"setup_header2": "Add an identity",
+		"setup_screen_header": "Creating ",
 		"setup_text1": "Enter your email address:",
-		"setup_label1": "Enter Address:",
+		"setup_label1": "Enter address:",
 		"setup_label2": "Device name:",
-		"setup_placeholder": "your email address",
+		"setup_placeholder": "Enter your email",
 		"setup_text2": "Your email address will be used as your identity when M-Pin authenticates you to this service.",
 		"setup_error_unathorized": "{0} has not been registered in the system.", // {0} will be replaced with the userID
 		"setup_error_server": "Cannot process the request. Please try again later.",
 		"setup_error_signupexpired": "Your signup request has been expired. Please try again.",
 		"setup_button_setup": "Setup M-Pin",
 		"setupPin_header": "Create your M-Pin with {0} digits", // {0} will be replaced with the pin length
-		"setupPin_header2": "Setup your pin", // {0} will be replaced with the pin length
+		"setupPin_header2": "Setup your PIN", // {0} will be replaced with the pin length
 		"setupPin_initializing": "Initializing...",
 		"setupPin_pleasewait": "Please wait...",
 		"setupPin_button_clear": "Clear",
@@ -2552,7 +2567,7 @@ var mpin = mpin || {};
 		"authPin_button_login": "Login",
 		"authPin_pleasewait": "Authenticating...",
 		"authPin_success": "Success",
-		"authPin_errorInvalidPin": "Incorrect pin!",
+		"authPin_errorInvalidPin": "Incorrect PIN!",
 		"authPin_errorNotAuthorized": "You are not authorized!",
 		"authPin_errorExpired": "The auth request expired!",
 		"authPin_errorServer": "Server error!",
@@ -2565,7 +2580,7 @@ var mpin = mpin || {};
 		"account_button_delete": "Remove this M-Pin Identity from this browser",
 		"account_button_delete2": "Remove Identity",
 		"account_button_reactivate": "Forgot my PIN. Send me a new activation email.",
-		"account_button_reactivate2": "Forget PIN",
+		"account_button_reactivate2": "Reset PIN",
 		"account_button_backToList": "Go back to identity list",
 		"account_button_backToList2": "Back to identity list",
 		"account_button_cancel": "Cancel and go back",
@@ -2597,9 +2612,9 @@ var mpin = mpin || {};
 		"mobile_header_txt3": "trust this computer",
 		"mobile_header_txt4": "Sign in with Smartphone",
 		"mobile_button_signin": "Sign in with this device",
-		"mobile_button_signin2": "Sign in",
+		"mobile_button_signin2": "Sign in from here",
 		"mobile_header_access_number": "Your Access Number is",
-		"identity_current_title": "change identity:",
+		"identity_current_title": "Change identity:",
 		"help_ok_btn": "Ok, Got it",
 		"help_more_btn": "I'm not sure, tell me more",
 		"help_hub_title": "M-Pin Help Hub",
@@ -2652,8 +2667,8 @@ var mpin = mpin || {};
 		"mobile_footer_btn": "Now, sign in with your Smartphone",
 		"mobile_footer_btn2": "Sign in with Phone",
 		"pinpad_setup_screen_text": "CREATE YOUR M-PIN:<br> CHOOSE 4 DIGIT",
-		"pinpad_setup_screen_text2": "Setup your pin",
-		"pinpad_default_message": "Enter your pin",
+		"pinpad_setup_screen_text2": "Setup your PIN",
+		"pinpad_default_message": "Enter your PIN",
 		"setup_device_label": "Choose your device name:",
 		"setup_device_default": "(default name)",
 		"help_text_1": "Simply choose a memorable <b>[4 digit]</b> PIN to assign to this identity by pressing the numbers in sequence followed by the 'Setup' button to setup your PIN for this identity",
@@ -2677,6 +2692,7 @@ var mpin = mpin || {};
 		"error_page_title": "Error page:",
 		"error_page_code": "Error code:",
 		"error_page_button": "Back",
+		"button_back_text": "Back",
 		"error_page_error": "Error:",
 		"error_code_4001": "We are experiencing a technical problem. Please try again later or contact the service administrator.",
 		"error_code_4002": "We are experiencing a technical problem. Please try again later or contact the service administrator.",

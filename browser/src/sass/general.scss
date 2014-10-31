@@ -124,19 +124,29 @@ the following links:
 		}
 	}
 
-	#mpinCurrentIden, .mpinCurrentIdentity {
+	/*#mpinCurrentIden, .mpinCurrentIdentity {*/
+	.mpinCurrentIdentity {
 		padding: 0px;
 		margin: 0px;
 		text-align: left;
 		padding-left: 10px;
+		
 		.mpinIdentityLabel {
 			font-size: 12px;
 			color: #444;
 		}
 		.mpinIdentityTitle {
 			font-size:14px; 
-			color: #0277db
+			color: #6e8778;;
 		}
+	}
+
+	#mpinCurrentIdenSetup {
+		padding: 0px;
+		margin: 0px;
+		text-align: left;
+		padding-left: 10px;
+		@include mpin-current-identity();
 	}
 
 	.mpinIdentityRowInner {
@@ -390,6 +400,7 @@ the following links:
 .mpinTimerBox {
 	position: relative;
 	margin: 15px;
+	text-align: center;
 
 	/*	#mpTimer {
 			border: 1px solid green;

@@ -290,7 +290,8 @@ $BGCOLOR6: #e74a00;
 	color: $BGCOLOR6;
 }
 @mixin pin-pad-input-text-error () {
-	color: $BGCOLOR6;
+	/*color: $BGCOLOR6;*/
+	color: #FF0000;
 	opacity: 1;
 }
 @mixin button-area-down () {
@@ -587,6 +588,10 @@ $BGCOLOR6: #e74a00;
 	&.mpinBtnClick {
 		border-bottom: 3px solid #44544b;
 	}
+}
+
+@mixin mpin-current-identity() {
+	line-height: 30px;
 }
 
 @mixin mpin-warning-button () {
