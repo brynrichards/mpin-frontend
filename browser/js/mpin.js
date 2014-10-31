@@ -252,7 +252,6 @@ var mpin = mpin || {};
 			var loc = window.location;
 			var newAuthServerURL;
 			if ((loc.protocol === "https:") && (this.opts.useWebSocket)) {
-
 				newAuthServerURL = "wss://";
 			} else {
 				newAuthServerURL = "ws://";
@@ -260,7 +259,6 @@ var mpin = mpin || {};
 			newAuthServerURL += loc.host + this.opts.mpinAuthServerURL;
 			this.opts.mpinAuthServerURL = newAuthServerURL;
 		}
-
 
 		this.opts.mpinAuthServerURL = (this.opts.mpinAuthServerURL.mpin_endsWith("/")) ? this.opts.mpinAuthServerURL.slice(0, this.opts.mpinAuthServerURL.length - 1) : this.opts.mpinAuthServerURL;
 
