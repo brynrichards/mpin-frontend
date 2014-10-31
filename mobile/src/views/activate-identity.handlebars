@@ -1,7 +1,9 @@
 <!-- User section -->
-
-<header id="header">
-  <div id="mpinLogo"></div>
+<header id="topNav">
+    <div id="mp_action_home">
+    </div>
+    <div id="logo">
+    </div>
 </header>
 
 <!-- Input button -->
@@ -24,11 +26,19 @@
   </div>
 
   <div id="buttonsContainer">
+
       <div class="mpinBtn" id="mpin_action_setup">
           <span class="btnLabel">{{hlp 'setupReady_button_go' }}</span>
       </div>
+
       <div class="mpinBtn" id="mpin_action_resend">
-          <span class="btnLabel">{{hlp 'setupReady_button_resend' }} <br> {{hlp 'setupReady_button_resend_cont' }}</span>
+          <span class="btnLabel">{{hlp 'setupReady_button_resend' }}</span>
+      </div>
+
+      <div class="mpinBtn" id="mpin_accounts">
+        <span class="btnLabel">
+          {{hlp 'setupNotReady_button_back' }}
+        </span>
       </div>
   </div> 
 

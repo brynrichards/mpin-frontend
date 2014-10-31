@@ -1147,6 +1147,13 @@ var mpin = mpin || {};
             if (self.checkBtn(this))
                 self.actionResend.call(self, this);
         };
+        //identities list
+        callbacks.mpin_accounts = function() {
+
+            self.renderAccountsBeforeSetup();
+
+        };
+
         this.render("activate-identity", callbacks, {email: email});
     };
 
@@ -1286,8 +1293,6 @@ var mpin = mpin || {};
     };
 
     mpin.prototype.renderAccountsBeforeSetupPanel = function(back) {
-
-        console.log("Comming here");
 
         var self = this, 
             callbacks = {},
@@ -1513,7 +1518,8 @@ var mpin = mpin || {};
  
     mpin.prototype.renderIdentityNotActive = function(email) {
         var callbacks = {}, self = this;
- 
+        var email = email? email: self.getDisplayName(this.identity);
+
         callbacks.mp_action_home = function(evt) {
 
             self.renderAccountsBeforeSetup();
@@ -1535,6 +1541,8 @@ var mpin = mpin || {};
             self.renderAccountsBeforeSetup();
 
         };
+
+        console.log("@@@@@@@@@@@@@@Dumping email", email);
 
         this.render("identity-not-active", callbacks, {email: email});
     };
@@ -1567,6 +1575,8 @@ var mpin = mpin || {};
             var circlesHolder = document.getElementById("circlesHolder");
 
             // circlesHolder.style.display = 'flex';
+
+            console.log("Executing addToPin");
 
             self.addToPin(e.target.getAttribute("data-value"));
             // return false;
@@ -1613,10 +1623,6 @@ var mpin = mpin || {};
     //
     mpin.prototype.addToPin = function(digit, iserror) {
 
-        var self = this;
-
-        this.display("");
-
         var pinpadContainer = document.getElementById('inputContainer')
             , pinElement = document.getElementById('pinpad-input')
             , element
@@ -1624,7 +1630,10 @@ var mpin = mpin || {};
             , circlesHolder = document.getElementById('circlesHolder')
             , accNumHolder = document.getElementById('accNumHolder')
             , ifDigit = new RegExp('[0-9]')
-            , errorCodes = document.getElementById("codes");
+            , errorCodes = document.getElementById("codes")
+            , self = this;
+
+        this.display("");
 
         if(ifDigit.test(parseInt(digit))) {
 
