@@ -1241,11 +1241,15 @@ var mpin = mpin || {};
         //     self.setIdentity(self.ds.getDefaultIdentity(), false);
         // }
 
-        menuBtn.onclick = function(evt) {
-            document.getElementById('accountTopBar').style.height = "";
-            menuBtn.className = 'up';
+        if(menuBtn) {
 
-        };
+            menuBtn.onclick = function(evt) {
+                document.getElementById('accountTopBar').style.height = "";
+                menuBtn.className = 'up';
+
+            };
+
+        }
 
         addEmptyItem = function(cnt) {
             var p = document.createElement("div");
@@ -1254,10 +1258,12 @@ var mpin = mpin || {};
         };
  
         addMpinBack = function () {
-            renderElem = document.getElementById('accountTopBar').appendChild(document.createElement("div"));
-            renderElem.id = "mp_back";
-            mpBack = document.getElementById("mp_back");
-            mpBack.innerHTML = self.readyHtml("accounts-panel", {});
+            if(document.getElementById('accountTopBar')) {
+                renderElem = document.getElementById('accountTopBar').appendChild(document.createElement("div"));
+                renderElem.id = "mp_back";
+                mpBack = document.getElementById("mp_back");
+                mpBack.innerHTML = self.readyHtml("accounts-panel", {});
+            }
         }
  
 
@@ -2692,8 +2698,8 @@ var mpin = mpin || {};
         "setupDone_text3": "",
         "setupDone_button_go": "Sign in with this M-Pin",
         "setupReady_header": "VERIFY YOUR IDENTITY",
-        "setupReady_text1": "Your M-Pin identity",
-        "setupReady_text2": "Click the link on the email,to confirm your identity and proceed.",
+        "setupReady_text1": "We have sent you an email to",
+        "setupReady_text2": "Click the link in the email to confirm your identity and proceed",
         "setupReady_text3": "We have just sent you an email, simply click the link to verify your identity.",
         "setupReady_button_go": "I confirmed my email",
         "setupReady_button_go_cont": "Setup your M-Pin now",
