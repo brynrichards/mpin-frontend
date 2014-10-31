@@ -2720,7 +2720,7 @@ var mpin = mpin || {};
         "account_button_backToList": "Back to identity list",
         "account_button_cancel": "Cancel and go back",
         "account_delete_question": "Are you sure you wish to remove this M-Pin Identity from this browser?",
-        "account_delete_button": "Yes, Remove it",
+        "account_delete_button": "Yes, remove it",
         "account_reactivate_question": "Are you sure you wish to reactivate this M-Pin Identity?",
         "account_reactivate_button": "Yes, reactivate this M-Pin Identity",
         "noaccount_header": "No identities have been added to this browser!",
