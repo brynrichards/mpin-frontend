@@ -80,11 +80,12 @@ $BORDERLESS : true;
 }
 
 @mixin pinpad() {
-	background: white /* Old browsers */
+	background: white;
 }
 
 @mixin pinpad-accessnumber() {
-	background: white; /* Old browsers */
+	background: #6d8778;
+	color: white;
 }
 
 @mixin access-number() {

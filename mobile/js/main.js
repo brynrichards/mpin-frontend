@@ -962,7 +962,6 @@ var mpin = mpin || {};
         if (this.isAccNumber) {
 
             // Change class if ac number
-
             pinPad.className = 'access-number';
 
         } else {
@@ -1613,7 +1612,7 @@ var mpin = mpin || {};
         }
     };
     //
-    mpin.prototype.addToPin = function(digit) {
+    mpin.prototype.addToPin = function(digit, iserror) {
 
         var self = this;
 
@@ -1626,7 +1625,7 @@ var mpin = mpin || {};
             , circlesHolder = document.getElementById('circlesHolder')
             , accNumHolder = document.getElementById('accNumHolder')
             , ifDigit = new RegExp('[0-9]')
-            , pinpadDisplay = document.getElementById("codes");
+            , errorCodes = document.getElementById("codes");
 
         if(ifDigit.test(parseInt(digit))) {
 
@@ -1637,7 +1636,7 @@ var mpin = mpin || {};
             if(this.isAccNumber && pinElement.value.length <= self.opts.accessNumberDigits) {
                 accNumHolder.style.display = 'block';
                 accNumHolder.innerHTML += digit;
-            } else {
+            } else if (!this.isAccNumber) {
 
                 // Use setTimeout to trigger the animation
 
@@ -1687,14 +1686,22 @@ var mpin = mpin || {};
 
             // Clear the ac num
 
-            if (this.isAccNumber) {
+            if (this.isAccNumber && iserror) {
+
                 accNumHolder.innerHTML = "";
                 pinElement.value = "";
-                this.enableNumberButtons(true);
                 //set placeholder to access Number text
-                pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
-                pinpadDisplay.style.display = 'block';
+                // errorCodes.innerHTML = hlp.text("pinpad_placeholder_text2");
+                // errorCodes.style.display = 'block';
+                this.enableNumberButtons(true);
 
+            } else if(this.isAccNumber && !iserror) {
+                accNumHolder.innerHTML = "";
+                pinElement.value = "";
+                //set placeholder to access Number text
+                // errorCodes.innerHTML = hlp.text("pinpad_placeholder_text2");
+                // errorCodes.style.display = 'block';
+                this.enableNumberButtons(true);
             }
 
             // Disable the clear and the sign in buttons
@@ -1791,7 +1798,7 @@ var mpin = mpin || {};
             elemForErrcode.className = "error";
             elemForErrcode.innerHTML = message;
 
-            self.addToPin("clear");
+            self.addToPin("clear", false);
         }
 
         if(clear) {

@@ -147,6 +147,10 @@ the following links:
 	&.access-number {
 		@include pinpad-accessnumber();
 
+		button {
+			color: white !important;
+		}
+
 	}
 
 	// Pinbat buttons
