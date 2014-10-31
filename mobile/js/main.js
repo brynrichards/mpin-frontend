@@ -2717,7 +2717,7 @@ var mpin = mpin || {};
         "deactivated_button_register": "Register again",
         "account_button_addnew": "Add a new identity to this list",
         "account_button_delete": "Remove Identity",
-        "account_button_reactivate": "Forget PIN",
+        "account_button_reactivate": "Reset PIN",
         "account_button_backToList": "Back to identity list",
         "account_button_cancel": "Cancel and go back",
         "account_delete_question": "Are you sure you wish to remove this M-Pin Identity from this browser?",
