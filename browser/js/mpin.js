@@ -1725,7 +1725,7 @@ var mpin = mpin || {};
 			var titleElem = document.getElementById("mpinCurrentIdentityTitle");
 			if (titleElem) {
 				titleElem.innerHTML = hlp.text("identity_current_title");
-				titleElem.style.fontSize = "16px";
+				titleElem.style.lineHeight = "24px";
 				addClass("mpinCurrentIden", "mpHide");
 			}
 
@@ -1753,7 +1753,8 @@ var mpin = mpin || {};
 			var titleElem = document.getElementById("mpinCurrentIdentityTitle");
 			if (titleElem) {
 				titleElem.innerHTML = hlp.text("login_current_label");
-				titleElem.style.fontSize = "12px";
+//				titleElem.style.fontSize = "12px";
+				titleElem.style.lineHeight = "12px";
 				removeClass("mpinCurrentIden", "mpHide");
 				removeClass(titleElem, "mpHide");
 			}
@@ -2662,6 +2663,7 @@ var mpin = mpin || {};
 		"activate_btn1": "Activated your identity via email? Setup your M-Pin now",
 		"activate_btn2": "Not received the activation email? Send it again!",
 		"settings_title": "IDENTITY OPTIONS",
+		"settings_title2": "Edit identity",
 		"landing_button_newuser": "I'm new to M-Pin, get me started",
 		"mobile_header": "GET THE M-PIN SMARTPHONE APP",
 		"mobile_footer_btn": "Now, sign in with your Smartphone",
