@@ -36,7 +36,10 @@ the following links:
 	height: 60%;
 	overflow: auto;
 	@include identity-list();
-
+	
+	&.mpNoHeight {
+		height: auto;
+	}
 
 	ul {
 		padding: 0px;
@@ -60,17 +63,21 @@ the following links:
 		@include setting-icon();
 	}
 
-	a.mpinSettingsRow {
+	.mpinSettingsRow {
 		/*word-break: break-all;*/
 		/*width: 75%;*/
-		line-height: 22px;
+		/*line-height: 16px;*/
 		text-align: left;
 		margin-left: 2px;
-		padding-top: 6px;
+		padding-top: 5px;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;
 		text-decoration: none;
 		display: block;
+		
+		&.mpVerCenter {
+			line-height: 16px;
+		}
 	}
 }
