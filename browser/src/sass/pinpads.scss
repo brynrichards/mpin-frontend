@@ -43,7 +43,11 @@ the following links:
 
 	.mpinInputIn {
 		margin: 0 auto;
+<<<<<<< HEAD
 		width: 90%;
+=======
+		width: 100%;
+>>>>>>> e2b1996d019d40b338d98849d4855f4d37c09fbd
 		padding: 7% 1%;
 		text-align: center;
 
@@ -66,10 +70,17 @@ the following links:
 	}
 
 	.mpinCircle {
+<<<<<<< HEAD
 		width: 25px;
 		height: 25px;
 		display: inline-block;
 		margin: 1%;
+=======
+		width: 35px;
+		height: 35px;
+		/*float: left;*/
+		display: inline-block;
+>>>>>>> e2b1996d019d40b338d98849d4855f4d37c09fbd
 
 		.mpinCircleIn {
 			@include pinpad-circlein();

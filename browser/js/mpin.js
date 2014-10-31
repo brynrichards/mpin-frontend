@@ -1033,6 +1033,11 @@ var mpin = mpin || {};
 			self.renderHelpTooltip.call(self, "login");
 		};
 
+<<<<<<< HEAD
+=======
+		console.log("this.cfg.pinSize ::: ", this.cfg.pinSize);
+
+>>>>>>> e2b1996d019d40b338d98849d4855f4d37c09fbd
 		this.render("login", callbacks, {pinSize: this.cfg.pinSize});
 		this.enableNumberButtons(true);
 		this.bindNumberButtons();
@@ -1662,6 +1667,10 @@ var mpin = mpin || {};
 			var newCircle = document.createElement('div');
 			newCircle.className = "mpinCircleIn";
 			var circleID = "mpin_circle_" + (this.pinpadInput.length - 1);
+<<<<<<< HEAD
+=======
+			console.log("this.pinpadInput.length:::", this.pinpadInput.length);
+>>>>>>> e2b1996d019d40b338d98849d4855f4d37c09fbd
 			document.getElementById(circleID).appendChild(newCircle);
 		} else if (!isErrorFlag) {
 			removeCircles();

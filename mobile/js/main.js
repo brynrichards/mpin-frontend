@@ -1783,13 +1783,13 @@ var mpin = mpin || {};
  
         var elemForErrcode = document.getElementById('codes');
 
-        if(message === 'INCORRECT M-PIN!') {
+        if(message === hlp.text("authPin_errorInvalidPin")) {
 
             elemForErrcode.style.display = "block";
             elemForErrcode.className = "error";
             elemForErrcode.innerHTML = message;
 
-            self.addToPin("clear");
+            self.addToPin("clear", true);
         } 
 
         if(message === hlp.text("authPin_errorInvalidAccessNumber")) {
@@ -2706,7 +2706,7 @@ var mpin = mpin || {};
         "authPin_button_next": "Next",
         "authPin_pleasewait": "Authenticating...",
         "authPin_success": "Success!",
-        "authPin_errorInvalidPin": "Incorrect pin!",
+        "authPin_errorInvalidPin": "Incorrect Pin!",
         "authPin_errorInvalidAccessNumber": "Invalid access number!",
         "authPin_errorNotAuthorized": "You are not authorized!",
         "authPin_errorExpired": "The auth request expired!",
