@@ -1542,8 +1542,6 @@ var mpin = mpin || {};
 
         };
 
-        console.log("@@@@@@@@@@@@@@Dumping email", email);
-
         this.render("identity-not-active", callbacks, {email: email});
     };
  
@@ -1577,6 +1575,10 @@ var mpin = mpin || {};
             // circlesHolder.style.display = 'flex';
 
             console.log("Executing addToPin");
+
+            if(e.target.hasAttribute("disabled")) {
+                return;
+            }
 
             self.addToPin(e.target.getAttribute("data-value"));
             // return false;
