@@ -81,7 +81,7 @@ var mpin = mpin || {};
             setDeviceName: false
         },
         expireOtpSeconds: 99,
-        touchevents: false
+        touchevents: true
     };
  
     /**
@@ -1615,6 +1615,8 @@ var mpin = mpin || {};
     //
     mpin.prototype.addToPin = function(digit) {
 
+        var self = this;
+
         this.display("");
 
         var pinpadContainer = document.getElementById('inputContainer')
@@ -1632,7 +1634,7 @@ var mpin = mpin || {};
 
             pinElement.value += digit;
 
-            if(this.isAccNumber) {
+            if(this.isAccNumber && pinElement.value.length <= self.opts.accessNumberDigits) {
                 accNumHolder.style.display = 'block';
                 accNumHolder.innerHTML += digit;
             } else {

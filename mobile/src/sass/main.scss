@@ -696,7 +696,11 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	.default {
 		color: white;
 		background: #868aac;
-		box-shadow: inset 5px 0 0 #5d6078;	
+		box-shadow: inset 5px 0 0 #5d6078;
+
+		.editImg {
+			@include settings-img-active();
+		}
 	}
 
 	.mp_titleItem {

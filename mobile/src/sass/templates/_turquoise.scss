@@ -488,8 +488,22 @@ $BORDERLESS : true;
 
 @mixin settings-img() {
 	background-image: url('#{$IMAGES}/settings.svg');
-	width: 14px;
-	height: 14px;
+	width: 90%;
+	height: 90%;
 	background-repeat: no-repeat;
 	display: block;
+	position: relative;
+	top: 5px;
+	right: 5px;
+}
+
+@mixin settings-img-active() {
+	background-image: url('#{$IMAGES}/setting-white.svg') !important;
+	width: 90%;
+	height: 90%;
+	background-repeat: no-repeat;
+	display: block;
+	position: relative;
+	top: 5px;
+	right: 5px;
 }
