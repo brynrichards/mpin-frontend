@@ -746,14 +746,14 @@ var mpin = mpin || {};
 
         _textLoginBtn.innerText = hlp.text("setup_btn_text");
 
-        pinpadInput.placeholder = hlp.text("pinpad_placeholder_text");
+        pinpadInput.placeholder = hlp.text("pinpad_placeholder_setup");
 
         // Create dummy input els
         if (!this.isAccNumber) {
 
             var renderElem = document.getElementById('codes');
             renderElem.style.display = 'block';
-            renderElem.innerHTML = hlp.text("pinpad_placeholder_text");
+            renderElem.innerHTML = hlp.text("pinpad_placeholder_setup");
 
             for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
                 var circleA = document.createElement("div");
@@ -1543,7 +1543,6 @@ var mpin = mpin || {};
         var self = this, btEls;
         btEls = document.getElementsByClassName("btn");
 
-
         function mEventsHandler(e) {
 
             e.stopPropagation();
@@ -1567,7 +1566,7 @@ var mpin = mpin || {};
 
             var circlesHolder = document.getElementById("circlesHolder");
 
-            circlesHolder.style.display = 'flex';
+            // circlesHolder.style.display = 'flex';
 
             self.addToPin(e.target.getAttribute("data-value"));
             // return false;
@@ -1636,7 +1635,7 @@ var mpin = mpin || {};
             if(this.isAccNumber && pinElement.value.length <= self.opts.accessNumberDigits) {
                 accNumHolder.style.display = 'block';
                 accNumHolder.innerHTML += digit;
-            } else if (!this.isAccNumber) {
+            } else if (!this.isAccNumber && pinElement.value.length <= mpin.cfg.pinSize) {
 
                 // Use setTimeout to trigger the animation
 
@@ -2662,9 +2661,9 @@ var mpin = mpin || {};
         "otp_expired_header": "Your One-Time Password has expired.",
         "otp_expired_button_home": "Login again to get a new OTP",
         "setup_header": "Add an identity",
-        "setup_text1": "Email Address:",
+        "setup_text1": "Email address:",
         "setup_text2": "Your email address will be used as your identity when M-Pin authenticates you to this service.",
-        "setup_text3": "enter your email",
+        "setup_text3": "Enter your email",
         "setup_error_unathorized": "{0} has not been registered in the system.", // {0} will be replaced with the userID
         "setup_error_server": "Cannot process the request. Please try again later.",
         "setup_error_signupexpired": "Your signup request has been expired. Please try again.",
@@ -2727,6 +2726,7 @@ var mpin = mpin || {};
         "noaccount_header": "No identities have been added to this browser!",
         "noaccount_button_add": "Add a new identity",
         "pinpad_placeholder_text": "Enter your pin",
+        "pinpad_placeholder_setup": "Setup your pin",
         "pinpad_placeholder_text2": "Enter access number",
         "logout_text1": "YOU ARE NOW LOGGED IN",
         "logout_button": "Logout",
