@@ -2520,7 +2520,7 @@ var mpin = mpin || {};
 		"setup_header2": "Add an identity",
 		"setup_screen_header": "Creating ",
 		"setup_text1": "Enter your email address:",
-		"setup_label1": "Enter address:",
+		"setup_label1": "Email address:",
 		"setup_label2": "Device name:",
 		"setup_placeholder": "Enter your email",
 		"setup_text2": "Your email address will be used as your identity when M-Pin authenticates you to this service.",
