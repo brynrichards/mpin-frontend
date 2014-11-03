@@ -31,7 +31,7 @@ the following links:
 
 // GLOBAL CONFIGS
 
-$IMAGES : "../images/%templatename%/";
+$IMAGES : "../images/%templatename%";
 $BORDERLESS : true;
 
 $BUTTON_COLOR: #ffffff;
@@ -91,7 +91,7 @@ $BGCOLOR6: #e74a00;
 	margin: 5px 0;
 	width: 85px;
 	float: right;
-	background: url('#{$IMAGES}m-pin.svg') no-repeat;
+	background: url('#{$IMAGES}/m-pin.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: right bottom;
 	height: 24px;
@@ -101,7 +101,7 @@ $BGCOLOR6: #e74a00;
 @mixin header-home () {
 	width: 20px;
 	height: 16px;
-	background: url('#{$IMAGES}home-white.svg') no-repeat;
+	background: url('#{$IMAGES}/home-white.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: left;
 	margin: 7px 6px;
@@ -172,7 +172,7 @@ $BGCOLOR6: #e74a00;
 		color: #fff;
 	}
 	.mpinSettings {
-		/*		background: url('#{$IMAGES}compose.svg') center no-repeat;
+		/*		background: url('#{$IMAGES}/compose.svg') center no-repeat;
 				background-size: auto 100%;
 				width: 30px;
 				height: 30px;*/
@@ -195,7 +195,7 @@ $BGCOLOR6: #e74a00;
 
 @mixin help-popup-corner-icon () {
 	content: '';
-	background-image: url('#{$IMAGES}mark.svg');
+	background-image: url('#{$IMAGES}/mark.svg');
 	width: 32px;
 	height: 31px;
 	display: block;
@@ -212,9 +212,9 @@ $BGCOLOR6: #e74a00;
 @mixin setting-icon($type:white) {
 	/*border: 1px solid grey;*/
 	@if $type == "white" {
-		background: url('#{$IMAGES}compose.svg') center no-repeat;
+		background: url('#{$IMAGES}/compose.svg') center no-repeat;
 	} @else {
-		background: url('#{$IMAGES}compose-green.svg') center no-repeat;
+		background: url('#{$IMAGES}/compose-green.svg') center no-repeat;
 	}
 	background-size: auto 100%;
 	width: 16px;
@@ -459,7 +459,7 @@ $BGCOLOR6: #e74a00;
 
 @mixin logo() {
 	height: 35px;
-	background-image: url('#{$IMAGES}m-pin-grey.svg');
+	background-image: url('#{$IMAGES}/m-pin-grey.svg');
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
@@ -488,7 +488,7 @@ $BGCOLOR6: #e74a00;
 @mixin mobile-icon() {
 	width: 30px !important;
 	height: 42px !important;
-	background-image: url('#{$IMAGES}phone-green.svg');
+	background-image: url('#{$IMAGES}/phone-green.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
@@ -502,7 +502,7 @@ $BGCOLOR6: #e74a00;
 @mixin desktop-icon() {
 	width: 50px !important;
 	height: 42px !important;
-	background-image: url('#{$IMAGES}computer-blue.svg');
+	background-image: url('#{$IMAGES}/computer-blue.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
@@ -560,14 +560,14 @@ $BGCOLOR6: #e74a00;
 }
 
 @mixin button-icon-mobile () {
-	background-image: url('#{$IMAGES}iphone-white.svg');
+	background-image: url('#{$IMAGES}/iphone-white.svg');
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
 }
 
 @mixin button-icon-desktop () {
-	background-image: url('#{$IMAGES}screen.svg');
+	background-image: url('#{$IMAGES}/screen.svg');
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;
@@ -640,7 +640,7 @@ $BGCOLOR6: #e74a00;
 @mixin email-input-before () {
 	width: 40px !important;
 	height: 20px !important;
-	background-image: url('#{$IMAGES}user-green.svg');
+	background-image: url('#{$IMAGES}/user-green.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
@@ -650,7 +650,7 @@ $BGCOLOR6: #e74a00;
 @mixin device-input-before () {
 	width: 40px !important;
 	height: 20px !important;
-	background-image: url('#{$IMAGES}screen-green.svg');
+	background-image: url('#{$IMAGES}/screen-green.svg');
 
 	background-repeat: no-repeat;
 	background-position: center;
@@ -692,7 +692,7 @@ $BGCOLOR6: #e74a00;
 }
 
 @mixin arrow-up-icon () {
-	background-image: url('#{$IMAGES}settings-icon.svg');
+	background-image: url('#{$IMAGES}/settings-icon.svg');
 	width: 16px !important;
 	height: 16px !important;
 	background-repeat: no-repeat;
@@ -703,7 +703,7 @@ $BGCOLOR6: #e74a00;
 }
 
 @mixin mpin-error-icon() {
-	background-image: url('#{$IMAGES}mark.svg');
+	background-image: url('#{$IMAGES}/mark.svg');
 	width: 65px;
 	height: 65px;
 	background-repeat: no-repeat;
@@ -715,7 +715,7 @@ $BGCOLOR6: #e74a00;
 
 
 @mixin arrow-icon() {
-	background-image: url('#{$IMAGES}arrow.svg');
+	background-image: url('#{$IMAGES}/arrow.svg');
 	width: 1.5em;
 	height: 1.5em;
 	padding: 20px;
@@ -723,7 +723,7 @@ $BGCOLOR6: #e74a00;
 }
 
 @mixin arrow-icon-open() {
-	background-image: url('#{$IMAGES}arrow-icon.svg');
+	background-image: url('#{$IMAGES}/arrow-icon.svg');
 	width: 1.5em;
 	height: 1.5em;
 	padding-top: 15px;
@@ -753,8 +753,8 @@ $BGCOLOR6: #e74a00;
 @mixin footer-helphub() {
 	width: 75px;
 	height: 22px;
-	/*background: url('#{$IMAGES}m-pin-grey.svg') no-repeat;*/
-	background: url('#{$IMAGES}m-pin-color.svg') no-repeat;
+	/*background: url('#{$IMAGES}/m-pin-grey.svg') no-repeat;*/
+	background: url('#{$IMAGES}/m-pin-color.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: left;
 	position: relative;
@@ -765,8 +765,8 @@ $BGCOLOR6: #e74a00;
 	width: 72px;
 	height: 14px;
 	float: right;
-	/*background: url('#{$IMAGES}powered-by-certivox.svg') no-repeat;*/
-	background: url('#{$IMAGES}certivox-color.svg') no-repeat;
+	/*background: url('#{$IMAGES}/powered-by-certivox.svg') no-repeat;*/
+	background: url('#{$IMAGES}/certivox-color.svg') no-repeat;
 	background-size: auto 100%;
 	background-position: right bottom;
 	margin-top: 8px;
