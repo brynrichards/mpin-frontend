@@ -583,8 +583,6 @@ var mpin = mpin || {};
             diff = totalSec - expireOn;
             start = -0.5 + ((diff / totalSec) * 2);
             start = Math.round(start * 100) / 100;
-
-            console.log(">>>", expireOn, "---", totalSec);
             timer2d.clearRect(0, 0, timerEl.width, timerEl.height);
 
             timer2d.beginPath();
