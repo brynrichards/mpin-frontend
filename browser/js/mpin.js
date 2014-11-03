@@ -39,12 +39,13 @@ var mpin = mpin || {};
 	var lang = {}, hlp = {}, loader, MPIN_URL_BASE, IMAGES_PATH;
 	MPIN_URL_BASE = "%URL_BASE%";
 	IMAGES_PATH = MPIN_URL_BASE + "/images/";
+	BUILD_DATE = "";
 
 	//CONSTRUCTOR 
 	mpin = function (options) {
 		var self = this, domID;
 
-		loader(MPIN_URL_BASE + "/css/main.css", function () {
+		loader(MPIN_URL_BASE + "/css/main.css?b=" + BUILD_DATE, "css", function () {
 			var opts = {};
 
 			Handlebars.registerHelper("txt", function (optionalValue) {
@@ -2416,9 +2417,9 @@ var mpin = mpin || {};
 
 
 	//loader 
-	loader = function (url, callback) {
-		var type = url.split(".");
-		type = type[type.length - 1];
+	loader = function (url, type, callback) {
+		// var type = url.split(".");
+		// type = type[type.length - 1];
 		if (type === "css") {
 			var script = document.createElement('link');
 			script.setAttribute('rel', 'stylesheet');
