@@ -181,6 +181,10 @@ info.mpinHelpInfo {
 .mpinHelpAnswerBlock {
 	@include help-box();
 }
+.mpinHelpAnswerBlock2 {
+	@include help-box();
+	height: 65%;
+}
 
 .mpinHelpHubFooter {
 	/*width: 90%;*/

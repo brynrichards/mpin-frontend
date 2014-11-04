@@ -3,31 +3,33 @@
 	<div class="mpinHome mpPointer" id="mpin_home"></div>
 </div>
 
-<div class="mpinHeaderRow">
-	{{txt "activate_header"}}
+<div class="mpinIdentityRow">
+	<div class="mpinIdentity mpLeft20 mpBrowserTop" id="mpinUser">
+		<div id="mpinCurrentIden" class="mpinIdentityRowInner">
+			{{txt "activate_header2"}}
+		</div>
+	</div>
 </div>
 
 <div class="mpinMain mpPaddTop10">
 	<div class="mpinCenter mpinCenter5">
-		{{txt "activate_text1"}}
+		{{txt "activate_text_new1"}}
 		
-		<p class="mpinIdentityText">
+		<p class="mpIdentityBrowser">
 			{{ data.email }}
 		</p>
 		
-		{{txt "activate_text2"}}
-		
 		<p class="mpinInfoText">
-			{{txt "activate_text3"}}
+			{{txt "activate_text_new2"}}
 		</p>
     </div>
 	
 	<div class="mpinBtnBox mpinBtnDown">
-		<div class="mpinButton" id="mpin_activate">
-			{{txt "activate_btn1"}}
+		<div class="mpinButton mpinBtnClick mpinButtonDark" id="mpin_activate">
+			{{txt "activate_btn_new1"}}
 		</div>
-		<div class="mpinButton" id="mpin_resend">
-			{{txt "activate_btn2"}}
+		<div class="mpinButton mpinBtnClick mpinBtnBack" id="mpin_resend">
+			{{txt "activate_btn_new2"}}
 		</div>
 	</div>
 		

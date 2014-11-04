@@ -94,6 +94,9 @@ the following links:
 		border-bottom:1px solid #00a800;
 		margin:0px 12px;
 	}
+	&.mpMobColor {
+		@include mobile-color();
+	}
 }
 
 .mpinIdentityRow {
@@ -169,6 +172,13 @@ the following links:
 	.mpinIdentity {
 		text-align: center;
 		padding: 5px 0px;
+
+		//turquoise theme fix
+		&.mpBrowserTop {
+			text-align: left;
+			padding-left: 10px;
+		}
+
 	}
 }
 
@@ -262,14 +272,13 @@ the following links:
 			}
 		}
 
-
-
-		.mpinIdentityText {
-			@include identity-text();
-		}
 		.mpinIdentityText {
 			@include identity-text();
 			font-size: 14px;
+		}
+
+		.mpIdentityBrowser {
+			color: $BGCOLOR;
 		}
 
 		.mpinInfoText {
@@ -380,7 +389,8 @@ the following links:
 }
 
 .marTop20 {
-	margin-top: 20px;
+	margin-top: 10px;
+	@include margin-top();
 }
 
 .border0 {
