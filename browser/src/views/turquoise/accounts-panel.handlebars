@@ -7,7 +7,11 @@
 	<div class="mpinButton mpinBtnClick" id="mpin_add_identity">
 		{{txt "account_button_add"}}
 	</div>
-	<div class="mpinButton mpinMobileBtn mpinBtnClick" id="mpin_phone">
-		{{txt "signin_button_mobile"}}
-	</div>
+	
+	{{#if data.mobileSupport }}
+		<div class="mpinButton mpinMobileBtn mpinBtnClick" id="mpin_phone">
+			{{txt "signin_button_mobile"}}
+		</div>
+	{{/if}}
+	
 </div>

@@ -10,7 +10,7 @@ the following links:
 
   * Our Terms and Conditions -
     http://www.certivox.com/about-certivox/terms-and-conditions/
-  
+	
   * Our Security and Privacy -
     http://www.certivox.com/about-certivox/security-privacy/
 
@@ -78,6 +78,29 @@ help#mpinHelpTag {
 				padding:12px 0px;
 			}
 		}
+
+		.mpinBtnContainer {
+			@include buttons-box();
+
+			.mpinButton {
+				@include mpinButton();
+				&.mpinBtnClick {
+					
+				}
+			}
+			
+			.mpinButtonDark {
+				@include mpin-dark-button();
+			}
+			
+			.mpinBtnBack {
+				background: #ededed;
+				border-bottom-color: #bcbcbc;
+				color: #000;
+				
+			}
+		}
+
 	}
 
 	// Option choose styling

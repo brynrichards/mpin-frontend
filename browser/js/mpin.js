@@ -105,7 +105,8 @@ var mpin = mpin || {};
 		restrictedOptions: "signatureURL; mpinAuthServerURL; timePermitsURL",
 		defaultOptions: {
 			identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-			setDeviceName: false
+			setDeviceName: false,
+			mobileSupport: true
 		},
 		expireOtpSeconds: 99
 	};
@@ -234,7 +235,7 @@ var mpin = mpin || {};
 		_options += "onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; signatureURL; certivoxURL; ";
 		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; customHeaders; authenticateRequestFormatter; accessNumberRequestFormatter; ";
 		_options += "registerRequestFormatter; identityCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; timePermitsStorageURL; authenticateURL; ";
-		_options += "language; customLanguageTexts; setDeviceName; getAccessNumberURL";
+		_options += "language; customLanguageTexts; setDeviceName; getAccessNumberURL; mobileSupport";
 		_opts = _options.split("; ");
 		this.opts || (this.opts = {});
 
@@ -416,7 +417,11 @@ var mpin = mpin || {};
 			self.renderHelpHub.call(self);
 		};
 
-		this.render("landing", callbacks);
+		if (this.opts.mobileSupport) {
+			this.render("landing", callbacks, {mobileSupport: this.opts.mobileSupport});
+		} else {
+			this.renderHome();
+		}
 
 		this.getAccessNumber();
 	};
@@ -447,8 +452,8 @@ var mpin = mpin || {};
 			self.toggleHelp.call(self);
 			self.renderHelpTooltip.call(self, "home");
 		};
-
-		this.render('home', callbacks);
+		//mobile SUPPORT :::
+		this.render('home', callbacks, {mobileSupport: this.opts.mobileSupport});
 
 		if (this.opts.onLoaded) {
 			this.opts.onLoaded();
@@ -1065,6 +1070,11 @@ var mpin = mpin || {};
 
 		this.intervalID || (this.intervalID = {});
 
+		//mobileSupport false stop HERE :::
+		if (!this.opts.mobileSupport) {
+			return;
+		}
+		
 		//// TIMER CODE
 		if (document.getElementById("mpTimer")) {
 			timerEl = document.getElementById("mpTimer");
@@ -1234,6 +1244,9 @@ var mpin = mpin || {};
 			if (self.checkBtn(this))
 				self.actionResend.call(self, this);
 		};
+		callbacks.mpin_accounts_btn = function () {
+			self.renderLogin.call(self, true);
+		};
 
 		this.render("activate-identity", callbacks, {email: email});
 	};
@@ -1315,7 +1328,7 @@ var mpin = mpin || {};
 
 		//inner ELEMENT
 		renderElem = document.getElementById("mpin_identities");
-		renderElem.innerHTML = this.readyHtml("accounts-panel", {});
+		renderElem.innerHTML = this.readyHtml("accounts-panel", {mobileSupport: this.opts.mobileSupport});
 		renderElem.style.display = "block";
 
 		// button
@@ -1326,9 +1339,11 @@ var mpin = mpin || {};
 			self.renderSetupHome2.call(self);
 		};
 		// button
-		document.getElementById("mpin_phone").onclick = function () {
-			self.renderMobileSetup.call(self);
-		};
+		if (this.opts.mobileSupport) {
+			document.getElementById("mpin_phone").onclick = function () {
+				self.renderMobileSetup.call(self);
+			};
+		}
 
 
 		//arrow show pinpad

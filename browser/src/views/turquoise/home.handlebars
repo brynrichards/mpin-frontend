@@ -8,11 +8,13 @@
 
 <div class="mpinMain mpPaddTop10"> 
 	<div class="mpinBtnBox">
-	
-		<div class="mpinButton mpinMobileBtn mpinBtnClick mpinBtnBig" id="mpin_mobile">
-			<div class="mpinBtnIcon mpMobile"></div>
-			{{txt "signin_mobile_btn_text2"}}
-		</div>
+		
+		{{#if data.mobileSupport }}
+			<div class="mpinButton mpinMobileBtn mpinBtnClick mpinBtnBig" id="mpin_mobile">
+				<div class="mpinBtnIcon mpMobile"></div>
+				{{txt "signin_mobile_btn_text2"}}
+			</div>
+		{{/if}}
 		
 		<div class="mpinButton mpinButtonDark mpinBtnClick mpinBtnBig" id="mpin_desktop">
 			<div class="mpinBtnIcon mpDesktop"></div>
