@@ -89,6 +89,7 @@ var mpin = mpin || {};
 					self.initialize.call(self, domID, opts);
 				} else {
 					window.addEventListener("load", function () {
+//					window.addEventListener("DOMContentLoaded", function () {
 						self.initialize.call(self, domID, opts);
 					});
 				}
@@ -104,7 +105,8 @@ var mpin = mpin || {};
 		restrictedOptions: "signatureURL; mpinAuthServerURL; timePermitsURL",
 		defaultOptions: {
 			identityCheckRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-			setDeviceName: false
+			setDeviceName: false,
+			mobileSupport: true
 		},
 		expireOtpSeconds: 99
 	};
@@ -121,6 +123,8 @@ var mpin = mpin || {};
 
 //		this.setupHtml();
 		this.addHelp();
+
+		console.log("window.onload  :::", window.onload);
 
 		//options CHECK
 		if (!options || !this.checkOptions(options.server)) {
@@ -231,7 +235,7 @@ var mpin = mpin || {};
 		_options += "onAccountDisabled; onUnsupportedBrowser; prerollid; onError; onGetSecret; signatureURL; certivoxURL; ";
 		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; customHeaders; authenticateRequestFormatter; accessNumberRequestFormatter; ";
 		_options += "registerRequestFormatter; identityCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; timePermitsStorageURL; authenticateURL; ";
-		_options += "language; customLanguageTexts; setDeviceName; getAccessNumberURL";
+		_options += "language; customLanguageTexts; setDeviceName; getAccessNumberURL; mobileSupport";
 		_opts = _options.split("; ");
 		this.opts || (this.opts = {});
 
@@ -413,7 +417,11 @@ var mpin = mpin || {};
 			self.renderHelpHub.call(self);
 		};
 
-		this.render("landing", callbacks);
+		if (this.opts.mobileSupport) {
+			this.render("landing", callbacks, {mobileSupport: this.opts.mobileSupport});
+		} else {
+			this.renderHome();
+		}
 
 		this.getAccessNumber();
 	};
@@ -444,8 +452,8 @@ var mpin = mpin || {};
 			self.toggleHelp.call(self);
 			self.renderHelpTooltip.call(self, "home");
 		};
-
-		this.render('home', callbacks);
+		//mobile SUPPORT :::
+		this.render('home', callbacks, {mobileSupport: this.opts.mobileSupport});
 
 		if (this.opts.onLoaded) {
 			this.opts.onLoaded();
@@ -1062,6 +1070,11 @@ var mpin = mpin || {};
 
 		this.intervalID || (this.intervalID = {});
 
+		//mobileSupport false stop HERE :::
+		if (!this.opts.mobileSupport) {
+			return;
+		}
+		
 		//// TIMER CODE
 		if (document.getElementById("mpTimer")) {
 			timerEl = document.getElementById("mpTimer");
@@ -1231,6 +1244,9 @@ var mpin = mpin || {};
 			if (self.checkBtn(this))
 				self.actionResend.call(self, this);
 		};
+		callbacks.mpin_accounts_btn = function () {
+			self.renderLogin.call(self, true);
+		};
 
 		this.render("activate-identity", callbacks, {email: email});
 	};
@@ -1312,7 +1328,7 @@ var mpin = mpin || {};
 
 		//inner ELEMENT
 		renderElem = document.getElementById("mpin_identities");
-		renderElem.innerHTML = this.readyHtml("accounts-panel", {});
+		renderElem.innerHTML = this.readyHtml("accounts-panel", {mobileSupport: this.opts.mobileSupport});
 		renderElem.style.display = "block";
 
 		// button
@@ -1323,9 +1339,11 @@ var mpin = mpin || {};
 			self.renderSetupHome2.call(self);
 		};
 		// button
-		document.getElementById("mpin_phone").onclick = function () {
-			self.renderMobileSetup.call(self);
-		};
+		if (this.opts.mobileSupport) {
+			document.getElementById("mpin_phone").onclick = function () {
+				self.renderMobileSetup.call(self);
+			};
+		}
 
 
 		//arrow show pinpad
@@ -2501,6 +2519,7 @@ var mpin = mpin || {};
 		"home_button_setupBrowser": "Add an <br/>Identity to this Browser",
 		"home_button_setupBrowser_description": "Add your Identity to this web browser to securely authenticate yourself to this service using this machine.",
 		"mobileGet_header": "GET M-PIN MOBILE APP",
+		"mobileGet_header2": "Get M-Pin mobile app",
 		"mobileGet_text1": "Scan this QR Code or open this URL on your Smartphone:",
 		"mobileGet_text2": "or open this URL on your mobile:",
 		"mobileGet_button_back": "Back",
@@ -2658,11 +2677,16 @@ var mpin = mpin || {};
 		"help_hub_10_p2": "",
 		"help_hub_return_button": "Return to Help Hub",
 		"activate_header": "ACTIVATE YOUR IDENTITY",
+		"activate_header2": "Creating new identity...",
 		"activate_text1": "Your M-Pin identity:",
 		"activate_text2": "is ready to setup.",
 		"activate_text3": "We have just send you an email, simply click the link in the email to activate your identity.",
+		"activate_text_new1": "We have send you an email to:",
+		"activate_text_new2": "Click the link on the email, to confirm your identity and proceed.",
 		"activate_btn1": "Activated your identity via email? Setup your M-Pin now",
 		"activate_btn2": "Not received the activation email? Send it again!",
+		"activate_btn_new1": "I confirmed my email",
+		"activate_btn_new2": "Resend confirmation email",
 		"settings_title": "IDENTITY OPTIONS",
 		"settings_title2": "Edit identity",
 		"landing_button_newuser": "I'm new to M-Pin, get me started",
