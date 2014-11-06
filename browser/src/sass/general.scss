@@ -156,6 +156,19 @@ the following links:
 		@include mpin-current-identity();
 	}
 
+	.mpWrappedIdentity {
+		text-align: left;
+		margin-left: 2px;
+		padding-top: 5px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		text-decoration: none;
+		display: block;
+	}
+
+
+
 	.mpinIdentityRowInner {
 		line-height: 30px;
 		font-size: 14px;

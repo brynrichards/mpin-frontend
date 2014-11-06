@@ -37,6 +37,7 @@ $BORDERLESS : true;
 $BUTTON_COLOR: #ffffff;
 $BUTTON_BGCOLOR: #007cc2;
 
+$BGCOLOR: #fff;
 //not in use
 $BGCOLOR4:#fff;
 
@@ -102,6 +103,11 @@ $BGCOLOR4:#fff;
 @mixin mobile-footer () {
 }
 @mixin pin-pad-input-text () {
+}
+@mixin mpin-current-identity () {
+}
+@mixin margin-top() {
+	margin-top: 10px;
 }
 @mixin mpin-expire-second () {
 	color: #f00;

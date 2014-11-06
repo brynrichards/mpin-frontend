@@ -2543,7 +2543,7 @@ var mpin = mpin || {};
 		"setup_text1": "Enter your email address:",
 		"setup_label1": "Email address:",
 		"setup_label2": "Device name:",
-		"setup_placeholder": "Enter your email",
+		"setup_placeholder": "Enter your Email",
 		"setup_text2": "Your email address will be used as your identity when M-Pin authenticates you to this service.",
 		"setup_error_unathorized": "{0} has not been registered in the system.", // {0} will be replaced with the userID
 		"setup_error_server": "Cannot process the request. Please try again later.",
