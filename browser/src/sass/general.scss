@@ -358,6 +358,13 @@ the following links:
 .mpWrapped {
 	width: 90%;
 	word-wrap: break-word;
+
+	&.mpAreaFixed {
+		max-height: 36px;
+		overflow: hidden;
+		display: block;
+		margin: 0 auto;
+	}
 }
 
 
