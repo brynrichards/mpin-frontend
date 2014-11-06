@@ -60,10 +60,8 @@ the following links:
 .mpinHeaderBig {
 	width: 90%;
 	margin: auto;
-	text-align:center;
 	line-height: 1.3em;
-	font-size: 18px;
-
+	@include mpin-header-big();
 
 	#mpinLogo {
 		@include logo();
@@ -193,6 +191,11 @@ the following links:
 		}
 
 	}
+
+	.mpinIdentityGradient {
+		@include mpin-identity-gradient();
+	}
+
 }
 
 .mpinPinpad {

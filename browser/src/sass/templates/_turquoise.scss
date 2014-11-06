@@ -75,6 +75,11 @@ $BGCOLOR6: #e74a00;
 	background: #6e8778;
 }
 
+@mixin mpin-header-big() {
+	text-align:center;
+	font-size: 18px;
+}
+
 @mixin mobile-bgcolor () {
 	background: $BGCOLOR4;
 }
@@ -157,6 +162,19 @@ $BGCOLOR6: #e74a00;
 		}
 	}
 }
+
+@mixin mpin-settings-row () {
+	text-align: left;
+	margin-left: 2px;
+	padding-top: 5px;
+}
+
+@mixin mpin-user-arrow () {
+	top: 0;
+	z-index: 10000;
+}
+
+
 @mixin mpin-logo-pointer () {
 	cursor: pointer;
 }
@@ -297,6 +315,12 @@ $BGCOLOR6: #e74a00;
 	color: #FF0000;
 	opacity: 1;
 }
+
+@mixin help-info-icon() {
+	background-image: url('#{$IMAGES}/mark.svg');
+	width: 20px;
+}
+
 @mixin button-area-down () {
 	position: absolute;
 	bottom: 5%;
@@ -327,6 +351,15 @@ $BGCOLOR6: #e74a00;
 	height: 40px;
 }
 
+@mixin mpin-identity-gradient() {
+}
+
+@mixin pinpad-circle () {
+	width: 25px;
+	height: 25px;
+	display: inline-block;
+	margin: 1%;
+}
 
 @mixin pinpad-circleout() {
 	width: 20px;
