@@ -126,8 +126,6 @@ var mpin = mpin || {};
 //		this.setupHtml();
 		this.addHelp();
 
-		console.log("window.onload  :::", window.onload);
-
 		//options CHECK
 		if (!options || !this.checkOptions(options.server)) {
 			return this.error(4003);
@@ -144,6 +142,8 @@ var mpin = mpin || {};
 		if (!this.checkBrowser()) {
 			return;
 		}
+
+		this.opts.mobileSupport = (this.opts.mobileAppFullURL) ? this.opts.mobileSupport : false;
 
 		//data Source
 		this.ds = this.dataSource();
