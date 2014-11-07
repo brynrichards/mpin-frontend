@@ -60,10 +60,8 @@ the following links:
 .mpinHeaderBig {
 	width: 90%;
 	margin: auto;
-	text-align:center;
 	line-height: 1.3em;
-	font-size: 18px;
-
+	@include mpin-header-big();
 
 	#mpinLogo {
 		@include logo();
@@ -156,6 +154,19 @@ the following links:
 		@include mpin-current-identity();
 	}
 
+	.mpWrappedIdentity {
+		text-align: left;
+		margin-left: 2px;
+		padding-top: 5px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		text-decoration: none;
+		display: block;
+	}
+
+
+
 	.mpinIdentityRowInner {
 		line-height: 30px;
 		font-size: 14px;
@@ -180,6 +191,11 @@ the following links:
 		}
 
 	}
+
+	.mpinIdentityGradient {
+		@include mpin-identity-gradient();
+	}
+
 }
 
 .mpinPinpad {
@@ -279,6 +295,7 @@ the following links:
 
 		.mpIdentityBrowser {
 			color: $BGCOLOR;
+			word-break: break-word;
 		}
 
 		.mpinInfoText {
@@ -342,6 +359,13 @@ the following links:
 .mpWrapped {
 	width: 90%;
 	word-wrap: break-word;
+
+	&.mpAreaFixed {
+		max-height: 36px;
+		overflow: hidden;
+		display: block;
+		margin: 0 auto;
+	}
 }
 
 

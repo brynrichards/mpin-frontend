@@ -64,17 +64,13 @@ the following links:
 	}
 
 	.mpinSettingsRow {
-		/*word-break: break-all;*/
-		/*width: 75%;*/
-		/*line-height: 16px;*/
-		text-align: left;
-		margin-left: 2px;
-		padding-top: 5px;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;
 		text-decoration: none;
 		display: block;
+		
+		@include mpin-settings-row();
 		
 		&.mpVerCenter {
 			line-height: 16px;

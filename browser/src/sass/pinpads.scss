@@ -58,18 +58,15 @@ the following links:
 			margin-right: 5px;
 			cursor: pointer;
 		}
-		
+
 		.mpinInputErrorText {
 			@include pin-pad-input-text-error();
 		}
-		
+
 	}
 
 	.mpinCircle {
-		width: 25px;
-		height: 25px;
-		display: inline-block;
-		margin: 1%;
+		@include pinpad-circle();
 
 		.mpinCircleIn {
 			@include pinpad-circlein();
@@ -83,9 +80,9 @@ the following links:
 	.mpinInputText {
 		text-align: center;
 		line-height: 20px;
-		
+
 		@include pin-pad-input-text();
-		
+
 		&.mpinInputTop {
 			display: block;
 			margin-top: 9px;
