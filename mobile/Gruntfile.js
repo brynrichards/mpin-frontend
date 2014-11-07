@@ -21,7 +21,7 @@ module.exports = function(grunt) {
 				}
 			},
 			makeViews: {
-				cmd: 'handlebars -n "mpin.templates" ./src/views/*.handlebars -f ../build/out/mobile/js/templates.js',
+				cmd: 'handlebars -n "mpin.templates" ./src/views/<%= settings.templateName %>/*.handlebars -f ../build/out/mobile/js/templates.js',
 				options: {
                 			stdout: true,
 				}
@@ -56,7 +56,7 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			resourceFiles: {
-				files: ['src/sass/*.scss','src/views/*.handlebars', 'js/*.js', 'settings.json', 'index.html'],
+				files: ['src/sass/*.scss','src/views/**/*.handlebars', 'js/*.js', 'settings.json', 'index.html'],
 				tasks: ['bgShell', 'sass']
 			}
 		},
