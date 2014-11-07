@@ -142,6 +142,7 @@ var mpin = mpin || {};
  
         this.renderHomeMobile();
 
+        // Simulate OTP
         // var authData = {};
         //    authData._mpinOTP = 99;
         //    authData.expireTime = 1414593174295000;
@@ -609,15 +610,20 @@ var mpin = mpin || {};
             }
         }
 
-        callbacks.mpin_home = function () {
+        callbacks.mp_action_home = function () {
             clearInterval(self.intervalExpire);
-            self.renderHome.call(self);
+            self.renderHomeMobile.call(self);
         };
 
         callbacks.mpin_help = function () {
             clearInterval(self.intervalExpire);
             self.lastView = "renderOtp";
             self.renderHelpHub.call(self);
+        };
+
+        callbacks.mpin_cancel = function () {
+            clearInterval(self.intervalExpire);
+            self.renderHomeMobile.call(self);
         };
 
         this.render("otp", callbacks);
@@ -2665,6 +2671,7 @@ var mpin = mpin || {};
         "mobileAuth_text2": "Note: Use this number in the next",
         "mobileAuth_text3": "with your M-Pin Mobile App.",
         "mobileAuth_text4": "Warning: Navigating away from this page will interrupt the authentication process and you will need to start again to authenticate successfully.",
+        "otp_signin_header": "Sign in with One-Time Password",
         "otp_text1": "Your One-Time Password is:",
         "otp_text2": "Note: The password is only valid for " + mpin.cfg.expireOtpSeconds + " seconds before it expires.", // {0} will be replaced with the max. seconds
         "otp_seconds": "Remaining:", // {0} will be replaced with the remaining seconds
