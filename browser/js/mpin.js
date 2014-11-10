@@ -2303,7 +2303,7 @@ var mpin = mpin || {};
 		"authPin_errorServer": "Server error!",
 		"deactivated_header": "SECURITY ALERT",
 		"deactivated_text1": "has been de-activated and your M-Pin token has been revoked.",
-		"deactivated_text2": "To re-activate your identity, click on the blue button below to register again.",
+		"deactivated_text2": "To re-activate your identity, click on the button below to register again.",
 		"deactivated_button_register": "Register again",
 		"account_button_addnew": "Add a new identity to this list",
 		"account_button_add": "Add new identity",
