@@ -159,6 +159,8 @@ var mpin = mpin || {};
 		this.setLanguageText();
 
 		this.renderLanding();
+//		this.renderRevokeIdentity("test-tooloooong.identity@tobegoog.de");
+//		this.renderAddIdentity();
 	};
 
 	mpin.prototype.setupHtml = function () {
@@ -376,6 +378,12 @@ var mpin = mpin || {};
 			self.lastView = "renderLanding";
 			self.renderHelpHub.call(self);
 		};
+		callbacks.mpin_home = function () {
+			self.clrInterval(self);
+			self.lastView = "renderLanding";
+			self.renderHome.call(self);
+		}
+
 		if (this.opts.mobileSupport) {
 			this.render("landing", callbacks, {mobileSupport: this.opts.mobileSupport});
 		} else {
@@ -705,6 +713,9 @@ var mpin = mpin || {};
 			};
 		}
 
+		document.getElementById("mpin_accounts_btn").onclick = function (evt) {
+			self.renderLogin.call(self, true);
+		};
 
 		document.getElementById("mpin_arrow").onclick = function (evt) {
 			delete self.tmp;
@@ -727,8 +738,8 @@ var mpin = mpin || {};
 			};
 		}
 	};
-	
-	
+
+
 	mpin.prototype.renderOtp = function (authData) {
 		var callbacks = {}, self = this, leftSeconds, timerEl, timer2d, totalSec;
 		//check if properties for seconds exist
@@ -1087,14 +1098,15 @@ var mpin = mpin || {};
 			height: 129
 		});
 	};
-	mpin.prototype.renderActivateIdentity = function () {
+
+	mpin.prototype.renderConfirmEmail = function () {
 		var callbacks = {}, self = this, email;
 		email = this.getDisplayName(this.identity);
 		callbacks.mpin_home = function (evt) {
 			self.renderHome.call(self, evt);
 		};
 		callbacks.mpin_helphub = function (evt) {
-			self.lastView = "renderActivateIdentity";
+			self.lastView = "renderConfirmEmail";
 			self.renderHelpHub.call(self);
 		};
 		callbacks.mpin_activate = function () {
@@ -1108,8 +1120,9 @@ var mpin = mpin || {};
 		callbacks.mpin_accounts_btn = function () {
 			self.renderLogin.call(self, true);
 		};
-		this.render("activate-identity", callbacks, {email: email});
+		this.render("confirm-email", callbacks, {email: email});
 	};
+
 	mpin.prototype.mpinButton = function (btnElem, busyText) {
 		var oldHtml = btnElem.innerHTML;
 		addClass(btnElem, "mpinBtnBusy");
@@ -1298,22 +1311,28 @@ var mpin = mpin || {};
 		this.render("setup-done", callbacks, {userId: userId});
 	};
 	//after warning
-	mpin.prototype.renderDeleteWarning = function (userId) {
+	mpin.prototype.renderRevokeIdentity = function (userId) {
 		var callbacks = {}, self = this, userId;
 		callbacks.mpin_home = function () {
 			self.renderHome.call(self);
 		};
+
 		callbacks.mp_action_go = function () {
-//			self.renderLogin.call(self);
 			self.renderAddIdentity.call(self, userId);
 		};
+
 		callbacks.mpin_helphub = function () {
-			self.lastView = "renderDeleteWarning";
+			self.lastView = "renderRevokeIdentity";
 			self.lastViewParams = [userId];
 			self.renderHelpHub.call(self);
 		};
-		this.render("delete-warning", callbacks, {userId: userId});
+		callbacks.mpin_accounts_btn = function () {
+			self.renderLogin.call(self, true);
+			
+		};
+		this.render("revoke-identity", callbacks, {userId: userId});
 	};
+
 	mpin.prototype.addUserToList = function (cnt, uId, isDefault, iNumber) {
 		var rowClass, self = this;
 		rowClass = (isDefault) ? "mpinRow mpinRowActive" : "mpinRow";
@@ -1368,7 +1387,6 @@ var mpin = mpin || {};
 				self.actionResend.call(self, this);
 		};
 		callbacks.mpin_accounts_btn = function () {
-//			self.renderLogin.call(self, true, email);
 			self.renderLogin.call(self, true);
 		};
 		callbacks.mpin_helphub = function (evt) {
@@ -1661,7 +1679,7 @@ var mpin = mpin || {};
 			if (rpsData.active) {
 				self.beforeRenderSetup();
 			} else {
-				self.renderActivateIdentity();
+				self.renderConfirmEmail();
 			}
 		});
 	};
@@ -1980,7 +1998,7 @@ var mpin = mpin || {};
 		//check
 		if (renderWarningFlag) {
 			identity = this.getDisplayName(iID);
-			this.renderDeleteWarning(identity);
+			this.renderRevokeIdentity(identity);
 		}
 
 		return false;
@@ -2300,7 +2318,12 @@ var mpin = mpin || {};
 		"deactivated_header": "SECURITY ALERT",
 		"deactivated_text1": "has been de-activated and your M-Pin token has been revoked.",
 		"deactivated_text2": "To re-activate your identity, click on the button below to register again.",
+		"revoke_text1": "You have entered your pin incorrect 3 times.",
+		"revoke_text2": "Your M-Pin identity:",
+		"revoke_text3": "has been revoked.",
 		"deactivated_button_register": "Register again",
+		"deactivated_button_register2": "Register new identity",
+		"deactivated_button_back": "Back to identity list",
 		"account_button_addnew": "Add a new identity to this list",
 		"account_button_add": "Add new identity",
 		"account_button_delete": "Remove this M-Pin Identity from this browser",
@@ -2395,6 +2418,7 @@ var mpin = mpin || {};
 		"settings_title": "IDENTITY OPTIONS",
 		"settings_title2": "Edit identity",
 		"landing_button_newuser": "I'm new to M-Pin, get me started",
+		"revoke_header_text": "Revoking identity ...",
 		"mobile_header": "GET THE M-PIN SMARTPHONE APP",
 		"mobile_footer_btn": "Now, sign in with your Smartphone",
 		"mobile_footer_btn2": "Sign in with Phone",
