@@ -19,7 +19,14 @@
 
     <div id="codes"></div>
     
-    <div id="circlesHolder" style="display: none;"></div>
+    <div id="circlesHolder" style="display: none;">
+        {{#loop data.pinSize}}
+            <div class="circle">
+                <div class="outer-circle"></div>
+            </div>
+        {{/loop}}
+    </div>
+
 </div>
  
 <div id="pinsHolder">

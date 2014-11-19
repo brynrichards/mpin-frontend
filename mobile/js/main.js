@@ -108,6 +108,13 @@ var mpin = mpin || {};
             return hlp.img(imgSrc);
         });
 
+        Handlebars.registerHelper("loop", function (n, block) {
+            var accum = '';
+            for (var i = 0; i < n; ++i)
+                accum += block.fn(i);
+            return accum;
+        });
+
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
 //          this.error(" Some options are required :" + mpin.cfg.requiredOptions);
@@ -744,7 +751,7 @@ var mpin = mpin || {};
             self.renderHelp("help-setup-home", callbacks);
         };
 
-        this.render("setup", callbacks, {email: email});
+        this.render("setup", callbacks, {email: email, pinSize: mpin.cfg.pinSize});
 
         var _textLoginBtn = document.getElementById('mpinLogin')
             ,pinpadContainer = document.getElementById('circlesHolder'),
@@ -754,25 +761,20 @@ var mpin = mpin || {};
 
         pinpadInput.placeholder = hlp.text("pinpad_placeholder_setup");
 
-        // Create dummy input els
-        if (!this.isAccNumber) {
+        var renderElem = document.getElementById('codes');
+        renderElem.style.display = 'block';
+        renderElem.innerHTML = hlp.text("pinpad_placeholder_setup");
 
-            var renderElem = document.getElementById('codes');
-            renderElem.style.display = 'block';
-            renderElem.innerHTML = hlp.text("pinpad_placeholder_setup");
+        for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
+            var circleA = document.createElement("div");
+            var circleB = document.createElement("div");
+            circleA.className = "circle";
+            circleB.className = "outer-circle";
 
-            for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
-                var circleA = document.createElement("div");
-                var circleB = document.createElement("div");
-                circleA.className = "circle";
-                circleB.className = "outer-circle";
-
-                circleA.appendChild(circleB);
-                pinpadContainer.appendChild(circleA);
-            };
-        } 
+            circleA.appendChild(circleB);
+            pinpadContainer.appendChild(circleA);
+        };
         
- 
         document.body.className = 'pinpadGlobal';
  
         this.enableNumberButtons(false);
@@ -863,12 +865,6 @@ var mpin = mpin || {};
         this.render("setup-access", callbacks, {email: email, menu: true});
         this.enableNumberButtons(false);
         this.bindNumberButtons(true);
-
-        // Bind element for error messages
-
-        elemForErrcode.style.display = "block";
-        elemForErrcode.className = "error";
-        elemForErrcode.innerHTML = hlp.text("authPin_errorInvalidAccessNumber");
     }
  
     mpin.prototype.renderLogin = function(listAccounts) {
@@ -920,7 +916,7 @@ var mpin = mpin || {};
             self.actionLogin.call(self);
         };
          
-        this.render("setup", callbacks, {email: email, menu: true});
+        this.render("setup", callbacks, {email: email, menu: true, pinSize: mpin.cfg.pinSize});
         this.enableNumberButtons(false);
         this.bindNumberButtons();
  
@@ -951,17 +947,6 @@ var mpin = mpin || {};
 
         document.getElementById('openHelpHub').onclick = function(evt) {
             self.renderHelpHub("helphub-index");
-        };
-
-        for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
-            var circleA = document.createElement("div");
-            var circleB = document.createElement("div");
-
-            circleA.className = "circle";
-            circleB.className = "outer-circle";
-
-            circleA.appendChild(circleB);
-            circlesHolder.appendChild(circleA);
         };
 
         if (listAccounts) {
@@ -1289,7 +1274,6 @@ var mpin = mpin || {};
  
         //default IDENTITY
 
-
     };
 
     mpin.prototype.renderAccountsBeforeSetupPanel = function(back) {
@@ -1490,7 +1474,7 @@ var mpin = mpin || {};
             // addClass(rowElem, "mp_itemSelected");
             self.ds.setDefaultIdentity(uId);
             self.setIdentity(uId, true);
-            self.renderLogin();
+            self.renderAccessNumber();
 
             // Hide the identity list
 
@@ -2131,7 +2115,7 @@ var mpin = mpin || {};
                     } else if (errorCode === "INVALIDACCESSNUMBER") {
 
                         // Render the access number again
-                        self.renderLogin.call(self);
+                        self.renderAccessNumber.call(self);
                         self.display(hlp.text("authPin_errorInvalidAccessNumber"));
                     }
  
