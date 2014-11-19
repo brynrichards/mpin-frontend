@@ -776,10 +776,14 @@ var mpin = mpin || {};
 
     mpin.prototype.renderAccessNumber = function(listAccounts) {
 
-        var callbacks = {}, self = this, elemForErrcode = document.getElementById('codes');
-        var identity = this.ds.getDefaultIdentity();
-        var email = this.getDisplayName(identity);
-        var totalAccounts = this.ds.getAccounts();
+        var callbacks = {}
+            , self = this
+            , elemForErrcode = document.getElementById('codes')
+            , identity = this.ds.getDefaultIdentity()
+            , email = this.getDisplayName(identity)
+            , totalAccounts = this.ds.getAccounts();
+
+
         totalAccounts = Object.keys(totalAccounts).length;
 
         if (!identity) {
@@ -790,10 +794,6 @@ var mpin = mpin || {};
             self.setIdentity(self.ds.getDefaultIdentity(), true);
 
         }
-
-        self.enableNumberButtons(true);
-        self.enableButton(false, "go");
-        self.enableButton(false, "clear");
         
         callbacks.mp_action_home = function(evt) {
             if (totalAccounts === 0) {
@@ -815,9 +815,6 @@ var mpin = mpin || {};
 
         callbacks.mpinLogin = function() {
 
-            console.log("Clicked acccNum login");
-
-            var callbacks = {};
             var pinpadDisplay = document.getElementById("pinpad-input")
 
                 self.accessNumber = pinpadDisplay.value;
@@ -853,8 +850,11 @@ var mpin = mpin || {};
         };
 
         this.render("setup-access", callbacks, {email: email, menu: true});
-        this.enableNumberButtons(false);
-        this.bindNumberButtons(true);
+
+        self.enableNumberButtons(true);
+        self.enableButton(false, "go");
+        self.enableButton(false, "clear");
+        self.bindNumberButtons(true);
     }
  
     mpin.prototype.renderLogin = function(listAccounts) {
@@ -867,13 +867,11 @@ var mpin = mpin || {};
             , totalAccounts = Object.keys(totalAccounts).length
             , pinpadDisplay = document.getElementById("pinpad-input")
 
-        
         if(self.opts.requestOTP) {
             this.isAccNumber = false;
         } else {
              this.isAccNumber = true;
         }
-
 
         callbacks.mp_action_home = function(evt) {
             if (totalAccounts === 0) {
@@ -892,7 +890,6 @@ var mpin = mpin || {};
         callbacks.menuBtn = function() {
             self.toggleButton.call(self);
         };
-
 
         callbacks.mpinLogin = function() {
             
