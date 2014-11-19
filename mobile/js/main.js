@@ -507,7 +507,8 @@ var mpin = mpin || {};
                  if (totalAccounts === 0) {
                   this.renderSetupHome();
                  } else if (totalAccounts === 1 || totalAccounts > 1) {
-                  this.renderLogin();
+                  this.renderAccessNumber();
+                  // this.renderLogin();
                  }
 
             } else {
@@ -780,19 +781,14 @@ var mpin = mpin || {};
         //requestSignature
         this.requestSignature(email, clientSecretShare, clientSecretParams);
     };
- 
-    mpin.prototype.renderLogin = function(listAccounts) {
+
+    mpin.prototype.renderAccessNumber = function(listAccounts) {
 
         var callbacks = {}, self = this, elemForErrcode = document.getElementById('codes');
-        
-        if(self.opts.requestOTP) {
-            this.isAccNumber = false;
-        } else {
-             this.isAccNumber = true;
-        }
-
         var identity = this.ds.getDefaultIdentity();
         var email = this.getDisplayName(identity);
+        var totalAccounts = this.ds.getAccounts();
+        totalAccounts = Object.keys(totalAccounts).length;
 
         if (!identity) {
             this.renderSetupHome();
@@ -803,19 +799,94 @@ var mpin = mpin || {};
 
         }
 
-        if(this.erroCodeAccNumber) {
+        self.enableNumberButtons(true);
+        self.enableButton(false, "go");
+        self.enableButton(false, "clear");
+        
+        callbacks.mp_action_home = function(evt) {
+            if (totalAccounts === 0) {
+             self.renderSetupHome();
+            } else if (totalAccounts === 1) {
+             self.renderLogin();
+            } else if (totalAccounts > 1) {
+             self.renderLogin(true);
+            }
+        };
 
-            elemForErrcode.style.display = "block";
-            elemForErrcode.className = "error";
-            elemForErrcode.innerHTML = hlp.text("authPin_errorInvalidAccessNumber");
+        callbacks.mpinClear = function() {
+            self.addToPin.call(self, "clear");
+        };
+        
+        callbacks.menuBtn = function() {
+            self.toggleButton.call(self);
+        };
 
-            self.bindNumberButtons();
-            self.enableNumberButtons(true);
-            self.enableButton(false, "go");
-            self.enableButton(false, "clear");
+        callbacks.mpinLogin = function() {
 
-        }
+            console.log("Clicked acccNum login");
+
+            var callbacks = {};
+            var pinpadDisplay = document.getElementById("pinpad-input")
+
+                self.accessNumber = pinpadDisplay.value;
+
+                // Validate the number of digits entered
+
+                if(self.accessNumber.length < self.opts.accessNumberDigits ) {
+                    return;
+                }
+
+                // Check if access number is valid
+
+                if (!self.checkAccessNumberValidity(self.accessNumber, 1)) {
+
+                    // store the accessNumber into mpin for the next step.
+                    self.erroCodeAccNumber = true;
+                    self.actionLogin.call(self);
+
+                    return;
+
+                }
+
+                // Clear the error codes display
+
+                self.display(false, true);
+                self.enableButton(false, "go");
+                self.enableButton(false, "clear");
+                self.addToPin("pin");
+
+                // Go to renderLogin
+                
+                self.renderLogin();
+        };
+
+        this.render("setup-access", callbacks, {email: email, menu: true});
+        this.enableNumberButtons(false);
+        this.bindNumberButtons(true);
+
+        // Bind element for error messages
+
+        elemForErrcode.style.display = "block";
+        elemForErrcode.className = "error";
+        elemForErrcode.innerHTML = hlp.text("authPin_errorInvalidAccessNumber");
+    }
  
+    mpin.prototype.renderLogin = function(listAccounts) {
+
+        var callbacks = {}, self = this, elemForErrcode = document.getElementById('codes');
+        var identity = this.ds.getDefaultIdentity();
+        var email = this.getDisplayName(identity);
+        var totalAccounts = this.ds.getAccounts();
+        totalAccounts = Object.keys(totalAccounts).length;
+
+        
+        if(self.opts.requestOTP) {
+            this.isAccNumber = false;
+        } else {
+             this.isAccNumber = true;
+        }
+
+
         callbacks.mp_action_home = function(evt) {
             if (totalAccounts === 0) {
              self.renderSetupHome();
@@ -837,71 +908,16 @@ var mpin = mpin || {};
 
         callbacks.mpinLogin = function() {
 
-            var callbacks = {};
-
             var pinpadDisplay = document.getElementById("pinpad-input")
-                _textLoginBtn = document.getElementById('mpinLogin');
 
-            if (self.isAccNumber) {
-                self.accessNumber = pinpadDisplay.value;
+            self.pinPadLength = pinpadDisplay.value;
 
-                // Validate the number of digits entered
+            if(self.pinPadLength.length < mpin.cfg.pinSize ) {
 
-                if(self.accessNumber.length < self.opts.accessNumberDigits ) {
-                    return;
-                }
-
-                if (!self.checkAccessNumberValidity(self.accessNumber, 1)) {
-
-                    // store the accessNumber into mpin for the next step.
-                    self.erroCodeAccNumber = true;
-                    self.actionLogin.call(self);
-
-                    return;
-
-                }
-
-                _textLoginBtn.innerText = hlp.text("authPin_button_login");
-
-                // Clear the error codes display
-
-                self.display(false, true);
-                self.isAccNumber = false;
-                self.enableButton(false, "go");
-                self.enableButton(false, "clear");
-
-                var pinPad = document.getElementById('pinsHolder');
-                pinPad.className = '';
-
-                // Empty the div
-                document.getElementById('accNumHolder').innerHTML = "";
-                document.getElementById('circlesHolder').innerHTML = "";
-
-                var circlesHolder = document.getElementById('circlesHolder');
-
-                for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
-
-                   var circleA = document.createElement("div");
-                   var circleB = document.createElement("div");
-
-                   circleA.className = "circle";
-                   circleB.className = "outer-circle";
-                   circleA.appendChild(circleB);
-                   circlesHolder.appendChild(circleA);
-                };
-
-                self.addToPin("login");
-            } else {
-
-                self.pinPadLength = pinpadDisplay.value;
-
-                if(self.pinPadLength.length < mpin.cfg.pinSize ) {
-
-                    return;
-                }
-
-                self.actionLogin.call(self);
+                return;
             }
+
+            self.actionLogin.call(self);
         };
          
         this.render("setup", callbacks, {email: email, menu: true});
@@ -911,29 +927,13 @@ var mpin = mpin || {};
         var pinpadDisplay = document.getElementById("pinpad-input")
             , _textLoginBtn = document.getElementById('mpinLogin');
 
-        // Change AC number text here
 
-        if (self.isAccNumber) {
-            _textLoginBtn.innerText = hlp.text("authPin_button_next");
-            //set placeholder to access Number text
-            pinpadDisplay.placeholder = hlp.text("pinpad_placeholder_text2");
-            pinpadDisplay.type = "text";
-        }
-
-        var pinPad = document.getElementById('pinsHolder');
         var circlesHolder = document.getElementById('circlesHolder');
         var pinpadContainer = document.getElementById('inputContainer');
         var renderElem = document.getElementById('codes');
 
-        if (self.isAccNumber) {
-            renderElem.style.display = 'block';
-            renderElem.innerHTML = hlp.text("pinpad_placeholder_text2");
-            // renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text2");
-        } else {
-            renderElem.style.display = 'block';
-            renderElem.innerHTML = hlp.text("pinpad_placeholder_text");
-            // renderElem.innerHTML = "<info-inline id='acInfo'><i></i></info>" + hlp.text("pinpad_placeholder_text");
-        }
+        renderElem.style.display = 'block';
+        renderElem.innerHTML = hlp.text("pinpad_placeholder_text");
 
         // Help hub callbacks
 
@@ -947,39 +947,22 @@ var mpin = mpin || {};
             self.renderHelpHub("helphub-index");
         };
 
-        // Purple template
-
-        // document.getElementById('acInfo').onclick = function(evt) {
-        //     console.log("Click here?");
-        //     // Show the help item
-        //     self.renderHelp("help-setup-home", callbacks);
-        // };
-
         // Helphub calbacks
 
         document.getElementById('openHelpHub').onclick = function(evt) {
             self.renderHelpHub("helphub-index");
         };
 
+        for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
+            var circleA = document.createElement("div");
+            var circleB = document.createElement("div");
 
-        // Create dummy input els
-        if (this.isAccNumber) {
+            circleA.className = "circle";
+            circleB.className = "outer-circle";
 
-            // Change class if ac number
-            pinPad.className = 'access-number';
-
-        } else {
-            for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
-                var circleA = document.createElement("div");
-                var circleB = document.createElement("div");
-
-                circleA.className = "circle";
-                circleB.className = "outer-circle";
-
-                circleA.appendChild(circleB);
-                circlesHolder.appendChild(circleA);
-            };
-        }
+            circleA.appendChild(circleB);
+            circlesHolder.appendChild(circleA);
+        };
 
         if (listAccounts) {
             this.toggleButton();
@@ -1025,7 +1008,6 @@ var mpin = mpin || {};
         //draw canvas Clock
         drawTimer = function (expireOn) {
 
-            console.log("##################### drawTimer");
             var start, diff;
             diff = totalSec - expireOn;
             start = -0.5 + ((diff / totalSec) * 2);
@@ -1039,8 +1021,6 @@ var mpin = mpin || {};
             timer2d.lineWidth = 5;
             timer2d.stroke();
         };
-
-        ////////////////// TIMER
 
         expire = function (expiresOn) {
             var expireAfter = Math.floor((expiresOn - (new Date())) / 1000);
@@ -1565,7 +1545,7 @@ var mpin = mpin || {};
         this.render("identity-not-active", callbacks, {email: email});
     };
  
-    mpin.prototype.bindNumberButtons = function() {
+    mpin.prototype.bindNumberButtons = function(isAcc) {
         var self = this, btEls;
         btEls = document.getElementsByClassName("btn");
 
@@ -1588,7 +1568,7 @@ var mpin = mpin || {};
                 return;
             }
 
-            self.addToPin(e.target.getAttribute("data-value"));
+            self.addToPin(e.target.getAttribute("data-value"), "", isAcc);
             // return false;
         
           // }
@@ -1631,7 +1611,7 @@ var mpin = mpin || {};
         }
     };
     //
-    mpin.prototype.addToPin = function(digit, iserror) {
+    mpin.prototype.addToPin = function(digit, iserror, isAcc) {
 
         var pinpadContainer = document.getElementById('inputContainer')
             , pinElement = document.getElementById('pinpad-input')
@@ -1643,18 +1623,16 @@ var mpin = mpin || {};
             , errorCodes = document.getElementById("codes")
             , self = this;
 
-        this.display("");
-
         if(ifDigit.test(parseInt(digit))) {
 
             // Add circles
 
             pinElement.value += digit;
 
-            if(this.isAccNumber && pinElement.value.length <= self.opts.accessNumberDigits) {
+            if(isAcc && pinElement.value.length <= self.opts.accessNumberDigits) {
                 accNumHolder.style.display = 'block';
                 accNumHolder.innerHTML += digit;
-            } else if (!this.isAccNumber && pinElement.value.length <= mpin.cfg.pinSize) {
+            } else if (!isAcc && pinElement.value.length <= mpin.cfg.pinSize) {
 
                 elemForErrcode.style.display = 'none';
                 circlesHolder.style.display = 'block';
@@ -1678,18 +1656,10 @@ var mpin = mpin || {};
            var circlesClear = document.getElementsByClassName("circle")
              , element = {};
 
-           if(this.isAccNumber) {
-               element.className = 'inner-circle-ac';
-           } else {
-               element.className = 'inner-circle';
-           }
-
            // Rotate the circles
 
             for (var i = 0; i < circlesClear.length; i++) {
-
                 var nodes = circlesClear[i].querySelector('.' + element.className);
-
 
                 if (circlesClear[i].querySelector('.' + element.className)) {
 
@@ -1702,21 +1672,15 @@ var mpin = mpin || {};
 
             // Clear the ac num
 
-            if (this.isAccNumber && iserror) {
+            if (isAcc && iserror) {
 
                 accNumHolder.innerHTML = "";
                 pinElement.value = "";
-                //set placeholder to access Number text
-                // errorCodes.innerHTML = hlp.text("pinpad_placeholder_text2");
-                // errorCodes.style.display = 'block';
                 this.enableNumberButtons(true);
 
-            } else if(this.isAccNumber && !iserror) {
+            } else if(isAcc && !iserror) {
                 accNumHolder.innerHTML = "";
                 pinElement.value = "";
-                //set placeholder to access Number text
-                // errorCodes.innerHTML = hlp.text("pinpad_placeholder_text2");
-                // errorCodes.style.display = 'block';
                 this.enableNumberButtons(true);
             }
 
@@ -1729,8 +1693,6 @@ var mpin = mpin || {};
  
         if (digit === 'login') {
  
-            if (!this.isAccNumber) {
-
                 pinElement.value = "";
  
                 elemForErrcode.style.display = "block";
@@ -1742,7 +1704,16 @@ var mpin = mpin || {};
                 this.enableNumberButtons(true);
  
                 return;
-            }
+        }
+
+        if (digit === 'pin') {
+        
+            elemForErrcode.style.display = "block";
+            elemForErrcode.innerHTML = "Enter your pin";
+
+            this.enableNumberButtons(true);
+    
+            return;
         }
  
         if (pinElement.value.length === 1) {
@@ -1751,10 +1722,8 @@ var mpin = mpin || {};
             this.enableButton(true, "clear");
         }
  
-        else if (this.isAccNumber) {
+        else if (isAcc) {
             if (pinElement.value.length === this.opts.accessNumberDigits) {
-
-                console.log("Comming here to enable the digits");
 
                 // Append the number of circles
 
@@ -1796,26 +1765,13 @@ var mpin = mpin || {};
     mpin.prototype.display = function(message, clear) {
 
         var self = this;
- 
         var elemForErrcode = document.getElementById('codes');
 
-        if(message === hlp.text("authPin_errorInvalidPin")) {
+        elemForErrcode.style.display = "block";
+        elemForErrcode.className = "error";
+        elemForErrcode.innerHTML = message;
 
-            elemForErrcode.style.display = "block";
-            elemForErrcode.className = "error";
-            elemForErrcode.innerHTML = message;
-
-            self.addToPin("clear", true);
-        } 
-
-        if(message === hlp.text("authPin_errorInvalidAccessNumber")) {
-
-            elemForErrcode.style.display = "block";
-            elemForErrcode.className = "error";
-            elemForErrcode.innerHTML = message;
-
-            self.addToPin("clear", false);
-        }
+        self.addToPin("clear", true);
 
         if(clear) {
             elemForErrcode.className = "";
@@ -2063,7 +2019,7 @@ var mpin = mpin || {};
 
         var self = this, _pin = document.getElementById('pinpad-input').value;
         this.ds.addIdentity(this.identity, "");
-        this.display("Verifying PIN...");
+        this.display(hlp.text("verify_pin"));
 
  
         extractPIN(_pin, this.clientSecret, this.identity, function(tokenHex) {
@@ -2760,7 +2716,8 @@ var mpin = mpin || {};
         "accessdenied_text_cont": "has been removed from this device.",
         "accessdenied_btn": "Register again",
         "setup_btn_text": "Setup",
-        "setup_device_label": "Device name:"
+        "setup_device_label": "Device name:",
+        "verify_pin": "Verifying PIN..."
     };
     //  image should have config properties
     hlp.img = function(imgSrc) {
