@@ -765,16 +765,6 @@ var mpin = mpin || {};
         renderElem.style.display = 'block';
         renderElem.innerHTML = hlp.text("pinpad_placeholder_setup");
 
-        for (var i = mpin.cfg.pinSize - 1; i >= 0; i--) {
-            var circleA = document.createElement("div");
-            var circleB = document.createElement("div");
-            circleA.className = "circle";
-            circleB.className = "outer-circle";
-
-            circleA.appendChild(circleB);
-            pinpadContainer.appendChild(circleA);
-        };
-        
         document.body.className = 'pinpadGlobal';
  
         this.enableNumberButtons(false);
@@ -869,11 +859,13 @@ var mpin = mpin || {};
  
     mpin.prototype.renderLogin = function(listAccounts) {
 
-        var callbacks = {}, self = this, elemForErrcode = document.getElementById('codes');
-        var identity = this.ds.getDefaultIdentity();
-        var email = this.getDisplayName(identity);
-        var totalAccounts = this.ds.getAccounts();
-        totalAccounts = Object.keys(totalAccounts).length;
+        var callbacks = {}
+            , self = this
+            , identity = this.ds.getDefaultIdentity()
+            , email = this.getDisplayName(identity)
+            , totalAccounts = this.ds.getAccounts()
+            , totalAccounts = Object.keys(totalAccounts).length
+            , pinpadDisplay = document.getElementById("pinpad-input")
 
         
         if(self.opts.requestOTP) {
@@ -903,9 +895,7 @@ var mpin = mpin || {};
 
 
         callbacks.mpinLogin = function() {
-
-            var pinpadDisplay = document.getElementById("pinpad-input")
-
+            
             self.pinPadLength = pinpadDisplay.value;
 
             if(self.pinPadLength.length < mpin.cfg.pinSize ) {
@@ -919,13 +909,7 @@ var mpin = mpin || {};
         this.render("setup", callbacks, {email: email, menu: true, pinSize: mpin.cfg.pinSize});
         this.enableNumberButtons(false);
         this.bindNumberButtons();
- 
-        var pinpadDisplay = document.getElementById("pinpad-input")
-            , _textLoginBtn = document.getElementById('mpinLogin');
 
-
-        var circlesHolder = document.getElementById('circlesHolder');
-        var pinpadContainer = document.getElementById('inputContainer');
         var renderElem = document.getElementById('codes');
 
         renderElem.style.display = 'block';
