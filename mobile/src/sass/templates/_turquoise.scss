@@ -225,7 +225,7 @@ $BORDERLESS : true;
 @mixin home-icon() {
 	background-image: url('#{$IMAGES}/home.svg');
 	
-	width: 16px;
+	width: 100%;
 	height: 16px;
 
 	background-repeat: no-repeat;
@@ -243,7 +243,7 @@ $BORDERLESS : true;
 }
 
 @mixin custom-logo() {
-	width: 106px;
+	width: 100%;
 	height: 32px;
 
 	background-image: url('#{$IMAGES}/logo-here-grey.svg');

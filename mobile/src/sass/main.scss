@@ -188,10 +188,11 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 		@include header-bar();
 
 		-webkit-box-orient: horizontal !important;
-		-ms-flex-direction: row !important;
+		-moz-box-orient: horizontal !important;
 		flex-direction: row !important;
 
 		-webkit-box-pack: start;
+		-moz-box-pack: start;
 		-ms-flex-pack: start;
 		justify-content: flex-start;
 

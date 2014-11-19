@@ -269,6 +269,7 @@ var mpin = mpin || {};
                 document.getElementById('menuBtn').addEventListener('click', callbacks[k], false);
             }
         }
+        
         if (typeof mpin.custom !== 'undefined') {
             this.setCustomStyle();
         }
@@ -2106,9 +2107,8 @@ var mpin = mpin || {};
      */
     mpin.prototype.actionLogin = function() {
 
-        var callbacks = {};
-
-        var authServer, getAuth 
+        var callbacks = {}
+            ,authServer, getAuth 
             , self = this
             , pinValue = document.getElementById('pinpad-input').value
             , accessNumber;
@@ -2139,7 +2139,6 @@ var mpin = mpin || {};
 
                     if (success) {
 
-                        console.log("######################Comming in success", authData);
                         var iD = self.identity;
                             if (self.opts.requestOTP) {
                                 self.renderOtp(authData);
