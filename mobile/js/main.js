@@ -773,11 +773,7 @@ var mpin = mpin || {};
 
         callbacks.mpinLogin = function() {
 
-            var pinpadDisplay = document.getElementById("pinpad-input")
-            
-            self.pinPadLength = pinpadDisplay.value;
-
-            if(self.pinPadLength.length < mpin.cfg.pinSize ) {
+            if(self.pinpadInput.length < mpin.cfg.pinSize ) {
 
                 return;
             }
@@ -1411,8 +1407,6 @@ var mpin = mpin || {};
 
         console.log("#########Gettting digit", this.pinpadInput);
 
-        // console.log("Comming here", this.pinpadInput, " And is it ac number", isAcc, "dump self acc number", self.accessNumber);
-
             if(isAcc && digitLength <= self.opts.accessNumberDigits) {
                 accNumHolder.style.display = 'block';
                 self.accessNumber += digit;
@@ -1459,7 +1453,7 @@ var mpin = mpin || {};
                 }
             }
      
-            else if (digitLength === mpin.cfg.pinSize) {
+            if (digitLength === mpin.cfg.pinSize) {
 
                 this.enableNumberButtons(false);
                 this.enableButton(true, "go");
@@ -1472,6 +1466,7 @@ var mpin = mpin || {};
                 this.enableNumberButtons(true);
                 this.enableButton(false, "go");
                 this.enableButton(false, "clear");
+                this.pinpadInput = "";
                 this.clearCircles();
 
                 // Clear the ac num
@@ -1532,7 +1527,7 @@ var mpin = mpin || {};
     };
 
     mpin.prototype.bindCircles = function() {
-        
+
         var pinElement = document.getElementById('pinpad-input');
         var newCircle = document.createElement('div');
         newCircle.className = "inner-circle";
