@@ -117,7 +117,6 @@ var mpin = mpin || {};
 
         //options CHECK
         if (!options || !this.checkOptions(options.server)) {
-//          this.error(" Some options are required :" + mpin.cfg.requiredOptions);
             return console.error("Some options are required: " + mpin.cfg.requiredOptions);
         }
  
@@ -157,15 +156,6 @@ var mpin = mpin || {};
            
         //    this.renderOtp(authData);
 
-        // Caching - monitor if new version of the cache exists
- 
-        // setInterval(function () { window.applicationCache.update(); }, 2000); // Check for an updated manifest file every 60 minutes. If it's updated, download a new cache as defined by the new manifest file.
- 
-        // window.applicationCache.addEventListener('updateready', function(){ // when an updated cache is downloaded and ready to be used
-        //         window.applicationCache.swapCache(); //swap to the newest version of the cache
-        //         alert("I updated the cache");
-        //         window.location.reload();
-        // }, false);
     };
  
  
@@ -328,14 +318,12 @@ var mpin = mpin || {};
             // Modify the sequence for the templates
             // self.renderHelp("help-helphub", callbacks);
 
-            console.log("This is clicked first");
         };
 
         helphubBtns.second = function(evt) {
             // Modify the sequence for the templates
             // self.renderHelp("help-helphub", callbacks);
 
-            console.log("This is clicked seconds");
         };
 
         helphubBtns.details = function(evt) {
@@ -536,7 +524,6 @@ var mpin = mpin || {};
 
         // Put placeholder attribute
 
-
         var inputDeviceName = document.getElementById('deviceInput')
             , inputEmail = document.getElementById('emailInput');
 
@@ -548,14 +535,6 @@ var mpin = mpin || {};
 
     mpin.prototype.renderOtp = function (authData) {
         var callbacks = {}, self = this, leftSeconds, timerEl, timer2d, totalSec;
-
-        //check if properties for seconds exist
-        // if (!authData.expireTime && !authData.nowTime) {
-        //     self.error(4016);
-        //     return;
-        // }
-
-        //// TIMER CODE
 
         //draw canvas Clock
         drawTimer = function (expireOn) {
@@ -575,7 +554,6 @@ var mpin = mpin || {};
         function expire (expiresOn) {
             leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date())) / 1000);
             if (leftSeconds > 0) {
-//              document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
                 document.getElementById("mpin_seconds").innerHTML = leftSeconds;
 
                 if (document.getElementById("mpTimer")) {
@@ -583,7 +561,6 @@ var mpin = mpin || {};
                 }
 
             } else {
-                //clear Interval and go to OTP expire screen.
                 clearInterval(self.intervalExpire);
                 self.renderOtpExpire();
             }
@@ -1452,21 +1429,16 @@ var mpin = mpin || {};
             var parent = document.getElementById("inputContainer");
             var child = document.getElementById("codes");
 
-            // if (e.type == "touchstart") {
-
             if(self.isAccNumber && parent.contains(child)) {
                 child.style.display = 'none';
             }
-
 
             if(e.target.hasAttribute("disabled")) {
                 return;
             }
 
             self.addToPin(e.target.getAttribute("data-value"), "", isAcc);
-            // return false;
-        
-          // }
+
         }
 
         for (var i = 0; i < btEls.length; i++) {
@@ -1510,15 +1482,9 @@ var mpin = mpin || {};
 
         var pinpadContainer = document.getElementById('inputContainer')
             , pinElement = document.getElementById('pinpad-input')
-            , element
             , elemForErrcode = document.getElementById('codes')
-            , circlesHolder = document.getElementById('circlesHolder')
             , accNumHolder = document.getElementById('accNumHolder')
-            , ifDigit = new RegExp('[0-9]')
-            , errorCodes = document.getElementById("codes")
             , self = this;
-
-        if(ifDigit.test(parseInt(digit))) {
 
             // Add circles
 
@@ -1527,72 +1493,14 @@ var mpin = mpin || {};
             if(isAcc && pinElement.value.length <= self.opts.accessNumberDigits) {
                 accNumHolder.style.display = 'block';
                 accNumHolder.innerHTML += digit;
-            } else if (!isAcc && pinElement.value.length <= mpin.cfg.pinSize) {
+            } 
 
-                elemForErrcode.style.display = 'none';
-                circlesHolder.style.display = 'block';
-
-                var circles = document.getElementsByClassName("circle");
-                element = document.createElement("div");
-                // element.style.width = "18px";
-                // element.style.height = "18px";
-                // element.style.margin = "7px";
-                element.className = 'inner-circle';
-                var addToDivNum =  pinElement.value.length -1;
-
-                // Append the circle element here
-                circles[addToDivNum].appendChild(element);
-            }
-
-        }
-
-        if (digit === 'clear') {
-            
-           var circlesClear = document.getElementsByClassName("circle")
-             , element = {};
-
-           // Rotate the circles
-
-            for (var i = 0; i < circlesClear.length; i++) {
-                var nodes = circlesClear[i].querySelector('.' + element.className);
-
-                if (circlesClear[i].querySelector('.' + element.className)) {
-
-                    circlesClear[i].removeChild(nodes);
-                    pinElement.value = "";
-                    this.enableNumberButtons(true);
-                }
-
-            }
-
-            // Clear the ac num
-
-            if (isAcc && iserror) {
-
-                accNumHolder.innerHTML = "";
-                pinElement.value = "";
-                this.enableNumberButtons(true);
-
-            } else if(isAcc && !iserror) {
-                accNumHolder.innerHTML = "";
-                pinElement.value = "";
-                this.enableNumberButtons(true);
-            }
-
-            // Disable the clear and the sign in buttons
-
-            this.enableButton(false, "go");
-            this.enableButton(false, "clear");
-
-        }
- 
         if (digit === 'login') {
  
                 pinElement.value = "";
  
                 elemForErrcode.style.display = "block";
                 elemForErrcode.innerHTML = "Enter your pin";
-                circlesHolder.style.display = 'none';
 
                 pinElement.type = "password";
  
@@ -1613,7 +1521,6 @@ var mpin = mpin || {};
  
         if (pinElement.value.length === 1) {
 
-            console.log("Comming here to enable the clear");
             this.enableButton(true, "clear");
         }
  
@@ -1621,7 +1528,6 @@ var mpin = mpin || {};
             if (pinElement.value.length === this.opts.accessNumberDigits) {
 
                 // Append the number of circles
-
                 this.enableNumberButtons(false);
                 this.enableButton(true, "go");
                 this.enableButton(true, "clear");
@@ -1634,6 +1540,32 @@ var mpin = mpin || {};
             this.enableButton(true, "go");
             this.enableButton(true, "clear");
         }
+
+
+        if (digit === 'clear') {
+            
+            pinElement.value = "";
+            this.enableNumberButtons(true);
+            this.enableButton(false, "go");
+            this.enableButton(false, "clear");
+
+            // Clear the ac num
+
+            if (isAcc && iserror) {
+
+                accNumHolder.innerHTML = "";
+                pinElement.value = "";
+                this.enableNumberButtons(true);
+
+            } else if(isAcc && !iserror) {
+
+                accNumHolder.innerHTML = "";
+                pinElement.value = "";
+                this.enableNumberButtons(true);
+            }
+
+        }
+        
     };
     /**
      *  wrap all buttons function inside ...
@@ -1689,15 +1621,7 @@ var mpin = mpin || {};
         var accountTopBar = document.getElementById('accountTopBar')
         var menuBtn = document.getElementById("menuBtn");
 
-        // console.log(self);
-
-        // if(menuBtn.classList.contains("close")) {
-        //     return;
-        // }
-
         if (menuBtn && !menuBtn.classList.contains("close")) {
- 
-            console.log("set IDENTITY ;::", typeof this.setIdentity);
  
             this.setIdentity(this.identity, true, function() {
                 self.display(mpin.cfg.pinpadDefaultMessage);
@@ -1789,8 +1713,6 @@ var mpin = mpin || {};
             this.ds.setDeviceName(_deviceName);
         }
 
-        console.log("############_reqData", _reqData);
- 
         //register identity
         requestRPS(_reqData, function(rpsData) {
             console.log("rpsData ::::", rpsData);
@@ -1819,17 +1741,9 @@ var mpin = mpin || {};
     mpin.prototype.requestSignature = function(email, clientSecretShare, clientSecretParams) {
         var self = this;
  
-        /*
-         requestSignature(email, 0, this.opts.signatureURL, this.opts.authenticateHeaders, function(params) {
-         var _urlParams = ["app_id=" + encodeURIComponent(params.app_id), "mpin_id=" + encodeURIComponent(params.mpin_id), "expires=" + encodeURIComponent(params.expires),
-         "mobile=" + encodeURIComponent(params.mobile), "signature=" + encodeURIComponent(params.signature)].join("&");
-         self.identity = params.mpin_id;
-         */
-
         requestClientSecret(self.certivoxClientSecretURL(clientSecretParams), clientSecretShare, function(clientSecret) {
 
             self.enableNumberButtons(true);
- 
             self.clientSecret = clientSecret;
             document.getElementById("pinpad-input").value = mpin.cfg.pinpadDefaultMessage;
  
@@ -1839,11 +1753,7 @@ var mpin = mpin || {};
         }, function(message, code) {
             self.error(message, code);
         });
-        /*
-         }, function(err) {
-         console.log("ERRORRR  :::");
-         });
-         */
+
     };
  
     mpin.prototype.error = function(msg) {
@@ -1857,7 +1767,6 @@ var mpin = mpin || {};
     mpin.prototype.actionResend = function(btnElem) {
         var self = this, _reqData = {}, regOTT, _email, btn;
 
-        console.log("this identity :::", this.identity);
         regOTT = this.ds.getIdentityData(this.identity, "regOTT");
         _email = this.getDisplayName(this.identity);
 
@@ -2070,7 +1979,6 @@ var mpin = mpin || {};
             this.enableButton(false, "go");
             this.enableButton(false, "clear");
             this.enableButton(true, "toggle");
-//          mpin.enableToggleButton(true);
             this.requestPermit(newIdentity, function(timePermitHex) {
                 self.enableNumberButtons(true);
             }, function(message, statusCode) {
@@ -2086,25 +1994,6 @@ var mpin = mpin || {};
             });
         }
     };
- 
-    /*
-     *
-     * @param {type} authData
-     * @returns {undefined}
-     *  successSetup: function(authData){
-     if (mpin.opts.successSetupURL) {
-     window.location = mpin.opts.successSetupURL;
-     } else if (mpin.opts.onSuccessSetup) {
-     ,          mpin.opts.onSuccessSetup(authData, function(){
-     mpin.renderSetupDone();
-     });
-     } else {
-     mpin.renderSetupDone();
-     }
-     },
-     *
-     */
- 
  
     mpin.prototype.successSetup = function(authData) {
         var self = this;
@@ -2360,7 +2249,6 @@ var mpin = mpin || {};
     };
 
     mpin.prototype.certivoxClientSecretURL = function(params) {
-//      return mpin.cfg.apiUrl + mpin.cfg.apiVersion + "/clientSecret?" + params;
         return this.opts.certivoxURL + "clientSecret?" + params;
     };
  
@@ -2375,7 +2263,6 @@ var mpin = mpin || {};
 
     mpin.prototype.dtaPermitsURL = function() {
         var mpin_idHex = this.identity;
-//      return this.opts.timePermitsURL + "timePermit?app_id=" + this.opts.appID + "&mobile=0&mpin_id=" + mpin_idHex;
         return this.opts.timePermitsURL + "/" + mpin_idHex;
     };
 
@@ -2413,7 +2300,6 @@ var mpin = mpin || {};
         return (checkSum == cSum)
     };
  
- 
     function mp_fromHex(s) {
         if (!s || s.length % 2 != 0)
             return '';
@@ -2434,8 +2320,6 @@ var mpin = mpin || {};
  
     // HELPERS and Language Dictionary
  
- 
-    //loader
     loader = function(url, callback) {
         var script = document.createElement('script');
         script.type = 'text/javascript';
@@ -2620,8 +2504,6 @@ var mpin = mpin || {};
     };
     //  translate
     hlp.text = function(langKey) {
-        //hlp.language set inside render
-        //customLanguageTexts - language
         return mpin.lang[hlp.language][langKey];
     };
  
