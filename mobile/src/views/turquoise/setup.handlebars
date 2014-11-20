@@ -14,11 +14,8 @@
 </div>
 
 <div id="inputContainer">
-
-    <input style="display: none;" id="pinpad-input" type="password" readonly="true">
-
-    <div id="codes"></div>
     
+    <div id="codes">{{hlp 'pinpad_placeholder_text'}}</div>
     <div id="circlesHolder">
         {{#loop data.pinSize}}
             <div class="circle" id="mpin_circle_{{this}}">
