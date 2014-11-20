@@ -667,8 +667,6 @@ var mpin = mpin || {};
 
     mpin.prototype.renderAccessNumber = function(listAccounts) {
 
-        console.log("##############RENDER renderAccessNumber");
-
         var callbacks = {}
             , self = this
             , elemForErrcode = document.getElementById('codes')
@@ -698,7 +696,7 @@ var mpin = mpin || {};
         };
 
         callbacks.mpinClear = function() {
-            self.addToPin.call(self, "clear", false);
+            self.addToAcc.call(self, "clear", false);
         };
         
         callbacks.menuBtn = function() {
@@ -1344,16 +1342,11 @@ var mpin = mpin || {};
             var parent = document.getElementById("inputContainer");
             var child = document.getElementById("codes");
 
-            if(self.isAccNumber && parent.contains(child)) {
-                child.style.display = 'none';
-            }
-
             if(e.target.hasAttribute("disabled")) {
                 return;
             }
 
-            self.addToPin(e.target.getAttribute("data-value"), "", isAcc);
-
+            isAcc ? self.addToAcc(e.target.getAttribute("data-value"),"") : self.addToPin(e.target.getAttribute("data-value"),"");
         }
 
         for (var i = 0; i < btEls.length; i++) {
@@ -1393,26 +1386,84 @@ var mpin = mpin || {};
         }
     };
     //
-    mpin.prototype.addToPin = function(digit, iserror, isAcc) {
+    mpin.prototype.addToPin = function(digit, iserror) {
 
-        var digitLength
+        var digitLen
         , elemForErrcode = document.getElementById('codes')
-        , accNumHolder = document.getElementById('accNumHolder')
         , self = this;
 
         this.pinpadInput || (this.pinpadInput = "");
         this.pinpadInput += digit;
 
-        digitLength = this.pinpadInput.length;
+        digitLen = this.pinpadInput.length;
 
-        console.log("Comming here##########");
+            if (digit === 'login') {
+     
+                    elemForErrcode.style.display = "block";
+                    elemForErrcode.innerHTML = hlp.text("pinpad_placeholder_text");
+                    this.enableNumberButtons(true);
+     
+                    return;
+            }
 
-            if(isAcc && digitLength <= self.opts.accessNumberDigits) {
+            if (digit === 'pin') {
+            
+                elemForErrcode.style.display = "block";
+                elemForErrcode.innerHTML = hlp.text("pinpad_placeholder_text");
 
-                console.log("Comming here##########22222222222");
+                this.enableNumberButtons(true);
+        
+                return;
+            }
+     
+            if (digitLen === 1) {
+
+                this.enableButton(true, "clear");
+            }
+
+            // APpend circles
+
+            if (digitLen <= mpin.cfg.pinSize) {
+                this.bindCircles();
+            }
+     
+            if (digitLen === mpin.cfg.pinSize) {
+
+                this.enableNumberButtons(false);
+                this.enableButton(true, "go");
+                this.enableButton(true, "clear");
+            }
+
+            if (digit === 'clear') {
+                
+                this.enableNumberButtons(true);
+                this.enableButton(false, "go");
+                this.enableButton(false, "clear");
+                this.pinpadInput = "";
+                this.clearCircles();
+
+            }
+        
+    };
+
+    // Add to pin ac number
+
+    mpin.prototype.addToAcc = function(digit, iserror) {
+
+        var accNumLen
+        , elemForErrcode = document.getElementById('codes')
+        , accNumHolder = document.getElementById('accNumHolder')
+        , self = this;
+
+        this.accessNumber += digit;
+
+        accNumLen = this.accessNumber.length;
+
+        console.log("###############This ac number length", accNumLen, "this.accessNumber", this.accessNumber, "and digit", digit);
+
+            if(accNumLen <= self.opts.accessNumberDigits) {
 
                 accNumHolder.style.display = 'block';
-                self.accessNumber += digit;
                 accNumHolder.innerHTML += digit;
             }
 
@@ -1435,20 +1486,13 @@ var mpin = mpin || {};
                 return;
             }
      
-            if (digitLength === 1) {
+            if (accNumLen === 1) {
 
                 this.enableButton(true, "clear");
             }
 
-            // APpend circles
-
-            if (!isAcc && digitLength <= mpin.cfg.pinSize) {
-                this.bindCircles();
-            }
      
-            if (isAcc && digitLength === this.opts.accessNumberDigits) {
-
-                console.log("Comming here##########3333333333333333");
+            if (accNumLen === this.opts.accessNumberDigits) {
 
                 // Append the number of circles
                 this.enableNumberButtons(false);
@@ -1456,30 +1500,23 @@ var mpin = mpin || {};
                 this.enableButton(true, "clear");
             }
      
-            if (!isAcc && digitLength === mpin.cfg.pinSize) {
-
-                this.enableNumberButtons(false);
-                this.enableButton(true, "go");
-                this.enableButton(true, "clear");
-            }
 
             if (digit === 'clear') {
+
+                console.log("###########CLEAR AC NUM", this.accessNumber);
                 
                 this.enableNumberButtons(true);
                 this.enableButton(false, "go");
                 this.enableButton(false, "clear");
-                this.pinpadInput = "";
-                this.clearCircles();
+                this.accessNumber = "";
 
                 // Clear the ac num
 
-                if (isAcc && iserror) {
-
+                if (iserror) {
                     accNumHolder.innerHTML = "";
                     this.enableNumberButtons(true);
 
-                } else if(isAcc && !iserror) {
-
+                } else {
                     this.accessNumber = "";
                     accNumHolder.innerHTML = "";
                     this.enableNumberButtons(true);
@@ -1488,6 +1525,7 @@ var mpin = mpin || {};
             }
         
     };
+
     /**
      *  wrap all buttons function inside ...
      * 
