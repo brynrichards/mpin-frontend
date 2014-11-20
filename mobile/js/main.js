@@ -406,36 +406,6 @@ var mpin = mpin || {};
  
     };
  
-    mpin.prototype.renderHome = function() {
-
-        var callbacks = {}, self = this;
- 
-        if (this.opts.prerollid) {
-            this.renderSetup(this.opts.prerollid);
-        }
- 
-        callbacks.mpin_authenticate = function(evt) {
- 
-            // Check for identity
-            if(self.ds.getDefaultIdentity()) {
-                self.renderLogin();
-            } else {
-                self.renderSetupHome.call(self, evt);               
-            }
-        };
-        callbacks.mp_action_Login1 = function(evt) {
-            self.renderLogin.call(self);
-        };
-        callbacks.mp_action_addIdentity2 = callbacks.mpin_authenticate;
-        callbacks.mp_action_Login2 = callbacks.mp_action_Login1;
- 
-        this.render('home', callbacks);
- 
-        if (this.opts.mobileAppFullURL) {
-            // RenderMobile Home
-            this.renderHomeMobile();
-        }
-    };
     mpin.prototype.renderHomeMobile = function() {
 
         var callbacks = {}, self = this, identity;
@@ -940,27 +910,7 @@ var mpin = mpin || {};
                });
         }
     };
- 
-    mpin.prototype.renderMobileLogin = function() {
-        var callbacks = {}, self = this, reqIntervalID, _request;
- 
-        callbacks.mp_action_home = function(evt) {
-            console.log("reqInterval :: ", self.intervalID);
-            console.log("_request :: ", _request);
- 
-            _request.abort();
- 
-            clearInterval(self.intervalID);
-            self.renderHome.call(self, evt);
-        };
- 
-        this.render("mobile-login", callbacks);
- 
-        this.getAccessNumber();
-        _request = this.getAccess();
- 
-    };
- 
+  
     mpin.prototype.getAccessNumber = function() {
         var _request = new XMLHttpRequest(), self = this, expire, drawTimer, timerEl, timer2d, totalSec;
  
@@ -1061,33 +1011,13 @@ var mpin = mpin || {};
         }
         return _request;
     };
- 
-    mpin.prototype.renderMobileSetup = function() {
-        var callbacks = {}, self = this, qrElem;
- 
-        callbacks.mp_action_home = function() {
-            self.renderHome.call(self);
-        };
-        callbacks.mp_action_cancel = function() {
-            self.renderHome.call(self);
-        };
- 
-        this.render("mobile-setup", callbacks, {mobileAppFullURL: this.opts.mobileAppFullURL});
-        qrElem = document.getElementById("mp_qrcode");
- 
-        new QRCode(qrElem, {
-            text: this.opts.mobileAppFullURL,
-            width: 129,
-            height: 129
-        });
-    };
- 
+  
     mpin.prototype.renderActivateIdentity = function() {
         var callbacks = {}, self = this, email;
         email = this.getDisplayName(this.identity);
 
         callbacks.mp_action_home = function(evt) {
-            self.renderHome.call(self, evt);
+            self.renderHomeMobile.call(self, evt);
         };
         callbacks.mpin_action_setup = function(evt) {
             if (self.checkBtn(this))
@@ -1398,7 +1328,7 @@ var mpin = mpin || {};
         userId = this.getDisplayName(this.identity);
  
         callbacks.mp_action_home = function() {
-            self.renderHome.call(self);
+            self.renderHomeMobile.call(self);
         };
         callbacks.mp_action_go = function() {
             self.renderLogin.call(self);
