@@ -95,7 +95,7 @@ the following links:
 }
 
 #circlesHolder {
-	display: flex;
+	display: block;
 
 	@include circles-holder();
 

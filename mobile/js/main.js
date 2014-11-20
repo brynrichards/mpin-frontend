@@ -230,11 +230,6 @@ var mpin = mpin || {};
         return html;
     };
 
-    mpin.prototype.readyHelp= function(tmplName, tmplData) {
-        var data = tmplData, html;
-        html = mpin.templates[tmplName]({data:data, cfg: mpin.cfg});
-        return html;
-    };
 
     mpin.prototype.readyHelpHub= function(tmplName, tmplData) {
         var data = tmplData, html;
@@ -268,37 +263,6 @@ var mpin = mpin || {};
             }
         }
         
-        if (typeof mpin.custom !== 'undefined') {
-            this.setCustomStyle();
-        }
-    };
-
-    mpin.prototype.renderHelp = function(tmplName, callbacks, tmplData) {
-        var data = tmplData || {}, k;
-
-        this.elHelpOverlay.style.display = 'block';
-        this.elHelpOverlay.style.opacity = "1";
-        this.elHelp.innerHTML = this.readyHelp(tmplName, data);
-        this.elHelp.style.display = 'block';
-
-        for (k in callbacks) {
-            if (document.getElementById(k)) {
-
-                if (window.navigator.msPointerEnabled) {
-                    document.getElementById(k).addEventListener("MSPointerDown", callbacks[k], false);
-                }
-                else {
-
-                    if(mpin.cfg.touchevents) {
-                        document.getElementById(k).addEventListener('touchstart', callbacks[k], false);
-                    } else {
-                        document.getElementById(k).addEventListener('click', callbacks[k], false);
-                    }
-
-                }
-    
-            }
-        }
         if (typeof mpin.custom !== 'undefined') {
             this.setCustomStyle();
         }
@@ -696,17 +660,6 @@ var mpin = mpin || {};
 
         this.render("setup", callbacks, {email: email, pinSize: mpin.cfg.pinSize});
 
-        // var _textLoginBtn = document.getElementById('mpinLogin')
-        //     pinpadInput = document.getElementById('pinpad-input');
-
-        // _textLoginBtn.innerText = hlp.text("setup_btn_text");
-
-        // pinpadInput.placeholder = hlp.text("pinpad_placeholder_setup");
-
-        // var renderElem = document.getElementById('codes');
-        // renderElem.style.display = 'block';
-        // renderElem.innerHTML = hlp.text("pinpad_placeholder_setup");
-
         this.enableNumberButtons(false);
         this.bindNumberButtons();
 
@@ -722,7 +675,6 @@ var mpin = mpin || {};
             , identity = this.ds.getDefaultIdentity()
             , email = this.getDisplayName(identity)
             , totalAccounts = this.ds.getAccounts();
-
 
         totalAccounts = Object.keys(totalAccounts).length;
 
@@ -770,7 +722,6 @@ var mpin = mpin || {};
                     self.actionLogin.call(self);
 
                     return;
-
                 }
 
                 // Clear the error codes display
@@ -833,17 +784,13 @@ var mpin = mpin || {};
 
             self.actionLogin.call(self);
         };
-         
+        
+        this.pinpadInput = '';
         this.render("setup", callbacks, {email: email, menu: true, pinSize: mpin.cfg.pinSize});
         this.enableNumberButtons(false);
         this.bindNumberButtons();
 
         // TODO
-
-        var renderElem = document.getElementById('codes');
-
-        renderElem.style.display = 'block';
-        renderElem.innerHTML = hlp.text("pinpad_placeholder_text");
 
         // Help hub callbacks
 
@@ -1452,18 +1399,21 @@ var mpin = mpin || {};
     //
     mpin.prototype.addToPin = function(digit, iserror, isAcc) {
 
-        var pinLength
+        var digitLength
         , elemForErrcode = document.getElementById('codes')
         , accNumHolder = document.getElementById('accNumHolder')
         , self = this;
 
         this.pinpadInput || (this.pinpadInput = "");
         this.pinpadInput += digit;
-        pinLength = this.pinpadInput.length;
 
-        console.log("Comming here", this.pinpadInput, " And is it ac number", isAcc, "dump self acc number", self.accessNumber);
+        digitLength = this.pinpadInput.length;
 
-            if(isAcc && pinLength <= self.opts.accessNumberDigits) {
+        console.log("#########Gettting digit", this.pinpadInput);
+
+        // console.log("Comming here", this.pinpadInput, " And is it ac number", isAcc, "dump self acc number", self.accessNumber);
+
+            if(isAcc && digitLength <= self.opts.accessNumberDigits) {
                 accNumHolder.style.display = 'block';
                 self.accessNumber += digit;
                 accNumHolder.innerHTML += digit;
@@ -1488,19 +1438,19 @@ var mpin = mpin || {};
                 return;
             }
      
-            if (pinLength === 1) {
+            if (digitLength === 1) {
 
                 this.enableButton(true, "clear");
             }
 
             // APpend circles
 
-            if (!isAcc && pinLength <= mpin.cfg.pinSize) {
-                self.bindCircles();
+            if (!isAcc && digitLength <= mpin.cfg.pinSize) {
+                this.bindCircles();
             }
      
             else if (isAcc) {
-                if (pinLength === this.opts.accessNumberDigits) {
+                if (digitLength === this.opts.accessNumberDigits) {
 
                     // Append the number of circles
                     this.enableNumberButtons(false);
@@ -1509,7 +1459,7 @@ var mpin = mpin || {};
                 }
             }
      
-            else if (pinLength === mpin.cfg.pinSize) {
+            else if (digitLength === mpin.cfg.pinSize) {
 
                 this.enableNumberButtons(false);
                 this.enableButton(true, "go");
@@ -1522,6 +1472,7 @@ var mpin = mpin || {};
                 this.enableNumberButtons(true);
                 this.enableButton(false, "go");
                 this.enableButton(false, "clear");
+                this.clearCircles();
 
                 // Clear the ac num
 
@@ -1532,9 +1483,11 @@ var mpin = mpin || {};
 
                 } else if(isAcc && !iserror) {
 
+                    this.accessNumber = "";
                     accNumHolder.innerHTML = "";
                     this.enableNumberButtons(true);
                 }
+
 
             }
         
@@ -1579,11 +1532,23 @@ var mpin = mpin || {};
     };
 
     mpin.prototype.bindCircles = function() {
+        
         var pinElement = document.getElementById('pinpad-input');
         var newCircle = document.createElement('div');
         newCircle.className = "inner-circle";
         var circleID = "mpin_circle_" + (this.pinpadInput.length - 1);
         document.getElementById(circleID).appendChild(newCircle);
+    }
+
+    mpin.prototype.clearCircles = function() {
+
+        var pinSize = mpin.cfg.pinSize, circles = [];
+        for (var i = 1; i < pinSize; i++) {
+            circles[i] = document.getElementById("mpin_circle_" + i);
+            if (circles[i] && circles[i].childNodes[3]) {
+                circles[i].removeChild(circles[i].childNodes[3]);
+            }
+        }
     }
  
     mpin.prototype.getDisplayName = function(uId) {
