@@ -659,6 +659,7 @@ var mpin = mpin || {};
 
         this.enableNumberButtons(false);
         this.bindNumberButtons();
+        this.addToPin.call(self, "clear");
 
         //requestSignature
         this.requestSignature(email, clientSecretShare, clientSecretParams);
@@ -1212,7 +1213,7 @@ var mpin = mpin || {};
             self.renderHomeMobile.call(self);
         };
         callbacks.mp_action_go = function() {
-            self.renderLogin.call(self);
+            self.renderAccessNumber.call(self);
         };
  
         this.render("setup-done", callbacks, {userId: userId});
@@ -1266,6 +1267,9 @@ var mpin = mpin || {};
             self.ds.setDefaultIdentity(uId);
             self.setIdentity(uId, true);
             self.renderAccessNumber();
+
+            // Enable pin
+            self.addToAcc.call(self, "clear", false);
 
             // Hide the identity list
 
@@ -1851,6 +1855,7 @@ var mpin = mpin || {};
                             self.successLogin(authData, iD);
                     } else if (errorCode === "INVALID") {
 
+                        self.addToPin.call(self, "clear");
                         self.display(hlp.text("authPin_errorInvalidPin"), true);
  
                         self.enableNumberButtons(true);
@@ -1880,6 +1885,7 @@ var mpin = mpin || {};
 
                         // Render the access number again
                         self.renderAccessNumber.call(self);
+                        self.addToAcc.call(self, "clear", false);
                         self.display(hlp.text("authPin_errorInvalidAccessNumber"), true);
                     }
  
@@ -2156,8 +2162,6 @@ var mpin = mpin || {};
     mpin.prototype.successLogin = function(authData, iD) {
         var callbacks = {}, self = this;
 
-        console.log("Is tehre logout url", authData.logoutURL);
-
         callbacks.mp_action_home = function(evt) {
             if (totalAccounts === 0) {
              self.renderSetupHome();
@@ -2174,12 +2178,12 @@ var mpin = mpin || {};
 
                 self.ajaxPost( authData.logoutURL, authData.logoutData, function(res) {
                     if (res) {
-                        self.renderLogin();
+                        self.renderAccessNumber();
                     }
                 });
             } else {
 
-                self.renderLogin();
+                self.renderAccessNumber();
             }
 
         };
