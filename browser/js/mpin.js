@@ -1851,8 +1851,12 @@ var mpin = mpin || {};
 						self.display(hlp.text("authPin_errorNotAuthorized"), true);
 					} else if (errorCode === "EXPIRED") {
 						self.display(hlp.text("authPin_errorExpired"), true);
+					} else if (errorCode === "WEBSOCKETERROR") {
+                        console.error("WebSocket connection fail! Falling to AJAX");
+                        self.opts.useWebSocket = false;
+                        self.actionLogin.call(self);
 					} else {
-						//error INVOCATION
+						console.error("Authentication error: ", errorCode, errorMessage)
 						self.display(hlp.text("authPin_errorServer"), true);
 					}
 
