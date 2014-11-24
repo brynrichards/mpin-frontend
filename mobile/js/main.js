@@ -73,7 +73,6 @@ var mpin = mpin || {};
 //      apiUrl: "https://m-pinapi.certivox.net/",
 //      apiUrl: "http://dtatest.certivox.me/",
         language: "en",
-        pinpadDefaultMessage: "",
         pinSize: 4,
         requiredOptions: "appID; signatureURL; mpinAuthServerURL; timePermitsURL; seedValue",
         defaultOptions: {
@@ -263,9 +262,6 @@ var mpin = mpin || {};
             }
         }
         
-        if (typeof mpin.custom !== 'undefined') {
-            this.setCustomStyle();
-        }
     };
 
     mpin.prototype.renderHelpHub = function(tmplName, tmplData) {
@@ -282,19 +278,16 @@ var mpin = mpin || {};
         helphubBtns.first = function(evt) {
             // Modify the sequence for the templates
             // self.renderHelp("help-helphub", callbacks);
-
         };
 
         helphubBtns.second = function(evt) {
             // Modify the sequence for the templates
             // self.renderHelp("help-helphub", callbacks);
-
         };
 
         helphubBtns.details = function(evt) {
             // Modify the sequence for the templates
             self.renderHelpHub("helphub-details");
-
         };
 
         helphubBtns.forth = function(evt) {
@@ -329,9 +322,7 @@ var mpin = mpin || {};
 
             }
         }
-        if (typeof mpin.custom !== 'undefined') {
-            this.setCustomStyle();
-        }
+
     };
 
     mpin.prototype.dismissHelp = function() {
@@ -457,9 +448,9 @@ var mpin = mpin || {};
             if (totalAccounts === 0) {
              self.renderSetupHome();
             } else if (totalAccounts === 1) {
-             self.renderLogin();
+             self.renderAccessNumber();
             } else if (totalAccounts > 1) {
-             self.renderLogin(true);
+             self.renderAccessNumber(true);
             }
         };
         callbacks.mp_action_setup = function(evt) {
@@ -620,13 +611,16 @@ var mpin = mpin || {};
         var callbacks = {}
             , self = this;
 
+        var totalAccounts = this.ds.getAccounts();
+        totalAccounts = Object.keys(totalAccounts).length;
+
         callbacks.mp_action_home = function(evt) {
             if (totalAccounts === 0) {
-             this.renderSetupHome();
+             self.renderSetupHome();
             } else if (totalAccounts === 1) {
-             this.renderLogin();
+             self.renderAccessNumber();
             } else if (totalAccounts > 1) {
-             this.renderLogin(true);
+             self.renderAccessNumber(true);
             }
         };
         callbacks.mpinClear = function() {
@@ -655,7 +649,7 @@ var mpin = mpin || {};
             self.renderHelp("help-setup-home", callbacks);
         };
 
-        this.render("setup", callbacks, {email: email, pinSize: mpin.cfg.pinSize});
+        this.render("setup-pin", callbacks, {email: email, pinSize: mpin.cfg.pinSize});
 
         this.enableNumberButtons(false);
         this.bindNumberButtons();
@@ -688,9 +682,9 @@ var mpin = mpin || {};
             if (totalAccounts === 0) {
              self.renderSetupHome();
             } else if (totalAccounts === 1) {
-             self.renderLogin();
+             self.renderAccessNumber();
             } else if (totalAccounts > 1) {
-             self.renderLogin(true);
+             self.renderAccessNumber(true);
             }
         };
 
@@ -731,6 +725,16 @@ var mpin = mpin || {};
         self.enableButton(false, "clear");
         self.bindNumberButtons(true);
 
+        if (listAccounts) {
+            this.toggleButton();
+        } else {
+            this.setIdentity(this.ds.getDefaultIdentity(), true, function() {
+                self.display(hlp.text("pinpad_placeholder_text"));
+               }, function() {
+                return false;
+               });
+        }
+
     }
  
     mpin.prototype.renderLogin = function(listAccounts) {
@@ -746,9 +750,9 @@ var mpin = mpin || {};
             if (totalAccounts === 0) {
              self.renderSetupHome();
             } else if (totalAccounts === 1) {
-             self.renderLogin();
+             self.renderAccessNumber();
             } else if (totalAccounts > 1) {
-             self.renderLogin(true);
+             self.renderAccessNumber(true);
             }
         };
 
@@ -799,7 +803,7 @@ var mpin = mpin || {};
             this.toggleButton();
         } else {
             this.setIdentity(this.ds.getDefaultIdentity(), true, function() {
-                self.display(hlp.text("pinpad_default_message"));
+                self.display(hlp.text("pinpad_placeholder_text"));
                }, function() {
                 return false;
                });
@@ -1575,7 +1579,6 @@ var mpin = mpin || {};
         if (menuBtn && !menuBtn.classList.contains("close")) {
  
             this.setIdentity(this.identity, true, function() {
-                self.display(mpin.cfg.pinpadDefaultMessage);
             }, function() {
                 return false;
             });
@@ -1609,7 +1612,6 @@ var mpin = mpin || {};
 
         
         this.setIdentity(this.identity, true, function() {
-            self.display(mpin.cfg.pinpadDefaultMessage);
         }, function() {
             return false;
         });
@@ -1645,28 +1647,22 @@ var mpin = mpin || {};
         _deviceNameInput = (document.getElementById("deviceInput")) ? document.getElementById("deviceInput").value : "";
         //DEVICE NAME
         if (!this.ds.getDeviceName() && _deviceNameInput === "") {
-            console.log("case NONE");
             _deviceName = this.suggestDeviceName();
         } else if (!this.ds.getDeviceName() && _deviceNameInput !== "") {
-            console.log("case have INPUT");
             _deviceName = _deviceNameInput;
         } else if (_deviceNameInput !== this.ds.getDeviceName()) {
-            console.log("case change");
             _deviceName = _deviceNameInput;
         } else {
             _deviceName = false;
         }
 
         if (_deviceName) {
-            console.log("case set DEVICE NAME", _deviceName);
-
             _reqData.data.deviceName = _deviceName;
             this.ds.setDeviceName(_deviceName);
         }
 
         //register identity
         requestRPS(_reqData, function(rpsData) {
-            console.log("rpsData ::::", rpsData);
             if (rpsData.error) {
                 self.error("Activate First");
                 return;
@@ -1696,8 +1692,7 @@ var mpin = mpin || {};
 
             self.enableNumberButtons(true);
             self.clientSecret = clientSecret;
-            document.getElementById("pinpad-input").value = mpin.cfg.pinpadDefaultMessage;
- 
+
             if (self.opts.onGetSecret) {
                 self.opts.onGetSecret();
             }
@@ -1747,8 +1742,6 @@ var mpin = mpin || {};
             }
 
             if (self.identity !== rpsData.mpinId) {
-                console.log("mpin CHANGED : ", rpsData.mpinId);
-
                 //delete OLD mpinID
                 self.ds.deleteIdentity(self.identity);
 
@@ -1786,6 +1779,7 @@ var mpin = mpin || {};
             self.ds.setDefaultIdentity(self.identity);
             self.ds.deleteOldIdentity(self.identity);
             self.display(hlp.text("setupPin_pleasewait"), false);
+
             if (self.opts.setupDoneURL) {
                 var _reqData = {}, url = self.opts.setupDoneURL + "/" + self.identity;
  
@@ -1991,15 +1985,6 @@ var mpin = mpin || {};
         _request.send(JSON.stringify(data));
     };
  
- 
-    //set Custom style to pinPad
-    //toDO create loop like options 
-    mpin.prototype.setCustomStyle = function() {
-        if (mpin.custom.frame_background && document.getElementById("mp_pinpadHolder")) {
-            document.getElementById("mp_pinpadHolder").style.background = mpin.custom.frame_background;
-        }
-    };
- 
     //new Function
     mpin.prototype.requestPermit = function(identity, onSuccess, onFail) {
         var self = this;
@@ -2029,7 +2014,6 @@ var mpin = mpin || {};
  
         if (newDefaultAccount) {
             this.setIdentity(newDefaultAccount, true, function() {
-                self.display(mpin.cfg.pinpadDefaultMessage);
             }, function() {
                 return false;
             });
@@ -2166,9 +2150,9 @@ var mpin = mpin || {};
             if (totalAccounts === 0) {
              self.renderSetupHome();
             } else if (totalAccounts === 1) {
-             self.renderLogin();
+             self.renderAccessNumber();
             } else if (totalAccounts > 1) {
-             self.renderLogin(true);
+             self.renderAccessNumber(true);
             }
         };
 
@@ -2198,10 +2182,6 @@ var mpin = mpin || {};
 
     mpin.prototype.certivoxClientSecretURL = function(params) {
         return this.opts.certivoxURL + "clientSecret?" + params;
-    };
- 
-    mpin.prototype.dtaClientSecretURL = function(params) {
-        return this.opts.mpinDTAServerURL + "clientSecret?" + params;
     };
  
      mpin.prototype.certivoxPermitsURL = function() {
@@ -2444,7 +2424,10 @@ var mpin = mpin || {};
         "accessdenied_btn": "Register again",
         "setup_btn_text": "Setup",
         "setup_device_label": "Device name:",
-        "verify_pin": "Verifying PIN..."
+        "verify_pin": "Verifying PIN...",
+        "sign_in": "Sign In",
+        "clear": "Clear",
+        "setup": "Setup"
     };
     //  image should have config properties
     hlp.img = function(imgSrc) {
