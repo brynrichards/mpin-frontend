@@ -1881,6 +1881,18 @@ var mpin = mpin || {};
                         self.renderAccessNumber.call(self);
                         self.addToAcc.call(self, "clear", false);
                         self.display(hlp.text("authPin_errorInvalidAccessNumber"), true);
+
+                    } else if (errorCode === "NOTAUTHORIZED") {
+                        self.display(hlp.text("authPin_errorNotAuthorized"), true);
+                    } else if (errorCode === "EXPIRED") {
+                        self.display(hlp.text("authPin_errorExpired"), true);
+                    } else if (errorCode === "WEBSOCKETERROR") {
+                        console.error("WebSocket connection fail! Falling to AJAX");
+                        self.opts.useWebSocket = false;
+                        self.actionLogin.call(self);
+                    } else {
+                        console.error("Authentication error: ", errorCode, errorMessage)
+                        self.display(hlp.text("authPin_errorServer"), true);
                     }
  
                 }, function() {
