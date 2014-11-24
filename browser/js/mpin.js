@@ -1861,6 +1861,7 @@ var mpin = mpin || {};
 		var displayName, accId, self = this;
 		if ((typeof (newIdentity) === "undefined") || (!newIdentity)) {
 			displayName = "";
+			this.identity = "";
 		} else {
 			this.identity = newIdentity;
 			displayName = this.getDisplayName(this.identity);
