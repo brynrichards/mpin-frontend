@@ -10,24 +10,15 @@
     <div id="mpinUser">
        <p>{{data.email}}</p>
     </div>
-        <a href="#" id="menuBtn"></a>
+		<a href="#" id="menuBtn"></a>
 </div>
 
 <div id="inputContainer">
-    
-    <div id="codes">{{hlp 'pinpad_placeholder_text'}}</div>
-    <div id="circlesHolder">
-        {{#loop data.pinSize}}
-            <div class="circle" id="mpin_circle_{{this}}">
-                <div class="outer-circle">
-                </div>
-            </div>
-        {{/loop}}
-    </div>
-
+    <div id="codes">{{hlp 'pinpad_placeholder_text2'}}</div>
+    <div id="accNumHolder" style="display: none;"></div>
 </div>
  
-<div id="pinsHolder">
+<div id="pinsHolder" class="access-number">
 
     <div class="pre-row">
         <div class="row">
@@ -71,14 +62,14 @@
     <div class="pre-row">
         <div class="row bottom">
             <button class="btnClear disabled" data-value="clear" id="mpinClear">
-                clear
+                Clear
                 <!-- <span class="label">clear</span> -->
             </button>
             <button class="btn" data-value="0">
                 0
             </button>
             <button class="btnLogin disabled" data-value="go" id="mpinLogin">
-                SIGN IN
+                Next
                 <!-- <span class="label">login</span> -->
             </button>
         </div>
