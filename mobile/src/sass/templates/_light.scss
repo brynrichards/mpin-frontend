@@ -115,10 +115,16 @@ $BORDERLESS : true;
 	letter-spacing: 10pt;
 }
 
+@mixin circle-main() {
+	width: 32px;
+	height: 32px;
+	margin-left: 0px;
+}
+
 @mixin circles-holder() {
 	position: absolute;
 	width: 260px;
-	top: 30px;
+	top: 10px;
 	left: 0;
 	right: 0;
 	text-align: center;
@@ -126,27 +132,24 @@ $BORDERLESS : true;
 }
 
 @mixin outer-circle() {
-	background: white;
-	width: 20px;
-	height: 20px;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	border-radius: 50%;
-	border: 2px solid #363c74;
+	background: #E4E4E4;
+	width: 32px;
+	height: 32px;
+	@include border-radius(61px);
+	border: 2px solid #585858;
 	position: absolute;
 	z-index: 800;
 }
 
 @mixin inner-circle() {
-	background: #363c74;
-	width: 20px;
-	height: 20px;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	border-radius: 50%;
-	border: 2px solid #363c74;
-	position: relative;
-	z-index: 801;
+	margin: 7px;
+	background: #3A7FB9;
+	width: 18px;
+	height: 18px;
+	@include border-radius(48px);
+	position: absolute;
+	z-index: 1000;
+	border: 2px solid white;
 }
 
 @mixin account-top-bar() {
@@ -215,6 +218,12 @@ $BORDERLESS : true;
 }
 
 @mixin mpin-menu-close() {
+
+	-webkit-transform: rotate(180deg);     /* Chrome and other webkit browsers */
+	-moz-transform: rotate(180deg);        /* FF */
+	-o-transform: rotate(180deg);          /* Opera */
+	-ms-transform: rotate(180deg);         /* IE9 */
+	transform: rotate(180deg);             /* W3C complaint browsers */
 }
 
 @mixin powered-by() {
@@ -469,7 +478,37 @@ $BORDERLESS : true;
 
 // Settings image in identity
 
+@mixin account-list() {
+	// Style rounded
+
+	color: #868aac;
+	margin-left: 10px;
+	margin-right: 10px;
+	border-radius: 4px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background-color: white;
+	border: 1px solid grey;
+}
+
+@mixin settings-item() {
+	color: white;
+	background: #007cc2;
+}
+
 @mixin settings-img() {
+	background-image: url('#{$IMAGES}/settings.svg');
+	background-repeat: no-repeat;
+	display: block;
+	position: relative;
+	top: 5px;
+	right: 10px;
+	background-color: white;
+	border: 1px solid grey;
+	background-size: auto 100%;
+	width: 30px;
+	height: 30px;
+	border-radius: 7px;
 }
 
 @mixin settings-img-active() {

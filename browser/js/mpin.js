@@ -712,10 +712,11 @@ var mpin = mpin || {};
 				self.renderHelpTooltip.call(self, "addidentity");
 			};
 		}
-
-		document.getElementById("mpin_accounts_btn").onclick = function (evt) {
-			self.renderLogin.call(self, true);
-		};
+		if (document.getElementById("mpin_accounts_btn")) {
+			document.getElementById("mpin_accounts_btn").onclick = function (evt) {
+				self.renderLogin.call(self, true);
+			};
+		}
 
 		document.getElementById("mpin_arrow").onclick = function (evt) {
 			delete self.tmp;
@@ -724,10 +725,12 @@ var mpin = mpin || {};
 			self.toggleButton();
 			renderElem.style.top = "40px";
 		};
+
 		document.getElementById("mpin_setup").onclick = function () {
 			delete self.tmp;
 			self.actionSetupHome.call(self);
 		};
+
 		if (this.opts.setDeviceName && document.getElementById("mpin_help_device")) {
 			document.getElementById("mpin_help_device").onclick = function () {
 				setTemp();
@@ -766,9 +769,11 @@ var mpin = mpin || {};
 			leftSeconds = (leftSeconds) ? leftSeconds - 1 : Math.floor((expiresOn - (new Date())) / 1000);
 			if (leftSeconds > 0) {
 //				document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
-				document.getElementById("mpin_seconds").innerHTML = leftSeconds;
 				if (document.getElementById("mpTimer")) {
+					document.getElementById("mpin_seconds").innerHTML = leftSeconds;
 					drawTimer(leftSeconds);
+				} else {
+					document.getElementById("mpin_seconds").innerHTML = leftSeconds + " " + hlp.text("mobileAuth_seconds");
 				}
 
 			} else {
@@ -990,11 +995,15 @@ var mpin = mpin || {};
 				}
 				self.getAccessNumber();
 			} else {
-				document.getElementById("mpin_seconds").innerHTML = expireAfter;
+				//leftSeconds + " " + hlp.text("mobileAuth_seconds");
 				//////////////////////////////////////////Clockwise
 				///// Check if Timer Element exist some template did not have timer
 				if (document.getElementById("mpTimer")) {
+					document.getElementById("mpin_seconds").innerHTML = expireAfter;
 					drawTimer(expireAfter);
+				} else {
+					document.getElementById("mpin_seconds").innerHTML = expireAfter + " " + hlp.text("mobileAuth_seconds");
+
 				}
 			}
 		};
@@ -1328,7 +1337,7 @@ var mpin = mpin || {};
 		};
 		callbacks.mpin_accounts_btn = function () {
 			self.renderLogin.call(self, true);
-			
+
 		};
 		this.render("revoke-identity", callbacks, {userId: userId});
 	};
@@ -1861,6 +1870,7 @@ var mpin = mpin || {};
 		var displayName, accId, self = this;
 		if ((typeof (newIdentity) === "undefined") || (!newIdentity)) {
 			displayName = "";
+			this.identity = "";
 		} else {
 			this.identity = newIdentity;
 			displayName = this.getDisplayName(this.identity);

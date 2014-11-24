@@ -682,15 +682,7 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 
 #mp_accountListView {
 
-	// Style rounded
-
-	color: #868aac;
-	margin-left: 10px;
-	margin-right: 10px;
-	border-radius: 4px;
-	overflow-x: hidden;
-	overflow-y: auto;
-	background-color: white;
+	@include account-list();
 
 	&.notActive {
 		background: #eeeeee;
@@ -698,9 +690,8 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 	}
 
 	.default {
-		color: white;
-		background: #868aac;
-		box-shadow: inset 5px 0 0 #5d6078;
+
+		@include settings-item();
 
 		.editImg {
 			@include settings-img-active();
@@ -779,11 +770,9 @@ h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
 }
 
 .circle {
-	width: 20px;
-	height: 20px;
-	margin-left: 5px;
-
 	display: inline-block;
+
+	@include circle-main();
 
 	.outer-circle {
 		@include outer-circle();
