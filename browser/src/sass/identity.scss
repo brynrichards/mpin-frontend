@@ -10,7 +10,7 @@ the following links:
 
   * Our Terms and Conditions -
     http://www.certivox.com/about-certivox/terms-and-conditions/
-  
+	
   * Our Security and Privacy -
     http://www.certivox.com/about-certivox/security-privacy/
 
@@ -32,13 +32,14 @@ the following links:
 .mpinLists {
 	width: 90%;
 	margin: 0 auto;
-	border: 1px solid grey;
-
 	/*max-height: 70%;*/
 	height: 60%;
 	overflow: auto;
-
-	@include border-radius(7px);
+	@include identity-list();
+	
+	&.mpNoHeight {
+		height: auto;
+	}
 
 	ul {
 		padding: 0px;
@@ -49,59 +50,30 @@ the following links:
 		padding: 5px;
 		width: 100%;
 		/*line-height: 35px;*/
-		min-height: 45px;
-		border-bottom: 1px solid grey;
-		&.mpinRowActive {
-			background: #007cc2;
-			color: #fff;
-			.mpinSettingsRow {
-				color: #fff;
-			}
-		}
-		&.mpinRowActive:hover {
-			background: #007cc2;
-			color: #fff;
-			.mpinSettingsRow {
-				color: #fff;
-			}
-		}
+		@include users-row();
 	}
 
 	.mpinRow:hover {
-		/*background: #007cc2;*/
-		background: #7DD1FF;
-		color: #fff;
-		cursor: pointer;
-		.mpinSettingsRow {
-			color: #fff;
-		}
+		@include users-row-hover();
 	}
 
 	.mpinSettings {
 		float: right;
-		border: 1px solid grey;
-		background: #fff url('#{$IMAGES}/cog-setting.svg') center no-repeat;
-		background-size: auto 100%;
-		width: 30px;
-		height: 30px;
-		margin: 3px;
-		@include border-radius(7px);
+
+		@include setting-icon();
 	}
 
-	a.mpinSettingsRow {
-		/*word-break: break-all;*/
-		/*width: 75%;*/
-		line-height: 22px;
-		text-align: left;
-		margin-left: 2px;
-
-		padding-top: 6px;
-
+	.mpinSettingsRow {
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;
 		text-decoration: none;
 		display: block;
-
+		
+		@include mpin-settings-row();
+		
+		&.mpVerCenter {
+			line-height: 16px;
+		}
 	}
 }
