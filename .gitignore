@@ -15,3 +15,6 @@ npm-debug.log
 browser/css
 .sass-cache/
 build/tmp/
+mobile/src/sass/.DS_Store
+mobile/resources/templates/.DS_Store
+mobile/resources/.DS_Store

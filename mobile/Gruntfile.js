@@ -21,7 +21,7 @@ module.exports = function(grunt) {
 				}
 			},
 			makeViews: {
-				cmd: 'handlebars -n "mpin.templates" ./src/views/*.handlebars -f ../build/out/mobile/js/templates.js',
+				cmd: 'handlebars -n "mpin.templates" ./src/views/<%= settings.templateName %>/*.handlebars -f ../build/out/mobile/js/templates.js',
 				options: {
                 			stdout: true,
 				}
@@ -33,19 +33,19 @@ module.exports = function(grunt) {
                 }
 			},
 			copyResources: {
-				cmd: 'cp -R resources/ ../build/out/mobile/resources/',
+				cmd: 'cp -Rv resources/ ../build/out/mobile/resources/',
 				options: {
                 			stdout: true,
 				}
 			},
 			copyHandlebarsRuntime: {
-				cmd: 'cp -R ../libs/handlebars.runtime.min.js ../build/out/mobile/js/',
+				cmd: 'cp -Rv ../libs/handlebars.runtime.min.js ../build/out/mobile/js/',
 				options: {
 	            			stdout: true,
 				}
 			},
 			copySASS: {
-				cmd: 'cp -R src/sass/ ../build/tmp/mobile/sass/',
+				cmd: 'mkdir -p ../build/tmp/mobile/sass/ && cp -Rv src/sass/ ../build/tmp/mobile/sass/',
 				options: {
 	            			stdout: true,
 				},
@@ -56,7 +56,7 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			resourceFiles: {
-				files: ['src/sass/*.scss','src/views/*.handlebars', 'js/*.js', 'settings.json', 'index.html'],
+				files: ['src/sass/*.scss','src/views/**/*.handlebars', 'js/*.js', 'settings.json', 'index.html'],
 				tasks: ['bgShell', 'sass']
 			}
 		},

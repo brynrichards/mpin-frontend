@@ -70,14 +70,11 @@ the following links:
 		background: #006b9e !important;
 	}
 
-	text-transform: uppercase;
-	font-weight: bold;
-
 	#codes {
 		
-		display: none;
 		text-align: center;
-		color: black;
+		color: rgba(54,60,116,0.6);
+		font-size: 26px;
 		width: 100%;
 		height: 100%;
 
@@ -91,21 +88,15 @@ the following links:
 		padding-top: 14px;
 
 		&.error {
-			color: red;
-			border: 1px solid red;
+			color: #e64a19;
 		}
 	}
 }
 
 #circlesHolder {
-	position: absolute;
-	width: 260px;
-	top: 10px;
-	left: 0;
-	right: 0;
-	text-align: center;
-	margin:0 auto;
-	display: flex;
+	display: block;
+
+	@include circles-holder();
 
 	-webkit-box-align: stretch;
 	-ms-flex-align: stretch;
@@ -116,6 +107,11 @@ the following links:
 	-ms-flex-direction: row !important;
 	-moz-box-orient: horizontal !important;
 	flex-direction: row !important;
+}
+
+#accNumHolder {
+
+	@include access-number();
 }
 
 #pinsHolder {
@@ -149,6 +145,10 @@ the following links:
 
 	&.access-number {
 		@include pinpad-accessnumber();
+
+		button {
+			color: white !important;
+		}
 
 	}
 

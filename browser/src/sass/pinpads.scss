@@ -10,7 +10,7 @@ the following links:
 
   * Our Terms and Conditions -
     http://www.certivox.com/about-certivox/terms-and-conditions/
-  
+	
   * Our Security and Privacy -
     http://www.certivox.com/about-certivox/security-privacy/
 
@@ -38,13 +38,12 @@ the following links:
 
 
 	&.mpinInputError {
-		border: 1px solid red;
-		color: red;
+		@include pin-pad-input-error();
 	}
 
 	.mpinInputIn {
 		margin: 0 auto;
-		width: 100%;
+		width: 90%;
 		padding: 7% 1%;
 		text-align: center;
 
@@ -59,38 +58,21 @@ the following links:
 			margin-right: 5px;
 			cursor: pointer;
 		}
+
+		.mpinInputErrorText {
+			@include pin-pad-input-text-error();
+		}
+
 	}
 
 	.mpinCircle {
-		width: 35px;
-		height: 35px;
-		/*float: left;*/
-		display: inline-block;
+		@include pinpad-circle();
 
 		.mpinCircleIn {
-			margin: 7px;
-			background: #3A7FB9;
-			width: 18px;
-			height: 18px;
-			-webkit-border-radius: 48px;
-			-moz-border-radius: 48px;
-			border-radius: 48px;
-			position: absolute;
-			z-index: 1000;
-			border: 2px solid white;
-
-			@include border-radius(48px);
+			@include pinpad-circlein();
 		}
 		.mpinCircleOut {
-			background: #E4E4E4;
-			width: 32px;
-			height: 32px;
-			-webkit-border-radius: 61px;
-			-moz-border-radius: 61px;
-			border-radius: 61px;
-			border: 2px solid #585858;
-			position: absolute;
-			z-index: 800;
+			@include pinpad-circleout();
 		}
 	}
 
@@ -98,7 +80,9 @@ the following links:
 	.mpinInputText {
 		text-align: center;
 		line-height: 20px;
-		font-weight: bold;
+
+		@include pin-pad-input-text();
+
 		&.mpinInputTop {
 			display: block;
 			margin-top: 9px;
@@ -126,20 +110,23 @@ the following links:
 
 		height: 100%;
 
-		.mpinPadBtn, .mpinPadBtn2 {
-			border: 0;
-			background: none;
-			color: #fff;
-			text-shadow: 2px 2px 2px #000000;
-			display: block;
-			text-align: center;
-			width: 90%;
-			font-size: 1.75em;
-			font-weight:normal;
+		.mpinPadBtn {
+			@include pin-pad-button();
+
 			&:active {
-				background: #3777ba;
+				@include pin-pad-button-active();
+			}
+
+		}
+
+		.mpinPadBtn2 {
+			@include pin-pad-button-text();
+
+			&:active {
+				@include pin-pad-button-active();
 			}
 		}
+
 		.mpinBtnDisabled {
 			opacity: 0.5;
 		}

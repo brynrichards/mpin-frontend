@@ -10,7 +10,7 @@ the following links:
 
   * Our Terms and Conditions -
     http://www.certivox.com/about-certivox/terms-and-conditions/
-  
+	
   * Our Security and Privacy -
     http://www.certivox.com/about-certivox/security-privacy/
 
@@ -31,15 +31,13 @@ the following links:
 
 .mpinBtnBox {
 	//instead of width: 90%
-	padding: 0% 5%;
-	background: #fff;
-	z-index: 99;
-	
+
+	@include buttons-box();
+
 	&.mpinBtnDown {
-		position: absolute;
-		bottom: 11%;
-		width: 100%;
+		@include button-area-down();
 	}
+
 
 	.mpinButton {
 		@include mpinButton();
@@ -63,6 +61,12 @@ the following links:
 			color: red;
 		}
 
+		&.mpinBtnBack {
+			background: #ededed;
+			border-bottom-color: #bcbcbc;
+			color: #000;
+		}
+
 		p {
 			font-size: 87%;
 			color: #fff;
@@ -77,9 +81,8 @@ the following links:
 			padding: 7px 0 3px;
 
 			#mpinAccessNumber, #mpinOTPNumber {
-				font-size: 24px;
-				letter-spacing: .4em;
-				padding: 8px;
+
+				@include identity-text();
 			}
 		}
 		.mpbtnExpire {
@@ -106,8 +109,28 @@ the following links:
 			background-position: center;
 		}
 
+		.mpinBtnIcon {
+			height: 20px;
+			width: 20px;
+			position: absolute;
+
+			&.mpMobile {
+				@include button-icon-mobile();
+			}
+
+			&.mpDesktop {
+				@include button-icon-desktop();
+			}
+		}
+
+		&.mpMobileAccessNumber {
+			background: none;
+			border: 1px solid $BGCOLOR4;
+		}
 
 	}
+	//.mpinButton
+
 	&.mpNoPadding {
 		padding-top:0;
 		padding-bottom:0;
@@ -117,6 +140,26 @@ the following links:
 		background: #00a800;
 		font-size:0.93em;
 	}
+
+	.mpinMobileBtn {
+		@include mpin-mobile-button();
+	}
+
+	.mpinWarnBtn {
+		@include mpin-warning-button();
+	}
+
+	.mpinButtonDark {
+		@include mpin-dark-button();
+	}
+
+	.mpinBtnBig {
+		height: 60px;
+		padding-top: 18px;
+		margin-bottom: 30px;
+	}
+
+
 	.mpBtnOnlyGreen {
 		background: none;
 		color: #00a800;
@@ -130,3 +173,5 @@ the following links:
 		padding: 14px 0;
 	}
 }
+
+
