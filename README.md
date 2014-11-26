@@ -21,9 +21,14 @@ The Mobile App is a JavaScript application, much similar to the PIN Pad. The Mob
 3. As normal user:
   1. `cd <work-dir>/browser`
   2. `npm install`
-4. Build the app
-  1. `cp settings.json_build settings.json`
-  2. `grunt build`
+4. Create `settings.json` file
+  ```
+  cp settings.json_build settings.json
+  ```
+5. Build the app
+  ```
+  grunt build
+  ```
 
 The built app should be placed in `<work-dir>/build/out/browser`.
 
@@ -32,7 +37,3 @@ NOTE that the `settings.json` file that was created above, should be modified wi
 For more information on building, configuring & customising the PIN pad please see: [Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf](/Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf)
 
 For information on building, configuring & customising the Mobile app please see: [Tech_Spec_-_M-Pin_v3.3.0_Mobile_App.pdf](/Tech_Spec_-_M-Pin_v3.3.0_Mobile_App.pdf)
-
-
-
-
