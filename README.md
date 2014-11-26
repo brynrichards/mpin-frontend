@@ -19,12 +19,13 @@ The Mobile App is a JavaScript application, much similar to the PIN Pad. The Mob
   1. `sudo npm install -g grunt-cli`
 3. Install *handlebars* and the required modules
   1. `sudo npm install -g handlebars`
-3. As normal user:
+4. Checkout/clone the repository to `<work-dir>`
+5. As normal user:
   1. `cd <work-dir>/browser`
   2. `npm install`
-4. Create `settings.json` file
+6. Create `settings.json` file
   1. `cp settings.json_build settings.json`
-5. Build the app
+7. Build the app
   1. `grunt build`
 
 The built app should be placed in `<work-dir>/build/out/browser`.
