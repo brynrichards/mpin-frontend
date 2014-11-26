@@ -1470,6 +1470,7 @@ var mpin = mpin || {};
 			removeCircles();
 			this.pinpadInput = "";
 			removeClass("mpin_input_text", "mpHide");
+			removeClass("mpin_inner_text", "mpinInputErrorText");
 			addClass("mpin_input_circle", "mpHide");
 			this.setupInputType = "text";
 			if (textElem) {
