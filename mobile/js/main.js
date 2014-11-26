@@ -531,7 +531,7 @@ var mpin = mpin || {};
 
         callbacks.mpin_cancel = function () {
             clearInterval(self.intervalExpire);
-            self.renderHomeMobile.call(self);
+            self.renderLogin.call(self);
         };
 
         this.render("otp", callbacks);
@@ -676,6 +676,11 @@ var mpin = mpin || {};
         if (!this.identity) {
             self.setIdentity(self.ds.getDefaultIdentity(), true);
 
+        }
+
+        if(self.opts.requestOTP === "1") {
+            self.renderLogin();
+            return;
         }
 
         callbacks.mp_action_home = function(evt) {
@@ -1415,7 +1420,7 @@ var mpin = mpin || {};
      
             if (digitLen === 1) {
 
-                // Reset the error codes
+                // Reset the error codes to original text
                 this.resetDisplay(hlp.text("pinpad_placeholder_text"));
                 this.enableButton(true, "clear");
             }
@@ -1883,14 +1888,21 @@ var mpin = mpin || {};
                         self.display(hlp.text("authPin_errorInvalidAccessNumber"), true);
 
                     } else if (errorCode === "NOTAUTHORIZED") {
+
                         self.display(hlp.text("authPin_errorNotAuthorized"), true);
+
                     } else if (errorCode === "EXPIRED") {
+
                         self.display(hlp.text("authPin_errorExpired"), true);
+
                     } else if (errorCode === "WEBSOCKETERROR") {
+
                         console.error("WebSocket connection fail! Falling to AJAX");
                         self.opts.useWebSocket = false;
                         self.actionLogin.call(self);
+
                     } else {
+                        
                         console.error("Authentication error: ", errorCode, errorMessage)
                         self.display(hlp.text("authPin_errorServer"), true);
                     }
