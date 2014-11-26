@@ -159,8 +159,6 @@ var mpin = mpin || {};
 		this.setLanguageText();
 
 		this.renderLanding();
-//		this.renderRevokeIdentity("test-tooloooong.identity@tobegoog.de");
-//		this.renderAddIdentity();
 	};
 
 	mpin.prototype.setupHtml = function () {
@@ -328,20 +326,14 @@ var mpin = mpin || {};
 
 	//landing Page
 	mpin.prototype.renderLanding = function () {
-		var callbacks = {}, self = this, totalAccounts;
+		var callbacks = {}, self = this, totalAccounts, userId, defIdentity;
 
 		this.clrInterval();
-		totalAccounts = this.ds.getAccounts();
-		totalAccounts = Object.keys(totalAccounts).length;
-		if (totalAccounts >= 1) {
-			this.renderLogin();
-			return;
-		}
 
 		//check for prerollid
 		if (this.opts.prerollid) {
-			var userId = self.getDisplayName(this.identity);
-			this.clrInterval();
+			this.identity = this.ds.getDefaultIdentity();
+			userId = self.getDisplayName(this.identity);
 			//check if this identity is not register already !!!
 			if (!this.identity && userId !== this.opts.prerollid) {
 				this.actionSetupHome(this.opts.prerollid);
@@ -349,48 +341,18 @@ var mpin = mpin || {};
 			}
 		}
 
-
-
-		callbacks.mpinLogo = function (evt) {
-			self.clrInterval.call(self);
-			self.renderHome.call(self, evt);
-		};
-		callbacks.mpin_action_setup = function () {
-			self.clrInterval.call(self);
-			self.renderMobileSetup.call(self);
-		};
-		callbacks.mpin_desktop = function () {
-			self.clrInterval.call(self);
-			self.renderHome.call(self);
-		};
-		callbacks.mpin_access_help = function () {
-			self.lastView = "renderLanding";
-			self.toggleHelp.call(self);
-			self.renderHelpTooltip.call(self, "landing1");
-		};
-		callbacks.mpin_help = function () {
-			self.lastView = "renderLanding";
-			self.toggleHelp.call(self);
-			self.renderHelpTooltip.call(self, "landing2");
-		};
-		callbacks.mpin_desktop_hub = function () {
-			self.clrInterval.call(self);
-			self.lastView = "renderLanding";
-			self.renderHelpHub.call(self);
-		};
-		callbacks.mpin_home = function () {
-			self.clrInterval(self);
-			self.lastView = "renderLanding";
-			self.renderHome.call(self);
+		totalAccounts = this.ds.getAccounts();
+		totalAccounts = Object.keys(totalAccounts).length;
+		if (totalAccounts >= 1) {
+			this.renderLogin();
+			return;
 		}
 
 		if (this.opts.mobileSupport) {
-			this.render("landing", callbacks, {mobileSupport: this.opts.mobileSupport});
+			this.renderMobile();
 		} else {
 			this.renderHome();
 		}
-
-		this.getAccessNumber();
 	};
 	mpin.prototype.renderHome = function () {
 		var callbacks = {}, self = this;
@@ -1508,6 +1470,7 @@ var mpin = mpin || {};
 			removeCircles();
 			this.pinpadInput = "";
 			removeClass("mpin_input_text", "mpHide");
+			removeClass("mpin_inner_text", "mpinInputErrorText");
 			addClass("mpin_input_circle", "mpHide");
 			this.setupInputType = "text";
 			if (textElem) {
@@ -1852,9 +1815,9 @@ var mpin = mpin || {};
 					} else if (errorCode === "EXPIRED") {
 						self.display(hlp.text("authPin_errorExpired"), true);
 					} else if (errorCode === "WEBSOCKETERROR") {
-                        console.error("WebSocket connection fail! Falling to AJAX");
-                        self.opts.useWebSocket = false;
-                        self.actionLogin.call(self);
+						console.error("WebSocket connection fail! Falling to AJAX");
+						self.opts.useWebSocket = false;
+						self.actionLogin.call(self);
 					} else {
 						console.error("Authentication error: ", errorCode, errorMessage)
 						self.display(hlp.text("authPin_errorServer"), true);
