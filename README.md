@@ -12,34 +12,29 @@ The Mobile App is a JavaScript application, much similar to the PIN Pad. The Mob
 
 To build and use PIN Pad
 
-1. Install SASS
+1. Install _SASS_
+  1. `sudo gem install sass`
+  2. Install _ruby_. For instance on an Ubuntu machine you would need to do:
+  ```
+  sudo apt-get install ruby1.9.1
+  ```
+2. Install _grunt_ and the required modules
+  1. `sudo npm install -g grunt-cli`
+  2. `sudo npm install -g handlebars`
+3. As normal user:
+  1. `cd <work-dir>/browser`
+  2. `npm install`
+4. Build the app
+  1. `cp settings.json_build settings.json`
+  2. `grunt build`
 
-1.1 gem install sass
+The built app should be placed in `<work-dir>/build/out/browser`.
 
-2. Install grunt and the required modules
+NOTE that the `settings.json` file that was created above, should be modified with the correct base URL for the PIN Pad resources and with the desired template. For more details see the bellow documentation.
 
-2.1 su
-2.2 npm install -g grunt-cli 
-2.3 npm install handlebars -g
+For more information on building, configuring & customising the PIN pad please see: [Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf](/Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf)
 
-As normal user:
-
-2.3 cd frontend/browser
-2.4 npm install 
-
-3 Build app
-
-3.1 cd libs/jslib
-3.2 ln -s ../../../mpin/crypto/js crypto
-3.3 cd frontend/browser
-3.4 ln -s settings.json_kealan settings.json
-3.5 grunt build
-
-The output is in frontend/build/out/browser
-
-For more information on building, configuring & customising the PIN pad please see: Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf
-
-For information on building, configuring & customising the Mobile app please see: Tech_Spec_-_M-Pin_v3.3.0_Mobile_App.pdf
+For information on building, configuring & customising the Mobile app please see: [Tech_Spec_-_M-Pin_v3.3.0_Mobile_App.pdf](/Tech_Spec_-_M-Pin_v3.3.0_Mobile_App.pdf)
 
 
 
