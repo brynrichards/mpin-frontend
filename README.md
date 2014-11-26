@@ -38,6 +38,7 @@ As normal user:
 The output is in frontend/build/out/browser
 
 For more information on building, configuring & customising the PIN pad please see: Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf
+
 For information on building, configuring & customising the Mobile app please see: Tech_Spec_-_M-Pin_v3.3.0_Mobile_App.pdf
 
 
