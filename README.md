@@ -17,7 +17,8 @@ The Mobile App is a JavaScript application, much similar to the PIN Pad. The Mob
   2. Install *ruby*. For instance on an Ubuntu machine you would need to do: `sudo apt-get install ruby1.9.1`
 2. Install *grunt* and the required modules
   1. `sudo npm install -g grunt-cli`
-  2. `sudo npm install -g handlebars`
+3. Install *handlebars* and the required modules
+  1. `sudo npm install -g handlebars`
 3. As normal user:
   1. `cd <work-dir>/browser`
   2. `npm install`
@@ -28,7 +29,7 @@ The Mobile App is a JavaScript application, much similar to the PIN Pad. The Mob
 
 The built app should be placed in `<work-dir>/build/out/browser`.
 
-NOTE that the `settings.json` file that was created above, should be modified with the correct base URL for the PIN Pad resources and with the desired template. For more details see the bellow documentation.
+**NOTE** that the `settings.json` file that was created above, should be modified with the correct base URL for the PIN Pad resources and with the desired template. For more details see the bellow documentation.
 
 For more information on building, configuring & customising the PIN pad please see: [Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf](/Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf)
 
