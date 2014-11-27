@@ -15,8 +15,8 @@ The Mobile App is a JavaScript application, much similar to the PIN Pad. The Mob
 3. Install *Node Package Manager* and *Node*. For instance on Ubuntu you need to do:
   1. `sudo apt-get install npm`
   2. `sudo npm install -g n`
-3. `sudo n 0.10.33`. NOTE that you need *curl* installed to do this.
-  4. Install *grunt* and the required modules
+  3. `sudo n 0.10.33`. NOTE that you need *curl* installed to do this.
+4. Install *grunt* and the required modules
   1. `sudo npm install -g grunt-cli`
 5. Install *handlebars* and the required modules
   1. `sudo npm install -g handlebars`
