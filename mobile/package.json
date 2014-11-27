@@ -19,7 +19,7 @@
     "grunt-contrib-watch": "~0.4.4",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-concat": "*",
-    "grunt-replace": "~0.7.7",
+    "grunt-replace": "*",
     "grunt-bg-shell": "~2.3.1",
     "handlebars": "*"
   }
