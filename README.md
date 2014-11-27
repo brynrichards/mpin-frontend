@@ -33,5 +33,7 @@ The built app should be placed in `<work-dir>/build/out/browser`.
 
 **NOTE** that the `settings.json` file that was created above, should be modified with the correct base URL for the PIN Pad resources and with the desired template. For more details see the bellow documentation.
 
-For more information on building, configuring & customizing the PIN pad please see: [Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf](/Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf)
-For information on building, configuring & customizing the Mobile app please see: [Tech_Spec_-_M-Pin_v3.3.0_Mobile_App.pdf](/Tech_Spec_-_M-Pin_v3.3.0_Mobile_App.pdf)
+For more information on building, configuring & customizing the PIN pad please see:
+[Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf](/Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf)
+For information on building, configuring & customizing the Mobile app please see:
+[Tech_Spec_-_M-Pin_v3.3.0_Mobile_App.pdf](/Tech_Spec_-_M-Pin_v3.3.0_Mobile_App.pdf)
