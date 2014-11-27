@@ -35,5 +35,6 @@ The built app should be placed in `<work-dir>/build/out/browser`.
 
 For more information on building, configuring & customizing the PIN pad please see:
 [Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf](/Tech_Spec_-_M-Pin_v3.3.0_PIN_Pad.pdf)
+
 For information on building, configuring & customizing the Mobile app please see:
 [Tech_Spec_-_M-Pin_v3.3.0_Mobile_App.pdf](/Tech_Spec_-_M-Pin_v3.3.0_Mobile_App.pdf)
