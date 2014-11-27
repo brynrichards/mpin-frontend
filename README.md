@@ -13,19 +13,22 @@ The Mobile App is a JavaScript application, much similar to the PIN Pad. The Mob
 **Building the PIN Pad**
 
 1. Install *SASS*
-  1. `sudo gem install sass`
-  2. Install *ruby*. For instance on an Ubuntu machine you would need to do: `sudo apt-get install ruby1.9.1`
-2. Install *grunt* and the required modules
+  1. Install *ruby*. For instance on an Ubuntu machine you would need to do: `sudo apt-get install ruby1.9.1`
+  2. `sudo gem install sass`
+2. Install *Node* and *Node Package Manager*. For instance on Ubuntu you need to do:
+  1. `sudo apt-get install node`
+  2. `sudo apt-get install npm`
+3. Install *grunt* and the required modules
   1. `sudo npm install -g grunt-cli`
-3. Install *handlebars* and the required modules
+4. Install *handlebars* and the required modules
   1. `sudo npm install -g handlebars`
-4. Checkout/clone the repository to `<work-dir>`
-5. As normal user:
+5. Checkout/clone the repository to `<work-dir>`
+6. As normal user:
   1. `cd <work-dir>/browser`
   2. `npm install`
-6. Create `settings.json` file
+7. Create `settings.json` file
   1. `cp settings.json_build settings.json`
-7. Build the app
+8. Build the app
   1. `grunt build`
 
 The built app should be placed in `<work-dir>/build/out/browser`.
