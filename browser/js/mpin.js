@@ -223,7 +223,7 @@ var mpin = mpin || {};
 		_options += "mpinAuthServerURL; registerURL; accessNumberURL; mobileAppFullURL; customHeaders; authenticateRequestFormatter; accessNumberRequestFormatter; ";
 		_options += "registerRequestFormatter; identityCheckRegex; seedValue; appID; useWebSocket; setupDoneURL; timePermitsURL; timePermitsStorageURL; authenticateURL; ";
 		_options += "language; customLanguageTexts; setDeviceName; getAccessNumberURL; mobileSupport; ";
-		_options += "prerollOnly; smartPhoneDisabled; accountSettingsDisabled; stage; onAccountDoesNotExist; ";
+		_options += "prerollOnly; smartPhoneDisabled; accountSettingsDisabled; stage; onAccountDoesNotExist; activationDisabled; ";
 		_opts = _options.split("; ");
 		this.opts || (this.opts = {});
 		this.opts.useWebSocket = ('WebSocket' in window && window.WebSocket.CLOSING === 2);
@@ -939,6 +939,9 @@ var mpin = mpin || {};
 				this[subView]();
 			}
 		} else {
+		    if (this.opts.prerollid) {
+		        document.getElementById("mpin_arrow").style.display = 'none';
+		    }
 			addClass("mpinUser", "mpinIdentityGradient");
 			this.setIdentity(this.ds.getDefaultIdentity(), true, function () {
 				self.display(hlp.text("pinpad_default_message"));
@@ -1205,11 +1208,13 @@ var mpin = mpin || {};
 		}
 		// button
 		if (this.opts.mobileSupport) {
-			document.getElementById("mpin_phone").onclick = function () {
-				self.renderMobileSetup.call(self);
-			};
+		    document.getElementById("mpin_phone").onclick = function () {
+		        self.renderMobileSetup.call(self);
+		    };
+		} else {
+		    document.getElementById("mpin_phone").style.display = 'none';
+		    document.getElementById("mpin_accounts_list").parentElement.style.height = this.opts.prerollOnly ? '100%' : '80%';
 		}
-
 
 		//arrow show pinpad
 		menuBtn.onclick = function () {
@@ -1229,20 +1234,21 @@ var mpin = mpin || {};
 
 			self.toggleButton.call(self);
 		};
-		//default IDENTITY
+	    //default IDENTITY
 		var cnt = document.getElementById("mpin_accounts_list");
 		defaultIdentity = this.ds.getDefaultIdentity();
-		if (defaultIdentity) {
-			this.addUserToList(cnt, defaultIdentity, true, 0);
+		if (defaultIdentity && (this.ds.getIdentityToken(defaultIdentity) != "" || !this.opts.activationDisabled)) {
+		    this.addUserToList(cnt, defaultIdentity, true, 0);
 		}
-		//bug1 default identity
-		//REMOVE THIS
-//		this.addUserToList(cnt, "7b226d6f62696c65223a20302c2022697373756564223a2022323031342d31302d30332030393a30373a34362e313236313931222c2022757365724944223a2022626f79616e2e62616b6f76406365727469766f782e636f6d222c202273616c74223a202230313432376230303939353933653366227d", false, 4);
+
+	    //bug1 default identity
+	    //REMOVE THIS
+	    //		this.addUserToList(cnt, "7b226d6f62696c65223a20302c2022697373756564223a2022323031342d31302d30332030393a30373a34362e313236313931222c2022757365724944223a2022626f79616e2e62616b6f76406365727469766f782e636f6d222c202273616c74223a202230313432376230303939353933653366227d", false, 4);
 
 		for (var i in this.ds.getAccounts()) {
-			c += 1;
-			if (i != defaultIdentity)
-				this.addUserToList(cnt, i, false, c);
+		    c += 1;
+		    if (i != defaultIdentity && (this.ds.getIdentityToken(i) != "" || !this.opts.activationDisabled))
+		        this.addUserToList(cnt, i, false, c);
 		}
 		/*
 		 addEmptyItem(cnt);
