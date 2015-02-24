@@ -254,12 +254,15 @@ var mpin = mpin || {};
 		return this;
 	};
 	mpin.prototype.accountExists = function (userId) {
+	    return this.getAccount(userId) != null;
+	};
+	mpin.prototype.getAccount = function (userId) {
 	    for (var i in this.ds.getAccounts()) {
-	        if (this.getDisplayName(i) == userId) {
-	            return true;
+	        if (this.ds.mpin.accounts[i] && this.ds.mpin.accounts[i]["token"] != "" && this.getDisplayName(i) == userId) {
+	            return i;
 	        }
 	    }
-	    return false;
+	    return null;
 	};
 	mpin.prototype.addHelp = function () {
 		var hlpHtml;
@@ -344,6 +347,7 @@ var mpin = mpin || {};
 		if (totalAccounts >= 1) {
 		    if (this.opts.prerollid) {
 		        if (this.accountExists(this.opts.prerollid)) {
+		            this.setIdentity(this.getAccount(this.opts.prerollid), false);
 		            this.renderLogin();
 		            return;
 		        }
@@ -372,8 +376,8 @@ var mpin = mpin || {};
 
 		if (this.opts.mobileSupport) {
 			this.renderMobile();
-		} else {
-			this.renderHome();
+		} else if (!this.opts.prerollOnly) {
+		    this.renderHome();
 		}
 	};
 	mpin.prototype.renderHome = function () {
@@ -588,6 +592,12 @@ var mpin = mpin || {};
 		this[this.lastView](param1, param2);
 	};
 	mpin.prototype.renderAddIdentity = function (email) {
+
+	    if (this.opts.prerollOnly) {
+	        this.renderHome();
+	        return;
+	    }
+
 		var callbacks = {}, self = this, userId, deviceName = "", deviceNameHolder = "";
 		//set Temporary params if enter email and then press tooltip without submit request...
 		function setTemp () {
@@ -1426,6 +1436,9 @@ var mpin = mpin || {};
 	        document.mpin.addToPin('clear');
 	    } else if (code == 13) {
 	        document.getElementById("mpin_login").onclick();
+	    } else if (code == 8 || code == 46) {
+	        document.mpin.delPinDigit();
+	        e.preventDefault();
 	    }
 	};
 	mpin.prototype.ensureKeyPress = function () {
@@ -1437,12 +1450,12 @@ var mpin = mpin || {};
 
 	    if (enable) {
 	        if (!this.keyPressAttached) {
-	            document.addEventListener("keypress", this.keyPress);
+	            document.addEventListener("keydown", this.keyPress);
 	            this.keyPressAttached = true;
 	        }
 	    } else {
 	        if (this.keyPressAttached) {
-	            document.removeEventListener("keypress", this.keyPress);
+	            document.removeEventListener("keydown", this.keyPress);
 	            this.keyPressAttached = false;
 	        }
 	    }
@@ -1465,8 +1478,14 @@ var mpin = mpin || {};
 	mpin.prototype.addToPin = function (digit) {
 		var digitLen;
 		this.pinpadInput || (this.pinpadInput = "");
-		this.pinpadInput += digit;
 		digitLen = this.pinpadInput.length;
+
+		if (!isNaN(digit) && digitLen == this.cfg.pinSize) {
+		    return;
+		}
+
+		this.pinpadInput += digit;
+		digitLen++;
 		if (this.setupInputType === "text") {
 			addClass("mpin_input_text", "mpHide");
 			removeClass("mpin_input_circle", "mpHide");
@@ -1498,6 +1517,25 @@ var mpin = mpin || {};
 			this.enableButton(false, "go");
 			this.enableButton(false, "clear");
 		}
+	};
+    //
+	mpin.prototype.delPinDigit = function () {
+	    var digitLen;
+	    this.pinpadInput || (this.pinpadInput = "");
+	    digitLen = this.pinpadInput.length;
+	    if (digitLen > 0) {
+	        this.pinpadInput = this.pinpadInput.substring(0, digitLen - 1);
+	        var circle = document.getElementById("mpin_circle_" + (digitLen - 1));
+	        if (circle && circle.childNodes[3]) {
+	            circle.removeChild(circle.childNodes[3]);
+	        }
+	        if (digitLen == 1) {
+	            this.display(hlp.text("pinpad_default_message"));
+	            this.enableNumberButtons(true);
+	            this.enableButton(false, "go");
+	            this.enableButton(false, "clear");
+	        }
+	    }
 	};
 	/**
 	 *	wrap all buttons function inside ...
@@ -2045,7 +2083,7 @@ var mpin = mpin || {};
 		}
 
 		//check
-		if (renderWarningFlag) {
+		if (renderWarningFlag && !this.opts.onAccountDisabled) {
 			identity = this.getDisplayName(iID);
 			this.renderRevokeIdentity(identity);
 		}
